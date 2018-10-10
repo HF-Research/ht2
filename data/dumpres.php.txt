@@ -1,0 +1,155 @@
+Copyright, Sundhedsdatastyrelsen
+SKS-databasen opdateres jævnligt.
+Dette udtræk modsvarer opdateringen d 01/10-2018 10:35:23.
+
+Kode	Tekst
+BUBB0	Diæt uden farve- og konserveringsstoffer
+BUBB1	Diæt uden pollenkrydsreagerende levnedsmidler
+BUBB2	Diæt uden mælkeprodukter
+BUBB3	Diæt uden æg
+BUBB4	Nikkelreduceret diæt
+BUBB7	Astronautkost
+BUBB8	Eliminationsdiæt
+BUBB9	Anden diæt ved allergi og intolerence
+DK220	Kardia-akalasi
+DK221	Ulcus i spiserøret
+DK221A	Erosion i spiserøret
+DK221B	Peptisk ulcus i spiserøret
+DK221C	Ulcus i spiserøret forårsaget af svampeinfektion
+DK221D	Ulcus i spiserøret forårsaget af kemikalie
+DK221E	Ulcus i spiserøret forårsaget af lægemiddel
+DK221F	Ulcerativ øsofagitis UNS
+DK222	Obstruktion af spiserøret
+DK222A	Kompression af spiserøret
+DK222B	Stenose i spiserøret
+DK222C	Striktur i spiserøret
+DK223	Perforation af spiserøret
+DK223A	Ruptur af spiserøret
+DK224	Spiserørsdyskinesi
+DK224A	Øsofaguspasmer
+DK225	Erhvervet øsofagusdivertikel
+DK225A	Traktionsdivertikel i spiserøret
+DK225B	Pulsionsdivertikel i øsofagus
+DK226	Mallory-Weiss' syndrom
+DK227	Barretts øsofagus
+DK228	Anden sygdom i spiserøret
+DK228A	Cystis oesophagi
+DK228B	Dilatatio oesophagi
+DK228C	Fistula tracheo-oesophagealis
+DK228D	Fistula broncho-oesophagealis
+DK228E	Functio laesa oesophagi
+DK228F	Blødning i spiserøret UNS
+DK228G	Leukoplakia oesophagi
+DK228H	Megaloøsofagus
+DK228I	Presbyøsofagus
+DK229	Sygdom i øsofagus UNS
+DZ220	Tyfusbacilbærer
+DZ221	Bærer af anden infektiøs tarmsygdom
+DZ222	Difteribacilbærer
+DZ223	Bærer af anden bakteriel sygdom
+DZ223A	Meningokok bærertilstand
+DZ224	Bærer af infektion, som hovedsagelig er seksuelt overført
+DZ226	Bærer af HTLV-1 virus
+DZ228	Bærer af anden infektiøs sygdom
+DZ229	Bærer af infektiøs sygdom UNS
+EUVB0	Voldshandling ved kollaps af materialer
+EUVB00	Voldshandling ved kollaps af materiale fra højere niveau
+EUVB01	Voldshandling ved kollaps af materiale på lavere niveau
+EUVB02	Voldshandling ved kollaps af materiale på samme niveau
+EUVB04	Voldshandling ved fragmentering af materiale
+EUVB08	Voldshandling ved kollaps af materiale, andet specificeret
+EUVB09	Voldshandling ved kollaps af materiale, uspecificeret
+KABB00	Excision af patologisk væv i spinalkanal
+KABB10	Resektion af patologisk væv i spinalkanal
+KABB20	Drænage af intramedullær eller ekstramedullær cyste i spinalkanal
+KABB30	Destruktion af patologisk væv i spinalkanal
+KABB40	Fjernelse af spontant hæmatom i spinalkanal
+KABB99	Anden operation på patologisk væv i spinalkanalen
+KKBB00	Biopsi af urinleder
+KKBB01	Perkutan endoskopisk biopsi af urinleder
+KKBV00	Indsættelse af ureterstent
+KKBV01	Perkutan endoskopisk indsættelse af ureterstent
+KKBV02	Transluminal endoskopisk indsættelse af ureterstent
+KKBV02A	Transluminal indsættelse af temporær ureterstent
+KKBV02B	Transluminal indsættelse af fastsiddende ureterstent
+KKBV03	Transluminal repositionering af ureterstent
+KKBV05	Transluminal endoskopisk skiftning af ureterstent
+KKBV07	Perkutan endoskopisk skiftning af ureterstent
+KKBV10	Fjernelse af ureterstent
+KKBV11	Perkutan endoskopisk fjernelse af ureterstent
+KKBV12	Transluminal endoskopisk fjernelse af ureterstent
+KKBV18	Transluminal endoskopisk kateterisation af urinleder
+KKBV22	Transluminal endoskopisk dilatation af ureterostie
+KKBV32	Transluminal endoskopisk incision af ureterostie
+KKBV35	Transluminal endoskopisk resektion af ureterostie
+KKBV40	Incision eller excision af ureterocele
+KKBV42	Transluminal endoskopisk incision eller excision af ureterocele
+KKBV52	Transluminal endoskopisk injektionsterapi ved vesikoureteral refluks
+KULB02	Falloposkopi
+KULB05	Falloposkopi med biopsi
+MA02BA	H2-receptor antagonister
+MA02BA01	cimetidin
+MA02BA02	ranitidin
+MA02BA03	famotidin
+MA02BA04	nizatidin
+MA02BA05	niperotidin
+MA02BA06	roxatidin
+MA02BA07	ranitidinbismuthcitrat
+MA02BA08	lafutidin
+MA02BA51	cimetidin, kombinationspræparater
+MA02BA53	famotidin, komb.
+MA02BB	prostaglandiner
+MA02BB01	misoprostol
+MA02BB02	enprostil
+MA02BC	protonpumpe-hæmmere
+MA02BC01	omeprazol
+MA02BC02	pantoprazol
+MA02BC03	lansoprazol
+MA02BC04	rabeprazol
+MA02BC05	esomeprazol
+MA02BC06	dexlansoprazol
+MA02BC07	dexrabeprazol
+MA02BC53	lansoprazol, kombinationer
+MA02BC54	rabeprazol, kombinationer
+MA02BD	komb. til bekæmpelse af heliobacter pylori
+MA02BD01	omeprazol, amoxicillin og metronidazol
+MA02BD02	lansoprazol, tetracyclin og metronidazol
+MA02BD03	lansoprazol, amoxicillin og metronidazol
+MA02BD04	pantoprazol, amoxicillin og clarithromycin
+MA02BD05	omeprazol, amoxicillin og clarithromycin
+MA02BD06	esomeprazol, amoxicillin og clarithromycin
+MA02BD07	lansoprazol, amoxicillin og clarithromycin
+MA02BD08	bismuth subcitrat, tetracyclin og metronidazol
+MA02BD09	lansoprazol, clarithromycin og tinidazol
+MA02BD10	lansoprazol, amoxicillin og levofloxacin
+MA02BD11	pantoprazol, amoxicillin, clarithromycin og metronidazol
+MA02BX	andre midler mod mavesår og gastro-oesophageal reflux (gord)
+MA02BX01	carbenoxolon
+MA02BX02	sucralfat
+MA02BX03	pirenzepin
+MA02BX04	methiosulfoniumchlorid
+MA02BX05	bismuthsubcitrat
+MA02BX06	proglumid
+MA02BX07	gefarnat
+MA02BX08	sulglicotid
+MA02BX09	acetoxolon
+MA02BX10	zolimidin
+MA02BX11	troxipid
+MA02BX12	bismuthsubnitrat
+MA02BX13	alginsyre
+MA02BX14	rebamipid
+MA02BX51	carbenoxolon, komb. excl. psycholeptica
+MA02BX71	carbenoxolon, komb. med psycholeptica
+MA02BX77	gefarnat, komb. med psycholeptica
+MA12BA	kalium
+MA12BA01	kaliumchlorid
+MA12BA02	kaliumcitrat
+MA12BA03	kaliumhydrogentartrat
+MA12BA04	kaliumhydrogencarbonat
+MA12BA05	kaliumgluconat
+MA12BA30	kombinationer
+MA12BA51	kaliumchlorid, kombinationer
+KZLB01	anvendelse af ventiler
+KZLB02	anvendelse af polymer gel
+KZLB03	anvendelse af coils
+

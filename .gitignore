@@ -2,3 +2,4 @@
 !*.R
 !*.rmd
 !*.txt
+.Rproj.user

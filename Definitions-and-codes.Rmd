@@ -1,0 +1,31 @@
+---
+title: "Definitions af sygdom, procedure, mecdicin og outcomes i HjerteTal"
+output:
+  html_document:
+    df_print: paged
+---
+```{r intro, include=FALSE, echo = FALSE}
+library(officer)
+library(flextable)
+invisible(source(file = "PrepDefinitions.R"))
+```
+
+The illnesses/outcomes used in HjerteTal are based on the ICD-10 codes as follows:
+
+```{r, echo = FALSE}
+
+out_pretty <- flextable(diag_pretty, col_keys = c("diag_en", "code_simple")) %>%
+  width(j = c("diag_en"), width = 2.1) %>%
+  width(j = "code_simple", width = 2.3) %>%
+  align(j = c("diag_en", "code_simple")) %>%
+  align(part = "header") %>%
+  fontsize(size = 12) %>%
+  fontsize(size = 13, part = "header") %>%
+  set_header_labels(diag_en = "Sygdomme",
+                    code_simple = "ICD-10 code(s)")
+
+out_pretty
+
+```
+
+
