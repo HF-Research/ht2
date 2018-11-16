@@ -37,11 +37,16 @@ ui <- fluidPage(
         label = choose_year,
         choices = c(2006:max_year),
         selected = 2015
+      ),
         
+        radioGroupButtons(
+          inputId = "aggr_level",
+          label = choose_aggr_lv,
+          choices = aggr_choices
+          )
+      
         
-        
-        
-      )
+      
     )
   ),
   
@@ -53,42 +58,47 @@ ui <- fluidPage(
     
   )),
   
-  tabsetPanel(
-    type = "tabs",
-    id = "aggr_level",
+  fluidRow(
+    br(),
+    fluidRow(d3Output("d3_bar_age")),
+    br(),
     
-    # TABS ---------------------------------------------------------------------
-    
-    # Age
-    tabPanel(ui_age, value = "age",
-             br(),
-             
-             # Row for results
-             fluidRow(DTOutput("table_age"))),
-    
-    # Education
-    tabPanel(ui_edu, value = "edu",
-             br(),
-             
-             # Row for results
-             fluidRow(DTOutput("table_edu"))),
-    
-    # Region
-    tabPanel(ui_region, value = "region",
-             br(),
-             
-             # Row for results
-             fluidRow(DTOutput("table_region"))),
-    
-    # National
-    tabPanel(ui_national, value = "national",
-             br(),
-             
-             # Row for results
-             fluidRow(DTOutput("table_national")))
-    
-  )
-  
+    fluidRow(DTOutput("table_age"))
+    )
+  #   
+  # 
+  # tabsetPanel(
+  #   type = "tabs",
+  #   id = "aggr_level",
+  #   
+  #   # TABS ---------------------------------------------------------------------
+  #   
+  #   
+  #   # Education
+  #   tabPanel(ui_edu, value = "edu",
+  #            # Row for results
+  #            br(),
+  #            fluidRow(d3Output("d3_bar_edu")),
+  #            br(),
+  #            
+  #            fluidRow(DTOutput("table_edu"))),
+  #   
+  #   # Region
+  #   tabPanel(ui_region, value = "region",
+  #            br(),
+  #            
+  #            # Row for results
+  #            fluidRow(DTOutput("table_region"))),
+  #   
+  #   # National
+  #   tabPanel(ui_national, value = "national",
+  #            br(),
+  #            
+  #            # Row for results
+  #            fluidRow(DTOutput("table_national")))
+  #   
+  # )
+  # 
   
   
 )

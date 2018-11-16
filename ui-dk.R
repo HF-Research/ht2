@@ -1,8 +1,11 @@
 
 
+
 choose_outcome <- enc2utf8("Vælge sygdome eller behandling:")
 choose_theme <- enc2utf8("Vælge emne")
 choose_year <- enc2utf8("Vælge år")
+choose_aggr_lv <- enc2utf8("Vælge metric")
+
 
 theme_names <- enc2utf8(
   c(
@@ -11,6 +14,15 @@ theme_names <- enc2utf8(
     "Hospital" = "hospital"
   )
 )
+
+aggr_choices <-
+  list(
+    "Aldre" = "age",
+    "Uddannelse" = "edu",
+    "Region" = "region",
+    "National" = "national"
+  )
+
 
 
 ui_age <- enc2utf8("Aldre")

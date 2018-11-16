@@ -23,6 +23,7 @@ shinyServer(function(input, output) {
   })
   
   subsetOutcome <- reactive({
+    
     # Cache subset based on outcome, aggr level, and theme
     export[[input$outcome]][[input$aggr_level]][[input$theme]]
   })
@@ -50,7 +51,7 @@ shinyServer(function(input, output) {
     out
   })
   
-  outputCasesTable <- reactive({
+  outputCasesRTable <- reactive({
     # National level data shows all years
     if (input$aggr_level != "national") {
       dat <- subsetYear()
@@ -69,14 +70,19 @@ shinyServer(function(input, output) {
                 n_dead_1yr)]
     }
     
+    
+    dat[]
+  })
+  
+  outputCasesTable <- reactive({
+    dat <- outputCasesRTable()
     colnames(dat) <- dtColNames()
     dat <- dat[, lapply(.SD, as.character)]
     dat <- dat[, lapply(.SD, function(i) {
       i[is.na(i)] <- "<10"
       i
     })]
-    
-    out <- DT::datatable(dat,
+    DT::datatable(data = dat,
                   extensions = 'Buttons') %>% formatStyle(
                     "Sex",
                     target = "row",
@@ -85,12 +91,20 @@ shinyServer(function(input, output) {
     
   })
   
+  
+  plot_bar_d3 <- reactive({
+    
+    r2d3(data = outputCasesRTable(), script = "bar.js")
+  })
+  
+  
   # AGE
   output$table_age <- renderDT({outputCasesTable()}, server = FALSE)
+  output$d3_bar_age <- renderD3({plot_bar_d3()})
   
   # EDU
   output$table_edu <- renderDT({outputCasesTable()}, server = FALSE)
-  
+  output$d3_bar_edu <- renderD3({plot_bar_d3()})
   
   # REGION
   output$table_region <- renderDT({outputCasesTable()}, server = FALSE)
