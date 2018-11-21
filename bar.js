@@ -7,9 +7,9 @@ var initData = d3.nest().key(d => d.grouping).entries(data)
 var margin = ({top:10, right:10, bottom:20, left:60});
 var Gwidth = width - margin.left - margin.right
 var Gheight = height - margin.top - margin.bottom
-var barPadding = 0.1;
+var barPadding = 0.2;
 
-var colors = ['#fab488', '#88cefa ']
+var colors = ['#bd6916', '#166abd ']
 
 var topG = svg.append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top +')')
@@ -50,8 +50,8 @@ function update(inData) {
   var maxY = d3.max(newData, d => d3.max(d.values, k => k.n_patients));
   grouping1Names = newData.map(d => d.key);
   grouping2Names = newData[0].values.map(d => d.sex);
-  var tLong = 750;
-  var tShort = 300;
+  var tLong = 450;
+  var tShort = 200;
   // Scales used in updates 
   var scaleY = d3.scaleLinear()
     .domain([0, maxY])
@@ -125,8 +125,10 @@ function update(inData) {
     .call(d3.axisBottom(scaleX))
     
 }
-update(data);
+
 // When data is updated via shiny, the following code is run:
-/*r2d3.onRender(function(newData) {
-  update(newData);
-}); */
+r2d3.onRender(function(newData) {
+  if (newData.length > 0){
+    update(newData);
+  }
+}); 
