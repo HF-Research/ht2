@@ -86,7 +86,7 @@ shinyServer(function(input, output) {
                   extensions = 'Buttons') %>% formatStyle(
                     "Sex",
                     target = "row",
-                    backgroundColor = styleEqual(c("female", "male"), c("snow", "#e9f6fe"))
+                    backgroundColor = styleEqual(c("female", "male"), c("#fde2d1", "#e9f6fe"))
                   )
     
   })

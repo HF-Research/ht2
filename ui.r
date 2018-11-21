@@ -59,12 +59,14 @@ ui <- fluidPage(
   )),
   
   fluidRow(
+    column(10, align = "center",
     br(),
     fluidRow(d3Output("d3_bar_age")),
     br(),
     
     fluidRow(DTOutput("table_age"))
     )
+  )
   #   
   # 
   # tabsetPanel(

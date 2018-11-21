@@ -4,36 +4,31 @@
 //
 
 var initData = d3.nest().key(d => d.grouping).entries(data)
-var margin = ({top:20, right:30, bottom:30, left:60});
+var margin = ({top:10, right:10, bottom:20, left:60});
 var Gwidth = width - margin.left - margin.right
 var Gheight = height - margin.top - margin.bottom
 var barPadding = 0.1;
+
+var colors = ['#fab488', '#88cefa ']
 
 var topG = svg.append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top +')')
 
 
-// Initial scales
-var scaleY = d3.scaleLinear()
-  .domain([0, d3.max(data, d=> d.value)]).nice()
-  .range([Gheight - 0]);
+// Initial scale
 
-// Scale between the groupings (i.e. b/w age groups`)
+// Scale between the keys (i.e. b/w age groups, edu, etc`)
 var scaleX = d3.scaleBand()
-  .domain(data.map(d => d.grouping))
+  .domain(initData.map(d => d.key))
   .range([0, Gwidth])
   .padding(barPadding);
 
-/* Scale within groupings (i.e. male/female). The range is from 0 to the width of each grouping */
-var scaleX1 = d3.scaleBand()
-  .domain(data.map(d => d.key))
-  .range(0, scaleX.bandwidth())
-
+var scaleColors = d3.scaleOrdinal()
+    .range(colors)
 
 // Initial axis
 var yAxis = topG.append('g')
   .attr("class", "y axis")
-  
 
 var xAxis = topG.append('g')
     .attr("class", "x axis")
@@ -41,24 +36,23 @@ var xAxis = topG.append('g')
 xAxis.call(d3.axisBottom(scaleX))
     .attr("transform", 'translate(' + 0 + "," + Gheight + ')');
 
-var chartArea = topG.append("g")
-    .attr("class", "chartArea");
-
-
+var chartArea = topG.append("g");
 
 // UPDATE FUNCTION - will be called by r2d3.onRender()
 function update(inData) {
 
-
-  var newData = d3.nest().key(d => d.grouping).entries(inData);
+  // Reshape data
+  var newData = d3.nest()
+    .key(d => d.grouping)
+    .entries(inData);
    
   
   var maxY = d3.max(newData, d => d3.max(d.values, k => k.n_patients));
   grouping1Names = newData.map(d => d.key);
   grouping2Names = newData[0].values.map(d => d.sex);
-  var t = 1000;
-  // Scales used in updates (these take the updated data as arguments, as opposed to the fn() calls outside the update() )
-  
+  var tLong = 750;
+  var tShort = 300;
+  // Scales used in updates 
   var scaleY = d3.scaleLinear()
     .domain([0, maxY])
     .range([Gheight, 0]);
@@ -73,75 +67,66 @@ function update(inData) {
     .rangeRound([0, scaleX.bandwidth()]);
   
   
-  // Perform the data join
+   // Perform the data joins
+   var barGroupWithData = chartArea
+      .selectAll('g')
+      .data(newData, d => d.key);
    
-   var barGroupWithData = chartArea.selectAll('.barGroup').data(newData);
+   // Remove any bar-groups not present in incoming data
+   barGroupWithData.exit()
+    .transition()
+    .duration(tShort)
+    .ease(d3.easeLinear)
+    .style('opacity', 0)
+    .remove();
    
-    barGroupWithData.exit().remove();
-   
-   
-   var bars = barGroupWithData.enter()
+   var barsData = barGroupWithData.enter()
       .append("g")
-      .attr("transform", d => "translate(" + scaleX(d.key) + ",0)")
-      .attr("fill", "steelblue")
       .merge(barGroupWithData)
-      .selectAll("rect")
+      .attr("transform", d => "translate(" + scaleX(d.key) + ",0)")
+      
+   //barsData.transition().duration(t).
+      
+		var	bars = barsData.selectAll("rect")
           .data(d => Object.keys(d.values)
-                          .map(k => ({ keyL2: grouping2Names[k], value: d.values[k].n_patients }) ));
+                          .map(k => ({ keyL2: grouping2Names[k], value: d.values[k].n_patients }) ))
+       
+  
+  
+
+
+  
+  
+  bars.exit().transition().duration(tLong).attr("y", d=> scaleY(0)).remove()
       
   bars.enter()
     .append("rect")
-    .attr("fill", "steelblue")
+    .attr("fill", d => scaleColors(d.keyL2))
     .attr("y", d => scaleY(0))
     .merge(bars)
-    .attr("x", (d, i) => scaleX1(d.keyL2))
-    .attr("width", scaleX1.bandwidth())
+    .attr("x", (d) => scaleX1(d.keyL2))
+    
     .transition()
-    .duration(t)
+    .duration(tLong)
     .ease(d3.easeLinear)
+    .attr("width", scaleX1.bandwidth())
     .attr('y', d => scaleY(d.value))
     .attr("height", d => scaleY(0) - scaleY(d.value));
-  
-  
-  bars.exit().transition().style('opacity', 0).remove()
-  
-  // Add new elements, update existing AND new elements    
-  
-  /*var bars = layersWithData.enter()
-      .append("g")
-      .attr("transform", d => 'translate')
-      .merge(layersWithData)
-      
-      .attr("fill", "steelblue")
-     
-    */  
-      
-      
-  
+
+
    
-  // Udpate axis
-  
+  // Udpate axes
   yAxis.transition()
-    .duration(t)
+    .duration(tLong)
     .call(d3.axisLeft(scaleY))
     
-    
   xAxis.transition()
-    .duration(t)
+    .duration(tLong)
     .call(d3.axisBottom(scaleX))
-     
-    
-  
-    
-  
-    
-    
-  
     
 }
-
-
-
-r2d3.onRender(function(newData) {
+update(data);
+// When data is updated via shiny, the following code is run:
+/*r2d3.onRender(function(newData) {
   update(newData);
-});
+}); */
