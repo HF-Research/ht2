@@ -1,11 +1,11 @@
 
-
+dropdown_tooltip = enc2utf8("Click to choose data")
 
 choose_outcome <- enc2utf8("Vælge sygdome eller behandling:")
 choose_theme <- enc2utf8("Vælge emne")
 choose_year <- enc2utf8("Vælge år")
 choose_aggr_lv <- enc2utf8("Vælge metric")
-
+choose_var <- enc2utf8("Vælge variable")
 
 theme_names <- enc2utf8(
   c(
@@ -22,6 +22,13 @@ aggr_choices <-
     "Region" = "region",
     "National" = "national"
   )
+
+variable_choices <- list(
+  "Antal Patienter" = "n_patients",
+  "Antal procedurer" = "n_oprs",
+  "Antal døde:30 dage" = "n_dead_30",
+  "Antal døde: 1 år" = "n_dead_1yr"
+)
 
 
 

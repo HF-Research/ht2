@@ -1,13 +1,26 @@
-// !preview r2d3 data=export$`Balloon angioplasty`$age$cases[year == 2015]
+// !preview r2d3 data=(export$`Balloon angioplasty`$age$cases[year == 2015])
 //
 // r2d3: https://rstudio.github.io/r2d3
 //
 
-var initData = d3.nest().key(d => d.grouping).entries(data)
+
 var margin = ({top:10, right:10, bottom:20, left:60});
 var Gwidth = width - margin.left - margin.right
 var Gheight = height - margin.top - margin.bottom
 var barPadding = 0.2;
+
+
+// Get data into format for bar chart, while storing variable name 
+var varName = Object.keys(data[0])[2]
+for (var i = 0; i<data.length; i++) {
+    data[i].value = data[i][varName]
+    delete data[i][varName];
+    
+}
+
+var initData = d3.nest().key(d => d.grouping).entries(data)
+
+
 
 var colors = ['#bd6916', '#166abd ']
 
@@ -38,16 +51,33 @@ xAxis.call(d3.axisBottom(scaleX))
 
 var chartArea = topG.append("g");
 
+
+
+
+
+
+
+
+
+
+
+
 // UPDATE FUNCTION - will be called by r2d3.onRender()
 function update(inData) {
 
-  // Reshape data
+// Reshape data
+  var varName = Object.keys(inData[0])[2];
+  for (var i = 0; i<data.length; i++) {
+    inData[i].value = inData[i][varName];
+    delete inData[i][varName];
+  }
+
   var newData = d3.nest()
     .key(d => d.grouping)
     .entries(inData);
    
   
-  var maxY = d3.max(newData, d => d3.max(d.values, k => k.n_patients));
+  var maxY = d3.max(newData, d => d3.max(d.values, k => k.value));
   grouping1Names = newData.map(d => d.key);
   grouping2Names = newData[0].values.map(d => d.sex);
   var tLong = 450;
@@ -89,14 +119,8 @@ function update(inData) {
       
 		var	bars = barsData.selectAll("rect")
           .data(d => Object.keys(d.values)
-                          .map(k => ({ keyL2: grouping2Names[k], value: d.values[k].n_patients }) ))
-       
-  
-  
-
-
-  
-  
+                          .map(k => ({ keyL2: grouping2Names[k], value: d.values[k].value }) ))
+    
   bars.exit().transition().duration(tLong).attr("y", d=> scaleY(0)).remove()
       
   bars.enter()
@@ -125,6 +149,15 @@ function update(inData) {
     .call(d3.axisBottom(scaleX))
     
 }
+
+
+
+
+
+
+
+
+
 
 // When data is updated via shiny, the following code is run:
 r2d3.onRender(function(newData) {

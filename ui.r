@@ -20,57 +20,86 @@ ui <- fluidPage(
     tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css")
   ),
   titlePanel("HjerteTal2"),
-  fluidRow(column(
-    id = "col_input",
-    4,
-    wellPanel(
-      selectInput(
-        inputId = "outcome",
-        label = choose_outcome,
-        choices = outcome_names
-      ),
-      selectInput(
-        inputId = "theme",
-        label = choose_theme,
-        choices = theme_names
-      ),
-      
-      
-      selectInput(
-        inputId = "year",
-        label = choose_year,
-        choices = NULL,
-        selected = 2015
-      ),
-      
-      radioGroupButtons(
-        inputId = "aggr_level",
-        label = choose_aggr_lv,
-        choices = aggr_choices
+  fluidRow(
+    column(id = "col_input",
+           4,
+           wellPanel(
+             selectInput(
+               inputId = "outcome",
+               label = choose_outcome,
+               choices = outcome_names
+             ),
+             fluidRow(column(
+               5,
+               selectInput(
+                 inputId = "year",
+                 label = choose_year,
+                 choices = NULL,
+                 selected = 2015
+               )
+               
+             ),
+             column(
+               7,
+               selectInput(
+                 inputId = "theme",
+                 label = choose_theme,
+                 choices = theme_names
+               )
+             )),
+             fluidRow(column(
+               5,
+               radioGroupButtons(
+                 inputId = "aggr_level",
+                 label = choose_aggr_lv,
+                 choices = aggr_choices,
+                 justified = TRUE,
+                 direction = "vertical"
+               )
+             )
+             ,
+             column(
+               7,
+               radioGroupButtons(
+                 inputId = "variable",
+                 label = choose_var,
+                 choices = variable_choices,
+                 justified = TRUE,
+                 direction = "vertical",
+                 individual = FALSE
+               )
+             ))
+             
+           )),
+    
+    column(
+      id = "col_description",
+      7,
+      wellPanel(
+        class = "well_description",
+        h2(textOutput("outcome_title")),
+        hr(),
+        textOutput("outcome_description")
       )
-      
-      
-      
     )
   ),
-  
-  column(
-    id = "col_description", 7,
-    wellPanel(
-      class = "well_description",
-      h2(textOutput("outcome_title")),
-    hr(),
-    textOutput("outcome_description")
-    )
-  )),
   
   fluidRow(column(
     12,
     align = "center",
     br(),
-    fluidRow(d3Output("d3_bar_age")),
+    
+    # Plots
+    fluidRow(
+      conditionalPanel("input.aggr_level != 'national'",
+                       d3Output("d3_plot")),
+      conditionalPanel("input.aggr_level == 'national'",
+                       d3Output("d3_plot_line"))
+    ),
+    
     br(),
     
+    # DataTables
     fluidRow(DTOutput("table_age"))
   ))
   #
