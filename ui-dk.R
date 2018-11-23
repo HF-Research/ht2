@@ -17,16 +17,16 @@ theme_names <- enc2utf8(
 
 aggr_choices <-
   list(
-    "Aldre" = "age",
+    "Alder" = "age",
     "Uddannelse" = "edu",
     "Region" = "region",
     "National" = "national"
   )
 
 variable_choices <- list(
-  "Antal Patienter" = "n_patients",
+  "Antal patienter" = "n_patients",
   "Antal procedurer" = "n_oprs",
-  "Antal døde:30 dage" = "n_dead_30",
+  "Antal døde: 30 dage" = "n_dead_30",
   "Antal døde: 1 år" = "n_dead_1yr"
 )
 
@@ -43,39 +43,36 @@ ui_national <- enc2utf8("National")
 ui_colnames_cases_age <-
   enc2utf8(
     c(
-      
       "Sex",
       "Alder",
       "Antal patienter",
       "Antal procedurer",
-      "Antal døde efter 30 dage",
-      "Antal døde efter 1 år"
+      "Antal døde: 30 dage",
+      "Antal døde: 1 år"
     )
   )
 
 ui_colnames_cases_edu <-
   enc2utf8(
     c(
-      
       "Sex",
       "Uddannelse",
       "Antal patienter",
       "Antal procedurer",
-      "Antal døde efter 30 dage",
-      "Antal døde efter 1 år"
+      "Antal døde: 30 dage",
+      "Antal døde: 1 år"
     )
   )
 
 ui_colnames_cases_region <-
   enc2utf8(
     c(
-      
       "Sex",
       "Region",
       "Antal patienter",
       "Antal procedurer",
-      "Antal døde efter 30 dage",
-      "Antal døde efter 1 år"
+      "Antal døde: 30 dage",
+      "Antal døde: 1 år"
     )
   )
 
@@ -84,10 +81,10 @@ ui_colnames_cases_national <-
     c(
       "År",
       "Sex",
-      "Region",
+      "National",
       "Antal patienter",
       "Antal procedurer",
-      "Antal døde efter 30 dage",
-      "Antal døde efter 1 år"
+      "Antal døde: 30 dage",
+      "Antal døde: 1 år"
     )
   )

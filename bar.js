@@ -4,15 +4,17 @@
 //
 
 
-var margin = ({top:10, right:10, bottom:20, left:60});
+var margin = ({top:10, right:10, bottom:40, left:60});
 var Gwidth = width - margin.left - margin.right
 var Gheight = height - margin.top - margin.bottom
 var barPadding = 0.2;
 
 
-// Get data into format for bar chart, while storing variable name 
+// Get data into format for bar chart, while storing grouping and variable name 
+var groupingName = Object.keys(data[0])[1]
 var varName = Object.keys(data[0])[2]
 for (var i = 0; i<data.length; i++) {
+    data[i].grouping = data[i][groupingName]
     data[i].value = data[i][varName]
 }
 
@@ -47,6 +49,23 @@ var xAxis = topG.append('g')
 xAxis.call(d3.axisBottom(scaleX))
     .attr("transform", 'translate(' + 0 + "," + Gheight + ')');
 
+
+// Axis titles
+topG.append("text")
+  .attr("x", Gwidth / 2)
+  .attr("y", Gheight + margin.bottom - 5)
+  .attr("class", "x axisTitle")
+  .text(groupingName)
+  
+topG.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", 0 - Gheight / 2)
+  .attr("y", 0 - margin.left + 20)
+  .attr("class", "y axisTitle")
+  .text("Total")
+
+
+
 var chartArea = topG.append("g");
 
 
@@ -64,11 +83,16 @@ var chartArea = topG.append("g");
 function update(inData) {
 
 // Reshape data
-  var varName = Object.keys(inData[0])[2];
+  var groupingName = Object.keys(inData[0])[1]
+  var varName = Object.keys(inData[0])[2]
   for (var i = 0; i<inData.length; i++) {
-    inData[i].value = inData[i][varName];
-    delete inData[i][varName];
+      inData[i].grouping = inData[i][groupingName]
+      inData[i].value = inData[i][varName]
+      delete inData[i][varName]
+      delete inData[i][groupingName]
+      
   }
+
 
   var newData = d3.nest()
     .key(d => d.grouping)
@@ -77,7 +101,7 @@ function update(inData) {
   
   var maxY = d3.max(newData, d => d3.max(d.values, k => k.value));
   grouping1Names = newData.map(d => d.key);
-  grouping2Names = newData[0].values.map(d => d.sex);
+  grouping2Names = newData[0].values.map(d => d.Sex);
   var tLong = 450;
   var tShort = 200;
   // Scales used in updates 
@@ -145,6 +169,21 @@ function update(inData) {
   xAxis.transition()
     .duration(tLong)
     .call(d3.axisBottom(scaleX))
+ 
+  
+  topG.select(".y.axisTitle")
+    .transition()
+    .duration(tLong)
+    .text(varName)
+      .style("text-anchor", "middle");
+  
+  topG.select(".x.axisTitle")
+    .transition()
+    .duration(tLong)
+    .style('opacity', 1)
+    .text(groupingName)
+      .style("text-anchor", "middle");
+    
     
 }
 
@@ -158,6 +197,7 @@ function update(inData) {
 
 
 // When data is updated via shiny, the following code is run:
+// This is also called on first load apparently
 r2d3.onRender(function(newData) {
   if (newData.length > 0){
     update(newData);

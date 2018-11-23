@@ -64,13 +64,30 @@ shinyServer(function(input, output, session) {
     out
   })
   
+  prettyAggr_level <- reactive({
+    # Outputs same character string that's used in the UI input field 
+     names(which(aggr_choices == input$aggr_level))
+  })
+  
+  prettyVariable <- reactive({
+    # Outputs same character string that's used in the UI input field 
+    names(which(variable_choices == input$variable))
+  })
+  
+  
+  
   outputCasesData <- reactive({
     # National level data shows all years
     
     if (input$aggr_level != "national") {
       dat <- subsetYear()
       dat <-
-        dat[, .(sex, grouping, n_patients, n_oprs, n_dead_30, n_dead_1yr)]
+        dat[, .(sex,
+                grouping,
+                n_patients,
+                n_oprs,
+                n_dead_30,
+                n_dead_1yr)]
       
     } else if (input$aggr_level == "national") {
       dat <- subsetOutcome()
@@ -86,26 +103,29 @@ shinyServer(function(input, output, session) {
     
     
     dat[]
+    
   })
   
   outputCasesD3Line <- reactive({
     # Replace value.var with reactive that corresponds to the variable the user selected
-    dcast(outputCasesData(), year ~ sex, value.var = input$variable)
+    dat <- dcast(outputCasesData(), year ~ sex, value.var = input$variable)
+    dat[, variable := prettyVariable()]
   })
   
   outputCasesD3Bar <- reactive({
-    # Replace value.var with reactive that corresponds to the variable the user selected
+    # Restrict data to the user selected vairable, and give pretty column names
     dat <- outputCasesData()
-    
-    keep_cols <- c("sex", "grouping", input$variable)
+    colnames(dat) <- dtColNames()
+    keep_cols <- c("Sex", prettyAggr_level(), prettyVariable())
     dat <- dat[, keep_cols, with = FALSE]
-    # colnames(dat) <- c("sex", "grouping", "value")
     dat[]
   })
   
   outputCasesDTTable <- reactive({
-    dat <- outputCasesData()
+    # Organizes data for DataTable outputs. Needs to be characters, and need
+    # flag column to color men/women rows
     
+    dat <- outputCasesData()
     dat <- dat[, lapply(.SD, as.character)]
     dat <- dat[, lapply(.SD, function(i) {
       i[is.na(i)] <- "<10"
@@ -143,9 +163,8 @@ shinyServer(function(input, output, session) {
   
   
   plot_d3 <- reactive({
-    
-    if (nrow(outputCasesD3Bar()) > 0  & input$aggr_level != "national") {
-      
+    if (nrow(outputCasesD3Bar()) > 0  &
+        input$aggr_level != "national") {
       r2d3(data = outputCasesD3Bar(), script = "bar.js")
     }
     
@@ -181,37 +200,47 @@ shinyServer(function(input, output, session) {
   
   # PLOT
   output$d3_plot <- renderD3({
-    plot_d3()
-    
+    if (input$year > 0 & input$aggr_level != "national") {
+      plot_d3()
+    }
   })
   
   output$d3_plot_line <- renderD3({
-    plot_d3_line()
-    
+    if (input$year > 0) {
+      plot_d3_line()
+    }
     
   })
   
   # DATATABLES:
   # AGE
   output$table_age <- renderDT({
-    outputCasesDTTable()
+    if (input$year > 0) {
+      outputCasesDTTable()
+    }
   }, server = FALSE)
   
   # EDU
   output$table_edu <- renderDT({
-    outputCasesDTTable()
+    if (input$year > 0) {
+      outputCasesDTTable()
+    }
   }, server = FALSE)
   
   # REGION
   output$table_region <-
     renderDT({
-      outputCasesDTTable()
+      if (input$year > 0) {
+        outputCasesDTTable()
+      }
     }, server = FALSE)
   
   # NATIONAL
   output$table_national <-
     renderDT({
-      outputCasesDTTable()
+      if (input$year > 0) {
+        outputCasesDTTable()
+      }
     }, server = FALSE)
   
   
