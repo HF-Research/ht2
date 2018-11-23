@@ -143,7 +143,9 @@ shinyServer(function(input, output, session) {
   
   
   plot_d3 <- reactive({
-    if (nrow(outputCasesD3Bar()) > 0) {
+    
+    if (nrow(outputCasesD3Bar()) > 0  & input$aggr_level != "national") {
+      
       r2d3(data = outputCasesD3Bar(), script = "bar.js")
     }
     

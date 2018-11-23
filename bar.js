@@ -14,8 +14,6 @@ var barPadding = 0.2;
 var varName = Object.keys(data[0])[2]
 for (var i = 0; i<data.length; i++) {
     data[i].value = data[i][varName]
-    delete data[i][varName];
-    
 }
 
 var initData = d3.nest().key(d => d.grouping).entries(data)
@@ -67,7 +65,7 @@ function update(inData) {
 
 // Reshape data
   var varName = Object.keys(inData[0])[2];
-  for (var i = 0; i<data.length; i++) {
+  for (var i = 0; i<inData.length; i++) {
     inData[i].value = inData[i][varName];
     delete inData[i][varName];
   }
