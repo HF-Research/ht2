@@ -143,19 +143,19 @@ var circlesMale = chartArea
     .attr("fill", colors[1]);
 
 
-var div = svg.append("div")
+var div = svg.append("rect")
     .attr('class', 'tooltip')
     .style('opacity', 0)
     .attr("position", "absolute")
     .attr("text-align", "center")
     .attr("width"," 60px")
     .attr("height", "28px")					
-    .attr("padding", "2px")				
-    .attr("font", "12px sans-serif")
-    .attr("background", "lightsteelblue")	
-    .attr("border", "0px")		
+    /*.attr("padding", "2px")				*/
+    /*.attr("font", "12px sans-serif")*/
+    .attr("fill", "lightsteelblue")	
+    /*.attr("border", "0px")		
     .attr("border-radius"," 8px")			
-
+*/
 
   // UPDATE FUNCTION - will be called by r2d3.onRender()
 function update(newData) {

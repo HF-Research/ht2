@@ -15,6 +15,7 @@ shinyServer(function(input, output, session) {
     fread(file = "documentation/outcome_descriptions.csv", encoding = "UTF-8")
   
   output$outcome_title <- renderText({
+    
     input$outcome
   })
   output$outcome_description <- renderText({
@@ -66,7 +67,8 @@ shinyServer(function(input, output, session) {
   
   prettyAggr_level <- reactive({
     # Outputs same character string that's used in the UI input field 
-     names(which(aggr_choices == input$aggr_level))
+     
+    names(which(aggr_choices == input$aggr_level))
   })
   
   prettyVariable <- reactive({
@@ -162,21 +164,24 @@ shinyServer(function(input, output, session) {
   })
   
   
-  plot_d3 <- reactive({
+  plot_d3_bar <- reactive({
     if (nrow(outputCasesD3Bar()) > 0  &
         input$aggr_level != "national") {
-      r2d3(data = outputCasesD3Bar(), script = "bar.js")
+      
+      simpleD3Bar(data = outputCasesD3Bar())
     }
     
   })
   
-  plot_d3_line <- reactive({
+  
+  plot_d3_line_html <- reactive({
     if (input$aggr_level == "national") {
-      r2d3(data = outputCasesD3Line(), script = "line.js")
+      simpleD3Line(data = outputCasesD3Line())
     }
   })
   
   choiceYears <- reactive({
+    
     # User can only select years >=2009 when viewing regional data
     if (input$aggr_level == "region") {
       return(c(2009:2015))
@@ -199,15 +204,27 @@ shinyServer(function(input, output, session) {
   # RENDER FUNCTIONS --------------------------------------------------------
   
   # PLOT
-  output$d3_plot <- renderD3({
+  output$d3_plot_bar <- renderSimpleD3Bar({
+    
     if (input$year > 0 & input$aggr_level != "national") {
-      plot_d3()
+      
+      plot_d3_bar()
     }
   })
   
   output$d3_plot_line <- renderD3({
     if (input$year > 0) {
       plot_d3_line()
+    }
+    
+  })
+  
+  
+  output$d3_plot_line_html <- renderSimpleD3Line({
+    
+    if (input$year > 0) {
+      
+      plot_d3_line_html()
     }
     
   })
