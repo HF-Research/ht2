@@ -5,35 +5,41 @@
 
 
 var margin = ({top:10, right:10, bottom:40, left:60});
-var Gwidth = width - margin.left - margin.right
-var Gheight = height - margin.top - margin.bottom
+var width = width - margin.left - margin.right;
+var height = height -margin.top - margin.bottom;
+
 var barPadding = 0.2;
 
 
 // Get data into format for bar chart, while storing grouping and variable name 
 var groupingName = Object.keys(data[0])[1]
-var varName = Object.keys(data[0])[2]
+var varName = Object.keys(data[0])[2];
 for (var i = 0; i<data.length; i++) {
-    data[i].grouping = data[i][groupingName]
-    data[i].value = data[i][varName]
+    data[i].grouping = data[i][groupingName];
+    data[i].value = data[i][varName];
 }
 
-var initData = d3.nest().key(d => d.grouping).entries(data)
+var initData = d3.nest().key(d => d.grouping).entries(data);
 
 
 
-var colors = ['#bd6916', '#166abd ']
+var colors = ['#bd6916', '#166abd '];
 
+var svg = div.append('svg')
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom);
+  
 var topG = svg.append('g')
-    .attr('transform', 'translate(' + margin.left + ',' + margin.top +')')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top +')');
 
-
+var tooltip = div.append('div')
+  .attr("class", "tooltip");
 // Initial scale
 
 // Scale between the keys (i.e. b/w age groups, edu, etc`)
 var scaleX = d3.scaleBand()
   .domain(initData.map(d => d.key))
-  .range([0, Gwidth])
+  .range([0, width])
   .padding(barPadding);
 
 var scaleColors = d3.scaleOrdinal()
@@ -47,19 +53,19 @@ var xAxis = topG.append('g')
     .attr("class", "x axis")
 
 xAxis.call(d3.axisBottom(scaleX))
-    .attr("transform", 'translate(' + 0 + "," + Gheight + ')');
+    .attr("transform", 'translate(' + 0 + "," + height + ')');
 
 
 // Axis titles
 topG.append("text")
-  .attr("x", Gwidth / 2)
-  .attr("y", Gheight + margin.bottom - 5)
+  .attr("x", width / 2)
+  .attr("y", height + margin.bottom - 5)
   .attr("class", "x axisTitle")
   .text(groupingName)
   
 topG.append("text")
   .attr("transform", "rotate(-90)")
-  .attr("x", 0 - Gheight / 2)
+  .attr("x", 0 - height / 2)
   .attr("y", 0 - margin.left + 20)
   .attr("class", "y axisTitle")
   .text("Total")
@@ -107,16 +113,36 @@ function update(inData) {
   // Scales used in updates 
   var scaleY = d3.scaleLinear()
     .domain([0, maxY])
-    .range([Gheight, 0]);
+    .range([height, 0]);
   
   var scaleX = d3.scaleBand()
     .domain(grouping1Names)
-    .range([0, Gwidth])
+    .range([0, width])
     .padding(barPadding);
 
   var scaleX1 = d3.scaleBand()
     .domain(grouping2Names)
     .rangeRound([0, scaleX.bandwidth()]);
+  
+  
+  
+  //
+   function showTooltip(d) {
+              tooltip.transition()
+              .duration(tShort)
+              .style('opacity', 0.9);
+              tooltip.html(
+                "<b>" + "År " + "</b>" + d.keyL2 + "<br/><br/>" +
+                varName + " " + "<b>" + d.value + "</br>")
+                .style("left", d3.event.pageX + "px")
+                .style("top", (d3.event.pageY + 28) + "px");
+          }
+
+        function hideTooltip() {
+            tooltip.transition()
+            .duration(tShort)
+            .style('opacity', 0);
+          }
   
   
    // Perform the data joins
@@ -151,6 +177,8 @@ function update(inData) {
     .attr("y", d => scaleY(0))
     .merge(bars)
     .attr("x", (d) => scaleX1(d.keyL2))
+    .on("mouseover", showTooltip)
+    .on("mouseout", hideTooltip)
     
     .transition()
     .duration(tLong)
