@@ -8,8 +8,6 @@ library(shinyBS)
 library(lubridate)
 library(DT)
 
-devtools::install_github('matthew-phelps/simpled3', force = TRUE)
-library(simpled3)
 
 
 
@@ -94,11 +92,10 @@ ui <- fluidPage(
     # Plots
     fluidRow(
       conditionalPanel("input.aggr_level != 'national'",
-                       simpleD3BarOutput("d3_plot_bar")),
+                       d3Output("d3_plot")),
       conditionalPanel("input.aggr_level == 'national'",
-                       
-                       simpleD3LineOutput("d3_plot_line_html")
-    )),
+                       d3Output("d3_plot_line"))
+    ),
     
     br(),
     
