@@ -1,3 +1,22 @@
+library(heaven)
+
+# Use hjertetal_code to merge names and descriptions of outcomes
+load(file = "data/export_summaries_opr.Rdata")
+load(file = "data/codes_tables.rda")
+code_tables$behandling
+outcome_names_treatment <- data.table(hjertetal_code = names(export))
+merge(code_tables$behandling, outcome_names_treatment, by = "hjertetal_code")
+
+
+
+
+# Add blank initial choice for dropdowns - so forces user to choose actively
+outcome_choices <- c("",
+                     list(
+                       "Sygdom" = c(),
+                       "Behandling" = outcome_names_treatment,
+                       "Medicin" = c()
+                     ))
 
 dropdown_tooltip = enc2utf8("Click to choose data")
 
@@ -14,6 +33,7 @@ theme_names <- enc2utf8(
     "Hospital" = "hospital"
   )
 )
+theme_names <- c("", theme_names)
 
 aggr_choices <-
   list(
@@ -23,7 +43,14 @@ aggr_choices <-
     "National" = "national"
   )
 
-variable_choices <- list(
+variable_choices_opr <- list(
+  "Antal patienter" = "n_patients",
+  "Antal procedurer" = "n_oprs",
+  "Antal døde: 30 dage" = "n_dead_30",
+  "Antal døde: 1 år" = "n_dead_1yr"
+)
+
+variable_choices_med <- list(
   "Antal patienter" = "n_patients",
   "Antal procedurer" = "n_oprs",
   "Antal døde: 30 dage" = "n_dead_30",
@@ -39,16 +66,13 @@ ui_national <- enc2utf8("National")
 
 
 
-
+var_names_opr_pretty <- sapply(names(variable_choices_opr), c)
 ui_colnames_cases_age <-
   enc2utf8(
     c(
       "Sex",
       "Alder",
-      "Antal patienter",
-      "Antal procedurer",
-      "Antal døde: 30 dage",
-      "Antal døde: 1 år"
+      var_names_opr_pretty
     )
   )
 
@@ -57,10 +81,7 @@ ui_colnames_cases_edu <-
     c(
       "Sex",
       "Uddannelse",
-      "Antal patienter",
-      "Antal procedurer",
-      "Antal døde: 30 dage",
-      "Antal døde: 1 år"
+      var_names_opr_pretty
     )
   )
 
@@ -69,22 +90,15 @@ ui_colnames_cases_region <-
     c(
       "Sex",
       "Region",
-      "Antal patienter",
-      "Antal procedurer",
-      "Antal døde: 30 dage",
-      "Antal døde: 1 år"
+      var_names_opr_pretty
     )
   )
 
 ui_colnames_cases_national <-
   enc2utf8(
     c(
-      "År",
       "Sex",
-      "National",
-      "Antal patienter",
-      "Antal procedurer",
-      "Antal døde: 30 dage",
-      "Antal døde: 1 år"
+      "År",
+      var_names_opr_pretty
     )
   )

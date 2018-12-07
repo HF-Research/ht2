@@ -15,12 +15,58 @@ shinyServer(function(input, output, session) {
     fread(file = "documentation/outcome_descriptions.csv", encoding = "UTF-8")
   
   output$outcome_title <- renderText({
-    
     input$outcome
   })
   output$outcome_description <- renderText({
     outcome_descriptions[outcome == input$outcome, description_dk]
   })
+  
+  # DYNAMIC VARIABLES/COLUMN NAMES ------------------------------------------
+  dtColNames <- reactive({
+    # Adapt DT column names to the appropriate dataset.
+    switch(
+      input$aggr_level,
+      "age" = ui_colnames_cases_age,
+      "edu" = ui_colnames_cases_edu,
+      "region" = ui_colnames_cases_region,
+      "national" = ui_colnames_cases_national
+    )
+  })
+  
+  outcomeGroup <- reactive({
+    # Define which columns are in the outputed dataset.
+    if (any(outcome_names_treatment %in% input$outcome)) {
+      outcome_group <- "treatment"
+    } else if (any(outcome_names_diag %in% input$outcome)) {
+      outcome_group <- "diag"
+    } else if (any(out_names_med %in% input$outcome)) {
+      outcome_group <- "med"
+    }
+    outcome_group
+  })
+  
+  prettyAggr_level <- reactive({
+    # Outputs same character string that's used in the UI input field
+    names(which(aggr_choices == input$aggr_level))
+  })
+  
+  prettyVariable <- reactive({
+    # Outputs same character string that's used in the UI input field
+    switch(
+      outcomeGroup(),
+      "treatment" = names(which(
+        variable_choices_opr == input$variable
+      )),
+      "diag" = names(which(
+        variable_choices_diag == input$variable
+      )),
+      "med" = names(which(
+        variable_choices_med == input$variable
+      ))
+    )
+    
+  })
+  
   
   
   # REACTIVE FUNCTIONS ------------------------------------------------------
@@ -34,53 +80,8 @@ shinyServer(function(input, output, session) {
     
   })
   
-  selectVars <- reactive({
-    # Can't remember why this is needed
-    
-    out <- c("year",
-             "sex",
-             "grouping",
-             "n_patients",
-             "n_oprs",
-             "n_dead_30",
-             "n_dead_1yr")
-    if (input$aggr_level != "national") {
-      out <- out[-1]
-    }
-    out
-  })
-  
-  
-  dtColNames <- reactive({
-    # Adapt DT column names to the appropriate dataset. Need to at switch() here probably
-    
-    out <- switch(
-      input$aggr_level,
-      "age" = ui_colnames_cases_age,
-      "edu" = ui_colnames_cases_edu,
-      "region" = ui_colnames_cases_region,
-      "national" = ui_colnames_cases_national
-    )
-    
-    out
-  })
-  
-  prettyAggr_level <- reactive({
-    # Outputs same character string that's used in the UI input field 
-     
-    names(which(aggr_choices == input$aggr_level))
-  })
-  
-  prettyVariable <- reactive({
-    # Outputs same character string that's used in the UI input field 
-    names(which(variable_choices == input$variable))
-  })
-  
-  
-  
   outputCasesData <- reactive({
     # National level data shows all years
-    
     if (input$aggr_level != "national") {
       dat <- subsetYear()
       dat <-
@@ -93,40 +94,69 @@ shinyServer(function(input, output, session) {
       
     } else if (input$aggr_level == "national") {
       dat <- subsetOutcome()
-      dat <-
-        dat[, .(year,
-                sex,
-                grouping,
-                n_patients,
-                n_oprs,
-                n_dead_30,
-                n_dead_1yr)]
+      dat <- dat[, .(sex,
+                     year,
+                     n_patients,
+                     n_oprs,
+                     n_dead_30,
+                     n_dead_1yr)]
     }
-    
-    
     dat[]
-    
   })
   
   outputCasesD3Line <- reactive({
     # Replace value.var with reactive that corresponds to the variable the user selected
-    dat <- dcast(outputCasesData(), year ~ sex, value.var = input$variable)
+    dat <-
+      dcast(outputCasesData(), year ~ sex, value.var = input$variable)
     dat[, variable := prettyVariable()]
   })
   
   outputCasesD3Bar <- reactive({
     # Restrict data to the user selected vairable, and give pretty column names
+    
     dat <- outputCasesData()
+    vars_holding_data <- sapply(variable_choices_opr, function(i)
+      i)
+    dat[, (vars_holding_data) := lapply(.SD, function(i) {
+      # Any NA values need to be converted to 0s to be sent to d3
+      i[is.na(i)] <- 0
+      i
+    }),
+    .SDcols = vars_holding_data]
+    
     colnames(dat) <- dtColNames()
     keep_cols <- c("Sex", prettyAggr_level(), prettyVariable())
     dat <- dat[, keep_cols, with = FALSE]
     dat[]
   })
   
+  
+  plot_d3_bar <- reactive({
+    if (nrow(outputCasesD3Bar()) > 0  &
+        input$aggr_level != "national") {
+      simpleD3Bar(data = outputCasesD3Bar())
+    }
+    
+  })
+  
+  
+  plot_d3_line <- reactive({
+    if (input$aggr_level == "national") {
+      simpleD3Line(data = outputCasesD3Line())
+    }
+  })
+  
+  plot_d3_legend <- reactive({
+    colors = data.frame(male = "#166abd",
+                        female = "#bd6916")
+    simpleD3Legend(colors = colors)
+    
+    
+  })
+  
   outputCasesDTTable <- reactive({
     # Organizes data for DataTable outputs. Needs to be characters, and need
     # flag column to color men/women rows
-    
     dat <- outputCasesData()
     dat <- dat[, lapply(.SD, as.character)]
     dat <- dat[, lapply(.SD, function(i) {
@@ -134,6 +164,7 @@ shinyServer(function(input, output, session) {
       i
     })]
     
+    # Make invisible column so we can color male and females
     colnames(dat) <- dtColNames()
     dat[, flag := 1]
     dat[Sex == "female", flag := 0]
@@ -149,8 +180,9 @@ shinyServer(function(input, output, session) {
     DT::datatable(
       data = dat,
       extensions = 'Buttons',
+      rownames = FALSE,
       options = list(columnDefs = list(list(
-        visible = FALSE, targets = 1
+        visible = FALSE, targets = 0
       )))
     ) %>%
       formatStyle(
@@ -163,25 +195,22 @@ shinyServer(function(input, output, session) {
     
   })
   
-  
-  plot_d3_bar <- reactive({
-    if (nrow(outputCasesD3Bar()) > 0  &
-        input$aggr_level != "national") {
-      
-      simpleD3Bar(data = outputCasesD3Bar())
-    }
-    
+  # VALIDATE BEFORE PLOTING -------------------------------------------------
+  validate <- reactive({
+    all(input$outcome != "", input$year > 0, input$theme != "")
   })
   
   
-  plot_d3_line_html <- reactive({
-    if (input$aggr_level == "national") {
-      simpleD3Line(data = outputCasesD3Line())
-    }
+  # CHANGE UI BASED ON INPUTS -----------------------------------------------
+  observe({
+    shinyjs::toggle(id = "theme", condition = input$outcome != "")
+    shinyjs::toggle(id = "year", condition = input$theme != "")
+    shinyjs::toggle(id = "variable", condition = input$theme != "")
+    shinyjs::toggle(id = "aggr_level", condition = input$theme != "")
   })
+  
   
   choiceYears <- reactive({
-    
     # User can only select years >=2009 when viewing regional data
     if (input$aggr_level == "region") {
       return(c(2009:2015))
@@ -197,7 +226,16 @@ shinyServer(function(input, output, session) {
       choices = choiceYears(),
       selected = 2015
     )
+    
   })
+  
+  observe({
+    # Disable "year" when showing longitudinal data
+    shinyjs::toggleState(id = "year",
+                         condition = input$aggr_level != "national")
+    
+  })
+  
   
   
   
@@ -205,61 +243,37 @@ shinyServer(function(input, output, session) {
   
   # PLOT
   output$d3_plot_bar <- renderSimpleD3Bar({
-    
-    if (input$year > 0 & input$aggr_level != "national") {
-      
+    if (validate() & input$aggr_level != "national") {
       plot_d3_bar()
     }
   })
   
-  output$d3_plot_line <- renderD3({
-    if (input$year > 0) {
+  output$d3_plot_line_html <- renderSimpleD3Line({
+    if (validate()) {
       plot_d3_line()
     }
     
   })
   
-  
-  output$d3_plot_line_html <- renderSimpleD3Line({
-    
-    if (input$year > 0) {
-      
-      plot_d3_line_html()
+  output$d3_plot_legend <- renderSimpleD3Legend({
+    if (validate()) {
+      plot_d3_legend()
     }
-    
   })
   
   # DATATABLES:
   # AGE
-  output$table_age <- renderDT({
-    if (input$year > 0) {
+  output$table <- renderDT({
+    if (validate()) {
       outputCasesDTTable()
     }
   }, server = FALSE)
   
-  # EDU
-  output$table_edu <- renderDT({
-    if (input$year > 0) {
+  output$table_margins <- renderDT({
+    if (validate()) {
       outputCasesDTTable()
     }
   }, server = FALSE)
-  
-  # REGION
-  output$table_region <-
-    renderDT({
-      if (input$year > 0) {
-        outputCasesDTTable()
-      }
-    }, server = FALSE)
-  
-  # NATIONAL
-  output$table_national <-
-    renderDT({
-      if (input$year > 0) {
-        outputCasesDTTable()
-      }
-    }, server = FALSE)
-  
   
   
 })

@@ -1,8 +1,6 @@
 library(shiny)
 library(shinyWidgets)
-library(shinyjs)
 library(data.table)
-library(ggplot2)
 library(r2d3)
 library(shinyBS)
 library(lubridate)
@@ -13,11 +11,12 @@ library(simpled3)
 
 
 
-load(file = "data/export_summaries_opr.Rdata")
+
 source(file = "ui-dk.R", encoding = "UTF-8")
-outcome_names <- names(export)
+
 max_year <- 2015
 ui <- fluidPage(
+  shinyjs::useShinyjs(),
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css")
   ),
@@ -29,9 +28,18 @@ ui <- fluidPage(
              selectInput(
                inputId = "outcome",
                label = choose_outcome,
-               choices = outcome_names
+               choices = outcome_choices,
+               selectize = TRUE
              ),
              fluidRow(column(
+               7,
+               selectInput(
+                 inputId = "theme",
+                 label = choose_theme,
+                 choices = theme_names
+               )
+             ),
+             column(
                5,
                selectInput(
                  inputId = "year",
@@ -40,16 +48,21 @@ ui <- fluidPage(
                  selected = 2015
                )
                
+             )),
+             
+             fluidRow(column(
+               7,
+               radioGroupButtons(
+                 inputId = "variable",
+                 label = choose_var,
+                 choices = variable_choices_opr,
+                 justified = TRUE,
+                 direction = "vertical",
+                 individual = FALSE
+                 
+               )
              ),
              column(
-               7,
-               selectInput(
-                 inputId = "theme",
-                 label = choose_theme,
-                 choices = theme_names
-               )
-             )),
-             fluidRow(column(
                5,
                radioGroupButtons(
                  inputId = "aggr_level",
@@ -57,18 +70,6 @@ ui <- fluidPage(
                  choices = aggr_choices,
                  justified = TRUE,
                  direction = "vertical"
-               )
-             )
-             ,
-             column(
-               7,
-               radioGroupButtons(
-                 inputId = "variable",
-                 label = choose_var,
-                 choices = variable_choices,
-                 justified = TRUE,
-                 direction = "vertical",
-                 individual = FALSE
                )
              ))
              
@@ -86,25 +87,39 @@ ui <- fluidPage(
     )
   ),
   
-  fluidRow(column(
-    12,
-    align = "center",
-    br(),
+  fluidRow(
+    column(
+      id = "col_output",
+      12,
+      align = "center",
+      br(),
+      
+      # Plots
+      fluidRow(
+        conditionalPanel(
+          condition = "input.aggr_level != 'national'",
+          column(10,
+          simpleD3BarOutput("d3_plot_bar")),
+          column(2, simpleD3LegendOutput("d3_plot_legend"))
+        ),
+        conditionalPanel(
+          "input.aggr_level == 'national'",
+          
+          simpleD3LineOutput("d3_plot_line_html")
+        )
+      ),
+      
+      br(),
+      br(),
+      
+      # DataTables
+      fluidRow(DTOutput("table")),
+      fluidRow(DTOutput("table_margins"))
     
-    # Plots
-    fluidRow(
-      conditionalPanel("input.aggr_level != 'national'",
-                       simpleD3BarOutput("d3_plot_bar")),
-      conditionalPanel("input.aggr_level == 'national'",
-                       
-                       simpleD3LineOutput("d3_plot_line_html")
-    )),
+    )
     
-    br(),
     
-    # DataTables
-    fluidRow(DTOutput("table_age"))
-  ))
+  )
   #
   #
   # tabsetPanel(

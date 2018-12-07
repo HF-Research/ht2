@@ -5,7 +5,7 @@ source(file = "helperFunctions.R")
 
 # DIAGNOSES ---------------------------------------------------------------
 
-diag_codes <- fread(input = "data/diag_codes.txt")
+diag_codes <- fread(input = "data/d_codes.txt")
 colnames(diag_codes) <- tolower(colnames(diag_codes))
 
 syg_names_dk <-
@@ -206,7 +206,7 @@ opr_list <- lapply(1:length(opr_names), function(i) {
     grep_string = grep_strings[i]
   )
 })
-opr_list[[1]]
+
 
 
 # MEDICINE ----------------------------------------------------------------
