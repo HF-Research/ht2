@@ -91,3 +91,8 @@ out_pretty
 
 ```
 
+#### Rates and standardizations
+We used the European Standard population, 2013, taken from:
+http://www.isdscotland.org/Products-and-Services/GPD-Support/Population/Standard-Populations/
+
+

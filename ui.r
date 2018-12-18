@@ -6,10 +6,8 @@ library(shinyBS)
 library(lubridate)
 library(DT)
 
-devtools::install_github('matthew-phelps/simpled3', force = TRUE)
+devtools::install_github('matthew-phelps/simpled3', force = FALSE)
 library(simpled3)
-
-
 
 
 source(file = "ui-dk.R", encoding = "UTF-8")
@@ -33,25 +31,6 @@ ui <- fluidPage(
              ),
              fluidRow(column(
                7,
-               selectInput(
-                 inputId = "theme",
-                 label = choose_theme,
-                 choices = theme_names
-               )
-             ),
-             column(
-               5,
-               selectInput(
-                 inputId = "year",
-                 label = choose_year,
-                 choices = NULL,
-                 selected = 2015
-               )
-               
-             )),
-             
-             fluidRow(column(
-               7,
                radioGroupButtons(
                  inputId = "variable",
                  label = choose_var,
@@ -64,16 +43,25 @@ ui <- fluidPage(
              ),
              column(
                5,
-               radioGroupButtons(
+               selectInput(
+                 inputId = "year",
+                 label = choose_year,
+                 choices = NULL,
+                 selected = 2015
+               ),
+             fluidRow(
+             radioGroupButtons(
                  inputId = "aggr_level",
                  label = choose_aggr_lv,
                  choices = aggr_choices,
                  justified = TRUE,
                  direction = "vertical"
                )
-             ))
+             )
              
-           )),
+           ))
+           )
+           ),
     
     column(
       id = "col_description",
@@ -98,9 +86,7 @@ ui <- fluidPage(
       fluidRow(
         conditionalPanel(
           condition = "input.aggr_level != 'national'",
-          column(10,
-          simpleD3BarOutput("d3_plot_bar")),
-          column(2, simpleD3LegendOutput("d3_plot_legend"))
+          simpleD3BarOutput("d3_plot_bar")
         ),
         conditionalPanel(
           "input.aggr_level == 'national'",
@@ -108,52 +94,18 @@ ui <- fluidPage(
           simpleD3LineOutput("d3_plot_line_html")
         )
       ),
+      fluidRow(simpleD3LegendOutput("d3_plot_legend", height = '50px')),
       
       br(),
       br(),
       
       # DataTables
-      fluidRow(DTOutput("table")),
-      fluidRow(DTOutput("table_margins"))
+      fluidRow(
+        column(6, DTOutput("table")),
+        column(6, DTOutput("table_margins"))
+        ),
+      fluidRow(br(), br())
     
     )
-    
-    
   )
-  #
-  #
-  # tabsetPanel(
-  #   type = "tabs",
-  #   id = "aggr_level",
-  #
-  #   # TABS ---------------------------------------------------------------------
-  #
-  #
-  #   # Education
-  #   tabPanel(ui_edu, value = "edu",
-  #            # Row for results
-  #            br(),
-  #            fluidRow(d3Output("d3_bar_edu")),
-  #            br(),
-  #
-  #            fluidRow(DTOutput("table_edu"))),
-  #
-  #   # Region
-  #   tabPanel(ui_region, value = "region",
-  #            br(),
-  #
-  #            # Row for results
-  #            fluidRow(DTOutput("table_region"))),
-  #
-  #   # National
-  #   tabPanel(ui_national, value = "national",
-  #            br(),
-  #
-  #            # Row for results
-  #            fluidRow(DTOutput("table_national")))
-  #
-  # )
-  #
-  
-  
 )

@@ -9,10 +9,16 @@ shinyServer(function(input, output, session) {
     dom = "Bt",
     buttons = c('copy', 'csv', 'pdf')
   ))
-  load(file = "data/export_summaries_opr.Rdata")
-  source("ui-dk.R", encoding = "UTF-8")
+  load(file = "data/shiny_dat.rda")
+  load(file = "data/export_med.Rdata")
   outcome_descriptions <-
     fread(file = "documentation/outcome_descriptions.csv", encoding = "UTF-8")
+  #
+  
+  # outcome_descriptions <-
+  #   fread(file = "data/descriptions.csv", encoding = "UTF-8")
+  #
+  source("ui-dk.R", encoding = "UTF-8")
   
   output$outcome_title <- renderText({
     input$outcome
@@ -22,20 +28,17 @@ shinyServer(function(input, output, session) {
   })
   
   # DYNAMIC VARIABLES/COLUMN NAMES ------------------------------------------
-  dtColNames <- reactive({
-    # Adapt DT column names to the appropriate dataset.
-    switch(
-      input$aggr_level,
-      "age" = ui_colnames_cases_age,
-      "edu" = ui_colnames_cases_edu,
-      "region" = ui_colnames_cases_region,
-      "national" = ui_colnames_cases_national
-    )
+  
+  outcomeCode <- reactive({
+    # Connect the input in normal language to the hjertetal_code. This is so we
+    # can change the description without having to rename allll the datasets.
+    outcomes_all[name_dk == input$outcome, hjertetal_code]
   })
   
-  outcomeGroup <- reactive({
-    # Define which columns are in the outputed dataset.
-    if (any(outcome_names_treatment %in% input$outcome)) {
+  
+   outcomeGroup <- reactive({
+    # Define which type of outcome are in the outputed dataset.
+    if (any(outcome_names_treatment$hjertetal_code %in% outcomeCode())) {
       outcome_group <- "treatment"
     } else if (any(outcome_names_diag %in% input$outcome)) {
       outcome_group <- "diag"
@@ -52,82 +55,93 @@ shinyServer(function(input, output, session) {
   
   prettyVariable <- reactive({
     # Outputs same character string that's used in the UI input field
-    switch(
-      outcomeGroup(),
-      "treatment" = names(which(
-        variable_choices_opr == input$variable
-      )),
-      "diag" = names(which(
-        variable_choices_diag == input$variable
-      )),
-      "med" = names(which(
-        variable_choices_med == input$variable
-      ))
-    )
+    data_var_names <- selectedDataVars()
+    
+    c(variable_names[code_name == data_var_names[1], var_dk], variable_names[code_name == data_var_names[2], var_dk])
+    
     
   })
   
   
   
-  # REACTIVE FUNCTIONS ------------------------------------------------------
+  # SUBSETTING ------------------------------------------------------
   subsetOutcome <- reactive({
     # Cache subset based on outcome, aggr level, and theme
-    export[[input$outcome]][[input$aggr_level]][[input$theme]]
-  })
-  subsetYear <- reactive({
-    # Subset the already partially subset data based on years
-    subsetOutcome()[year == input$year,]
+    if (input$aggr_level != "national") {
+      shiny_dat[[outcomeCode()]][[input$aggr_level]]
+    } else {
+      # No real reason to pick age - but need any dataset (not edu) that will be
+      # aggregated
+      shiny_dat[[outcomeCode()]]$age
+    }
     
   })
   
+  selectedDataVars <- reactive({
+    grep(input$variable, colnames(subsetOutcome()), value = TRUE)
+  })
+  subsetVars <- reactive({
+    dat <- subsetOutcome()
+    col_vars <- c("year", "sex", "grouping", selectedDataVars())
+    dat <- dat[, ..col_vars]
+    colnames(dat) <-
+      c(ui_year, ui_sex, prettyAggr_level(), prettyVariable())
+    dat[]
+  })
+  subsetYear <- function()
+    ({
+      # Subset the already partially subset data based on years
+      
+      dat <- subsetVars()[get(ui_year) == input$year,]
+      dat[]
+    })
+  
+  
+  # FORMATTING DATA ---------------------------------------------------------
   outputCasesData <- reactive({
     # National level data shows all years
+    # This is not a reactive, because then it somehow turns the "<10" strings
+    # into 0s. The reactive wasn't being called when I thought it was
     if (input$aggr_level != "national") {
       dat <- subsetYear()
-      dat <-
-        dat[, .(sex,
-                grouping,
-                n_patients,
-                n_oprs,
-                n_dead_30,
-                n_dead_1yr)]
-      
-    } else if (input$aggr_level == "national") {
-      dat <- subsetOutcome()
-      dat <- dat[, .(sex,
-                     year,
-                     n_patients,
-                     n_oprs,
-                     n_dead_30,
-                     n_dead_1yr)]
+      dat[, (ui_year) := NULL]
+    } else {
+      subsetYear()
     }
-    dat[]
+    
   })
   
   outputCasesD3Line <- reactive({
     # Replace value.var with reactive that corresponds to the variable the user selected
+    # TODO: Allow switching between rates and counts for plot
+    
     dat <-
-      dcast(outputCasesData(), year ~ sex, value.var = input$variable)
-    dat[, variable := prettyVariable()]
+      dcast(
+        subsetVars(),
+        get(ui_year) ~ get(ui_sex),
+        value.var = prettyVariable()[1],
+        fun.aggregate = sum
+      )
+    colnames(dat) <-
+      c(ui_year, "female", "male") # TODO: needs to be language agnostic
+    dat[, variable := prettyVariable()[1]]
+    
   })
   
   outputCasesD3Bar <- reactive({
     # Restrict data to the user selected vairable, and give pretty column names
-    
-    dat <- outputCasesData()
-    vars_holding_data <- sapply(variable_choices_opr, function(i)
-      i)
-    dat[, (vars_holding_data) := lapply(.SD, function(i) {
+    # browser()
+    keep_cols <- c(ui_sex, prettyAggr_level(), prettyVariable())
+    dat <- subsetYear()[, ..keep_cols]
+    dat[, (prettyVariable()) := lapply(.SD, function(i) {
       # Any NA values need to be converted to 0s to be sent to d3
       i[is.na(i)] <- 0
       i
     }),
-    .SDcols = vars_holding_data]
+    .SDcols = prettyVariable()]
     
-    colnames(dat) <- dtColNames()
-    keep_cols <- c("Sex", prettyAggr_level(), prettyVariable())
-    dat <- dat[, keep_cols, with = FALSE]
-    dat[]
+    dat[, 1:3]
+    #TODO: Allow switching between rates and counts for plot
   })
   
   
@@ -147,52 +161,88 @@ shinyServer(function(input, output, session) {
   })
   
   plot_d3_legend <- reactive({
-    colors = data.frame(male = "#166abd",
-                        female = "#bd6916")
-    simpleD3Legend(colors = colors)
+    sex_vars <- ui_sex_levels
+    color = c("#bd6916", "#166abd")
+    data = data.frame(sex = sex_vars,
+                      color =  color)
+    simpleD3Legend(data)
     
     
   })
   
-  outputCasesDTTable <- reactive({
+  # DATATABLES --------------------------------------------------------------
+  outputCountDTTable <- reactive({
     # Organizes data for DataTable outputs. Needs to be characters, and need
     # flag column to color men/women rows
-    dat <- outputCasesData()
-    dat <- dat[, lapply(.SD, as.character)]
+    dat <- copy(outputCasesData())
+    group_var <- prettyAggr_level()
+    dat[, prettyVariable()[2] := NULL]
+    dat <-  dcast(
+      dat,
+      get(group_var) ~ get(ui_sex),
+      value.var = prettyVariable()[1],
+      fun.aggregate = sum
+    )
+    dat[, Total := rowSums(dat[, .(female, male)])]
+    
     dat <- dat[, lapply(.SD, function(i) {
       i[is.na(i)] <- "<10"
       i
     })]
     
-    # Make invisible column so we can color male and females
-    colnames(dat) <- dtColNames()
-    dat[, flag := 1]
-    dat[Sex == "female", flag := 0]
-    
-    # Make sure "flag" variable is always first column, so we can
-    # programatically reference it
-    out_names <- colnames(dat)
-    out_names <-
-      c(out_names[length(out_names)], out_names[-length(out_names)])
-    
-    setcolorder(dat, neworder = out_names)
+    colnames(dat) <- c(group_var, ui_sex_levels, "Total")
     
     DT::datatable(
       data = dat,
       extensions = 'Buttons',
       rownames = FALSE,
-      options = list(columnDefs = list(list(
-        visible = FALSE, targets = 0
-      )))
-    ) %>%
-      formatStyle(
-        "Sex",
-        "flag",
-        color = "white",
-        fontWeight = "bold",
-        backgroundColor = styleInterval(c(0), c("#bd6916", "#166abd"))
+      class = ' hover row-border',
+      options = list(
+        buttons = c('copy', 'pdf'),
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+          "}"
+        )
       )
+    ) %>%
+      formatStyle('Total',  fontWeight = 'bold') %>%
+      formatStyle(group_var,  backgroundColor = "#e7e7e7")
     
+  })
+  
+  outputRateDTTable <- reactive({
+    dat <- copy(outputCasesData())
+    group_var <- prettyAggr_level()
+    dat[, prettyVariable()[1] := NULL]
+    dat <-  dcast(
+      dat,
+      get(group_var) ~ get(ui_sex),
+      value.var = prettyVariable()[2],
+      fun.aggregate = sum
+    )
+    dat <- dat[, lapply(.SD, function(i) {
+      i[is.na(i)] <- "<10"
+      i
+    })]
+    
+    colnames(dat) <- c(group_var, ui_sex_levels)
+    
+    DT::datatable(
+      data = dat,
+      extensions = 'Buttons',
+      rownames = FALSE,
+      class = 'hover row-border',
+      options = list(
+        buttons = c('copy', 'pdf'),
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+          "}"
+        )
+      )
+    ) %>%
+      formatStyle(group_var,  backgroundColor = "#e7e7e7")
   })
   
   # VALIDATE BEFORE PLOTING -------------------------------------------------
@@ -265,13 +315,13 @@ shinyServer(function(input, output, session) {
   # AGE
   output$table <- renderDT({
     if (validate()) {
-      outputCasesDTTable()
+      outputCountDTTable()
     }
   }, server = FALSE)
   
   output$table_margins <- renderDT({
     if (validate()) {
-      outputCasesDTTable()
+      outputRateDTTable()
     }
   }, server = FALSE)
   
