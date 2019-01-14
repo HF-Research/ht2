@@ -1,12 +1,11 @@
 library(shiny)
 library(shinyWidgets)
 library(data.table)
-library(r2d3)
 library(shinyBS)
 library(lubridate)
 library(DT)
 
-devtools::install_github('matthew-phelps/simpled3', force = FALSE)
+# devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 
 
@@ -23,6 +22,7 @@ ui <- fluidPage(
     column(id = "col_input",
            4,
            wellPanel(
+             class = "well_input",
              selectInput(
                inputId = "outcome",
                label = choose_outcome,
@@ -31,33 +31,27 @@ ui <- fluidPage(
              ),
              fluidRow(column(
                7,
-               radioGroupButtons(
-                 inputId = "variable",
-                 label = choose_var,
-                 choices = variable_choices_opr,
-                 justified = TRUE,
-                 direction = "vertical",
-                 individual = FALSE
+               uiOutput("varButtonChoices")
                  
-               )
+               
              ),
              column(
                5,
-               selectInput(
-                 inputId = "year",
-                 label = choose_year,
-                 choices = NULL,
-                 selected = 2015
-               ),
-             fluidRow(
              radioGroupButtons(
                  inputId = "aggr_level",
                  label = choose_aggr_lv,
                  choices = aggr_choices,
                  justified = TRUE,
                  direction = "vertical"
+               ),
+             fluidRow(
+               selectInput(
+                 inputId = "year",
+                 label = choose_year,
+                 choices = NULL,
+                 selected = 2015
+               ) 
                )
-             )
              
            ))
            )
@@ -68,9 +62,12 @@ ui <- fluidPage(
       7,
       wellPanel(
         class = "well_description",
-        h2(textOutput("outcome_title")),
+        h3(textOutput("outcome_title")),
         hr(),
-        textOutput("outcome_description")
+        textOutput("outcome_description"),
+        br(),
+        h4(textOutput("variable_title")),
+        textOutput("variable_desc")
       )
     )
   ),
@@ -80,9 +77,17 @@ ui <- fluidPage(
       id = "col_output",
       12,
       align = "center",
-      br(),
       
       # Plots
+      fluidRow(
+        align = "left", h4(tags$b(textOutput("plot_title")))),
+      fluidRow(align = "left",
+               radioGroupButtons(
+                 inputId = "count_rates",
+                 label =  NULL,
+                 choices = count_rate_choices,
+                 justified = FALSE)),
+                 
       fluidRow(
         conditionalPanel(
           condition = "input.aggr_level != 'national'",
@@ -94,15 +99,18 @@ ui <- fluidPage(
           simpleD3LineOutput("d3_plot_line_html")
         )
       ),
-      fluidRow(simpleD3LegendOutput("d3_plot_legend", height = '50px')),
+      # fluidRow(simpleD3LegendOutput("d3_plot_legend", height = '50px')),
       
-      br(),
-      br(),
+      
       
       # DataTables
       fluidRow(
-        column(6, DTOutput("table")),
-        column(6, DTOutput("table_margins"))
+        column(6,
+               fluidRow(tags$b(textOutput("table1_title"))),
+               fluidRow(DTOutput("table"))),
+        column(6,
+               fluidRow(tags$b(textOutput("table2_title"))),
+               fluidRow(DTOutput("table_margins")))
         ),
       fluidRow(br(), br())
     

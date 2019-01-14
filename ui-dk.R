@@ -1,63 +1,54 @@
-library(heaven)
+library(data.table)
+
 source("r/data-preprocessing.R")
+
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
 load(file = "data/shiny_list.rda")
 load(file = "data/codes_tables.rda")
-load(file = "data/export_med.Rdata")
+load(file = "data/outcome_descriptions.Rdata")
+load(file = "data/variable_ui.Rdata")
+outcome_descriptions <- outcome_descriptions[, lapply(.SD, enc2native)]
+variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 
-
-outcome_descriptions <-
-  fread(file = "data/descriptions.csv", encoding = "UTF-8")
-variable_names <- fread(file = "data/variable_ui_text.csv", encoding = "UTF-8")
-
-code_tables$behandling
 outcome_names_treatment <-
   merge(data.table(hjertetal_code = names(shiny_list$opr_dat)),
-        code_tables$behandling,
-        by = "hjertetal_code")[, .(hjertetal_code, opr_name_dk, opr_name_en)]
+        outcome_descriptions,
+        by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
 colnames(outcome_names_treatment) <- c("hjertetal_code", "name_dk", "name_en")
 outcome_names_med <-
-  merge(data.table(hjertetal_code = names(export_med)),
-        code_tables$med,
-        by = "hjertetal_code")[, .(hjertetal_code, med_name_dk, med_name_en)]
+  merge(data.table(hjertetal_code = names(shiny_list$med_dat)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
 colnames(outcome_names_med) <- c("hjertetal_code", "name_dk", "name_en")
 outcomes_all <- rbind(outcome_names_treatment, outcome_names_med)
 
 
+# LANGUAGE
+lang = "dk"
 
-
-# Add blank initial choice for dropdowns - so forces user to choose actively
+# Outcome dropdown, broken up into sections
 outcome_choices <- c(
   list(
-    "Behandling" = outcome_names_treatment$name_dk,
-    "Medicin" = outcome_names_med$name_dk
+    "Behandling" = enc2utf8(outcome_names_treatment$name_dk),
+    "Medicin" = enc2utf8(outcome_names_med$name_dk)
   )
 )
 
 dropdown_tooltip = enc2utf8("Click to choose data")
-
 choose_outcome <- enc2utf8("Vælge sygdome eller behandling:")
-choose_theme <- enc2utf8("Vælge emne")
+# choose_theme <- enc2utf8("Vælge emne")
 choose_year <- enc2utf8("Vælge år")
 choose_aggr_lv <- enc2utf8("Vælge metric")
 choose_var <- enc2utf8("Vælge variable")
 
-theme_names <- enc2utf8(
-  c(
-    "Prevalence/incidence" = "cases",
-    "Dødlighed" = "mortality",
-    "Hospital" = "hospital"
-  )
-)
-theme_names <- c(theme_names)
 
 aggr_choices <-
   list(
     "Alder" = "age",
     "Uddannelse" = "edu",
     "Region" = "kom",
-    "National" = "national"
+    "År" = "national"
   )
 
 variable_choices_opr <- list(
@@ -67,12 +58,15 @@ variable_choices_opr <- list(
 )
 
 variable_choices_med <- list(
-  "Antal patienter" = "n_patients",
-  "Antal procedurer" = "n_oprs",
-  "Antal døde: 30 dage" = "n_dead_30",
-  "Antal døde: 1 år" = "n_dead_1yr"
+  "Antal patienter" = "n_patients"
 )
 
+count_rate_choices <- list(
+  "Vis rater" = 2,
+  "Vis antal" = 1
+)
+
+ui_rate_suffix <- "per 100.000 menneske"
 
 
 ui_age <- enc2utf8("Aldre")
