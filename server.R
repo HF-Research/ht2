@@ -24,10 +24,12 @@ shinyServer(function(input, output, session) {
     # have to restrict the output that depends on this (which is nearly
     # everything) from running until a non-NULL value is supplied. This is
     # acheived by an if-statement in the validate() reactive
+    
     var_names <- grep("count", names(subsetOutcome()), value = TRUE)
     variable_choices <-
-      variable_ui[code_name %in% var_names, var_dk]
-    names(var_names) <- variable_choices
+      variable_ui[code_name %in% var_names, .(code_name, var_dk)]
+    var_names <- variable_choices$code_name
+    names(var_names) <- variable_choices$var_dk
     radioGroupButtons(
       inputId = "variable",
       label = choose_var,
@@ -36,6 +38,28 @@ shinyServer(function(input, output, session) {
       direction = "vertical",
       individual = FALSE
     )
+  })
+  
+  
+  output$downloadButton <- renderUI({
+    # Gives a dynamic button UI. The buttons change depending on the selected
+    # outcome Keep variables that have "count" in their name.
+    #
+    # When page loads, this UI element initally returns NULL to server fn(),
+    # then it re-runs and returns the initial value - eg. "age". This means we
+    # have to restrict the output that depends on this (which is nearly
+    # everything) from running until a non-NULL value is supplied. This is
+    # acheived by an if-statement in the validate() reactive
+    if (input$aggr_level != "national") {
+      actionBttn(inputId = "download_bar",
+                 label = "Download",
+                 size = "sm")
+    } else if (input$aggr_level == "national") {
+      actionBttn(inputId = "download_line",
+                 label = "Download",
+                 size = "sm")
+    }
+    
   })
   
   # TEXT RENDERING ----------------------------------------------------------
@@ -59,7 +83,6 @@ shinyServer(function(input, output, session) {
   })
   
   output$table1_title <- renderText({
-    
     if (validate())
       prettyVariable()[1]
   })
@@ -89,7 +112,7 @@ shinyServer(function(input, output, session) {
     # Define which type of outcome are in the outputed dataset.
     if (any(outcome_names_treatment$hjertetal_code %in% outcomeCode())) {
       outcome_group <- "treatment"
-    } else if (any(outcome_names_diag %in% input$outcome)) {
+    } else if (any(outcome_names_diag$hjertetal_code %in% input$outcome)) {
       outcome_group <- "diag"
     } else if (any(out_names_med %in% input$outcome)) {
       outcome_group <- "med"
@@ -110,8 +133,7 @@ shinyServer(function(input, output, session) {
   
   
   # SUBSETTING ------------------------------------------------------
-  selectCountRate <- function(){
-   
+  selectCountRate <- function() {
     as.integer(input$count_rates)
   }
   subsetOutcome <- reactive({
@@ -126,10 +148,11 @@ shinyServer(function(input, output, session) {
     
   })
   
-  selectedDataVars <- reactive({
+  selectedDataVars <- function() {
     var_stripped <- gsub("count_|rate_", "", input$variable)
     grep(var_stripped, colnames(subsetOutcome()), value = TRUE)
-  })
+  }
+  
   subsetVars <- reactive({
     dat <- subsetOutcome()
     if (input$aggr_level != "national") {
@@ -209,10 +232,12 @@ shinyServer(function(input, output, session) {
         input$aggr_level != "national") {
       sex_vars <- ui_sex_levels
       color = c("#bd6916", "#166abd")
-      simpleD3Bar(data = outputCasesD3Bar(),
-                  colors = c("#bd6916", "#166abd"),
-                  legendData = data.frame(sex = sex_vars,
-                                    color =  color))
+      simpleD3Bar(
+        data = outputCasesD3Bar(),
+        colors = c("#bd6916", "#166abd"),
+        legendData = data.frame(sex = sex_vars,
+                                color =  color)
+      )
     }
     
   })
@@ -220,17 +245,18 @@ shinyServer(function(input, output, session) {
   
   plot_d3_line <- reactive({
     if (input$aggr_level == "national") {
-      browser()
       sex_vars <- ui_sex_levels
       color = c("#bd6916", "#166abd")
-      simpleD3Line(data = outputCasesD3Line(),
-                   colors = c("#bd6916", "#166abd"),
-                   legendData = data.frame(sex = sex_vars,
-                                           color =  color))
+      simpleD3Line(
+        data = outputCasesD3Line(),
+        colors = c("#bd6916", "#166abd"),
+        legendData = data.frame(sex = sex_vars,
+                                color =  color)
+      )
     }
   })
   
-
+  
   
   # DATATABLES --------------------------------------------------------------
   outputCountDTTable <- reactive({
@@ -356,10 +382,17 @@ shinyServer(function(input, output, session) {
   
   # VALIDATE BEFORE PLOTING -------------------------------------------------
   validate <- reactive({
-    all(!is.null(input$variable),
-        input$outcome != "",
-        input$year > 0,
-        input$theme != "")
+    # Returns TRUE is passes and FALSE if any condition fails. This is needed to
+    # stop the plots and tables trying to render when they have inproper input.
+    # I.e. when switching between outcomes, the variable inupt is -
+    #
+    nonZero_variable <- !is.null(input$variable)
+    if (nonZero_variable) {
+      length(selectedDataVars()) > 0 && input$outcome != "" &&
+        input$year > 0
+    } else {
+      FALSE
+    }
   })
   
   
