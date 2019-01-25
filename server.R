@@ -42,14 +42,7 @@ shinyServer(function(input, output, session) {
   
   
   output$downloadButton <- renderUI({
-    # Gives a dynamic button UI. The buttons change depending on the selected
-    # outcome Keep variables that have "count" in their name.
-    #
-    # When page loads, this UI element initally returns NULL to server fn(),
-    # then it re-runs and returns the initial value - eg. "age". This means we
-    # have to restrict the output that depends on this (which is nearly
-    # everything) from running until a non-NULL value is supplied. This is
-    # acheived by an if-statement in the validate() reactive
+    
     if (input$aggr_level != "national") {
       actionBttn(inputId = "download_bar",
                  label = "Download",
@@ -66,35 +59,47 @@ shinyServer(function(input, output, session) {
   output$outcome_title <- renderText({
     input$outcome
   })
-  output$outcome_description <- renderText({
-    outcome_descriptions[hjertetal_code == outcomeCode(), desc_dk]
+  output$outcome_description <- renderUI({
+    out <-
+      outcome_descriptions[hjertetal_code == outcomeCode(), .(desc_dk, link_dk)]
+    
+    # Add link for further reading - if link exists, otherwise just desc
+    url <- a(ui_read_more,
+             href = (out$link_dk),
+             target = "_blank")
+    
+    if (out$link_dk != "na") {
+      tagList(out$desc_dk, url)
+    }
+    else {
+      tagList(out$desc_dk)
+    }
   })
   
-  variableTitle <- reactive({
-    prettyVariable()[selectCountRate()]
-  })
+  
   output$variable_title <- renderText({
-    if (validate())
-      variableTitle()
-  })
-  output$plot_title <- renderText({
-    if (validate())
-      paste0(variableTitle(), " - ", input$outcome)
-  })
-  
-  output$table1_title <- renderText({
     if (validate())
       prettyVariable()[1]
   })
   
-  output$table2_title <- renderText({
-    if (validate())
-      paste0(prettyVariable()[2], " ", ui_rate_suffix)
-  })
-  
   output$variable_desc <- renderText({
     if (validate())
-      variable_ui[code_name == selectedDataVars()[selectCountRate()], desc_dk]
+      
+      variable_ui[code_name == selectedDataVars()[1], desc_dk]
+  })
+  plotTitle <- reactive({
+    if (validate())
+      paste0(prettyVariable()[1], " - ", input$outcome)
+  })
+  
+  output$table1_title <- renderText({
+    if (validate())
+      paste0(prettyVariable()[1], ": ", ui_count_rate[1])
+  })
+  
+  output$table2_title <- renderText({
+    if (validate())
+      prettyVariable()[2]
   })
   
   
@@ -232,11 +237,12 @@ shinyServer(function(input, output, session) {
         input$aggr_level != "national") {
       sex_vars <- ui_sex_levels
       color = c("#bd6916", "#166abd")
+      plot_title = plotTitle()
       simpleD3Bar(
         data = outputCasesD3Bar(),
         colors = c("#bd6916", "#166abd"),
-        legendData = data.frame(sex = sex_vars,
-                                color =  color)
+        plotTitle = plot_title,
+        sexVars = sex_vars
       )
     }
     
@@ -247,11 +253,13 @@ shinyServer(function(input, output, session) {
     if (input$aggr_level == "national") {
       sex_vars <- ui_sex_levels
       color = c("#bd6916", "#166abd")
+      
+      plot_title = plotTitle()
       simpleD3Line(
         data = outputCasesD3Line(),
         colors = c("#bd6916", "#166abd"),
-        legendData = data.frame(sex = sex_vars,
-                                color =  color)
+        plotTitle = plot_title,
+        sexVars = sex_vars
       )
     }
   })
@@ -274,14 +282,19 @@ shinyServer(function(input, output, session) {
     
     # Calculate margins
     dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
-    totals <-
-      dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
-    
-    # Convert entire table to character to we can rbind() totals
-    dat <- dat[, lapply(.SD, as.character)]
-    # Rbind totals
-    dat <- rbindlist(list(dat, as.list(c("Total", totals))))
-    
+    if (input$aggr_level == "age") {
+      totals <-
+        dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
+      
+      # Convert entire table to character to we can rbind() totals
+      dat <- dat[, lapply(.SD, as.character)]
+      # Rbind totals
+      dat <- rbindlist(list(dat, as.list(c(
+        "Total", totals
+      ))))
+    } else {
+      dat <- dat[, lapply(.SD, as.character)]
+    }
     # Format data columns to either DK or EN settings
     col_names <- colnames(dat)[-1]
     dat[, (col_names) := dat[, lapply(.SD, function(i) {
@@ -300,7 +313,8 @@ shinyServer(function(input, output, session) {
     
     # Flag last row so can be targeted for formatting
     dat[, flag := 0]
-    dat[nrow(dat), flag := 1]
+    if (input$aggr_level == "age")
+      dat[nrow(dat), flag := 1]
     # Make sure "flag" variable is always first column, so we can
     # reference by col index in formatting fn()
     col_names <- colnames(dat)
@@ -406,7 +420,8 @@ shinyServer(function(input, output, session) {
   
   choiceYears <- reactive({
     # User can only select years >=2009 when viewing regional data
-    if (input$aggr_level == "region") {
+    
+    if (input$aggr_level == "kom") {
       return(c(2009:2015))
     } else {
       return(c(2006:2015))

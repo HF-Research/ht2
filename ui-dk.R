@@ -77,7 +77,7 @@ aggr_choices <-
 count_rate_choices <- list("Vis rater" = 2,
                            "Vis antal" = 1)
 
-ui_rate_suffix <- "per 100.000 menneske"
+
 
 
 ui_age <- enc2utf8("Aldre")
@@ -87,7 +87,8 @@ ui_national <- enc2utf8("National")
 ui_sex <- enc2utf8("Køn")
 ui_year <- enc2utf8("År")
 ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
-
+ui_count_rate <- enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
+ui_read_more <- enc2utf8("Læse mere")
 
 # var_names_opr_pretty <- sapply(names(variable_choices_opr), c)
 # ui_colnames_cases_age <-

@@ -58,11 +58,11 @@ ui <- fluidPage(
       7,
       wellPanel(
         class = "well_description",
-        h3(textOutput("outcome_title")),
+        textOutput("outcome_title"),
         hr(),
-        textOutput("outcome_description"),
+        uiOutput("outcome_description"),
         br(),
-        h4(textOutput("variable_title")),
+        textOutput("variable_title"),
         textOutput("variable_desc")
       )
     )
