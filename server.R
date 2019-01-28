@@ -1,6 +1,5 @@
-library(shiny)
-library(DT)
-library(magrittr)
+
+
 
 shinyServer(function(input, output, session) {
   options(DT.options = list(
@@ -8,10 +7,9 @@ shinyServer(function(input, output, session) {
     dom = "Bt",
     buttons = c('copy', 'csv', 'pdf')
   ))
-  load(file = "data/shiny_dat.rda")
-  load(file = "data/export_med.Rdata")
-  source("ui-dk.R", encoding = "UTF-8")
   
+  source("global.R")
+  session$onSessionEnded(stopApp)
   
   
   # UPDATE RADIO BUTTONS ----------------------------------------------------
@@ -30,15 +28,20 @@ shinyServer(function(input, output, session) {
       variable_ui[code_name %in% var_names, .(code_name, var_dk)]
     var_names <- variable_choices$code_name
     names(var_names) <- variable_choices$var_dk
-    
-    radioGroupButtons(
+    selectInput(
       inputId = "variable",
       label = choose_var,
       choices = var_names,
-      justified = TRUE,
-      direction = "vertical",
-      individual = FALSE
+      selectize = TRUE
     )
+    # radioGroupButtons(
+    #   inputId = "variable",
+    #   label = choose_var,
+    #   choices = var_names,
+    #   justified = TRUE,
+    #   direction = "vertical",
+    #   individual = FALSE
+    # )
   })
   
   
@@ -94,16 +97,16 @@ shinyServer(function(input, output, session) {
   
   output$rate_count_desc <- renderUI({
     if (validate()) {
-      
-      if(input$count_rates == 2){
-      title_text <- tags$b(prettyVariable()[2])
-      
-      col_selection <- paste0("desc_", selectedRateType(), "_", lang)
-      desc_text <-
-        variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
-      tagList(title_text, desc_text)
+      if (input$count_rates == 2) {
+        title_text <- tags$b(prettyVariable()[2])
+        col_selection <-
+          paste0("desc_", selectedRateType(), "_", lang)
+        desc_text <-
+          variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
+        tagList(title_text, desc_text)
       } else {
-        title_text <- tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
+        title_text <-
+          tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
         
         col_selection <- paste0("desc_", "count", "_", lang)
         desc_text <-
@@ -155,12 +158,13 @@ shinyServer(function(input, output, session) {
     # Outputs character string formatted for user.
     data_var_names <- selectedDataVars()
     
-    grep_selection <-  paste0("var_rate_", selectedRateType(), "_", lang)
+    grep_selection <-
+      paste0("var_rate_", selectedRateType(), "_", lang)
     col_names <- colnames(variable_ui)
     col_selection <- grep(grep_selection, col_names, value = TRUE)
     c(variable_ui[code_name == data_var_names[1], var_dk], variable_ui[code_name == data_var_names[1], get(col_selection)])
     
-    })
+  })
   
   
   # SUBSETTING ------------------------------------------------------
@@ -193,7 +197,6 @@ shinyServer(function(input, output, session) {
   }
   
   subsetVars <- reactive({
-    
     dat <- subsetOutcome()
     if (input$aggr_level != "national") {
       col_vars <- c("year", "sex", "grouping", selectedDataVars())
@@ -212,7 +215,7 @@ shinyServer(function(input, output, session) {
     ({
       # Subset the already partially subset data based on years
       
-      dat <- subsetVars()[get(ui_year) == input$year,]
+      dat <- subsetVars()[get(ui_year) == input$year, ]
       dat[]
     })
   
@@ -260,7 +263,7 @@ shinyServer(function(input, output, session) {
     .SDcols = count_rate]
     
     # Order so that males come first - makes sure the coloring matches
-    dat[order(-get(ui_sex)),]
+    dat[order(-get(ui_sex)), ]
     
   })
   
@@ -301,7 +304,6 @@ shinyServer(function(input, output, session) {
   
   # DATATABLES --------------------------------------------------------------
   outputCountDTTable <- reactive({
-    
     # Organizes data for DataTable outputs. Needs to be characters
     dat <- copy(outputCasesData())
     group_var <- prettyAggr_level()
@@ -330,21 +332,13 @@ shinyServer(function(input, output, session) {
       dat <- dat[, lapply(.SD, as.character)]
     }
     # Format data columns to either DK or EN settings
-    col_names <- colnames(dat)[-1]
-    dat[, (col_names) := dat[, lapply(.SD, function(i) {
-      if (lang == "dk") {
-        i[!is.na(i)] <-
-          prettyNum(i[!is.na(i)], big.mark = ".", decimal.mark = ",")
-      } else if (lang == "en") {
-        i[!is.na(i)] <-
-          prettyNum(i[!is.na(i)], big.mark = ",", decimal.mark = ".")
-      }
-      i[is.na(i)] <- "<10"
-      i
-    }),
-    .SDcols = col_names]]
-    colnames(dat) <- c(group_var, ui_sex_levels, "Total")
+    dat <-
+      formatNumbers(dat)
     
+    
+    # .SDcols = col_names]]
+    colnames(dat) <- c(group_var, ui_sex_levels, "Total")
+    #
     # Flag last row so can be targeted for formatting
     dat[, flag := 0]
     if (input$aggr_level == "age")
@@ -356,30 +350,7 @@ shinyServer(function(input, output, session) {
       c(col_names[length(col_names)], col_names[-length(col_names)])
     setcolorder(dat, neworder = col_names)
     
-    DT::datatable(
-      data = dat,
-      extensions = 'Buttons',
-      rownames = FALSE,
-      class = ' hover row-border',
-      options = list(
-        columnDefs = list(list(
-          # Hides the "flag" column
-          visible = FALSE, targets = 0
-        )),
-        buttons = list('csv'),
-        initComplete = JS(
-          # Table hearder background color
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-          "}"
-        )
-      )
-    ) %>%
-      formatStyle('Total',  fontWeight = 'bold') %>%
-      formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
-      formatStyle("flag",
-                  target = "row",
-                  fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
+    makeCountDT(dat, group_var = group_var)
     
   })
   
@@ -396,36 +367,11 @@ shinyServer(function(input, output, session) {
     )
     
     # Format data columns in either DK or EN numbers
-    col_names <- colnames(dat)[-1]
-    dat[, (col_names) := dat[, lapply(.SD, function(i) {
-      if (lang == "dk") {
-        i[!is.na(i)] <-
-          prettyNum(i[!is.na(i)], big.mark = ".", decimal.mark = ",")
-      } else if (lang == "en") {
-        i[!is.na(i)] <-
-          prettyNum(i[!is.na(i)], big.mark = ",", decimal.mark = ".")
-      }
-      i[is.na(i)] <- "<10"
-      i
-    }),
-    .SDcols = col_names]]
+    dat <-
+      formatNumbers(dat)
     
     colnames(dat) <- c(group_var, ui_sex_levels)
-    DT::datatable(
-      data = dat,
-      extensions = 'Buttons',
-      rownames = FALSE,
-      class = 'hover row-border',
-      options = list(
-        buttons = list('csv'),
-        initComplete = JS(
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-          "}"
-        )
-      )
-    ) %>%
-      formatStyle(group_var,  backgroundColor = "#e7e7e7")
+    makeRateDT(dat = dat, group_var = group_var)
   })
   
   # VALIDATE BEFORE PLOTING -------------------------------------------------

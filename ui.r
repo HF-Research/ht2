@@ -1,15 +1,3 @@
-library(shiny)
-library(shinyWidgets)
-library(data.table)
-library(shinyBS)
-library(lubridate)
-library(DT)
-
-# devtools::install_github('matthew-phelps/simpled3', force = TRUE)
-library(simpled3)
-
-
-source(file = "ui-dk.R", encoding = "UTF-8")
 
 max_year <- 2015
 ui <- fluidPage(
@@ -31,7 +19,15 @@ ui <- fluidPage(
              ),
              fluidRow(column(7,
                              # This UI has to change based on "outcome" choice
-                             uiOutput("varButtonChoices")),
+                             uiOutput("varButtonChoices"),
+                             fluidRow(
+                               selectInput(
+                                 inputId = "year",
+                                 label = choose_year,
+                                 choices = NULL,
+                                 selected = 2015
+                               )
+                             )),
                       column(
                         5,
                         radioGroupButtons(
@@ -40,15 +36,8 @@ ui <- fluidPage(
                           choices = aggr_choices,
                           justified = TRUE,
                           direction = "vertical"
-                        ),
-                        fluidRow(
-                          selectInput(
-                            inputId = "year",
-                            label = choose_year,
-                            choices = NULL,
-                            selected = 2015
-                          )
                         )
+                       
                         
                       ))
            )),
