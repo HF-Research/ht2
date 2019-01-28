@@ -30,6 +30,7 @@ shinyServer(function(input, output, session) {
       variable_ui[code_name %in% var_names, .(code_name, var_dk)]
     var_names <- variable_choices$code_name
     names(var_names) <- variable_choices$var_dk
+    
     radioGroupButtons(
       inputId = "variable",
       label = choose_var,
@@ -42,7 +43,6 @@ shinyServer(function(input, output, session) {
   
   
   output$downloadButton <- renderUI({
-    
     if (input$aggr_level != "national") {
       actionBttn(inputId = "download_bar",
                  label = "Download",
@@ -62,7 +62,6 @@ shinyServer(function(input, output, session) {
   output$outcome_description <- renderUI({
     out <-
       outcome_descriptions[hjertetal_code == outcomeCode(), .(desc_dk, link_dk)]
-    
     # Add link for further reading - if link exists, otherwise just desc
     url <- a(ui_read_more,
              href = (out$link_dk),
@@ -76,20 +75,42 @@ shinyServer(function(input, output, session) {
     }
   })
   
-  
-  output$variable_title <- renderText({
-    if (validate())
-      prettyVariable()[1]
-  })
-  
-  output$variable_desc <- renderText({
-    if (validate())
+  output$variable_desc <- renderUI({
+    # Append title to front of variable descr text
+    if (validate()) {
+      title_text <- tags$b(prettyVariable()[1])
       
-      variable_ui[code_name == selectedDataVars()[1], desc_dk]
+      col_selection <- paste0("desc_general_", lang)
+      desc_text <-
+        variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
+      tagList(title_text, desc_text)
+    }
   })
+  
   plotTitle <- reactive({
     if (validate())
       paste0(prettyVariable()[1], " - ", input$outcome)
+  })
+  
+  output$rate_count_desc <- renderUI({
+    if (validate()) {
+      
+      if(input$count_rates == 2){
+      title_text <- tags$b(prettyVariable()[2])
+      
+      col_selection <- paste0("desc_", selectedRateType(), "_", lang)
+      desc_text <-
+        variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
+      tagList(title_text, desc_text)
+      } else {
+        title_text <- tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
+        
+        col_selection <- paste0("desc_", "count", "_", lang)
+        desc_text <-
+          variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
+        tagList(title_text, desc_text)
+      }
+    }
   })
   
   output$table1_title <- renderText({
@@ -133,8 +154,13 @@ shinyServer(function(input, output, session) {
   prettyVariable <- reactive({
     # Outputs character string formatted for user.
     data_var_names <- selectedDataVars()
-    c(variable_ui[code_name == data_var_names[1], var_dk], variable_ui[code_name == data_var_names[2], var_dk])
-  })
+    
+    grep_selection <-  paste0("var_rate_", selectedRateType(), "_", lang)
+    col_names <- colnames(variable_ui)
+    col_selection <- grep(grep_selection, col_names, value = TRUE)
+    c(variable_ui[code_name == data_var_names[1], var_dk], variable_ui[code_name == data_var_names[1], get(col_selection)])
+    
+    })
   
   
   # SUBSETTING ------------------------------------------------------
@@ -153,12 +179,21 @@ shinyServer(function(input, output, session) {
     
   })
   
+  selectedRateType <- reactive({
+    if (input$aggr_level == "age") {
+      "stratified"
+    } else {
+      "standardized"
+    }
+  })
   selectedDataVars <- function() {
     var_stripped <- gsub("count_|rate_", "", input$variable)
-    grep(var_stripped, colnames(subsetOutcome()), value = TRUE)
+    grep_str <- paste0(var_stripped, "$")
+    grep(grep_str, colnames(subsetOutcome()), value = TRUE)
   }
   
   subsetVars <- reactive({
+    
     dat <- subsetOutcome()
     if (input$aggr_level != "national") {
       col_vars <- c("year", "sex", "grouping", selectedDataVars())
@@ -177,7 +212,7 @@ shinyServer(function(input, output, session) {
     ({
       # Subset the already partially subset data based on years
       
-      dat <- subsetVars()[get(ui_year) == input$year, ]
+      dat <- subsetVars()[get(ui_year) == input$year,]
       dat[]
     })
   
@@ -193,12 +228,10 @@ shinyServer(function(input, output, session) {
     } else {
       subsetVars()
     }
-    
   })
   
   outputCasesD3Line <- reactive({
     # Replace value.var with reactive that corresponds to the variable the user selected
-    
     dat <-
       dcast(
         subsetVars(),
@@ -227,7 +260,7 @@ shinyServer(function(input, output, session) {
     .SDcols = count_rate]
     
     # Order so that males come first - makes sure the coloring matches
-    dat[order(-get(ui_sex)), ]
+    dat[order(-get(ui_sex)),]
     
   })
   
@@ -268,6 +301,7 @@ shinyServer(function(input, output, session) {
   
   # DATATABLES --------------------------------------------------------------
   outputCountDTTable <- reactive({
+    
     # Organizes data for DataTable outputs. Needs to be characters
     dat <- copy(outputCasesData())
     group_var <- prettyAggr_level()

@@ -62,8 +62,8 @@ ui <- fluidPage(
         hr(),
         uiOutput("outcome_description"),
         br(),
-        textOutput("variable_title"),
-        textOutput("variable_desc")
+        uiOutput("variable_desc")
+        
       )
     )
   ),
@@ -73,11 +73,14 @@ ui <- fluidPage(
       id = "col_output",
       12,
       align = "center",
-      
-      # Plots
-      fluidRow(align = "left", h4(tags$b(
-        textOutput("plot_title")
-      ))),
+      fluidRow(
+        conditionalPanel(condition = "input.aggr_level != 'national'",
+                         simpleD3BarOutput("d3_plot_bar")),
+        conditionalPanel(
+          "input.aggr_level == 'national'",
+          simpleD3LineOutput("d3_plot_line_html")
+        )
+      ),
       fluidRow(
         column(
           id = "col_rate_count",
@@ -90,24 +93,20 @@ ui <- fluidPage(
             justified = TRUE
           )
         ),
-        column(
-          3,
-          offset = 6,
-          uiOutput("downloadButton")
-        )
+        column(3,
+               offset = 6,
+               uiOutput("downloadButton"))
       ),
       
       fluidRow(
-        conditionalPanel(condition = "input.aggr_level != 'national'",
-                         simpleD3BarOutput("d3_plot_bar")),
-        conditionalPanel(
-          "input.aggr_level == 'national'",
-          simpleD3LineOutput("d3_plot_line_html")
-        )
+        column(12, align = "left",
+               uiOutput("rate_count_desc"),
+               br())
       ),
       
       
-      
+      fluidRow(column(12, align = "left",
+                      h3("Data"))),
       # DataTables
       fluidRow(
         column(6,
