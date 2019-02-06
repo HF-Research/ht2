@@ -1,0 +1,40 @@
+---
+title: "Questions"
+output: html_document
+---
+
+
+### Presentation / general project questions
+* Should we use risk of death, or risk of survival (fx 1-year risk of death, or % who survive 1-year)
+
+* How do I ask for data to be added to project?
+
+* Need to set up an DST-export validation process. There's so much data, risk of microdata increases.
+
+
+
+### Data questions need to replicate HT1
+
+* Averge over previous three years on stratified analyses? (then what to do about 2006 - 2008)
+
+* Should oprs that occur on the same date, by have different codes, be considered the same operation? i.e. if someone had KFNG02A and KFNG05 on the same date. Right now, they are considered the same opr
+
+* How should cause of death be counted - i.e. when has both d1 and d9 as COD?
+
+* How many secondary causes of death should be included? 
+
+* Which patient types should be counted as "hospital admission", full day only, or also half day?
+
+* Bed-days during transfers b/w departments. When somone is transferred between departments - count from start of hospital stay, or start of diag?
+
+* How should accute disease be counted (i.e. prevalence doesn't make sense)
+
+* My age standardized rates for AF in region vary significantly from HT 1.
+
+
+
+### Data questions to improve HT
+
+* Can we calculate "prevalence" of ICD? i.e. all people living who have ever had ICD put in?
+
+* Dose it make sense to link diseases to opr/medicine? i.e. what percent of AF patients had X proceedure?

@@ -65,21 +65,12 @@ aggr_choices <-
     "Region" = "kom",
     "År" = "national"
   )
-# 
-# variable_choices_opr <- list(
-#   "Antal patienter" = "n_patients",
-#   "Antal procedurer" = "n_oprs",
-#   "Antal døde: 1 år" = "mort_1y"
-# )
-
-# variable_choices_med <- list("Antal patienter" = "n_patients")
-
 count_rate_choices <- list("Vis rater" = 2,
                            "Vis antal" = 1)
 
 
 
-
+ui_main_title <- enc2utf8("Hjemme")
 ui_age <- enc2utf8("Aldre")
 ui_edu <- enc2utf8("Uddannelse")
 ui_region <- enc2utf8("Region")
@@ -90,23 +81,7 @@ ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
 ui_count_rate <- enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 
-# var_names_opr_pretty <- sapply(names(variable_choices_opr), c)
-# ui_colnames_cases_age <-
-#   enc2utf8(c(ui_sex,
-#              "Alder",
-#              var_names_opr_pretty))
-# 
-# ui_colnames_cases_edu <-
-#   enc2utf8(c(ui_sex,
-#              "Uddannelse",
-#              var_names_opr_pretty))
-# 
-# ui_colnames_cases_region <-
-#   enc2utf8(c(ui_sex,
-#              "Region",
-#              var_names_opr_pretty))
-# 
-# ui_colnames_cases_national <-
-#   enc2utf8(c(ui_sex,
-#              "År",
-#              var_names_opr_pretty))
+
+# ABOUT PANEL -------------------------------------------------------------
+
+ui_about_title <- "Metoder"
