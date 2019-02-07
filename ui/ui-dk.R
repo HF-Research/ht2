@@ -1,6 +1,7 @@
-library(data.table)
+# INTRO -------------------------------------------------------------------
 
-# source("r/data-preprocessing.R")
+
+library(data.table)
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
@@ -36,9 +37,11 @@ colnames(outcome_names_diag) <-
 outcomes_all <-
   rbind(outcome_names_diag,
         outcome_names_treatment,
-        outcome_names_med
-        )
+        outcome_names_med)
 
+
+# LANGUAGE SPECIFIC SECTION -----------------------------------------------
+# Everything below here will need to be changed for the english verison
 
 # LANGUAGE
 lang = "dk"
@@ -53,9 +56,9 @@ outcome_choices <- c(list(
 dropdown_tooltip = enc2utf8("Click to choose data")
 choose_outcome <- enc2utf8("Vælge sygdome eller behandling:")
 # choose_theme <- enc2utf8("Vælge emne")
-choose_year <- enc2utf8("Vælge år")
-choose_aggr_lv <- enc2utf8("Vælge metric")
-choose_var <- enc2utf8("Vælge variable")
+choose_year <- enc2utf8("Vælg år")
+choose_aggr_lv <- enc2utf8("Opdælt efter:")
+choose_var <- enc2utf8("Vælg statistik")
 
 
 aggr_choices <-
@@ -68,8 +71,6 @@ aggr_choices <-
 count_rate_choices <- list("Vis rater" = 2,
                            "Vis antal" = 1)
 
-
-
 ui_main_title <- enc2utf8("Hjemme")
 ui_age <- enc2utf8("Aldre")
 ui_edu <- enc2utf8("Uddannelse")
@@ -78,10 +79,47 @@ ui_national <- enc2utf8("National")
 ui_sex <- enc2utf8("Køn")
 ui_year <- enc2utf8("År")
 ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
-ui_count_rate <- enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
+ui_count_rate <-
+  enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 
 
 # ABOUT PANEL -------------------------------------------------------------
 
 ui_about_title <- "Metoder"
+about_selection <- "Vælg definition"
+about_choices <- list(
+  "Sygdomme" = "def_diag",
+  "Procedurer" = "def_opr",
+  "Medicin" = "def_med",
+  "Statistik" = "def_variables",
+  "Befolkninger" = "def_populations",
+  "Stratifikationer" = "def_stratas",
+  "R kode" = "code"
+)
+col_names_diag <-
+  c("Sygdomme",
+    "ICD-kode",
+    "Ambulant",
+    "Diagnose type",
+    "Patient type")
+
+col_names_opr <-
+  c("Sygdomme",
+    "ICD-kode",
+    "Grep string"
+  )
+
+col_names_med <-
+  c("Medicin",
+    "ATC kode",
+    "Grep string"
+  )
+    
+
+def_diag_title <- "Definitioner af sygdomme"
+def_opr_title <- "Definitioner af procedurer"
+def_med_title <- "Definitioner af medicin"
+def_variables_title <- "Definitioner af statistiker"
+def_population_title <- "Definitioner af befolkninger"
+def_stratas_title <- "Definitioner af stratifikationer"

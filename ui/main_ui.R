@@ -1,5 +1,6 @@
 tabPanel(
   ui_main_title,
+  
   tags$head(
     tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css")
   ),
@@ -8,12 +9,12 @@ tabPanel(
          5,
          wellPanel(
            class = "well_input",
-           selectInput(
+           fluidRow(selectInput(
              inputId = "outcome",
              label = choose_outcome,
              choices = outcome_choices,
              selectize = TRUE
-           ),
+           )),
            fluidRow(column(7,
                            # This UI has to change based on "outcome" choice
                            fluidRow(

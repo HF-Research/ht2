@@ -13,9 +13,10 @@ output$varButtonChoices <- renderUI({
   # then it re-runs and returns the initial value - eg. "age". This means we
   # have to restrict the output that depends on this (which is nearly
   # everything) from running until a non-NULL value is supplied. This is
-  # acheived by an if-statement in the validate() reactive
+  # acheived by an if-statement in the validate() reactive.
   
-  var_names <- grep("count", names(subsetOutcome()), value = TRUE)
+  var_names <-
+    grep("count", names(subsetOutcomeWithoutAggreLevel()), value = TRUE)
   variable_choices <-
     variable_ui[code_name %in% var_names, .(code_name, var_dk)]
   var_names <- variable_choices$code_name
@@ -125,6 +126,7 @@ output$table2_title <- renderText({
 outcomeCode <- reactive({
   # Connect the input in normal language to the hjertetal_code. This is so we
   # can change the description without having to rename allll the datasets.
+  
   outcomes_all[name_dk == input$outcome, hjertetal_code]
 })
 
@@ -163,14 +165,27 @@ prettyVariable <- reactive({
 selectCountRate <- function() {
   as.integer(input$count_rates)
 }
+
+subsetOutcomeWithoutAggreLevel <- reactive({
+  # Some functions should not depend on the state of input$aggr_level - but
+  # still need to know which variables are available to the user. More
+  # specifically, I do not want some functions being re-run everytime aggr_level
+  # changes (i.e. updating the available variabls - this resets the variable
+  # n_incidence everytime aggr_level changes).
+  #
+  # However, this means I cannot change the variables available to the user when
+  # switching between agg_levels (obviously).
+  shiny_dat[[outcomeCode()]]$age
+})
+
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
   if (input$aggr_level != "national") {
     shiny_dat[[outcomeCode()]][[input$aggr_level]]
   } else {
-    # No real reason to pick "age" - but need any dataset (not edu) that will be
-    # aggregated later. Cannot use "edu" because it has only subset of age range.
-    shiny_dat[[outcomeCode()]]$age
+    # Age is needed because it is the only aggregation subset that includes all
+    # the data
+    subsetOutcomeWithoutAggreLevel()
   }
   
 })
@@ -207,7 +222,7 @@ subsetYear <- function()
   ({
     # Subset the already partially subset data based on years
     
-    dat <- subsetVars()[get(ui_year) == input$year, ]
+    dat <- subsetVars()[get(ui_year) == input$year,]
     dat[]
   })
 
@@ -255,7 +270,7 @@ outputCasesD3Bar <- reactive({
   .SDcols = count_rate]
   
   # Order so that males come first - makes sure the coloring matches
-  dat[order(-get(ui_sex)), ]
+  dat[order(-get(ui_sex)),]
   
 })
 
@@ -317,9 +332,7 @@ outputCountDTTable <- reactive({
     # Convert entire table to character to we can rbind() totals
     dat <- dat[, lapply(.SD, as.character)]
     # Rbind totals
-    dat <- rbindlist(list(dat, as.list(c(
-      "Total", totals
-    ))))
+    dat <- rbindlist(list(dat, as.list(c("Total", totals))))
   } else {
     dat <- dat[, lapply(.SD, as.character)]
   }
@@ -368,46 +381,65 @@ outputRateDTTable <- reactive({
 
 # VALIDATE BEFORE PLOTING -------------------------------------------------
 validate <- reactive({
-  # Returns TRUE is passes and FALSE if any condition fails. This is needed to
+  # Returns TRUE if passes and FALSE if any condition fails. This is needed to
   # stop the plots and tables trying to render when they have inproper input.
   # I.e. when switching between outcomes, the variable inupt is -
   #
   nonZero_variable <- !is.null(input$variable)
   if (nonZero_variable) {
     length(selectedDataVars()) > 0 && input$outcome != "" &&
-      input$year > 0
+      input$year > 0 && input$year != "" && validateKom()
   } else {
     FALSE
   }
 })
 
+validateKom <- reactive({
+  # If geographic aggregation level is selected, the selected year must be >=
+  # 2009. This invalid combination cannot be directly selected by the user, but
+  # is created during an intermediate step in Shiny, before the "year" selected
+  # is reset. This validate step stops Shiny from processing the data steps -
+  # and thus throwing an error - during this intermediate step.
+  if (input$aggr_level == "kom") {
+    input$year >= 2009
+  } else if (input$aggr_level != "kom") {
+    TRUE
+  } else {
+    FALSE
+  }
+})
 
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
-observe({
-  shinyjs::toggle(id = "year", condition = input$theme != "")
-  shinyjs::toggle(id = "variable", condition = input$theme != "")
-  shinyjs::toggle(id = "aggr_level", condition = input$theme != "")
-})
-
 
 choiceYears <- reactive({
-  # User can only select years >=2009 when viewing regional data
-  
-  if (input$aggr_level == "kom") {
-    return(c(2009:2015))
+  # The following additional if-else logic is needed to stop the year count
+  # always resetting to 2015 when changing aggr_level.
+  if (input$year != "") {
+    selected_year <- input$year
   } else {
-    return(c(2006:2015))
+    selected_year <- "2015"
   }
+  
+  # Set year-range to be used by udateSelectInput()
+  if (input$aggr_level == "kom") {
+    year_range <- c(2009:2015)
+    if (input$year < 2009)
+      selected_year <- "2015"
+  } else {
+    year_range <- c(2006:2015)
+  }
+  return(list(selected_year = selected_year,
+              year_range = year_range))
   
 })
 observe({
+  # User can only select years >=2009 when viewing regional data.
   updateSelectInput(
     session = session,
     inputId = "year",
-    choices = choiceYears(),
-    selected = 2015
+    choices = choiceYears()$year_range,
+    selected = choiceYears()$selected_year
   )
-  
 })
 
 observe({
