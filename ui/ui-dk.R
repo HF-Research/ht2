@@ -9,6 +9,7 @@ load(file = "data/shiny_list.rda")
 load(file = "data/codes_tables.rda")
 load(file = "data/outcome_descriptions.Rdata")
 load(file = "data/variable_ui.Rdata")
+ui_about_text <- fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 outcome_descriptions <-
   outcome_descriptions[, lapply(.SD, enc2native)]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
@@ -95,7 +96,7 @@ about_choices <- list(
   "Statistik" = "def_variables",
   "Befolkninger" = "def_populations",
   "Stratifikationer" = "def_stratas",
-  "R kode" = "code"
+  "R kode" = "r_code"
 )
 col_names_diag <-
   c("Sygdomme",
