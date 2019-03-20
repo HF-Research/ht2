@@ -1,6 +1,5 @@
 library(shiny)
 library(DT)
-library(magrittr)
 library(shinyWidgets)
 library(data.table)
 library(shinyBS)
@@ -45,7 +44,11 @@ makeCountDT <- function(dat, group_var){
       # Hides the "flag" column
       visible = FALSE, targets = 0
     )),
-    buttons = list('csv'),
+    buttons = list(list(
+      extend = "collection",
+      buttons = c("csv", "pdf"),
+      text = "Download"
+    )),
     initComplete = JS(
       # Table hearder background color
       "function(settings, json) {",

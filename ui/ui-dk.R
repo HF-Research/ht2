@@ -116,7 +116,7 @@ col_names_med <-
     "ATC kode",
     "Grep string"
   )
-    
+
 
 def_diag_title <- "Definitioner af sygdomme"
 def_opr_title <- "Definitioner af procedurer"

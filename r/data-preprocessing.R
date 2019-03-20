@@ -1,3 +1,4 @@
+library(data.table)
 load("data/export_opr.Rdata")
 load("data/export_med.Rdata")
 load("data/export_diag.Rdata")

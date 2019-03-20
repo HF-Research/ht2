@@ -230,8 +230,6 @@ subsetYear <- function()
 # FORMATTING DATA FOR D3------------------------------------------------------
 outputCasesData <- reactive({
   # National level data shows all years
-  # This is not a reactive, because then it somehow turns the "<10" strings
-  # into 0s. The reactive wasn't being called when I thought it was
   if (input$aggr_level != "national") {
     dat <- subsetYear()
     dat[, (ui_year) := NULL]
@@ -258,7 +256,6 @@ outputCasesD3Line <- reactive({
 
 outputCasesD3Bar <- reactive({
   # Restrict data to the user selected vairable, and give pretty column names
-  
   count_rate <- prettyVariable()[selectCountRate()]
   keep_cols <- c(ui_sex, prettyAggr_level(), count_rate)
   dat <- subsetYear()[, ..keep_cols]
