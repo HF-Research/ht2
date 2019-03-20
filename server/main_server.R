@@ -469,6 +469,7 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 # DATATABLES:
 # AGE
 output$table <- renderDT({
+  server = TRUE
   if (validate()) {
     outputCountDTTable()
   }

@@ -46,7 +46,8 @@ makeCountDT <- function(dat, group_var){
     )),
     buttons = list(list(
       extend = "collection",
-      buttons = c("csv", "pdf"),
+      buttons = c("excel", "pdf"),
+      exportOptions = list(columns = ":visible"),
       text = "Download"
     )),
     initComplete = JS(
