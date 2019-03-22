@@ -1,6 +1,4 @@
 # INTRO -------------------------------------------------------------------
-
-
 library(data.table)
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
@@ -8,7 +6,8 @@ library(data.table)
 load(file = "data/shiny_list.rda")
 load(file = "data/codes_tables.rda")
 load(file = "data/outcome_descriptions.Rdata")
-load(file = "data/variable_ui.Rdata")
+# load(file = "data/variable_ui.Rdata")
+variable_ui <- fread(file = "data/variable_ui.csv", encoding = "UTF-8")
 ui_about_text <- fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 outcome_descriptions <-
   outcome_descriptions[, lapply(.SD, enc2native)]
@@ -44,9 +43,6 @@ outcomes_all <-
 # LANGUAGE SPECIFIC SECTION -----------------------------------------------
 # Everything below here will need to be changed for the english verison
 
-# LANGUAGE
-lang = "dk"
-
 # Outcome dropdown, broken up into sections
 outcome_choices <- c(list(
   "Sygdomme" = enc2utf8(outcome_names_diag$name_dk),
@@ -66,7 +62,8 @@ aggr_choices <-
   list(
     "Alder" = "age",
     "Uddannelse" = "edu",
-    "Region" = "kom",
+    "Kommune" = "kom",
+    "Region" = "region",
     "År" = "national"
   )
 count_rate_choices <- list("Vis rater" = 2,
@@ -83,6 +80,7 @@ ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
 ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
+ui_percent <- enc2utf8("andele")
 
 
 # ABOUT PANEL -------------------------------------------------------------
@@ -95,7 +93,7 @@ about_choices <- list(
   "Medicin" = "def_med",
   "Statistik" = "def_variables",
   "Befolkninger" = "def_populations",
-  "Stratifikationer" = "def_stratas",
+  "Uddannelse" = "def_edu",
   "R kode" = "r_code"
 )
 col_names_diag <-
@@ -112,10 +110,13 @@ col_names_opr <-
   )
 
 col_names_med <-
-  c("Medicin",
+  c("Medicin type",
     "ATC kode",
     "Grep string"
   )
+
+col_names_edu <- c("Uddannelsesniveau",
+                   "DISCED-15 kode")
 
 
 def_diag_title <- "Definitioner af sygdomme"

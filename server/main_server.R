@@ -17,8 +17,12 @@ output$varButtonChoices <- renderUI({
   
   var_names <-
     grep("count", names(subsetOutcomeWithoutAggreLevel()), value = TRUE)
+  var_names <- var_names[!grepl("mean", var_names)]
+  
+  # Select the plain language terms matching the variables in data
   variable_choices <-
     variable_ui[code_name %in% var_names, .(code_name, var_dk)]
+  
   var_names <- variable_choices$code_name
   names(var_names) <- variable_choices$var_dk
   selectInput(
@@ -41,7 +45,7 @@ output$varButtonChoices <- renderUI({
 output$downloadButton <- renderUI({
   if (input$aggr_level != "national") {
     actionBttn(inputId = "download_bar",
-               label = "Download",
+               label = "Hente figure",
                size = "sm")
   } else if (input$aggr_level == "national") {
     actionBttn(inputId = "download_line",
@@ -50,6 +54,8 @@ output$downloadButton <- renderUI({
   }
   
 })
+
+
 
 # TEXT RENDERING ----------------------------------------------------------
 output$outcome_title <- renderText({
@@ -150,13 +156,13 @@ prettyAggr_level <- reactive({
 
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
-  data_var_names <- selectedDataVars()
+  data_var_name <- selectedDataVars()[1]
   
   grep_selection <-
     paste0("var_rate_", selectedRateType(), "_", lang)
   col_names <- colnames(variable_ui)
   col_selection <- grep(grep_selection, col_names, value = TRUE)
-  c(variable_ui[code_name == data_var_names[1], var_dk], variable_ui[code_name == data_var_names[1], get(col_selection)])
+  c(variable_ui[code_name == data_var_name, var_dk], variable_ui[code_name == data_var_name, get(col_selection)])
   
 })
 
@@ -165,6 +171,39 @@ prettyVariable <- reactive({
 selectCountRate <- function() {
   as.integer(input$count_rates)
 }
+
+selectRawOrMean <- function() {
+  # Returns TRUE if raw count data should be used. FALSE if moving avg data
+  # should be used
+  if (input$aggr_level %in% c("age", "national")) {
+    TRUE
+  } else if (input$aggr_level %in% c("edu", "region", "kom")) {
+    FALSE
+  }
+}
+
+selectPercentOrRate <- function() {
+  if (input$variable %in% c(
+    "count_n_readmissions_ppl_30",
+    "count_n_dead30",
+    "count_n_dead1",
+    "count_n_dead5"
+  )) {
+    TRUE
+  } else {
+    FALSE
+  }
+  
+}
+
+selectGeo <- function() {
+  if (input$aggr_level %in% c("kom", "region")) {
+    TRUE
+  } else {
+    FALSE
+  }
+}
+
 
 subsetOutcomeWithoutAggreLevel <- reactive({
   # Some functions should not depend on the state of input$aggr_level - but
@@ -198,6 +237,8 @@ selectedRateType <- reactive({
   }
 })
 selectedDataVars <- function() {
+  # Returns the column names to be used to subset the data - taking into account
+  # raw or mean data
   var_stripped <- gsub("count_|rate_", "", input$variable)
   grep_str <- paste0(var_stripped, "$")
   grep(grep_str, colnames(subsetOutcome()), value = TRUE)
@@ -205,13 +246,23 @@ selectedDataVars <- function() {
 
 subsetVars <- reactive({
   dat <- subsetOutcome()
+  
+  # Switch between RAW and MOVNIG AVG data
+  data_vars <- selectedDataVars()
+  if (selectRawOrMean()) {
+    data_vars <- data_vars[!grepl("mean", data_vars)]
+  } else {
+    data_vars <- data_vars[grepl("mean", data_vars)]
+  }
+  
+  # Select based on aggre_level
   if (input$aggr_level != "national") {
-    col_vars <- c("year", "sex", "grouping", selectedDataVars())
+    col_vars <- c("year", "sex", "grouping", data_vars)
     dat <- dat[, ..col_vars]
     colnames(dat) <-
       c(ui_year, ui_sex, prettyAggr_level(), prettyVariable())
   } else {
-    col_vars <- c("year", "sex", selectedDataVars())
+    col_vars <- c("year", "sex", data_vars)
     dat <- dat[, ..col_vars]
     colnames(dat) <-
       c(ui_year, ui_sex, prettyVariable())
@@ -221,8 +272,11 @@ subsetVars <- reactive({
 subsetYear <- function()
   ({
     # Subset the already partially subset data based on years
-    
     dat <- subsetVars()[get(ui_year) == input$year,]
+    if (selectPercentOrRate()) {
+      var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
+      dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
+    }
     dat[]
   })
 
@@ -265,6 +319,10 @@ outputCasesD3Bar <- reactive({
     i
   }),
   .SDcols = count_rate]
+  
+  # For variables that present PERCENTAGE results - divide by 1000
+  
+  
   
   # Order so that males come first - makes sure the coloring matches
   dat[order(-get(ui_sex)),]
@@ -334,8 +392,9 @@ outputCountDTTable <- reactive({
     dat <- dat[, lapply(.SD, as.character)]
   }
   # Format data columns to either DK or EN settings
+  
   dat <-
-    formatNumbers(dat)
+    formatNumbers(dat, lang = lang)
   
   
   # .SDcols = col_names]]
@@ -370,7 +429,7 @@ outputRateDTTable <- reactive({
   
   # Format data columns in either DK or EN numbers
   dat <-
-    formatNumbers(dat)
+    formatNumbers(dat, lang = lang)
   
   colnames(dat) <- c(group_var, ui_sex_levels)
   makeRateDT(dat = dat, group_var = group_var)
@@ -414,23 +473,44 @@ choiceYears <- reactive({
   if (input$year != "") {
     selected_year <- input$year
   } else {
-    selected_year <- "2015"
+    selected_year <- year_max
   }
   
+  null_var <- is.null(input$variable)
   # Set year-range to be used by udateSelectInput()
-  if (input$aggr_level == "kom") {
-    year_range <- c(2009:2015)
+  if (selectGeo() &&
+      (null_var ||
+       input$variable != "count_n_dead5")) {
+    year_range <- c(2009:year_max)
     if (input$year < 2009)
-      selected_year <- "2015"
+      selected_year <- 2009
+    
+  } else if (selectGeo() &&
+             !null_var && input$variable == "count_n_dead5") {
+    year_range <- c(2009:(year_max - 4))
+    if (input$year < 2009) {
+      selected_year <- 2009
+    } else if (input$year > (year_max - 4)) {
+      selected_year <- year_max - 4
+    }
+    
+  } else if (!selectGeo() &&
+             !null_var && input$variable == "count_n_dead5") {
+    year_range <- c(2006:(year_max - 4))
+    if (input$year > (year_max - 4)) {
+      selected_year <- year_max - 4
+    }
+    
   } else {
-    year_range <- c(2006:2015)
+    year_range <- c(2006:year_max)
   }
   return(list(selected_year = selected_year,
               year_range = year_range))
   
 })
 observe({
-  # User can only select years >=2009 when viewing regional data.
+  # User can only select years >=2009 when viewing regional data and <=2012 when
+  # viewing 5-year mortality
   updateSelectInput(
     session = session,
     inputId = "year",
@@ -438,6 +518,9 @@ observe({
     selected = choiceYears()$selected_year
   )
 })
+
+
+
 
 observe({
   # Disable "year" when showing longitudinal data

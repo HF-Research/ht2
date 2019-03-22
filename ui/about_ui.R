@@ -22,6 +22,7 @@ tabPanel(
          fluidRow(textOutput("ui_about_desc_2"),
                   br())
   )),
+  br(),
   conditionalPanel(condition = "input.about_selection == 'def_diag'",
                    fluidRow(column(
                      11, align = "center",
@@ -42,6 +43,9 @@ tabPanel(
   conditionalPanel(condition = "input.about_selection == 'def_variables'"),
   
   conditionalPanel(condition = "input.about_selection == 'def_populations'"),
-  conditionalPanel(condition = "input.about_selection == 'def_stratas'")
-  
-)
+  conditionalPanel(condition = "input.about_selection == 'def_edu'",
+                   
+                   fluidRow(column(
+                     11, align = "center",
+                     DTOutput("table_edu")
+                   ))))
