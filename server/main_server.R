@@ -325,8 +325,15 @@ outputCasesD3Bar <- reactive({
   
   
   # Order so that males come first - makes sure the coloring matches
-  dat[order(-get(ui_sex)),]
+  setorderv(dat, ui_sex, order = -1L)
   
+  # For kommune data re-order based on rate or count
+  
+  if(input$aggr_level == "kom"){
+
+    setorderv(dat, c(ui_sex, count_rate), order = -1L)
+  }
+  dat[]
 })
 
 
@@ -381,6 +388,8 @@ outputCountDTTable <- reactive({
   # Calculate margins
   dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
   if (input$aggr_level == "age") {
+    # Only calculate bottom margins for "age" - other aggr levels don't include
+    # full data
     totals <-
       dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
     
@@ -388,14 +397,17 @@ outputCountDTTable <- reactive({
     dat <- dat[, lapply(.SD, as.character)]
     # Rbind totals
     dat <- rbindlist(list(dat, as.list(c("Total", totals))))
+    
+    # Convert back to numeric
+    col_convert <- c("female", "male", "Total")
+    dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
+    
   } else {
-    dat <- dat[, lapply(.SD, as.character)]
+    # dat <- dat[, lapply(.SD, as.character)]
   }
   # Format data columns to either DK or EN settings
-  
-  dat <-
-    formatNumbers(dat, lang = lang)
-  
+  # dat <-
+  # formatNumbers(dat, lang = lang)
   
   # .SDcols = col_names]]
   colnames(dat) <- c(group_var, ui_sex_levels, "Total")
@@ -411,7 +423,12 @@ outputCountDTTable <- reactive({
     c(col_names[length(col_names)], col_names[-length(col_names)])
   setcolorder(dat, neworder = col_names)
   
-  makeCountDT(dat, group_var = group_var)
+  makeCountDT(
+    dat,
+    group_var = group_var,
+    thousands_sep = thousands_sep
+  
+  )
   
 })
 
@@ -427,12 +444,23 @@ outputRateDTTable <- reactive({
     fun.aggregate = sum
   )
   
-  # Format data columns in either DK or EN numbers
-  dat <-
-    formatNumbers(dat, lang = lang)
+  # # Format data columns in either DK or EN numbers
+  # dat <-
+  #   formatNumbers(dat, lang = lang)
+  if (!selectPercentOrRate()) {
+    digits = 0
+  } else {
+    digits = 1
+  }
   
   colnames(dat) <- c(group_var, ui_sex_levels)
-  makeRateDT(dat = dat, group_var = group_var)
+  makeRateDT(
+    dat = dat,
+    group_var = group_var,
+    thousands_sep = thousands_sep,
+    digits = digits,
+    dec_mark = dec_mark
+  )
 })
 
 # VALIDATE BEFORE PLOTING -------------------------------------------------

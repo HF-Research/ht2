@@ -64,7 +64,7 @@ fluidRow(
     align = "center",
     fluidRow(
       conditionalPanel(condition = "input.aggr_level != 'national'",
-                       simpleD3BarOutput("d3_plot_bar")),
+                       simpleD3BarOutput("d3_plot_bar", height = "500px")),
       conditionalPanel(
         "input.aggr_level == 'national'",
         simpleD3LineOutput("d3_plot_line_html")

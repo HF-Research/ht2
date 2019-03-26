@@ -1,3 +1,4 @@
+
 library(shiny)
 library(DT)
 library(shinyWidgets)
@@ -5,20 +6,23 @@ library(data.table)
 library(shinyBS)
 library(lubridate)
 library(shinyjs)
+library(leaflet)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 shiny_dat <- readRDS(file = "data/shiny_dat.rds")
-
-# LANGUAGE ----------------------------------------------------------------
 lang = "dk"
-
-# SOURCE ----------------------------------------------------------------
+if (lang == "dk") {
+  thousands_sep <- "."
+  dec_mark <- ","
+} else {
+  thousands_sep <- ","
+  dec_mark <- "."
+}
 ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
 source(ui_file_path, encoding = "UTF-8")
 source("r/PrepDefinitions.R")
 year_max <- 2016
 
-# MAIN PANNEL -------------------------------------
 formatNumbers <- function(dat, lang) {
   x <- copy(dat)
   col_names <- colnames(dat)[-1]
@@ -34,65 +38,83 @@ formatNumbers <- function(dat, lang) {
     i
   }),
   .SDcols = col_names]]
-
+  
   x[]
 }
 
-
-makeCountDT <- function(dat, group_var){
+makeCountDT <- function(dat, group_var, thousands_sep) {
+  col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
-  data = dat,
-  extensions = 'Buttons',
-  rownames = FALSE,
-  class = ' hover row-border',
-  options = list(
-    columnDefs = list(list(
-      # Hides the "flag" column
-      visible = FALSE, targets = 0
-    )),
-    buttons = list(list(
-      extend = "collection",
-      buttons = c("excel", "pdf"),
-      exportOptions = list(columns = ":visible"),
-      text = "Hente"
-    )),
-    initComplete = JS(
-      # Table hearder background color
-      "function(settings, json) {",
-      "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-      "}"
+    data = dat,
+    extensions = 'Buttons',
+    rownames = FALSE,
+    class = ' hover row-border',
+    options = list(
+      columnDefs = list(list(
+        # Hides the "flag" column
+        visible = FALSE, targets = 0
+      )),
+      buttons = list(
+        list(
+          extend = "collection",
+          buttons = c("excel", "pdf"),
+          exportOptions = list(columns = ":visible"),
+          text = "Hente"
+        )
+      ),
+      initComplete = JS(
+        # Table hearder background color
+        "function(settings, json) {",
+        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+        "}"
+      )
     )
-  )
-) %>%
-  formatStyle('Total',  fontWeight = 'bold') %>%
-  formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
-  formatStyle("flag",
-              target = "row",
-              fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
+  ) %>%
+    formatCurrency(col_format,
+                   currency = "",
+                   interval = 3,
+                   mark = thousands_sep,
+                   digits = 0) %>%
+    formatStyle('Total',  fontWeight = 'bold') %>%
+    formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
+    formatStyle("flag",
+                target = "row",
+                fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
 }
 
-makeRateDT <- function(dat, group_var){ 
+makeRateDT <- function(dat, group_var, thousands_sep, digits, dec_mark) {
+  col_format <- c(ui_sex_levels)
   DT::datatable(
-  data = dat,
-  extensions = 'Buttons',
-  rownames = FALSE,
-  class = 'hover row-border',
-  options = list(
-    buttons = list('csv'),
-    initComplete = JS(
-      "function(settings, json) {",
-      "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-      "}"
+    data = dat,
+    extensions = 'Buttons',
+    rownames = FALSE,
+    class = 'hover row-border',
+    options = list(
+      buttons = list('csv'),
+      initComplete = JS(
+        "function(settings, json) {",
+        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+        "}"
+      )
     )
-  )
-) %>%
-  formatStyle(group_var,  backgroundColor = "#e7e7e7")
+  ) %>%
+    formatCurrency(col_format,
+                   currency = "",
+                   interval = 3,
+                   mark = thousands_sep,
+                   digits = digits,
+                   dec.mark = dec_mark) %>%
+    formatStyle(group_var,  backgroundColor = "#e7e7e7")
 }
 
 
-# ABOUT tabPanel-------------------------------------------------------------------
-
-col_subset <- c(paste0("name_", lang), "icd_simple", "ambulant", "diag_type", "pat_type")
+# ABOUT PANEL ------------------------------------------------------------
+col_subset <-
+  c(paste0("name_", lang),
+    "icd_simple",
+    "ambulant",
+    "diag_type",
+    "pat_type")
 diag <- diag[, ..col_subset]
 colnames(diag) <- col_names_diag
 diag_DT <- DT::datatable(
@@ -163,4 +185,3 @@ edu_DT <- DT::datatable(
     )
   )
 )
-
