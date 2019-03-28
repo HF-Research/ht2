@@ -10,6 +10,7 @@ library(leaflet)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 shiny_dat <- readRDS(file = "data/shiny_dat.rds")
+dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
@@ -185,3 +186,7 @@ edu_DT <- DT::datatable(
     )
   )
 )
+
+
+# LEAFLET MAPS -------------------------------------------------------
+pal <- colorQuantile("YlOrRd", NULL, n = 4, reverse = FALSE)

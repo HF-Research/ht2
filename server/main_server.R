@@ -166,6 +166,10 @@ prettyVariable <- reactive({
   
 })
 
+prettyVariableSingular <- reactive({
+  prettyVariable()[selectCountRate()]
+})
+
 
 # SUBSETTING ------------------------------------------------------
 selectCountRate <- function() {
@@ -272,7 +276,7 @@ subsetVars <- reactive({
 subsetYear <- function()
   ({
     # Subset the already partially subset data based on years
-    dat <- subsetVars()[get(ui_year) == input$year,]
+    dat <- subsetVars()[get(ui_year) == input$year, ]
     if (selectPercentOrRate()) {
       var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
       dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
@@ -298,19 +302,19 @@ outputCasesD3Line <- reactive({
     dcast(
       subsetVars(),
       get(ui_year) ~ get(ui_sex),
-      value.var = prettyVariable()[selectCountRate()],
+      value.var = prettyVariableSingular(),
       fun.aggregate = sum
     )
   
   colnames(dat) <-
     c(ui_year, "female", "male") # TODO: needs to be language agnostic
-  dat[, variable := prettyVariable()[selectCountRate()]]
+  dat[, variable := prettyVariableSingular()]
   
 })
 
 outputCasesD3Bar <- reactive({
   # Restrict data to the user selected vairable, and give pretty column names
-  count_rate <- prettyVariable()[selectCountRate()]
+  count_rate <- prettyVariableSingular()
   keep_cols <- c(ui_sex, prettyAggr_level(), count_rate)
   dat <- subsetYear()[, ..keep_cols]
   dat <- dat[, (count_rate) := lapply(.SD, function(i) {
@@ -329,8 +333,7 @@ outputCasesD3Bar <- reactive({
   
   # For kommune data re-order based on rate or count
   
-  if(input$aggr_level == "kom"){
-
+  if (input$aggr_level == "kom") {
     setorderv(dat, c(ui_sex, count_rate), order = -1L)
   }
   dat[]
@@ -343,6 +346,7 @@ plot_d3_bar <- reactive({
     sex_vars <- ui_sex_levels
     color = c("#bd6916", "#166abd")
     plot_title = plotTitle()
+    
     simpleD3Bar(
       data = outputCasesD3Bar(),
       colors = c("#bd6916", "#166abd"),
@@ -366,6 +370,109 @@ plot_d3_line <- reactive({
       plotTitle = plot_title,
       sexVars = sex_vars
     )
+  }
+})
+
+
+
+# LEAFLET MAPS ------------------------------------------------------
+mapDataM <- reactive({
+  if (input$aggr_level == "kom") {
+    # Convert to DT  before merge - makes life easier later
+    
+    dk_sp$l2@data <- merge(dk_sp$l2@data,
+                           outputCasesD3Bar()[get(ui_sex) == "male"],
+                           # TODO: language agnostic sex
+                           by.x = "name_dk",
+                           by.y =  prettyAggr_level(),) %>%
+      # Need to make sure the order is the same when putting data back into sp
+      # object!!
+      setorder(id)
+    dk_sp$l2
+  }
+})
+mapDataF <- reactive({
+  if (input$aggr_level == "kom") {
+    # Convert to DT  before merge - makes life easier later
+    
+    dk_sp$l2@data <- merge(dk_sp$l2@data,
+                           outputCasesD3Bar()[get(ui_sex) == "female"],
+                           # TODO: language agnostic sex
+                           by.x = "name_dk",
+                           by.y =  prettyAggr_level(),) %>%
+      # Need to make sure the order is the same when putting data back into sp
+      # object!!
+      setorder(id)
+    dk_sp$l2
+  }
+  
+})
+
+output$map_m <- renderLeaflet({
+  if (validate() &&
+      isKom()) {
+    name_lang <- paste0("name_", lang)
+    map_data <-  mapDataM()
+    
+    
+    popup <- paste0(prettyAggr_level(),
+                    ": <strong>",
+                    map_data@data[["name_dk"]],
+                    "</strong><br><br>",
+                    map_data@data[[prettyVariableSingular()]]) %>%
+      lapply(htmltools::HTML)
+    
+    
+    leaflet() %>%
+      setView(lng = 11.743608,
+              lat = 56.179752,
+              zoom = 7) %>%
+      # addProviderTiles(provider = "CartoDB.Positron",
+      #                  options = providerTileOptions(opacity = 0.4,
+      #                                                minZoom = 6)) %>%
+      addPolygons(
+        data = map_data,
+        fillColor  = ~ pal(map_data@data[[prettyVariableSingular()]]),
+        weight = 1,
+        opacity = 1,
+        color = "grey",
+        fillOpacity = 0.7,
+        label = popup
+      )
+    
+  }
+})
+output$map_f <- renderLeaflet({
+  if (validate() &&
+      isKom()) {
+    
+    name_lang <- paste0("name_", lang)
+    map_data <-  mapDataF()
+    popup <- paste0(prettyAggr_level(),
+                    ": <strong>",
+                    map_data@data[["name_dk"]],
+                    "</strong><br><br>",
+                    map_data@data[[prettyVariableSingular()]]) %>%
+      lapply(htmltools::HTML)
+    
+    
+    leaflet() %>%
+      setView(lng = 11.743608,
+              lat = 56.179752,
+              zoom = 7) %>%
+      # addProviderTiles(provider = "CartoDB.Positron",
+      #                  options = providerTileOptions(opacity = 0.4,
+      #                                                minZoom = 6)) %>%
+      addPolygons(
+        data = map_data,
+        fillColor  = ~ pal(map_data@data[[prettyVariableSingular()]]),
+        weight = 1,
+        opacity = 1,
+        color = "grey",
+        fillOpacity = 0.7,
+        label = popup
+      )
+    
   }
 })
 
@@ -423,12 +530,9 @@ outputCountDTTable <- reactive({
     c(col_names[length(col_names)], col_names[-length(col_names)])
   setcolorder(dat, neworder = col_names)
   
-  makeCountDT(
-    dat,
-    group_var = group_var,
-    thousands_sep = thousands_sep
-  
-  )
+  makeCountDT(dat,
+              group_var = group_var,
+              thousands_sep = thousands_sep)
   
 })
 
@@ -491,6 +595,11 @@ validateKom <- reactive({
   } else {
     FALSE
   }
+})
+
+isKom <- reactive({
+  input$aggr_level == "kom" ||
+    input$aggr_level == "region"
 })
 
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
@@ -556,6 +665,11 @@ observe({
                        condition = input$aggr_level != "national")
   
 })
+
+observe({
+  shinyjs::toggle(condition = (input$aggr_level == "kom" || input$aggr_level == "region"),
+                selector = paste0("#data_vis_tabs li a[data-value=", ui_map, "]"))
+  })
 
 
 

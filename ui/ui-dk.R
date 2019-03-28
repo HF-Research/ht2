@@ -3,7 +3,8 @@ library(data.table)
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
-load(file = "data/shiny_list.rda")
+shiny_dat <- readRDS(file = "data/shiny_dat.rds")
+
 load(file = "data/codes_tables.rda")
 load(file = "data/outcome_descriptions.Rdata")
 # load(file = "data/variable_ui.Rdata")
@@ -14,19 +15,19 @@ outcome_descriptions <-
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 
 outcome_names_treatment <-
-  merge(data.table(hjertetal_code = names(shiny_list$opr_dat)),
+  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
         outcome_descriptions,
         by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
 colnames(outcome_names_treatment) <-
   c("hjertetal_code", "name_dk", "name_en")
 outcome_names_med <-
-  merge(data.table(hjertetal_code = names(shiny_list$med_dat)),
+  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
         outcome_descriptions,
         by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
 colnames(outcome_names_med) <-
   c("hjertetal_code", "name_dk", "name_en")
 outcome_names_diag <-
-  merge(data.table(hjertetal_code = names(shiny_list$diag_dat)),
+  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
         outcome_descriptions,
         by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
 colnames(outcome_names_diag) <-
@@ -81,7 +82,8 @@ ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andele")
-
+ui_map <- "Kort"
+ui_d3_figures <- "Figures"
 
 # ABOUT PANEL -------------------------------------------------------------
 

@@ -53,22 +53,58 @@ l2 <- readRDS("data/DNK_adm2.rds")
 # Check projection
 proj4string(l1) == "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
 
-
 # Remove un-needed attributes
-# l0@data <- l0@data %>% dplyr::select(OBJECTID, ISO, NAME_ENGLISH, NAME_LOCAL)
+# # NOTE need to keep id variable for merges
 l1@data <-
-  l1@data %>% dplyr::select(OBJECTID, ISO, ID_1, NAME_1, VARNAME_1)
-l2@data <- l2@data %>% dplyr::select(OBJECTID, ISO, ID_1, ID_2,
-                                     NAME_1, NAME_2, VARNAME_2)
+  l1@data %>%
+  dplyr::select(OBJECTID, NAME_1, VARNAME_1) %>%
+  dplyr::rename(id = OBJECTID,
+                name_dk = NAME_1,
+                name_en = VARNAME_1)
+l2@data <-
+  l2@data %>%
+  dplyr::select(OBJECTID, NAME_2) %>%
+  dplyr::rename(id = OBJECTID,
+                name_dk = NAME_2)
+
+setDT(l2@data)
+l2@data[name_dk == "Århus", name_dk := "Aarhus"]
+l2@data[name_dk == "Vesthimmerland", name_dk := "Vesthimmerlands"]
+l2@data <- l2@data %>%
+  dplyr::mutate(name_en = name_dk)
+
+setDT(l1@data)
+
 
 # Simplify poloygons because load time is too high with original resolution. gSimplify remove @data, so will need to re-add that from original. See: https://goo.gl/RXBpZn
 l1_data <- l1@data
 lx <- rgeos::gSimplify(l1, .001, topologyPreserve = TRUE)
 l1 <- SpatialPolygonsDataFrame(lx, data = l1@data)
+
+l2_data <- l2@data
+lx <- rgeos::gSimplify(l2, .001, topologyPreserve = TRUE)
+l2 <- SpatialPolygonsDataFrame(lx, data = l2@data)
+
+
+
 dk_sp_data <- list(l1 = l1,
                    l2 = l2)
 
-save(dk_sp_data, file = "data/dk_sp_data.rda")
+# Check names
+kom_names_dst <- unique(shiny_dat$d1$kom$grouping)
+kom_names_geo <- unique(l2@data$name_dk)
+
+kom_names_geo[!kom_names_geo %in% kom_names_dst]
+kom_names_dst[!kom_names_dst %in% kom_names_geo]
+
+
+# Rename problematic ones in spatial file. The dst version contains the correct
+# names
+
+saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
+
+
+
 
 # leaflet(l2) %>%
 #   addProviderTiles(provider = "CartoDB.Positron") %>% # Check about useage of provider
