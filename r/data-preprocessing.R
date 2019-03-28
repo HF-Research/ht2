@@ -74,9 +74,11 @@ l2@data <- l2@data %>%
   dplyr::mutate(name_en = name_dk)
 
 setDT(l1@data)
+l1@data[name_dk == "Midtjylland", name_dk := "Midtjydlland"]
 
-
-# Simplify poloygons because load time is too high with original resolution. gSimplify remove @data, so will need to re-add that from original. See: https://goo.gl/RXBpZn
+# Simplify poloygons because load time is too high with original resolution.
+# gSimplify remove @data, so will need to re-add that from original. See:
+# https://goo.gl/RXBpZn
 l1_data <- l1@data
 lx <- rgeos::gSimplify(l1, .001, topologyPreserve = TRUE)
 l1 <- SpatialPolygonsDataFrame(lx, data = l1@data)
@@ -84,6 +86,10 @@ l1 <- SpatialPolygonsDataFrame(lx, data = l1@data)
 l2_data <- l2@data
 lx <- rgeos::gSimplify(l2, .001, topologyPreserve = TRUE)
 l2 <- SpatialPolygonsDataFrame(lx, data = l2@data)
+
+
+# Move Bornholm to better part of mapÆ
+
 
 
 
@@ -97,12 +103,26 @@ kom_names_geo <- unique(l2@data$name_dk)
 kom_names_geo[!kom_names_geo %in% kom_names_dst]
 kom_names_dst[!kom_names_dst %in% kom_names_geo]
 
+reg_names_dst <- unique(shiny_dat$d1$region$grouping)
+reg_names_geo <- unique(l1@data$name_dk)
+
+reg_names_geo[!reg_names_geo %in% reg_names_dst]
+reg_names_dst[!reg_names_dst %in% reg_names_geo]
+
+
 
 # Rename problematic ones in spatial file. The dst version contains the correct
 # names
 
 saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
+library(leaflet)
+library(leaflet.minicharts)
+library(manipulateWidget)
 
+map1 <- leaflet() %>% addTiles() %>% syncWith("maps")
+map2 <- leaflet() %>% addTiles() %>% syncWith("maps")
+
+combineWidgets(map1, map2, ncol = 2)
 
 
 

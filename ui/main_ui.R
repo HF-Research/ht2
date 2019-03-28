@@ -108,17 +108,18 @@ tabPanel(
                           textOutput("table2_title")
                         )),
                         fluidRow(DTOutput("table_margins")))
+               )
                ),
-               fluidRow(br(), br())),
       
       tabPanel(ui_map,
                fluidRow(
-                 column(6, align = "left",
-                        leafletOutput("map_m")),
-                 column(6, align = "left",
-                        leafletOutput("map_f"))
-               ))
-    )
+                 column(12, align = "left",
+                        combineWidgetsOutput("maps", height = 550))
+                
+               )
+               )
+    ),
+    fluidRow(br(), br())
   )
   
   # fluidRow(column(12, align = "left",

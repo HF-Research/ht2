@@ -276,7 +276,7 @@ subsetVars <- reactive({
 subsetYear <- function()
   ({
     # Subset the already partially subset data based on years
-    dat <- subsetVars()[get(ui_year) == input$year, ]
+    dat <- subsetVars()[get(ui_year) == input$year,]
     if (selectPercentOrRate()) {
       var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
       dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
@@ -376,102 +376,123 @@ plot_d3_line <- reactive({
 
 
 # LEAFLET MAPS ------------------------------------------------------
-mapDataM <- reactive({
+
+mapObj <- reactive({
   if (input$aggr_level == "kom") {
-    # Convert to DT  before merge - makes life easier later
-    
-    dk_sp$l2@data <- merge(dk_sp$l2@data,
-                           outputCasesD3Bar()[get(ui_sex) == "male"],
-                           # TODO: language agnostic sex
-                           by.x = "name_dk",
-                           by.y =  prettyAggr_level(),) %>%
-      # Need to make sure the order is the same when putting data back into sp
-      # object!!
-      setorder(id)
     dk_sp$l2
+  } else if (input$aggr_level == "region") {
+    dk_sp$l1
   }
 })
-mapDataF <- reactive({
-  if (input$aggr_level == "kom") {
-    # Convert to DT  before merge - makes life easier later
-    
-    dk_sp$l2@data <- merge(dk_sp$l2@data,
-                           outputCasesD3Bar()[get(ui_sex) == "female"],
-                           # TODO: language agnostic sex
-                           by.x = "name_dk",
-                           by.y =  prettyAggr_level(),) %>%
-      # Need to make sure the order is the same when putting data back into sp
-      # object!!
-      setorder(id)
-    dk_sp$l2
-  }
+mapData <- reactive({
+  out <- mapObj()
+  out@data <- merge(out@data,
+                    outputCasesD3Bar()[get(ui_sex) == "male"],
+                    # TODO: language agnostic sex
+                    by.x = "name_dk",
+                    by.y =  prettyAggr_level(),
+  ) %>%
+    # Need to make sure the order is the same when putting data back into sp
+    # object!!
+    setorder(id)
+  m <- out
+  out <- mapObj()
+  out@data <- merge(out@data,
+                    outputCasesD3Bar()[get(ui_sex) == "female"],
+                    # TODO: language agnostic sex
+                    by.x = "name_dk",
+                    by.y =  prettyAggr_level(),
+  ) %>%
+    setorder(id)
+  list(male = m,
+       female = out)
   
 })
 
+output$maps <- renderCombineWidgets({
+  name_lang <- paste0("name_", lang)
+  map_data <-  mapData()$male
+  popup <- paste0(
+    prettyAggr_level(),
+    ": <strong>",
+    map_data@data[["name_dk"]],
+    "</strong><br><br>",
+    map_data@data[[prettyVariableSingular()]]
+  ) %>%
+    lapply(htmltools::HTML)
+  
+  fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+  map_m <- makeLeaflet(
+    map_data = map_data,
+    fill_colors = fill_colors,
+    label_popup = popup)
+  
+  # Female  
+  map_data <-  mapData()$female
+  popup <- paste0(
+    prettyAggr_level(),
+    ": <strong>",
+    map_data@data[["name_dk"]],
+    "</strong><br><br>",
+    map_data@data[[prettyVariableSingular()]]
+  ) %>%
+    lapply(htmltools::HTML)
+  
+  fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+  map_f <- makeLeaflet(
+    map_data = map_data,
+    fill_colors = fill_colors,
+    label_popup = popup)  
+    
+    combineWidgets(map_m, map_f, ncol = 2)
+    
+
+})
 output$map_m <- renderLeaflet({
   if (validate() &&
-      isKom()) {
+      isGeo()) {
+    
     name_lang <- paste0("name_", lang)
-    map_data <-  mapDataM()
+    map_data <-  mapData()$male
     
     
-    popup <- paste0(prettyAggr_level(),
-                    ": <strong>",
-                    map_data@data[["name_dk"]],
-                    "</strong><br><br>",
-                    map_data@data[[prettyVariableSingular()]]) %>%
+    popup <- paste0(
+      prettyAggr_level(),
+      ": <strong>",
+      map_data@data[["name_dk"]],
+      "</strong><br><br>",
+      map_data@data[[prettyVariableSingular()]]
+    ) %>%
       lapply(htmltools::HTML)
     
-    
-    leaflet() %>%
-      setView(lng = 11.743608,
-              lat = 56.179752,
-              zoom = 7) %>%
-      # addProviderTiles(provider = "CartoDB.Positron",
-      #                  options = providerTileOptions(opacity = 0.4,
-      #                                                minZoom = 6)) %>%
-      addPolygons(
-        data = map_data,
-        fillColor  = ~ pal(map_data@data[[prettyVariableSingular()]]),
-        weight = 1,
-        opacity = 1,
-        color = "grey",
-        fillOpacity = 0.7,
-        label = popup
-      )
+    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+    makeLeaflet(
+      map_data = map_data,
+      fill_colors = fill_colors,
+      label_popup = popup
+    )
     
   }
 })
 output$map_f <- renderLeaflet({
   if (validate() &&
-      isKom()) {
-    
+      isGeo()) {
     name_lang <- paste0("name_", lang)
-    map_data <-  mapDataF()
-    popup <- paste0(prettyAggr_level(),
-                    ": <strong>",
-                    map_data@data[["name_dk"]],
-                    "</strong><br><br>",
-                    map_data@data[[prettyVariableSingular()]]) %>%
+    map_data <-  mapData()$female
+    popup <- paste0(
+      prettyAggr_level(),
+      ": <strong>",
+      map_data@data[["name_dk"]],
+      "</strong><br><br>",
+      map_data@data[[prettyVariableSingular()]]
+    ) %>%
       lapply(htmltools::HTML)
-    
-    
-    leaflet() %>%
-      setView(lng = 11.743608,
-              lat = 56.179752,
-              zoom = 7) %>%
-      # addProviderTiles(provider = "CartoDB.Positron",
-      #                  options = providerTileOptions(opacity = 0.4,
-      #                                                minZoom = 6)) %>%
-      addPolygons(
-        data = map_data,
-        fillColor  = ~ pal(map_data@data[[prettyVariableSingular()]]),
-        weight = 1,
-        opacity = 1,
-        color = "grey",
-        fillOpacity = 0.7,
-        label = popup
-      )
+    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+    makeLeaflet(
+      map_data = map_data,
+      fill_colors = fill_colors,
+      label_popup = popup
+    )
     
   }
 })
@@ -597,7 +618,7 @@ validateKom <- reactive({
   }
 })
 
-isKom <- reactive({
+isGeo <- reactive({
   input$aggr_level == "kom" ||
     input$aggr_level == "region"
 })
@@ -667,9 +688,12 @@ observe({
 })
 
 observe({
-  shinyjs::toggle(condition = (input$aggr_level == "kom" || input$aggr_level == "region"),
-                selector = paste0("#data_vis_tabs li a[data-value=", ui_map, "]"))
-  })
+  shinyjs::toggle(
+    condition = (input$aggr_level == "kom" ||
+                   input$aggr_level == "region"),
+    selector = paste0("#data_vis_tabs li a[data-value=", ui_map, "]")
+  )
+})
 
 
 

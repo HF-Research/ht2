@@ -1,4 +1,4 @@
-
+# LIBRARIES ----------------------------------------------------
 library(shiny)
 library(DT)
 library(shinyWidgets)
@@ -7,8 +7,17 @@ library(shinyBS)
 library(lubridate)
 library(shinyjs)
 library(leaflet)
+library(manipulateWidget)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
+
+# This is a fork, because of the issue highlighted here with the master branch:
+# https://github.com/rstudio/leaflet/issues/347
+devtools::install_github('matthew-phelps/leaflet.minicharts')
+library(leaflet.minicharts)
+
+# OBJECTS ------------------------------------------------------------
+
 shiny_dat <- readRDS(file = "data/shiny_dat.rds")
 dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 lang = "dk"
@@ -24,6 +33,7 @@ source(ui_file_path, encoding = "UTF-8")
 source("r/PrepDefinitions.R")
 year_max <- 2016
 
+# FUNCTIONS ------------------------------------------------
 formatNumbers <- function(dat, lang) {
   x <- copy(dat)
   col_names <- colnames(dat)[-1]
@@ -190,3 +200,19 @@ edu_DT <- DT::datatable(
 
 # LEAFLET MAPS -------------------------------------------------------
 pal <- colorQuantile("YlOrRd", NULL, n = 4, reverse = FALSE)
+makeLeaflet <- function(map_data, fill_colors, label_popup){
+  leaflet() %>%
+  setView(lng = 10.3018,
+          lat = 56.179752,
+          zoom = 7) %>%
+  addPolygons(
+    data = map_data,
+    fillColor  = fill_colors,
+    weight = 1,
+    opacity = 1,
+    color = "grey",
+    fillOpacity = 0.7,
+    label = label_popup
+  ) %>%
+    syncWith(groupname = "maps")
+}
