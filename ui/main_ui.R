@@ -2,7 +2,8 @@ tabPanel(
   ui_main_title,
   
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css"),
+    tags$style(HTML(".leaflet-container { background: #f00; }"))
   ),
   fluidRow(
     column(id = "col_input",
@@ -47,6 +48,7 @@ tabPanel(
     column(
       id = "col_description",
       7,
+      profvis_ui("profiler"),
       wellPanel(
         class = "well_description",
         textOutput("outcome_title"),
@@ -68,57 +70,57 @@ tabPanel(
       tabPanel(
         ui_d3_figures,
         conditionalPanel(condition = "input.aggr_level != 'national'",
-                         simpleD3BarOutput("d3_plot_bar", height = "500px")),
+                         simpleD3BarOutput("d3_plot_bar", height = "550px")),
         conditionalPanel(
           condition = "input.aggr_level == 'national'",
-          simpleD3LineOutput("d3_plot_line_html", height = "500px")
-        ),
-        
-        fluidRow(
-          column(
-            id = "col_rate_count",
-            3,
-            align = "left",
-            radioGroupButtons(
-              inputId = "count_rates",
-              label =  NULL,
-              choices = count_rate_choices,
-              justified = TRUE
-            )
-          ),
-          column(3,
-                 offset = 6,
-                 uiOutput("downloadButton"))
-        ),
-        fluidRow(column(
-          12, align = "left",
-          uiOutput("rate_count_desc"),
-          br()
-        ))
+          simpleD3LineOutput("d3_plot_line_html", height = "550px")
+        )
       ),
+      
       tabPanel("Data",
                fluidRow(
                  column(6,
                         fluidRow(tags$b(
                           textOutput("table1_title")
                         )),
-                        fluidRow(DTOutput("table"))),
+                        fluidRow(withSpinner(DTOutput("table")))),
                  column(6,
                         fluidRow(tags$b(
                           textOutput("table2_title")
                         )),
-                        fluidRow(DTOutput("table_margins")))
+                        fluidRow(withSpinner(DTOutput("table_margins"))))
                )
                ),
       
       tabPanel(ui_map,
                fluidRow(
                  column(12, align = "left",
-                        combineWidgetsOutput("maps", height = 550))
+                        withSpinner(combineWidgetsOutput("maps", height = 550))),
                 
-               )
+               br())
                )
     ),
+    fluidRow(
+      column(
+        id = "col_rate_count",
+        3,
+        align = "left",
+        radioGroupButtons(
+          inputId = "count_rates",
+          label =  NULL,
+          choices = count_rate_choices,
+          justified = TRUE
+        )
+      ),
+      column(3,
+             offset = 6,
+             uiOutput("downloadButton"))
+    ),
+    fluidRow(column(
+      12, align = "left",
+      uiOutput("rate_count_desc"),
+      br()
+    )),
     fluidRow(br(), br())
   )
   

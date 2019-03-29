@@ -3,7 +3,7 @@ options(DT.options = list(
   dom = "Bt",
   buttons = c('copy', 'csv', 'pdf')
 ))
-
+callModule(profvis_server, "profiler")
 # UPDATE RADIO BUTTONS ----------------------------------------------------
 output$varButtonChoices <- renderUI({
   # Gives a dynamic button UI. The buttons change depending on the selected
@@ -289,8 +289,8 @@ subsetYear <- function()
 outputCasesData <- reactive({
   # National level data shows all years
   if (input$aggr_level != "national") {
-    dat <- subsetYear()
-    dat[, (ui_year) := NULL]
+    sub_year <- subsetYear()
+    sub_year[, (ui_year) := NULL]
   } else {
     subsetVars()
   }
@@ -500,19 +500,32 @@ output$map_f <- renderLeaflet({
 
 
 # DATATABLES --------------------------------------------------------------
-outputCountDTTable <- reactive({
-  # Organizes data for DataTable outputs. Needs to be characters
-  dat <- copy(outputCasesData())
+
+
+
+dtCast <- reactive({
+  # dcast() is apparently expensive when running on server - so do one dcast for
+  # both counts and rates
   group_var <- prettyAggr_level()
-  dat[, prettyVariable()[2] := NULL]
-  
-  dat <-  dcast(
-    dat,
+
+  data.table::dcast(
+    outputCasesData(),
     get(group_var) ~ get(ui_sex),
-    value.var = prettyVariable()[1],
+    value.var = prettyVariable(),
     fun.aggregate = sum
   )
   
+})
+
+
+outputCountDTTable <- reactive({
+  # Organizes data for DataTable outputs. Needs to be characters
+  dat <- dtCast()
+  # Subset to either counts or rates
+  vars <- c("group_var", grep(prettyVariable()[1], colnames(dat), value = TRUE))
+  
+  dat <- dat[, ..vars]
+  colnames(dat) <- c("group_var", "female", "male")
   # Calculate margins
   dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
   if (input$aggr_level == "age") {
@@ -530,16 +543,14 @@ outputCountDTTable <- reactive({
     col_convert <- c("female", "male", "Total")
     dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
     
-  } else {
-    # dat <- dat[, lapply(.SD, as.character)]
   }
-  # Format data columns to either DK or EN settings
-  # dat <-
-  # formatNumbers(dat, lang = lang)
+
+  setnames(
+    dat,
+    old = c("group_var", "male", "female"),
+    new = c(prettyAggr_level(), ui_sex_levels)
+  )
   
-  # .SDcols = col_names]]
-  colnames(dat) <- c(group_var, ui_sex_levels, "Total")
-  #
   # Flag last row so can be targeted for formatting
   dat[, flag := 0]
   if (input$aggr_level == "age")
@@ -552,36 +563,34 @@ outputCountDTTable <- reactive({
   setcolorder(dat, neworder = col_names)
   
   makeCountDT(dat,
-              group_var = group_var,
+              group_var = prettyAggr_level(),
               thousands_sep = thousands_sep)
   
 })
 
 outputRateDTTable <- reactive({
-  dat <- copy(outputCasesData())
-  group_var <- prettyAggr_level()
-  dat[, prettyVariable()[1] := NULL]
+  dat <- dtCast()
+
+  # Subset to either counts or rates
+  vars <- c("group_var", grep(prettyVariable()[2], colnames(dat), fixed = TRUE, value = TRUE))
+  dat <- dat[, ..vars]
+  colnames(dat) <- c("group_var", "female", "male")
   
-  dat <-  dcast(
-    dat,
-    get(group_var) ~ get(ui_sex),
-    value.var = prettyVariable()[2],
-    fun.aggregate = sum
-  )
-  
-  # # Format data columns in either DK or EN numbers
-  # dat <-
-  #   formatNumbers(dat, lang = lang)
   if (!selectPercentOrRate()) {
     digits = 0
   } else {
     digits = 1
   }
   
-  colnames(dat) <- c(group_var, ui_sex_levels)
+  setnames(
+    dat,
+    old = c("group_var", "male", "female"),
+    new = c(prettyAggr_level(), ui_sex_levels)
+  )
+# colnames(dat) <- c(group_var, ui_sex_levels)
   makeRateDT(
     dat = dat,
-    group_var = group_var,
+    group_var = prettyAggr_level(),
     thousands_sep = thousands_sep,
     digits = digits,
     dec_mark = dec_mark
@@ -688,13 +697,13 @@ observe({
 })
 
 observe({
+  # Shows map tab only when geo data is selected 
   shinyjs::toggle(
     condition = (input$aggr_level == "kom" ||
                    input$aggr_level == "region"),
     selector = paste0("#data_vis_tabs li a[data-value=", ui_map, "]")
   )
 })
-
 
 
 
@@ -725,6 +734,7 @@ output$table <- renderDT({
 })
 
 output$table_margins <- renderDT({
+  server = TRUE
   if (validate()) {
     outputRateDTTable()
   }
