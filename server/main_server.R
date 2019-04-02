@@ -84,7 +84,7 @@ output$variable_desc <- renderUI({
     
     col_selection <- paste0("desc_general_", lang)
     desc_text <-
-      variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
+      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
     tagList(title_text, desc_text)
   }
 })
@@ -101,7 +101,7 @@ output$rate_count_desc <- renderUI({
       col_selection <-
         paste0("desc_", selectedRateType(), "_", lang)
       desc_text <-
-        variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
+        variable_ui[code_name == selectedDataVars()[1], ..col_selection]
       tagList(title_text, desc_text)
     } else {
       title_text <-
@@ -172,11 +172,11 @@ prettyVariableSingular <- reactive({
 
 
 # SUBSETTING ------------------------------------------------------
-selectCountRate <- function() {
+selectCountRate <- reactive({
   as.integer(input$count_rates)
-}
+})
 
-selectRawOrMean <- function() {
+selectRawOrMean <- reactive({
   # Returns TRUE if raw count data should be used. FALSE if moving avg data
   # should be used
   if (input$aggr_level %in% c("age", "national")) {
@@ -184,9 +184,9 @@ selectRawOrMean <- function() {
   } else if (input$aggr_level %in% c("edu", "region", "kom")) {
     FALSE
   }
-}
+})
 
-selectPercentOrRate <- function() {
+selectPercentOrRate <- reactive({
   if (input$variable %in% c(
     "count_n_readmissions_ppl_30",
     "count_n_dead30",
@@ -198,7 +198,7 @@ selectPercentOrRate <- function() {
     FALSE
   }
   
-}
+})
 
 selectGeo <- function() {
   if (input$aggr_level %in% c("kom", "region")) {
@@ -240,13 +240,13 @@ selectedRateType <- reactive({
     "standardized"
   }
 })
-selectedDataVars <- function() {
+selectedDataVars <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
   var_stripped <- gsub("count_|rate_", "", input$variable)
   grep_str <- paste0(var_stripped, "$")
   grep(grep_str, colnames(subsetOutcome()), value = TRUE)
-}
+})
 
 subsetVars <- reactive({
   dat <- subsetOutcome()
@@ -273,16 +273,15 @@ subsetVars <- reactive({
   }
   dat[]
 })
-subsetYear <- function()
-  ({
-    # Subset the already partially subset data based on years
-    dat <- subsetVars()[get(ui_year) == input$year,]
-    if (selectPercentOrRate()) {
-      var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
-      dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
-    }
-    dat[]
-  })
+subsetYear <- reactive({
+  # Subset the already partially subset data based on years
+  dat <- subsetVars()[get(ui_year) == input$year,]
+  if (selectPercentOrRate()) {
+    var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
+    dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
+  }
+  dat[]
+})
 
 
 # FORMATTING DATA FOR D3------------------------------------------------------
@@ -422,12 +421,11 @@ output$maps <- renderCombineWidgets({
     lapply(htmltools::HTML)
   
   fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
-  map_m <- makeLeaflet(
-    map_data = map_data,
-    fill_colors = fill_colors,
-    label_popup = popup)
+  map_m <- makeLeaflet(map_data = map_data,
+                       fill_colors = fill_colors,
+                       label_popup = popup)
   
-  # Female  
+  # Female
   map_data <-  mapData()$female
   popup <- paste0(
     prettyAggr_level(),
@@ -439,19 +437,17 @@ output$maps <- renderCombineWidgets({
     lapply(htmltools::HTML)
   
   fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
-  map_f <- makeLeaflet(
-    map_data = map_data,
-    fill_colors = fill_colors,
-    label_popup = popup)  
-    
-    combineWidgets(map_m, map_f, ncol = 2)
-    
-
+  map_f <- makeLeaflet(map_data = map_data,
+                       fill_colors = fill_colors,
+                       label_popup = popup)
+  
+  combineWidgets(map_m, map_f, ncol = 2)
+  
+  
 })
 output$map_m <- renderLeaflet({
   if (validate() &&
       isGeo()) {
-    
     name_lang <- paste0("name_", lang)
     map_data <-  mapData()$male
     
@@ -507,14 +503,16 @@ dtCast <- reactive({
   # dcast() is apparently expensive when running on server - so do one dcast for
   # both counts and rates
   group_var <- prettyAggr_level()
-
-  data.table::dcast(
-    outputCasesData(),
-    get(group_var) ~ get(ui_sex),
-    value.var = prettyVariable(),
-    fun.aggregate = sum
-  )
   
+  dat <- outputCasesData()
+  value_var <- prettyVariable()
+  cast_formula <- formula(paste0(group_var, "~", ui_sex))
+  
+  out <- dcast(dat,
+               cast_formula,
+               value.var = value_var,
+               fun.aggregate = sum)
+  setnames(out, names(out)[1], "group_var")
 })
 
 
@@ -522,7 +520,9 @@ outputCountDTTable <- reactive({
   # Organizes data for DataTable outputs. Needs to be characters
   dat <- dtCast()
   # Subset to either counts or rates
-  vars <- c("group_var", grep(prettyVariable()[1], colnames(dat), value = TRUE))
+  
+  vars <-
+    c("group_var", grep(prettyVariable()[1], colnames(dat), value = TRUE))
   
   dat <- dat[, ..vars]
   colnames(dat) <- c("group_var", "female", "male")
@@ -544,7 +544,7 @@ outputCountDTTable <- reactive({
     dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
     
   }
-
+  
   setnames(
     dat,
     old = c("group_var", "male", "female"),
@@ -562,6 +562,10 @@ outputCountDTTable <- reactive({
     c(col_names[length(col_names)], col_names[-length(col_names)])
   setcolorder(dat, neworder = col_names)
   
+  
+  
+  
+  
   makeCountDT(dat,
               group_var = prettyAggr_level(),
               thousands_sep = thousands_sep)
@@ -570,9 +574,16 @@ outputCountDTTable <- reactive({
 
 outputRateDTTable <- reactive({
   dat <- dtCast()
-
+  
   # Subset to either counts or rates
-  vars <- c("group_var", grep(prettyVariable()[2], colnames(dat), fixed = TRUE, value = TRUE))
+  vars <-
+    c("group_var",
+      grep(
+        prettyVariable()[2],
+        colnames(dat),
+        fixed = TRUE,
+        value = TRUE
+      ))
   dat <- dat[, ..vars]
   colnames(dat) <- c("group_var", "female", "male")
   
@@ -587,7 +598,7 @@ outputRateDTTable <- reactive({
     old = c("group_var", "male", "female"),
     new = c(prettyAggr_level(), ui_sex_levels)
   )
-# colnames(dat) <- c(group_var, ui_sex_levels)
+  # colnames(dat) <- c(group_var, ui_sex_levels)
   makeRateDT(
     dat = dat,
     group_var = prettyAggr_level(),
@@ -697,7 +708,7 @@ observe({
 })
 
 observe({
-  # Shows map tab only when geo data is selected 
+  # Shows map tab only when geo data is selected
   shinyjs::toggle(
     condition = (input$aggr_level == "kom" ||
                    input$aggr_level == "region"),
