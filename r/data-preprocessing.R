@@ -18,7 +18,7 @@ preProccess <- function(export_dat) {
     lapply(outcome, function(aggr_level) {
       aggr_level[, `:=` (outcome = NULL, aggr_level = NULL)]
       setkey(aggr_level, year)
-      aggr_level
+     
     })
   })
 }
@@ -79,8 +79,6 @@ setkey(l2@data, name_dk)
 setDT(l1@data)
 l1@data[name_dk == "Midtjylland", name_dk := "Midtjydlland"]
 setkey(l1@data, name_dk)
-# Any duplicated values within the same outcome/aggr_level have to be jittered so that
-
 
 # Simplify poloygons because load time is too high with original resolution.
 # gSimplify remove @data, so will need to re-add that from original. See:

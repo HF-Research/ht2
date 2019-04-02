@@ -442,55 +442,9 @@ output$maps <- renderCombineWidgets({
   
   combineWidgets(map_m, map_f, ncol = 2)
   
-  
-})
-output$map_m <- renderLeaflet({
-  if (validate() &&
-      isGeo()) {
-    name_lang <- paste0("name_", lang)
-    map_data <-  mapData()$male
-    
-    
-    popup <- paste0(
-      prettyAggr_level(),
-      ": <strong>",
-      map_data@data[["name_dk"]],
-      "</strong><br><br>",
-      map_data@data[[prettyVariableSingular()]]
-    ) %>%
-      lapply(htmltools::HTML)
-    
-    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
-    makeLeaflet(
-      map_data = map_data,
-      fill_colors = fill_colors,
-      label_popup = popup
-    )
-    
   }
 })
-output$map_f <- renderLeaflet({
-  if (validate() &&
-      isGeo()) {
-    name_lang <- paste0("name_", lang)
-    map_data <-  mapData()$female
-    popup <- paste0(
-      prettyAggr_level(),
-      ": <strong>",
-      map_data@data[["name_dk"]],
-      "</strong><br><br>",
-      map_data@data[[prettyVariableSingular()]]
-    ) %>%
-      lapply(htmltools::HTML)
-    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
-    makeLeaflet(
-      map_data = map_data,
-      fill_colors = fill_colors,
-      label_popup = popup
-    )
-    
-  }
-})
+
 
 
 
