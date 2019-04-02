@@ -240,15 +240,15 @@ selectedRateType <- reactive({
     "standardized"
   }
 })
-selectedDataVars <- reactive({
+selectedDataVars <- function(){
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
   var_stripped <- gsub("count_|rate_", "", input$variable)
   grep_str <- paste0(var_stripped, "$")
   grep(grep_str, colnames(subsetOutcome()), value = TRUE)
-})
+}
 
-subsetVars <- reactive({
+subsetVars <- function(){
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -272,21 +272,21 @@ subsetVars <- reactive({
       c(ui_year, ui_sex, prettyVariable())
   }
   dat[]
-})
-subsetYear <- reactive({
+}
+subsetYear <- function(){
   # Subset the already partially subset data based on years
   
-  dat <- subsetVars()[get(ui_year) == input$year, ]
+  dat <- subsetVars()[get(ui_year) == input$year,]
   if (selectPercentOrRate()) {
     var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
     dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
   }
   dat[]
-})
+}
 
 
 # FORMATTING DATA FOR D3------------------------------------------------------
-outputCasesData <- reactive({
+outputCasesData <- function(){
   # National level data shows all years
   if (input$aggr_level != "national") {
     sub_year <- subsetYear()
@@ -294,21 +294,25 @@ outputCasesData <- reactive({
   } else {
     subsetVars()
   }
-})
+}
 
 outputCasesD3Line <- reactive({
   # Replace value.var with reactive that corresponds to the variable the user selected
+  cast_formula <- formula(paste0(ui_year, "~", ui_sex))
+  tmp <- subsetVars()
+  value_var <- prettyVariableSingular()
+  
   dat <-
     dcast(
-      subsetVars(),
-      get(ui_year) ~ get(ui_sex),
-      value.var = prettyVariableSingular(),
-      fun.aggregate = sum
+      tmp,
+      cast_formula,
+      value.var = value_var,
+      fun.aggregate = function(x) sum(x, na.rm = TRUE)
     )
   
   colnames(dat) <-
     c(ui_year, "female", "male") # TODO: needs to be language agnostic
-  dat[, variable := prettyVariableSingular()]
+  dat[, variable := value_var]
   
 })
 
@@ -375,20 +379,25 @@ plot_d3_line <- reactive({
 
 # LEAFLET MAPS ------------------------------------------------------
 
-mapObj <- reactive({
+mapObj <- function(){
   if (input$aggr_level == "kom") {
     dk_sp$l2
   } else if (input$aggr_level == "region") {
     dk_sp$l1
   }
-})
+}
 
-mapData <- reactive({
+mapData <- function() {
   out <- mapObj()
-  keep_vars <- c("id", prettyAggr_level(), prettyVariableSingular())
+  data_var <- prettyVariableSingular()
+  keep_vars <- c("id", prettyAggr_level(), data_var)
+  
+  tmp <- copy(outputCasesD3Bar())
+  # inx <- duplicated(tmp[, ..data_var])
+  # # tmp[inx, (data_var) := jitter(get(data_var), amount = .1)]
   
   # MALES
-  tmp <- outputCasesD3Bar()[get(ui_sex) == "male"]
+  tmp <- tmp[get(ui_sex) == "male"]
   setkeyv(tmp, prettyAggr_level())
   out@data <- tmp[out@data, ..keep_vars]
   setorder(out@data, id)
@@ -405,10 +414,11 @@ mapData <- reactive({
   list(male = m,
        female = out)
   
-})
+}
 
 output$maps <- renderCombineWidgets({
-  name_lang <- paste0("name_", lang)
+  if (validate() && isGeo()){
+    name_lang <- paste0("name_", lang)
   map_data <-  mapData()$male
   popup <- paste0(
     prettyAggr_level(),
@@ -454,6 +464,7 @@ output$maps <- renderCombineWidgets({
 
 dtCast <- reactive({
   # One dcast for both rates and counts
+  if(validate()){
   group_var <- prettyAggr_level()
   dat <- outputCasesData()
   value_var <- prettyVariable()
@@ -461,12 +472,14 @@ dtCast <- reactive({
   out <- dcast(dat,
                cast_formula,
                value.var = value_var,
-               fun.aggregate = sum)
+               fun.aggregate = function(x) sum(x, na.rm = TRUE))
   setnames(out, names(out)[1], "group_var")
+  }
 })
 
 
 outputCountDTTable <- reactive({
+  if(validate()){
   # Organizes data for DataTable outputs. Needs to be characters
   dat <- dtCast()
   # Subset to either counts or rates
@@ -519,12 +532,12 @@ outputCountDTTable <- reactive({
   makeCountDT(dat,
               group_var = prettyAggr_level(),
               thousands_sep = thousands_sep)
-  
+  }
 })
 
 outputRateDTTable <- reactive({
+  if(validate()){
   dat <- dtCast()
-  
   # Subset to either counts or rates
   vars <-
     c("group_var",
@@ -556,6 +569,7 @@ outputRateDTTable <- reactive({
     digits = digits,
     dec_mark = dec_mark
   )
+  }
 })
 
 # VALIDATE BEFORE PLOTING -------------------------------------------------
@@ -688,14 +702,13 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 # DATATABLES:
 # AGE
 output$table <- renderDT({
-  server = TRUE
+  
   if (validate()) {
     outputCountDTTable()
   }
 })
 
 output$table_margins <- renderDT({
-  server = TRUE
   if (validate()) {
     outputRateDTTable()
   }

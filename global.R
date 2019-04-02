@@ -1,7 +1,6 @@
 # LIBRARIES ----------------------------------------------------
 # devtools::install_github("rstudio/profvis")
 library(profvis)
-
 library(shiny)
 library(DT)
 library(shinyWidgets)
@@ -14,10 +13,11 @@ library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 
+
 # This is a fork, because of the issue highlighted here with the master branch:
 # https://github.com/rstudio/leaflet/issues/347
 # devtools::install_github('matthew-phelps/leaflet.minicharts')
-library(leaflet.minicharts)
+# library(leaflet.minicharts)
 
 
 # OBJECTS ------------------------------------------------------------
