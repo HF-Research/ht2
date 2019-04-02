@@ -1,7 +1,5 @@
 library(data.table)
 library(magrittr)
-if (!require("sp"))
-  install.packages("sp")
 library(sp)
 library(rgeos)
 
@@ -19,6 +17,8 @@ preProccess <- function(export_dat) {
   lapply(dat, function(outcome) {
     lapply(outcome, function(aggr_level) {
       aggr_level[, `:=` (outcome = NULL, aggr_level = NULL)]
+      setkey(aggr_level, year)
+      aggr_level
     })
   })
 }
@@ -28,12 +28,12 @@ dat_diag <-  preProccess(export_diag)
 
 
 ## Add lists together (med, diag, opr) and save output as one massive list
-shiny_list <-
-  list(opr_dat = dat_opr,
-       med_dat = dat_med,
-       diag_dat = dat_diag)
+# shiny_list <-
+#   list(opr_dat = dat_opr,
+#        med_dat = dat_med,
+#        diag_dat = dat_diag)
 shiny_dat <- c(dat_opr, dat_med, dat_diag)
-saveRDS(shiny_list, file = "data/shiny_list.rds")
+# saveRDS(shiny_list, file = "data/shiny_list.rds")
 saveRDS(shiny_dat, file = "data/shiny_dat.rds")
 
 # SPATIAL DATA PRE PROCESSING --------------------------------------
@@ -67,14 +67,20 @@ l2@data <-
   dplyr::rename(id = OBJECTID,
                 name_dk = NAME_2)
 
+
+# Rename problematic names in spatial file. The dst version contains the correct
+# names
 setDT(l2@data)
 l2@data[name_dk == "Århus", name_dk := "Aarhus"]
 l2@data[name_dk == "Vesthimmerland", name_dk := "Vesthimmerlands"]
-l2@data <- l2@data %>%
-  dplyr::mutate(name_en = name_dk)
+l2@data$name_en <- l2@data$name_dk
+setkey(l2@data, name_dk)
 
 setDT(l1@data)
 l1@data[name_dk == "Midtjylland", name_dk := "Midtjydlland"]
+setkey(l1@data, name_dk)
+# Any duplicated values within the same outcome/aggr_level have to be jittered so that
+
 
 # Simplify poloygons because load time is too high with original resolution.
 # gSimplify remove @data, so will need to re-add that from original. See:
@@ -111,21 +117,4 @@ reg_names_dst[!reg_names_dst %in% reg_names_geo]
 
 
 
-# Rename problematic ones in spatial file. The dst version contains the correct
-# names
-
 saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
-library(leaflet)
-library(leaflet.minicharts)
-library(manipulateWidget)
-
-map1 <- leaflet() %>% addTiles() %>% syncWith("maps")
-map2 <- leaflet() %>% addTiles() %>% syncWith("maps")
-
-combineWidgets(map1, map2, ncol = 2)
-
-
-
-# leaflet(l2) %>%
-#   addProviderTiles(provider = "CartoDB.Positron") %>% # Check about useage of provider
-#   addPolygons(data = l2)

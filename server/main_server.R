@@ -109,7 +109,7 @@ output$rate_count_desc <- renderUI({
       
       col_selection <- paste0("desc_", "count", "_", lang)
       desc_text <-
-        variable_ui[code_name == selectedDataVars()[1], get(col_selection)]
+        paste0(variable_ui[code_name == selectedDataVars()[1], ..col_selection])
       tagList(title_text, desc_text)
     }
   }
@@ -162,7 +162,7 @@ prettyVariable <- reactive({
     paste0("var_rate_", selectedRateType(), "_", lang)
   col_names <- colnames(variable_ui)
   col_selection <- grep(grep_selection, col_names, value = TRUE)
-  c(variable_ui[code_name == data_var_name, var_dk], variable_ui[code_name == data_var_name, get(col_selection)])
+  c(variable_ui[code_name == data_var_name, var_dk], paste0(variable_ui[code_name == data_var_name, ..col_selection]))
   
 })
 
@@ -275,7 +275,8 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  dat <- subsetVars()[get(ui_year) == input$year,]
+  
+  dat <- subsetVars()[get(ui_year) == input$year, ]
   if (selectPercentOrRate()) {
     var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
     dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
@@ -324,8 +325,6 @@ outputCasesD3Bar <- reactive({
   .SDcols = count_rate]
   
   # For variables that present PERCENTAGE results - divide by 1000
-  
-  
   
   # Order so that males come first - makes sure the coloring matches
   setorderv(dat, ui_sex, order = -1L)
@@ -383,26 +382,26 @@ mapObj <- reactive({
     dk_sp$l1
   }
 })
+
 mapData <- reactive({
   out <- mapObj()
-  out@data <- merge(out@data,
-                    outputCasesD3Bar()[get(ui_sex) == "male"],
-                    # TODO: language agnostic sex
-                    by.x = "name_dk",
-                    by.y =  prettyAggr_level(),
-  ) %>%
-    # Need to make sure the order is the same when putting data back into sp
-    # object!!
-    setorder(id)
+  keep_vars <- c("id", prettyAggr_level(), prettyVariableSingular())
+  
+  # MALES
+  tmp <- outputCasesD3Bar()[get(ui_sex) == "male"]
+  setkeyv(tmp, prettyAggr_level())
+  out@data <- tmp[out@data, ..keep_vars]
+  setorder(out@data, id)
   m <- out
+  
+  # Female
   out <- mapObj()
-  out@data <- merge(out@data,
-                    outputCasesD3Bar()[get(ui_sex) == "female"],
-                    # TODO: language agnostic sex
-                    by.x = "name_dk",
-                    by.y =  prettyAggr_level(),
-  ) %>%
-    setorder(id)
+  tmp <- outputCasesD3Bar()[get(ui_sex) == "female"]
+  setkeyv(tmp, prettyAggr_level())
+  out@data <- tmp[out@data, ..keep_vars]
+  setorder(out@data, id)
+  
+  # Combine for output
   list(male = m,
        female = out)
   
@@ -500,14 +499,11 @@ output$map_f <- renderLeaflet({
 
 
 dtCast <- reactive({
-  # dcast() is apparently expensive when running on server - so do one dcast for
-  # both counts and rates
+  # One dcast for both rates and counts
   group_var <- prettyAggr_level()
-  
   dat <- outputCasesData()
   value_var <- prettyVariable()
   cast_formula <- formula(paste0(group_var, "~", ui_sex))
-  
   out <- dcast(dat,
                cast_formula,
                value.var = value_var,
