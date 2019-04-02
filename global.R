@@ -209,7 +209,7 @@ edu_DT <- DT::datatable(
 
 
 # LEAFLET MAPS -------------------------------------------------------
-pal <- colorQuantile("YlOrRd", NULL, n = 4, reverse = FALSE)
+pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
 makeLeaflet <- function(map_data, fill_colors, label_popup){
   leaflet() %>%
   setView(lng = 10.3018,
@@ -229,6 +229,5 @@ makeLeaflet <- function(map_data, fill_colors, label_popup){
       textsize = "17px",
       direction = "auto",
       opacity = 1)
-  ) %>%
-    syncWith(groupname = "maps")
+  )
 }
