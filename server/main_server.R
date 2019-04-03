@@ -14,7 +14,7 @@ output$varButtonChoices <- renderUI({
   # have to restrict the output that depends on this (which is nearly
   # everything) from running until a non-NULL value is supplied. This is
   # acheived by an if-statement in the validate() reactive.
-  
+  # browser()
   var_names <-
     grep("count", names(subsetOutcomeWithoutAggreLevel()), value = TRUE)
   var_names <- var_names[!grepl("mean", var_names)]
@@ -22,23 +22,23 @@ output$varButtonChoices <- renderUI({
   # Select the plain language terms matching the variables in data
   variable_choices <-
     variable_ui[code_name %in% var_names, .(code_name, var_dk)]
-  
   var_names <- variable_choices$code_name
   names(var_names) <- variable_choices$var_dk
+
+  # If the previous selected var is available in the new outcome vars, make that
+  # the default, else the first variable
+  selected_var <- input$variable
+    if(is.null(selected_var) || !selected_var %in% var_names){
+    selected_var <- var_names[1]
+  }
   selectInput(
     inputId = "variable",
     label = choose_var,
     choices = var_names,
-    selectize = TRUE
+    selectize = TRUE,
+    selected = selected_var
+    
   )
-  # radioGroupButtons(
-  #   inputId = "variable",
-  #   label = choose_var,
-  #   choices = var_names,
-  #   justified = TRUE,
-  #   direction = "vertical",
-  #   individual = FALSE
-  # )
 })
 
 
@@ -604,6 +604,10 @@ isGeo <- reactive({
     input$aggr_level == "region"
 })
 
+observe({
+  freezeReactiveValue(input, "outcome")
+})
+
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
 choiceYears <- reactive({
@@ -702,12 +706,12 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 output$table_counts <- renderDT({
   
   if (validate()) {
+    browser()
     outputCountDTTable()
   }
 })
 
 output$table_rates <- renderDT({
-  
   if (validate()) {
     outputRateDTTable()
   }
