@@ -2,8 +2,7 @@ tabPanel(
   ui_main_title,
   
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css"),
-    tags$style(HTML(".leaflet-container { background: #f00; }"))
+    tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css")
   ),
   fluidRow(
     column(id = "col_input",
@@ -83,12 +82,12 @@ tabPanel(
                         fluidRow(tags$b(
                           textOutput("table1_title")
                         )),
-                        fluidRow(withSpinner(DTOutput("table")))),
+                        fluidRow(withSpinner(DTOutput("table_counts")))),
                  column(6,
                         fluidRow(tags$b(
                           textOutput("table2_title")
                         )),
-                        fluidRow(withSpinner(DTOutput("table_margins"))))
+                        fluidRow(withSpinner(DTOutput("table_rates"))))
                )
                ),
       

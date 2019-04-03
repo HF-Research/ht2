@@ -459,9 +459,6 @@ output$maps <- renderCombineWidgets({
 
 
 # DATATABLES --------------------------------------------------------------
-
-
-
 dtCast <- reactive({
   # One dcast for both rates and counts
   if(validate()){
@@ -685,6 +682,7 @@ observe({
 # RENDER FUNCTIONS --------------------------------------------------------
 
 # PLOT
+# 
 output$d3_plot_bar <- renderSimpleD3Bar({
   if (validate() & input$aggr_level != "national") {
     plot_d3_bar()
@@ -701,14 +699,15 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 
 # DATATABLES:
 # AGE
-output$table <- renderDT({
+output$table_counts <- renderDT({
   
   if (validate()) {
     outputCountDTTable()
   }
 })
 
-output$table_margins <- renderDT({
+output$table_rates <- renderDT({
+  
   if (validate()) {
     outputRateDTTable()
   }
