@@ -259,7 +259,7 @@ subsetVars <- function() {
 subsetYear <- function() {
   # Subset the already partially subset data based on years
   
-  dat <- subsetVars()[get(ui_year) == input$year, ]
+  dat <- subsetVars()[get(ui_year) == input$year,]
   if (selectPercentOrRate()) {
     var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
     dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
@@ -452,20 +452,26 @@ dtCast <- reactive({
   dat <- outputCasesData()
   group_var <- prettyAggr_level()
   value_var <- prettyVariable()
+  if (input$aggr_level == "national") {
+    dat <-
+      ageStdRates(dat = dat,
+                  value_var = value_var,
+                  group_var = group_var)
+  }
   setkeyv(dat, c(ui_sex, group_var))
-  dummy = c(group_var, value_var)
-  out = cbind(dat["female", ..dummy], dat["male", ..value_var])
+  subset_cols = c(group_var, value_var)
+  out = cbind(dat["female", ..subset_cols], dat["male", ..value_var])
   setnames(out, c("group_var", paste0(value_var, rep(
     c("_female", "_male"), c(2, 2)
   ))))
 })
 
 
-dtCastNational <- reactive({
-  dat <- outputCasesData()
-  # Need to calculate age std rates at the national level for men/women
-  setkeyv(dat, c(group_var, ui_sex, "age"))
+ageStdRates <- function(dat, value_var, group_var) {
+  
   rate_var <- prettyVariable()[2]
+  setkeyv(dat, c(group_var, ui_sex, "age"))
+  # Need to calculate age std rates at the national level for men/women
   dat <- cbind(dat, pop_summary_weighted[, .(count, weight)])
   dat[,
       (rate_var) := .SD[[1]] / .SD[[2]] * .SD[[3]],
@@ -473,24 +479,20 @@ dtCastNational <- reactive({
   dat[, `:=` (count = NULL, weight = NULL)]
   dat = dat[, lapply(.SD, sum), .SDcols = value_var, by = c(group_var, ui_sex)]
   if (selectPercentOrRate()) {
-    dat[, (rate_var) := .SD[[1]]  * 1e5, .SDcols = rate_var]
-  } else {
     dat[, (rate_var) := .SD[[1]]  * 1e2, .SDcols = rate_var]
+  } else {
+    dat[, (rate_var) := .SD[[1]]  * 1e5, .SDcols = rate_var]
   }
-})
+}
 
 
 
 outputCountDTTable <- reactive({
   # Organizes data for DataTable outputs. Needs to be characters
-  if (input$aggr_level == "national") {
-    dat <- dtCastNational()
-  } else {
-    dat <- dtCast()
-  }
+  
+  dat <- dtCast()
   
   # Subset to either counts or rates
-  
   vars <-
     c("group_var",
       grep(prettyVariable()[1], colnames(dat), value = TRUE))
@@ -539,12 +541,8 @@ outputCountDTTable <- reactive({
 })
 
 outputRateDTTable <- reactive({
-  if (input$aggr_level == "national") {
-    dat <- dtCastNational()
-  } else {
-    dat <- dtCast()
-  }
   
+  dat <- dtCast()
   # Subset to either counts or rates
   vars <-
     c("group_var",
