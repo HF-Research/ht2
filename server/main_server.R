@@ -136,19 +136,6 @@ outcomeCode <- reactive({
   outcomes_all[name_dk == input$outcome, hjertetal_code]
 })
 
-
-outcomeGroup <- reactive({
-  # Define which type of outcome are in the outputed dataset.
-  if (any(outcome_names_treatment$hjertetal_code %in% outcomeCode())) {
-    outcome_group <- "treatment"
-  } else if (any(outcome_names_diag$hjertetal_code %in% input$outcome)) {
-    outcome_group <- "diag"
-  } else if (any(out_names_med %in% input$outcome)) {
-    outcome_group <- "med"
-  }
-  outcome_group
-})
-
 prettyAggr_level <- reactive({
   # Outputs same character string that's used in the UI input field
   names(which(aggr_choices == input$aggr_level))
