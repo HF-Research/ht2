@@ -459,7 +459,7 @@ output$maps <- renderCombineWidgets({
 dtCast <- reactive({
   # One dcast for both rates and counts
   group_var <- prettyAggr_level()
-  dat <- outputCasesData()
+  # dat <- outputCasesData()
   value_var <- prettyVariable()
   # cast_formula <- formula(paste0(group_var, "~", ui_sex))
   # out <- dcast(dat,

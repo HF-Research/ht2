@@ -82,12 +82,12 @@ tabPanel(
                         fluidRow(tags$b(
                           textOutput("table1_title")
                         )),
-                        fluidRow(withSpinner(DTOutput("table_counts")))),
+                        fluidRow((DTOutput("table_counts")))),
                  column(6,
                         fluidRow(tags$b(
                           textOutput("table2_title")
                         )),
-                        fluidRow(withSpinner(DTOutput("table_rates"))))
+                        fluidRow((DTOutput("table_rates"))))
                )
                ),
       
