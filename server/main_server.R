@@ -167,14 +167,11 @@ prettyVariable <- reactive({
 })
 
 prettyVariableSingular <- reactive({
-  prettyVariable()[selectCountRate()]
+  prettyVariable()[as.integer(input$count_rates)]
 })
 
 
 # SUBSETTING ------------------------------------------------------
-selectCountRate <- reactive({
-  as.integer(input$count_rates)
-})
 
 selectRawOrMean <- reactive({
   # Returns TRUE if raw count data should be used. FALSE if moving avg data
@@ -461,79 +458,31 @@ output$maps <- renderCombineWidgets({
 # DATATABLES --------------------------------------------------------------
 dtCast <- reactive({
   # One dcast for both rates and counts
-  if(validate()){
   group_var <- prettyAggr_level()
   dat <- outputCasesData()
   value_var <- prettyVariable()
-  cast_formula <- formula(paste0(group_var, "~", ui_sex))
-  out <- dcast(dat,
-               cast_formula,
-               value.var = value_var,
-               fun.aggregate = function(x) sum(x, na.rm = TRUE))
-  setnames(out, names(out)[1], "group_var")
-  }
+  # cast_formula <- formula(paste0(group_var, "~", ui_sex))
+  # out <- dcast(dat,
+  #              cast_formula,
+  #              value.var = value_var,
+  #              fun.aggregate = function(x) sum(x, na.rm = TRUE))
+  # setnames(out, names(out)[1], "group_var")
+  # 
+  # browser()
+  mat_names <- c("group_var", paste0(value_var[1], "_female"), paste0(value_var[1], "_male"),
+                 paste0(value_var[2], "_female"), paste0(value_var[2], "_male"))
+  out <- matrix(1:30, nrow = 6)
+  colnames(out) <- mat_names
+  setDT(as.data.frame(out))
 })
 
 
 outputCountDTTable <- reactive({
-  if(validate()){
-  # Organizes data for DataTable outputs. Needs to be characters
-  dat <- dtCast()
-  # Subset to either counts or rates
-  
-  vars <-
-    c("group_var", grep(prettyVariable()[1], colnames(dat), value = TRUE))
-  
-  dat <- dat[, ..vars]
-  colnames(dat) <- c("group_var", "female", "male")
-  # Calculate margins
-  dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
-  if (input$aggr_level == "age") {
-    # Only calculate bottom margins for "age" - other aggr levels don't include
-    # full data
-    totals <-
-      dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
-    
-    # Convert entire table to character to we can rbind() totals
-    dat <- dat[, lapply(.SD, as.character)]
-    # Rbind totals
-    dat <- rbindlist(list(dat, as.list(c("Total", totals))))
-    
-    # Convert back to numeric
-    col_convert <- c("female", "male", "Total")
-    dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
-    
-  }
-  
-  setnames(
-    dat,
-    old = c("group_var", "male", "female"),
-    new = c(prettyAggr_level(), ui_sex_levels)
-  )
-  
-  # Flag last row so can be targeted for formatting
-  dat[, flag := 0]
-  if (input$aggr_level == "age")
-    dat[nrow(dat), flag := 1]
-  # Make sure "flag" variable is always first column, so we can
-  # reference by col index in formatting fn()
-  col_names <- colnames(dat)
-  col_names <-
-    c(col_names[length(col_names)], col_names[-length(col_names)])
-  setcolorder(dat, neworder = col_names)
   
   
-  
-  
-  
-  makeCountDT(dat,
-              group_var = prettyAggr_level(),
-              thousands_sep = thousands_sep)
-  }
 })
 
 outputRateDTTable <- reactive({
-  if(validate()){
   dat <- dtCast()
   # Subset to either counts or rates
   vars <-
@@ -547,6 +496,8 @@ outputRateDTTable <- reactive({
   dat <- dat[, ..vars]
   colnames(dat) <- c("group_var", "female", "male")
   
+  # If results are percentages - round with 1 sig fig. If results are rates -> 0
+  # sig figs.
   if (!selectPercentOrRate()) {
     digits = 0
   } else {
@@ -566,7 +517,7 @@ outputRateDTTable <- reactive({
     digits = digits,
     dec_mark = dec_mark
   )
-  }
+  
 })
 
 # VALIDATE BEFORE PLOTING -------------------------------------------------
@@ -704,10 +655,55 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 # DATATABLES:
 # AGE
 output$table_counts <- renderDT({
-  
   if (validate()) {
-    browser()
-    outputCountDTTable()
+    # Organizes data for DataTable outputs. Needs to be characters
+    dat <- dtCast()
+    # Subset to either counts or rates
+  
+    vars <-
+      c("group_var", grep(prettyVariable()[1], colnames(dat), value = TRUE))
+    
+    dat <- dat[, ..vars]
+    colnames(dat) <- c("group_var", "female", "male")
+    # Calculate margins
+    dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
+    if (input$aggr_level == "age") {
+      # Only calculate bottom margins for "age" - other aggr levels don't include
+      # full data
+      totals <-
+        dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
+      
+      # Convert entire table to character to we can rbind() totals
+      dat <- dat[, lapply(.SD, as.character)]
+      # Rbind totals
+      dat <- rbindlist(list(dat, as.list(c("Total", totals))))
+      
+      # Convert back to numeric
+      col_convert <- c("female", "male", "Total")
+      dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
+      
+    }
+    
+    setnames(
+      dat,
+      old = c("group_var", "male", "female"),
+      new = c(prettyAggr_level(), ui_sex_levels)
+    )
+    
+    # Flag last row so can be targeted for formatting
+    dat[, flag := 0]
+    if (input$aggr_level == "age")
+      dat[nrow(dat), flag := 1]
+    # Make sure "flag" variable is always first column, so we can
+    # reference by col index in formatting fn()
+    col_names <- colnames(dat)
+    col_names <-
+      c(col_names[length(col_names)], col_names[-length(col_names)])
+    setcolorder(dat, neworder = col_names)
+    
+    makeCountDT(dat,
+                group_var = prettyAggr_level(),
+                thousands_sep = thousands_sep)
   }
 })
 
@@ -715,4 +711,23 @@ output$table_rates <- renderDT({
   if (validate()) {
     outputRateDTTable()
   }
+})
+
+
+# BENCHMARKING ------------------------------------------------------------
+
+
+observe({
+  req(input$year, input$variables)
+  print(
+    microbenchmark::microbenchmark(
+      prettyVariable(),
+      prettyAggr_level(),
+      prettyVariableSingular(),
+      outputRateDTTable(),
+      outputCasesD3Bar(),
+      outputCasesD3Line(),
+      times = 1
+    )
+  )
 })
