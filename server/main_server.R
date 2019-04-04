@@ -24,11 +24,11 @@ output$varButtonChoices <- renderUI({
     variable_ui[code_name %in% var_names, .(code_name, var_dk)]
   var_names <- variable_choices$code_name
   names(var_names) <- variable_choices$var_dk
-
+  
   # If the previous selected var is available in the new outcome vars, make that
   # the default, else the first variable
   selected_var <- input$variable
-    if(is.null(selected_var) || !selected_var %in% var_names){
+  if (is.null(selected_var) || !selected_var %in% var_names) {
     selected_var <- var_names[1]
   }
   selectInput(
@@ -224,7 +224,7 @@ selectedRateType <- reactive({
     "standardized"
   }
 })
-selectedDataVars <- function(){
+selectedDataVars <- function() {
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
   var_stripped <- gsub("count_|rate_", "", input$variable)
@@ -232,7 +232,7 @@ selectedDataVars <- function(){
   grep(grep_str, colnames(subsetOutcome()), value = TRUE)
 }
 
-subsetVars <- function(){
+subsetVars <- function() {
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -250,17 +250,16 @@ subsetVars <- function(){
     colnames(dat) <-
       c(ui_year, ui_sex, prettyAggr_level(), prettyVariable())
   } else {
-    col_vars <- c("year", "sex", data_vars)
+    col_vars <- c("year", "sex", "grouping", data_vars)
     dat <- dat[, ..col_vars]
-    colnames(dat) <-
-      c(ui_year, ui_sex, prettyVariable())
+    setnames(dat, c(ui_year, ui_sex, "age", prettyVariable()))
   }
   dat[]
 }
-subsetYear <- function(){
+subsetYear <- function() {
   # Subset the already partially subset data based on years
   
-  dat <- subsetVars()[get(ui_year) == input$year,]
+  dat <- subsetVars()[get(ui_year) == input$year, ]
   if (selectPercentOrRate()) {
     var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
     dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
@@ -270,7 +269,7 @@ subsetYear <- function(){
 
 
 # FORMATTING DATA FOR D3------------------------------------------------------
-outputCasesData <- function(){
+outputCasesData <- function() {
   # National level data shows all years
   if (input$aggr_level != "national") {
     sub_year <- subsetYear()
@@ -291,7 +290,8 @@ outputCasesD3Line <- reactive({
       tmp,
       cast_formula,
       value.var = value_var,
-      fun.aggregate = function(x) sum(x, na.rm = TRUE)
+      fun.aggregate = function(x)
+        sum(x, na.rm = TRUE)
     )
   
   colnames(dat) <-
@@ -363,7 +363,7 @@ plot_d3_line <- reactive({
 
 # LEAFLET MAPS ------------------------------------------------------
 
-mapObj <- function(){
+mapObj <- function() {
   if (input$aggr_level == "kom") {
     dk_sp$l2
   } else if (input$aggr_level == "region") {
@@ -401,41 +401,45 @@ mapData <- function() {
 }
 
 output$maps <- renderCombineWidgets({
-  if (validate() && isGeo()){
+  if (validate() && isGeo()) {
     name_lang <- paste0("name_", lang)
-  map_data <-  mapData()$male
-  popup <- paste0(
-    prettyAggr_level(),
-    ": <strong>",
-    map_data@data[["name_dk"]],
-    "</strong><br><br>",
-    map_data@data[[prettyVariableSingular()]]
-  ) %>%
-    lapply(htmltools::HTML)
-  
-  fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
-  map_m <- makeLeaflet(map_data = map_data,
-                       fill_colors = fill_colors,
-                       label_popup = popup)
-  
-  # Female
-  map_data <-  mapData()$female
-  popup <- paste0(
-    prettyAggr_level(),
-    ": <strong>",
-    map_data@data[["name_dk"]],
-    "</strong><br><br>",
-    map_data@data[[prettyVariableSingular()]]
-  ) %>%
-    lapply(htmltools::HTML)
-  
-  fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
-  map_f <- makeLeaflet(map_data = map_data,
-                       fill_colors = fill_colors,
-                       label_popup = popup)
-  
-  combineWidgets(map_m, map_f, ncol = 2)
-  
+    map_data <-  mapData()$male
+    popup <- paste0(
+      prettyAggr_level(),
+      ": <strong>",
+      map_data@data[["name_dk"]],
+      "</strong><br><br>",
+      map_data@data[[prettyVariableSingular()]]
+    ) %>%
+      lapply(htmltools::HTML)
+    
+    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+    map_m <- makeLeaflet(
+      map_data = map_data,
+      fill_colors = fill_colors,
+      label_popup = popup
+    )
+    
+    # Female
+    map_data <-  mapData()$female
+    popup <- paste0(
+      prettyAggr_level(),
+      ": <strong>",
+      map_data@data[["name_dk"]],
+      "</strong><br><br>",
+      map_data@data[[prettyVariableSingular()]]
+    ) %>%
+      lapply(htmltools::HTML)
+    
+    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+    map_f <- makeLeaflet(
+      map_data = map_data,
+      fill_colors = fill_colors,
+      label_popup = popup
+    )
+    
+    combineWidgets(map_m, map_f, ncol = 2)
+    
   }
 })
 
@@ -445,32 +449,102 @@ output$maps <- renderCombineWidgets({
 # DATATABLES --------------------------------------------------------------
 dtCast <- reactive({
   # One dcast for both rates and counts
+  dat <- outputCasesData()
   group_var <- prettyAggr_level()
-  # dat <- outputCasesData()
   value_var <- prettyVariable()
-  # cast_formula <- formula(paste0(group_var, "~", ui_sex))
-  # out <- dcast(dat,
-  #              cast_formula,
-  #              value.var = value_var,
-  #              fun.aggregate = function(x) sum(x, na.rm = TRUE))
-  # setnames(out, names(out)[1], "group_var")
-  # 
-  # browser()
-  mat_names <- c("group_var", paste0(value_var[1], "_female"), paste0(value_var[1], "_male"),
-                 paste0(value_var[2], "_female"), paste0(value_var[2], "_male"))
-  out <- matrix(1:30, nrow = 6)
-  colnames(out) <- mat_names
-  setDT(as.data.frame(out))
+  setkeyv(dat, c(ui_sex, group_var))
+  dummy = c(group_var, value_var)
+  out = cbind(dat["female", ..dummy], dat["male", ..value_var])
+  setnames(out, c("group_var", paste0(value_var, rep(
+    c("_female", "_male"), c(2, 2)
+  ))))
 })
+
+
+dtCastNational <- reactive({
+  dat <- outputCasesData()
+  # Need to calculate age std rates at the national level for men/women
+  setkeyv(dat, c(group_var, ui_sex, "age"))
+  rate_var <- prettyVariable()[2]
+  dat <- cbind(dat, pop_summary_weighted[, .(count, weight)])
+  dat[,
+      (rate_var) := .SD[[1]] / .SD[[2]] * .SD[[3]],
+      .SDcols = c(prettyVariable()[1], "count", "weight")]
+  dat[, `:=` (count = NULL, weight = NULL)]
+  dat = dat[, lapply(.SD, sum), .SDcols = value_var, by = c(group_var, ui_sex)]
+  if (selectPercentOrRate()) {
+    dat[, (rate_var) := .SD[[1]]  * 1e5, .SDcols = rate_var]
+  } else {
+    dat[, (rate_var) := .SD[[1]]  * 1e2, .SDcols = rate_var]
+  }
+})
+
 
 
 outputCountDTTable <- reactive({
+  # Organizes data for DataTable outputs. Needs to be characters
+  if (input$aggr_level == "national") {
+    dat <- dtCastNational()
+  } else {
+    dat <- dtCast()
+  }
   
+  # Subset to either counts or rates
   
+  vars <-
+    c("group_var",
+      grep(prettyVariable()[1], colnames(dat), value = TRUE))
+  
+  dat <- dat[, ..vars]
+  colnames(dat) <- c("group_var", "female", "male")
+  # Calculate margins
+  dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
+  if (input$aggr_level == "age") {
+    # Only calculate bottom margins for "age" - other aggr levels don't include
+    # full data
+    totals <-
+      dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
+    
+    # Convert entire table to character to we can rbind() totals
+    dat <- dat[, lapply(.SD, as.character)]
+    # Rbind totals
+    dat <- rbindlist(list(dat, as.list(c("Total", totals))))
+    
+    # Convert back to numeric
+    col_convert <- c("female", "male", "Total")
+    dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
+    
+  }
+  
+  setnames(
+    dat,
+    old = c("group_var", "male", "female"),
+    new = c(prettyAggr_level(), ui_sex_levels)
+  )
+  
+  # Flag last row so can be targeted for formatting
+  dat[, flag := 0]
+  if (input$aggr_level == "age")
+    dat[nrow(dat), flag := 1]
+  # Make sure "flag" variable is always first column, so we can
+  # reference by col index in formatting fn()
+  col_names <- colnames(dat)
+  col_names <-
+    c(col_names[length(col_names)], col_names[-length(col_names)])
+  setcolorder(dat, neworder = col_names)
+  
+  makeCountDT(dat,
+              group_var = prettyAggr_level(),
+              thousands_sep = thousands_sep)
 })
 
 outputRateDTTable <- reactive({
-  dat <- dtCast()
+  if (input$aggr_level == "national") {
+    dat <- dtCastNational()
+  } else {
+    dat <- dtCast()
+  }
+  
   # Subset to either counts or rates
   vars <-
     c("group_var",
@@ -624,7 +698,7 @@ observe({
 # RENDER FUNCTIONS --------------------------------------------------------
 
 # PLOT
-# 
+#
 output$d3_plot_bar <- renderSimpleD3Bar({
   if (validate() & input$aggr_level != "national") {
     plot_d3_bar()
@@ -643,54 +717,7 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 # AGE
 output$table_counts <- renderDT({
   if (validate()) {
-    # Organizes data for DataTable outputs. Needs to be characters
-    dat <- dtCast()
-    # Subset to either counts or rates
-  
-    vars <-
-      c("group_var", grep(prettyVariable()[1], colnames(dat), value = TRUE))
-    
-    dat <- dat[, ..vars]
-    colnames(dat) <- c("group_var", "female", "male")
-    # Calculate margins
-    dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
-    if (input$aggr_level == "age") {
-      # Only calculate bottom margins for "age" - other aggr levels don't include
-      # full data
-      totals <-
-        dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
-      
-      # Convert entire table to character to we can rbind() totals
-      dat <- dat[, lapply(.SD, as.character)]
-      # Rbind totals
-      dat <- rbindlist(list(dat, as.list(c("Total", totals))))
-      
-      # Convert back to numeric
-      col_convert <- c("female", "male", "Total")
-      dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
-      
-    }
-    
-    setnames(
-      dat,
-      old = c("group_var", "male", "female"),
-      new = c(prettyAggr_level(), ui_sex_levels)
-    )
-    
-    # Flag last row so can be targeted for formatting
-    dat[, flag := 0]
-    if (input$aggr_level == "age")
-      dat[nrow(dat), flag := 1]
-    # Make sure "flag" variable is always first column, so we can
-    # reference by col index in formatting fn()
-    col_names <- colnames(dat)
-    col_names <-
-      c(col_names[length(col_names)], col_names[-length(col_names)])
-    setcolorder(dat, neworder = col_names)
-    
-    makeCountDT(dat,
-                group_var = prettyAggr_level(),
-                thousands_sep = thousands_sep)
+    outputCountDTTable()
   }
 })
 

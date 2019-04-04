@@ -27,7 +27,10 @@ dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 diag <- fread("data/definitions_diag.csv", encoding = "UTF-8")
 opr <- fread("data/definitions_opr.csv", encoding = "UTF-8")
 med <- fread("data/definitions_med.csv", encoding = "UTF-8")
+pop_summary_weighted <- fread("data/pop_summary_weighted.csv")
+setkey(pop_summary_weighted, year, sex, grouping)
 
+setkey(pop_ref, sex, age_group)
 # LANGUAGE UI ---------------------------------------------------------
 lang = "dk"
 if (lang == "dk") {
