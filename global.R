@@ -30,7 +30,7 @@ med <- fread("data/definitions_med.csv", encoding = "UTF-8")
 pop_summary_weighted <- fread("data/pop_summary_weighted.csv")
 setkey(pop_summary_weighted, year, sex, grouping)
 
-setkey(pop_ref, sex, age_group)
+setkey(pop_summary_weighted, sex, age_group)
 # LANGUAGE UI ---------------------------------------------------------
 lang = "dk"
 if (lang == "dk") {
