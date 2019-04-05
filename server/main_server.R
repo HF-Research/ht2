@@ -207,13 +207,9 @@ subsetOutcomeWithoutAggreLevel <- reactive({
 
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
-  if (input$aggr_level != "national") {
+  
     shiny_dat[[outcomeCode()]][[input$aggr_level]]
-  } else {
-    # Age is needed because it is the only aggregation subset that includes all
-    # the data
-    subsetOutcomeWithoutAggreLevel()
-  }
+  
   
 })
 
@@ -452,12 +448,6 @@ dtCast <- reactive({
   dat <- outputCasesData()
   group_var <- prettyAggr_level()
   value_var <- prettyVariable()
-  if (input$aggr_level == "national") {
-    dat <-
-      ageStdRates(dat = dat,
-                  value_var = value_var,
-                  group_var = group_var)
-  }
   setkeyv(dat, c(ui_sex, group_var))
   subset_cols = c(group_var, value_var)
   out = cbind(dat["female", ..subset_cols], dat["male", ..value_var])
@@ -465,27 +455,6 @@ dtCast <- reactive({
     c("_female", "_male"), c(2, 2)
   ))))
 })
-
-
-ageStdRates <- function(dat, value_var, group_var) {
-  
-  rate_var <- prettyVariable()[2]
-  setkeyv(dat, c(group_var, ui_sex, "age"))
-  # Need to calculate age std rates at the national level for men/women
-  dat <- cbind(dat, pop_summary_weighted[, .(count, weight)])
-  browser()
-  dat[,
-      (rate_var) := .SD[[1]] / .SD[[2]] * .SD[[3]],
-      .SDcols = c(prettyVariable()[1], "count", "weight")]
-  dat[, `:=` (count = NULL, weight = NULL)]
-  dat = dat[, lapply(.SD, sum), .SDcols = value_var, by = c(group_var, ui_sex)]
-  if (selectPercentOrRate()) {
-    dat[, (rate_var) := .SD[[1]]  * 1e2, .SDcols = rate_var]
-  } else {
-    dat[, (rate_var) := .SD[[1]]  * 1e5, .SDcols = rate_var]
-  }
-}
-
 
 
 outputCountDTTable <- reactive({
