@@ -473,6 +473,7 @@ ageStdRates <- function(dat, value_var, group_var) {
   setkeyv(dat, c(group_var, ui_sex, "age"))
   # Need to calculate age std rates at the national level for men/women
   dat <- cbind(dat, pop_summary_weighted[, .(count, weight)])
+  browser()
   dat[,
       (rate_var) := .SD[[1]] / .SD[[2]] * .SD[[3]],
       .SDcols = c(prettyVariable()[1], "count", "weight")]
