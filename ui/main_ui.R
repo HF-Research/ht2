@@ -60,71 +60,80 @@ tabPanel(
     )
   ),
   
-  fluidRow(column(
-    id = "col_output",
-    12,
-    align = "center",
-    tabsetPanel(
-      id = "data_vis_tabs",
-      tabPanel(
-        ui_d3_figures,
-        conditionalPanel(condition = "input.aggr_level != 'national'",
-                         simpleD3BarOutput("d3_plot_bar", height = "550px")),
-        conditionalPanel(
-          condition = "input.aggr_level == 'national'",
-          simpleD3LineOutput("d3_plot_line_html", height = "550px")
-        )
+  fluidRow(
+    column(
+      id = "col_output",
+      12,
+      align = "center",
+      tabsetPanel(
+        id = "data_vis_tabs",
+        type = "tab",
+        tabPanel(
+          ui_d3_figures,
+          conditionalPanel(condition = "input.aggr_level != 'national'",
+                           withSpinner(
+                             simpleD3BarOutput("d3_plot_bar", height = "550px")
+                           )),
+          conditionalPanel(condition = "input.aggr_level == 'national'",
+                           withSpinner(
+                             simpleD3LineOutput("d3_plot_line_html", height = "550px")
+                           ))
+        ),
+        
+        tabPanel("Data",
+                 fluidRow(
+                   column(6,
+                          fluidRow(tags$b(
+                            textOutput("table1_title")
+                          )),
+                          fluidRow((
+                            withSpinner(DTOutput("table_counts"))
+                          ))),
+                   column(6,
+                          fluidRow(tags$b(
+                            textOutput("table2_title")
+                          )),
+                          fluidRow((
+                            withSpinner(DTOutput("table_rates"))
+                          )))
+                 )),
+        
+        tabPanel(ui_map,
+                 fluidRow(
+                   column(12, align = "left",
+                          withSpinner(
+                            combineWidgetsOutput("maps", height = 550)
+                          )),
+                   
+                   br()
+                 ))
       ),
-      
-      tabPanel("Data",
-               fluidRow(
-                 column(6,
-                        fluidRow(tags$b(
-                          textOutput("table1_title")
-                        )),
-                        fluidRow((DTOutput("table_counts")))),
-                 column(6,
-                        fluidRow(tags$b(
-                          textOutput("table2_title")
-                        )),
-                        fluidRow((DTOutput("table_rates"))))
-               )
-               ),
-      
-      tabPanel(ui_map,
-               fluidRow(
-                 column(12, align = "left",
-                        withSpinner(combineWidgetsOutput("maps", height = 550))),
-                
-               br())
-               )
-    ),
-    fluidRow(
-      column(
-        id = "col_rate_count",
-        3,
-        align = "left",
-        radioGroupButtons(
-          inputId = "count_rates",
-          label =  NULL,
-          choices = count_rate_choices,
-          justified = TRUE
-        )
+      fluidRow(
+        column(
+          id = "col_rate_count",
+          3,
+          align = "left",
+          radioGroupButtons(
+            inputId = "count_rates",
+            label =  NULL,
+            choices = count_rate_choices,
+            justified = TRUE
+          )
+        ),
+        column(3,
+               offset = 6,
+               uiOutput("downloadButton"))
       ),
-      column(3,
-             offset = 6,
-             uiOutput("downloadButton"))
-    ),
-    fluidRow(column(
-      12, align = "left",
-      uiOutput("rate_count_desc"),
-      br()
-    )),
-    fluidRow(br(), br())
-  )
-  
-  # fluidRow(column(12, align = "left",
-  #                 h3("Data")))
-  # # DataTables)
+      fluidRow(column(
+        12, align = "left",
+        uiOutput("rate_count_desc"),
+        br()
+      )),
+      fluidRow(br(), br())
+    )
+    
+    # fluidRow(column(12, align = "left",
+    #                 h3("Data")))
+    # # DataTables)
   )
 )

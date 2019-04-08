@@ -208,7 +208,7 @@ subsetOutcomeWithoutAggreLevel <- reactive({
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
   
-    shiny_dat[[outcomeCode()]][[input$aggr_level]]
+  shiny_dat[[outcomeCode()]][[input$aggr_level]]
   
   
 })
@@ -277,22 +277,23 @@ outputCasesData <- function() {
 
 outputCasesD3Line <- reactive({
   # Replace value.var with reactive that corresponds to the variable the user selected
-  cast_formula <- formula(paste0(ui_year, "~", ui_sex))
-  tmp <- subsetVars()
-  value_var <- prettyVariableSingular()
   
-  dat <-
-    dcast(
-      tmp,
-      cast_formula,
-      value.var = value_var,
-      fun.aggregate = function(x)
-        sum(x, na.rm = TRUE)
-    )
+  dat <- dtCast()
+  vars <-
+    c("group_var",
+      grep(
+        prettyVariableSingular(),
+        colnames(dat),
+        fixed = TRUE,
+        # because special characters exits
+        value = TRUE
+      ))
+  dat <- dat[, ..vars]
+  setnames(dat, c(ui_year, "female", "male")) # TODO: needs to be language agnostic
   
-  colnames(dat) <-
-    c(ui_year, "female", "male") # TODO: needs to be language agnostic
-  dat[, variable := value_var]
+  # Column containing variable name to send to D3. TODO: send this data as
+  # single data point - so change d3 widget
+  dat[, variable := prettyVariableSingular()]
   
 })
 
@@ -445,15 +446,23 @@ output$maps <- renderCombineWidgets({
 # DATATABLES --------------------------------------------------------------
 dtCast <- reactive({
   # One dcast for both rates and counts
+  
   dat <- outputCasesData()
   group_var <- prettyAggr_level()
   value_var <- prettyVariable()
   setkeyv(dat, c(ui_sex, group_var))
   subset_cols = c(group_var, value_var)
-  out = cbind(dat["female", ..subset_cols], dat["male", ..value_var])
+  out = cbind(dat["male", ..subset_cols], dat["female", ..value_var])
   setnames(out, c("group_var", paste0(value_var, rep(
-    c("_female", "_male"), c(2, 2)
+    c("_male", "_female"), c(2, 2)
   ))))
+  if (isNational() && is5YearMortality()) {
+    
+    return(out[group_var <= year_max - 4, ])
+   
+  } else {
+    return(out)
+  }
 })
 
 
@@ -461,14 +470,13 @@ outputCountDTTable <- reactive({
   # Organizes data for DataTable outputs. Needs to be characters
   
   dat <- dtCast()
-  
   # Subset to either counts or rates
   vars <-
     c("group_var",
       grep(prettyVariable()[1], colnames(dat), value = TRUE))
   
   dat <- dat[, ..vars]
-  colnames(dat) <- c("group_var", "female", "male")
+  colnames(dat) <- c("group_var", "male", "female")
   # Calculate margins
   dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
   if (input$aggr_level == "age") {
@@ -483,7 +491,7 @@ outputCountDTTable <- reactive({
     dat <- rbindlist(list(dat, as.list(c("Total", totals))))
     
     # Convert back to numeric
-    col_convert <- c("female", "male", "Total")
+    col_convert <- c("male", "female", "Total")
     dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
     
   }
@@ -491,7 +499,7 @@ outputCountDTTable <- reactive({
   setnames(
     dat,
     old = c("group_var", "male", "female"),
-    new = c(prettyAggr_level(), ui_sex_levels)
+    new = c(prettyAggr_level(), rev(ui_sex_levels))
   )
   
   # Flag last row so can be targeted for formatting
@@ -511,7 +519,6 @@ outputCountDTTable <- reactive({
 })
 
 outputRateDTTable <- reactive({
-  
   dat <- dtCast()
   # Subset to either counts or rates
   vars <-
@@ -584,8 +591,12 @@ isGeo <- reactive({
     input$aggr_level == "region"
 })
 
-observe({
-  freezeReactiveValue(input, "outcome")
+isNational <- reactive({
+  input$aggr_level == "national"
+})
+
+is5YearMortality <- reactive({
+  input$variable == "count_n_dead5"
 })
 
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
@@ -603,13 +614,13 @@ choiceYears <- reactive({
   # Set year-range to be used by udateSelectInput()
   if (selectGeo() &&
       (null_var ||
-       input$variable != "count_n_dead5")) {
+       !is5YearMortality())) {
     year_range <- c(2009:year_max)
     if (input$year < 2009)
       selected_year <- 2009
     
   } else if (selectGeo() &&
-             !null_var && input$variable == "count_n_dead5") {
+             !null_var && is5YearMortality()) {
     year_range <- c(2009:(year_max - 4))
     if (input$year < 2009) {
       selected_year <- 2009
@@ -618,7 +629,7 @@ choiceYears <- reactive({
     }
     
   } else if (!selectGeo() &&
-             !null_var && input$variable == "count_n_dead5") {
+             !null_var && is5YearMortality()) {
     year_range <- c(2006:(year_max - 4))
     if (input$year > (year_max - 4)) {
       selected_year <- year_max - 4

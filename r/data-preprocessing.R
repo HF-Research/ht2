@@ -30,37 +30,37 @@ dat_med <-  preProccess(export_med)
 dat_diag <-  preProccess(export_diag)
 
 # ADD DUMMY YEAR DATA -----------------------------------------------------
-dummy_nms_opr <- colnames(dat_opr$b1$age)
-dummy_nms_med <- colnames(dat_med$m1$age)
-dummy_nms_diag <- colnames(dat_diag$d1$age)
-
-dummy_data <- setDT(data.frame("sex" = rep(c("male", "female"), times= 13),
-                               "grouping" = "national",
-                               "year" = 2004:2016))
-
-
-
-addData <- function(ht_dat, dummy_dat){
-  
-  nms <- colnames(ht_dat[[1]][[1]])
-  dat <- matrix(1:((length(nms) - 3)*26), nrow = 26)  
-  x <- cbind(dummy_dat, dat)
-  setnames(x, nms)
-  lapply(ht_dat, function(outcome){
-    outcome$national <- x
-    outcome
-  })
-}
-
-
-outlist <- lapply(list(dat_opr, dat_med, dat_diag), addData, dummy_data)
-dat_opr <- addData(dat_opr, dummy_data)
-
-  
-
-dat_opr <- outlist[[1]]
-dat_med <- outlist[[2]]
-dat_diag <- outlist[[3]]
+# dummy_nms_opr <- colnames(dat_opr$b1$age)
+# dummy_nms_med <- colnames(dat_med$m1$age)
+# dummy_nms_diag <- colnames(dat_diag$d1$age)
+# 
+# dummy_data <- setDT(data.frame("sex" = rep(c("male", "female"), times= 13),
+#                                "grouping" = "national",
+#                                "year" = 2004:2016))
+# 
+# 
+# 
+# addData <- function(ht_dat, dummy_dat){
+#   
+#   nms <- colnames(ht_dat[[1]][[1]])
+#   dat <- matrix(1:((length(nms) - 3)*26), nrow = 26)  
+#   x <- cbind(dummy_dat, dat)
+#   setnames(x, nms)
+#   lapply(ht_dat, function(outcome){
+#     outcome$national <- x
+#     outcome
+#   })
+# }
+# 
+# 
+# outlist <- lapply(list(dat_opr, dat_med, dat_diag), addData, dummy_data)
+# dat_opr <- addData(dat_opr, dummy_data)
+# 
+#   
+# 
+# dat_opr <- outlist[[1]]
+# dat_med <- outlist[[2]]
+# dat_diag <- outlist[[3]]
 
 ## Add lists together (med, diag, opr) and save output as one massive list
 # shiny_list <-
