@@ -244,7 +244,8 @@ subsetVars <- function() {
   
   # Select based on aggre_level
   if (input$aggr_level != "national") {
-    setnames(dat, c(ui_year, ui_sex, prettyAggr_level(), prettyVariable()))
+    setnames(dat,
+             c(ui_year, ui_sex, prettyAggr_level(), prettyVariable()))
   } else {
     setnames(dat, c(ui_year, ui_sex, "age", prettyVariable()))
   }
@@ -259,7 +260,7 @@ subsetVars <- function() {
 }
 subsetYear <- function() {
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
 }
 
 
@@ -448,15 +449,18 @@ dtCast <- reactive({
   dat <- outputCasesData()
   group_var <- prettyAggr_level()
   value_var <- prettyVariable()
-  setkeyv(dat, c(ui_sex, group_var))
+  # x <- copy(dat)
+  # setkeyv(dat, c(ui_sex, group_var))
+  # if (!all.equal(x, dat, check.attributes = FALSE))
+    # browser()
   subset_cols = c(group_var, value_var)
   out = cbind(dat["male", ..subset_cols], dat["female", ..value_var])
   setnames(out, c("group_var", paste0(value_var, rep(
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4, ])
-   
+    return(out[group_var <= year_max - 4,])
+    
   } else {
     return(out)
   }
@@ -601,10 +605,13 @@ is5YearMortality <- reactive({
 choiceYears <- reactive({
   # The following additional if-else logic is needed to stop the year count
   # always resetting to 2015 when changing aggr_level.
-  if (input$year != "") {
-    selected_year <- input$year
+  year_val <- isolate(input$year)
+  if (year_val == "") {
+    return(list(selected_year = year_max,
+                year_range = 2006:year_max))
+    
   } else {
-    selected_year <- year_max
+    selected_year <- year_val
   }
   
   null_var <- is.null(input$variable)
@@ -619,16 +626,16 @@ choiceYears <- reactive({
   } else if (selectGeo() &&
              !null_var && is5YearMortality()) {
     year_range <- c(2009:(year_max - 4))
-    if (input$year < 2009) {
+    if (year_val < 2009) {
       selected_year <- 2009
-    } else if (input$year > (year_max - 4)) {
+    } else if (year_val > (year_max - 4)) {
       selected_year <- year_max - 4
     }
     
   } else if (!selectGeo() &&
              !null_var && is5YearMortality()) {
     year_range <- c(2006:(year_max - 4))
-    if (input$year > (year_max - 4)) {
+    if (year_val > (year_max - 4)) {
       selected_year <- year_max - 4
     }
     
@@ -640,6 +647,9 @@ choiceYears <- reactive({
   
 })
 observe({
+  req(input$variable)
+  if(req(input$aggr_level) != "national") {
+  browser()
   # User can only select years >=2009 when viewing regional data and <=2012 when
   # viewing 5-year mortality
   updateSelectInput(
@@ -648,6 +658,7 @@ observe({
     choices = choiceYears()$year_range,
     selected = choiceYears()$selected_year
   )
+  }
 })
 
 

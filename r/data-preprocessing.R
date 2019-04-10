@@ -19,7 +19,10 @@ preProccess <- function(export_dat) {
   lapply(dat, function(outcome) {
     lapply(outcome, function(aggr_level) {
       aggr_level[, `:=` (outcome = NULL, aggr_level = NULL)]
-      setkey(aggr_level, year)
+      
+      # !!!!! DO NOT CHANGE !!! unless you have checked with it does not
+      # interfere with cbind operation in dtCast()
+      setkey(aggr_level, sex, grouping, year)
       
     })
   })
