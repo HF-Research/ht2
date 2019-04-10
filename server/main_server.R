@@ -4,60 +4,6 @@ options(DT.options = list(
   buttons = c('copy', 'csv', 'pdf')
 ))
 callModule(profvis_server, "profiler")
-# UPDATE RADIO BUTTONS ----------------------------------------------------
-output$varButtonChoices <- renderUI({
-  # Gives a dynamic button UI. The buttons change depending on the selected
-  # outcome Keep variables that have "count" in their name.
-  #
-  # When page loads, this UI element initally returns NULL to server fn(),
-  # then it re-runs and returns the initial value - eg. "age". This means we
-  # have to restrict the output that depends on this (which is nearly
-  # everything) from running until a non-NULL value is supplied. This is
-  # acheived by an if-statement in the validate() reactive.
-  
-  browser()
-  var_names <-
-    grep("count", names(subsetOutcomeWithoutAggreLevel()), value = TRUE)
-  var_names <- var_names[!grepl("mean", var_names)]
-  
-  # Select the plain language terms matching the variables in data
-  variable_choices <-
-    variable_ui[code_name %in% var_names, .(code_name, var_dk)]
-  var_names <- variable_choices$code_name
-  names(var_names) <- variable_choices$var_dk
-  
-  # If the previous selected var is available in the new outcome vars, make that
-  # the default, else the first variable
-  selected_var <- isolate(input$variable)
-  if (is.null(selected_var) || !selected_var %in% var_names) {
-    selected_var <- var_names[1]
-  }
-  selectInput(
-    inputId = "variable",
-    label = choose_var,
-    choices = var_names,
-    selectize = TRUE,
-    selected = selected_var
-    
-  )
-})
-
-
-output$downloadButton <- renderUI({
-  if (input$aggr_level != "national") {
-    actionBttn(inputId = "download_bar",
-               label = "Hente figure",
-               size = "sm")
-  } else if (input$aggr_level == "national") {
-    actionBttn(inputId = "download_line",
-               label = "Download",
-               size = "sm")
-  }
-  
-})
-
-
-
 # TEXT RENDERING ----------------------------------------------------------
 output$outcome_title <- renderText({
   input$outcome
@@ -144,14 +90,16 @@ prettyAggr_level <- reactive({
 
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
-  data_var_name <- selectedDataVars()[1]
-  
-  grep_selection <-
-    paste0("var_rate_", selectedRateType(), "_", lang)
-  col_names <- colnames(variable_ui)
-  col_selection <- grep(grep_selection, col_names, value = TRUE)
-  c(variable_ui[code_name == data_var_name, var_dk], paste0(variable_ui[code_name == data_var_name, ..col_selection]))
-  
+  browser()
+  input$variable
+  isolate({
+    data_var_name <- selectedDataVars()[1]
+    grep_selection <-
+      paste0("var_rate_", selectedRateType(), "_", lang)
+    col_names <- colnames(variable_ui)
+    col_selection <- grep(grep_selection, col_names, value = TRUE)
+    c(variable_ui[code_name == data_var_name, var_dk], paste0(variable_ui[code_name == data_var_name, ..col_selection]))
+  })
 })
 
 prettyVariableSingular <- reactive({
@@ -159,8 +107,7 @@ prettyVariableSingular <- reactive({
 })
 
 
-# SUBSETTING ------------------------------------------------------
-
+# SELECTORS ---------------------------------------------------------------
 selectRawOrMean <- reactive({
   # Returns TRUE if raw count data should be used. FALSE if moving avg data
   # should be used
@@ -185,27 +132,8 @@ selectPercentOrRate <- reactive({
   
 })
 
-selectGeo <- function() {
-  if (input$aggr_level %in% c("kom", "region")) {
-    TRUE
-  } else {
-    FALSE
-  }
-}
 
-
-subsetOutcomeWithoutAggreLevel <- reactive({
-  # Some functions should not depend on the state of input$aggr_level - but
-  # still need to know which variables are available to the user. More
-  # specifically, I do not want some functions being re-run everytime aggr_level
-  # changes (i.e. updating the available variabls - this resets the variable
-  # n_incidence everytime aggr_level changes).
-  #
-  # However, this means I cannot change the variables available to the user when
-  # switching between agg_levels (obviously).
-  shiny_dat[[outcomeCode()]]$age
-})
-
+# SUBSETTING ------------------------------------------------------
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
   
@@ -261,7 +189,7 @@ subsetVars <- function() {
 }
 subsetYear <- function() {
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
 }
 
 
@@ -460,7 +388,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4, ])
+    return(out[group_var <= year_max - 4,])
     
   } else {
     return(out)
@@ -603,25 +531,73 @@ is5YearMortality <- reactive({
 
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
+output$varButtonChoices <- renderUI({
+  # Gives a dynamic button UI. The buttons change depending on the selected
+  # outcome Keep variables that have "count" in their name.
+  #
+  # When page loads, this UI element initally returns NULL to server fn(),
+  # then it re-runs and returns the initial value - eg. "age". This means we
+  # have to restrict the output that depends on this (which is nearly
+  # everything) from running until a non-NULL value is supplied. This is
+  # acheived by an if-statement in the validate() reactive.
+  
+  outcome_subset <- shiny_dat[[outcomeCode()]]$age
+  var_names <-
+    grep("count", names(outcome_subset), value = TRUE)
+  var_names <- var_names[!grepl("mean", var_names)]
+  
+  # Select the plain language terms matching the variables in data
+  variable_choices <-
+    variable_ui[code_name %in% var_names, .(code_name, var_dk)]
+  var_names <- variable_choices$code_name
+  names(var_names) <- variable_choices$var_dk
+  
+  # If the previous selected var is available in the new outcome vars, make that
+  # the default, else the first variable
+  selected_var <- isolate(input$variable)
+  if (is.null(selected_var) || !selected_var %in% var_names) {
+    selected_var <- var_names[1]
+  }
+  selectInput(
+    inputId = "variable",
+    label = choose_var,
+    choices = var_names,
+    selectize = TRUE,
+    selected = selected_var
+    
+  )
+})
+
+
+output$downloadButton <- renderUI({
+  if (!isNational()) {
+    actionBttn(inputId = "download_bar",
+               label = "Hente figure",
+               size = "sm")
+  } else if (isNational()) {
+    actionBttn(inputId = "download_line",
+               label = "Download",
+               size = "sm")
+  }
+  
+})
+
 choiceYears <- reactive({
   # The following additional if-else logic is needed to stop the year count
   # always resetting to 2015 when changing aggr_level.
   
   input$aggr_level
-  year_val <- isolate(
-    input$year
-  )
+  year_val <- isolate(input$year)
   if (year_val != "") {
-    
     selected_year <- year_val
     # Set year-range to be used by udateSelectInput()
-    if (selectGeo() &&
+    if (isGeo() &&
         !is5YearMortality()) {
       year_range <- c(2009:year_max)
       if (year_val < 2009)
         selected_year <- 2009
       
-    } else if (selectGeo() &&
+    } else if (isGeo() &&
                is5YearMortality()) {
       year_range <- c(2009:(year_max - 4))
       if (year_val < 2009) {
@@ -630,7 +606,7 @@ choiceYears <- reactive({
         selected_year <- year_max - 4
       }
       
-    } else if (!selectGeo() &&
+    } else if (!isGeo() &&
                is5YearMortality()) {
       year_range <- c(2006:(year_max - 4))
       if (year_val > (year_max - 4)) {
@@ -644,7 +620,6 @@ choiceYears <- reactive({
                 year_range = year_range))
     
   } else {
-    
     return(list(
       selected_year = year_max,
       year_range = 2006:year_max
@@ -658,7 +633,6 @@ choiceYears <- reactive({
 observe({
   req(input$variable)
   if (req(input$aggr_level) != "national") {
-    
     # User can only select years >=2009 when viewing regional data and <=2012 when
     # viewing 5-year mortality
     updateSelectInput(
