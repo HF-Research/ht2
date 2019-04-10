@@ -14,7 +14,8 @@ output$varButtonChoices <- renderUI({
   # have to restrict the output that depends on this (which is nearly
   # everything) from running until a non-NULL value is supplied. This is
   # acheived by an if-statement in the validate() reactive.
-  # browser()
+  
+  browser()
   var_names <-
     grep("count", names(subsetOutcomeWithoutAggreLevel()), value = TRUE)
   var_names <- var_names[!grepl("mean", var_names)]
@@ -27,7 +28,7 @@ output$varButtonChoices <- renderUI({
   
   # If the previous selected var is available in the new outcome vars, make that
   # the default, else the first variable
-  selected_var <- input$variable
+  selected_var <- isolate(input$variable)
   if (is.null(selected_var) || !selected_var %in% var_names) {
     selected_var <- var_names[1]
   }
