@@ -239,28 +239,27 @@ subsetVars <- function() {
     data_vars <- data_vars[grepl("mean", data_vars)]
   }
   
+  col_vars <- c("year", "sex", "grouping", data_vars)
+  dat <- dat[, ..col_vars]
+  
   # Select based on aggre_level
   if (input$aggr_level != "national") {
-    col_vars <- c("year", "sex", "grouping", data_vars)
-    dat <- dat[, ..col_vars]
-    colnames(dat) <-
-      c(ui_year, ui_sex, prettyAggr_level(), prettyVariable())
+    setnames(dat, c(ui_year, ui_sex, prettyAggr_level(), prettyVariable()))
   } else {
-    col_vars <- c("year", "sex", "grouping", data_vars)
-    dat <- dat[, ..col_vars]
     setnames(dat, c(ui_year, ui_sex, "age", prettyVariable()))
   }
-  dat[]
-}
-subsetYear <- function() {
-  # Subset the already partially subset data based on years
   
-  dat <- subsetVars()[get(ui_year) == input$year,]
   if (selectPercentOrRate()) {
     var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
     dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
   }
+  
+  
   dat[]
+}
+subsetYear <- function() {
+  # Subset the already partially subset data based on years
+  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
 }
 
 
@@ -268,8 +267,7 @@ subsetYear <- function() {
 outputCasesData <- function() {
   # National level data shows all years
   if (input$aggr_level != "national") {
-    sub_year <- subsetYear()
-    sub_year[, (ui_year) := NULL]
+    subsetYear()
   } else {
     subsetVars()
   }
@@ -457,7 +455,6 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    
     return(out[group_var <= year_max - 4, ])
    
   } else {
