@@ -92,17 +92,30 @@ l1 <- l1[order(l1$name_dk),] # Re-order based on order found in shiny data
 l2_data <- l2@data
 lx <- rgeos::gSimplify(l2, .001, topologyPreserve = TRUE)
 l2 <- SpatialPolygonsDataFrame(lx, data = l2@data)
-l2 <- l2[order(l2$name_dk),] # Re-order based on order found in shiny data
 
-# # Move Bornholm to better part of mapÆ
+# Move Bornholm to better part of mapÆ
+bornholm <- l2[4, ]
+x <- (elide(bornholm, shift = c(-3.2, 1.88)))
+l2@polygons[4] <- x@polygons[1]
+plot(l2)
+range(l2@polygons[4][[1]]@Polygons[[1]]@coords[,1])
+range(l2@polygons[4][[1]]@Polygons[[1]]@coords[,2])
+# Add vertices for mini-map graphical lines
 
-bornholm <- l2[10, ]
-test <- l2
-x <- (elide(bornholm, shift = c(-3, 1.85)))
-# proj4string(x) <-  "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-l2@polygons[10] <- x@polygons[1]
-dk_sp_data <- list(l1 = l1,
-              l2 = l2)
+x_min <- 11.40
+x_max <- 12.0
+y_min <- 56.82
+y_max <- 57.2
+
+
+bottom_right <- c(x_max, y_min)
+bottom_left <- c(x_min, y_min)
+top_left <- c(x_min, y_max)
+mini_map_lines <- data.frame(rbind(bottom_right, bottom_left, top_left)) 
+mini_map_lines$name <- row.names(mini_map_lines)
+# leaflet::leaflet() %>% addTiles() %>%  addPolygons(data = l2)%>%
+#   addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 6)
+
 
 # Check names
 kom_names_dst <- unique(shiny_dat$d1$kom$grouping)
@@ -118,6 +131,9 @@ reg_names_geo[!reg_names_geo %in% reg_names_dst]
 reg_names_dst[!reg_names_dst %in% reg_names_geo]
 
 
+dk_sp_data <- list(l1 = l1,
+                   l2 = l2,
+                   mini_map_lines = mini_map_lines)
 
 saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
 

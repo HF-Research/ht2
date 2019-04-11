@@ -213,11 +213,16 @@ edu_DT <- DT::datatable(
 
 # LEAFLET MAPS -------------------------------------------------------
 pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
-makeLeaflet <- function(map_data, fill_colors, label_popup){
-  leaflet() %>%
+makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines){
+  leaflet(options = leafletOptions(minZoom = 7)) %>%
   setView(lng = 10.3018,
           lat = 56.179752,
-          zoom = 7) %>%
+          zoom = 7,
+          ) %>%
+    setMaxBounds(lng1 = 7.0,
+                 lat1 = 54.0,
+                 lng2 = 14.0,
+                 lat2 = 58.0) %>%
   addPolygons(
     data = map_data,
     fillColor  = fill_colors,
@@ -232,5 +237,6 @@ makeLeaflet <- function(map_data, fill_colors, label_popup){
       textsize = "17px",
       direction = "auto",
       opacity = 1)
-  )
+  ) %>%
+    addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 5, )
 }

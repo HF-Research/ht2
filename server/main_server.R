@@ -159,7 +159,6 @@ selectedDataVars <- reactive({
 })
 
 subsetVars <- reactive({
-  
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -191,13 +190,12 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
 })
 
 
 # FORMATTING DATA FOR D3------------------------------------------------------
 outputCasesData <- function() {
-  
   # National level data shows all years
   if (!isNational()) {
     subsetYear()
@@ -244,25 +242,25 @@ outputCasesD3Bar <- reactive({
   
   # Order so that males come first - makes sure the coloring matches
   setorderv(dat, ui_sex, order = -1L)
-  
-  # For kommune data re-order based on rate or count
-  
-  if (input$aggr_level == "kom") {
-    setorderv(dat, c(ui_sex, count_rate), order = -1L)
-  }
   dat[]
 })
 
 
 plot_d3_bar <- reactive({
-  if (nrow(outputCasesD3Bar()) > 0  &
-      input$aggr_level != "national") {
+  if (nrow(outputCasesD3Bar()) > 0  &&
+      !isNational()) {
     sex_vars <- ui_sex_levels
     color = c("#bd6916", "#166abd")
     plot_title = plotTitle()
     
+    # For kommune data re-order based on rate or count
+    dat <- copy(outputCasesD3Bar())
+    if (input$aggr_level == "kom") {
+      setorderv(dat, c(ui_sex, prettyVariableSingular()), order = -1L)
+    }
+    
     simpleD3Bar(
-      data = outputCasesD3Bar(),
+      data = dat,
       colors = c("#bd6916", "#166abd"),
       plotTitle = plot_title,
       sexVars = sex_vars
@@ -273,7 +271,7 @@ plot_d3_bar <- reactive({
 
 
 plot_d3_line <- reactive({
-  if (input$aggr_level == "national") {
+  if (isNational()) {
     sex_vars <- ui_sex_levels
     color = c("#bd6916", "#166abd")
     
@@ -300,42 +298,58 @@ mapObj <- function() {
 }
 
 mapData <- function() {
-  out <- mapObj()
   data_var <- prettyVariableSingular()
-  keep_vars <- c(prettyAggr_level(), data_var)
-  
+  keep_vars <- c("old_id", prettyAggr_level(), data_var)
   tmp <- copy(outputCasesD3Bar())
   # inx <- duplicated(tmp[, ..data_var])
   # # tmp[inx, (data_var) := jitter(get(data_var), amount = .1)]
-  browser()
+  
   # MALES
-  tmp <- tmp[get(ui_sex) == "male" & get(prettyAggr_level()) != "Unknown"]
-  out <- spCbind(out, tmp)
-  out@data$old_id <- out@data$name_dk <- out@data$name_en <-  NULL
-  colnames(out@data) <- c(ui_sex, prettyAggr_level(), data_var)
+  out_m <- mapObj()
+  tmp_m <-
+    tmp[get(ui_sex) == "male" & get(prettyAggr_level()) != "Unknown"]
+  out_m@data <-
+    merge(
+      tmp_m,
+      out_m@data,
+      by.x = prettyAggr_level(),
+      by.y = paste0("name_", lang),
+      all.y = TRUE
+    )
+  out_m@data <- out_m@data[, ..keep_vars]
+  setorder(out_m@data, old_id)
   
   # Female
-  out <- mapObj()
-  tmp <- outputCasesD3Bar()[get(ui_sex) == "female" & get(prettyAggr_level()) != "Unknown"]
-  # setkeyv(tmp, prettyAggr_level())
-  undebug(merge)
-  out@data <- merge(out@data, tmp, by.x = paste0("name_", lang), by.y = prettyAggr_level(), all.x = TRUE)
-  setorder(out@data, id)
+  out_f <- mapObj()
+  tmp_f <-
+    tmp[get(ui_sex) == "female" & get(prettyAggr_level()) != "Unknown"]
+  out_f@data <-
+    merge(
+      tmp_f,
+      out_f@data,
+      by.x = prettyAggr_level(),
+      by.y = paste0("name_", lang),
+      all.y = TRUE
+    )
+  out_f@data <- out_f@data[, ..keep_vars]
+  setorder(out_f@data, old_id)
   
   # Combine for output
-  list(male = m,
-       female = out)
+  list(male = out_m,
+       female = out_f)
   
 }
 
 output$maps <- renderCombineWidgets({
   if (validate() && isGeo()) {
     name_lang <- paste0("name_", lang)
+    
+    # Male
     map_data <-  mapData()$male
     popup <- paste0(
       prettyAggr_level(),
       ": <strong>",
-      map_data@data[["name_dk"]],
+      map_data@data[[prettyAggr_level()]],
       "</strong><br><br>",
       map_data@data[[prettyVariableSingular()]]
     ) %>%
@@ -345,7 +359,8 @@ output$maps <- renderCombineWidgets({
     map_m <- makeLeaflet(
       map_data = map_data,
       fill_colors = fill_colors,
-      label_popup = popup
+      label_popup = popup,
+      mini_map_lines = dk_sp$mini_map_lines
     )
     
     # Female
@@ -363,7 +378,9 @@ output$maps <- renderCombineWidgets({
     map_f <- makeLeaflet(
       map_data = map_data,
       fill_colors = fill_colors,
-      label_popup = popup
+      label_popup = popup,
+      mini_map_lines = dk_sp$mini_map_lines
+      
     )
     
     combineWidgets(map_m, map_f, ncol = 2)
@@ -391,7 +408,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4,])
+    return(out[group_var <= year_max - 4, ])
     
   } else {
     return(out)
