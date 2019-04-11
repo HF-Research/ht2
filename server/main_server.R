@@ -9,6 +9,7 @@ output$outcome_title <- renderText({
   input$outcome
 })
 output$outcome_description <- renderUI({
+  req(input$outcome)
   out <-
     outcome_descriptions[hjertetal_code == outcomeCode(), .(desc_dk, link_dk)]
   # Add link for further reading - if link exists, otherwise just desc
@@ -26,23 +27,25 @@ output$outcome_description <- renderUI({
 
 output$variable_desc <- renderUI({
   # Append title to front of variable descr text
-  if (validate()) {
+  
+  req(input$variable)
+  isolate({
     title_text <- tags$b(prettyVariable()[1])
     
     col_selection <- paste0("desc_general_", lang)
     desc_text <-
       variable_ui[code_name == selectedDataVars()[1], ..col_selection]
     tagList(title_text, desc_text)
-  }
+  })
 })
 
 plotTitle <- reactive({
-  if (validate())
-    paste0(prettyVariable()[1], " - ", input$outcome)
+  paste0(prettyVariable()[1], " - ", input$outcome)
 })
 
 output$rate_count_desc <- renderUI({
-  if (validate()) {
+  req(input$count_rates, input$variable)
+  isolate({
     if (input$count_rates == 2) {
       title_text <- tags$b(prettyVariable()[2])
       col_selection <-
@@ -59,17 +62,15 @@ output$rate_count_desc <- renderUI({
         paste0(variable_ui[code_name == selectedDataVars()[1], ..col_selection])
       tagList(title_text, desc_text)
     }
-  }
+  })
 })
 
 output$table1_title <- renderText({
-  if (validate())
-    paste0(prettyVariable()[1], ": ", ui_count_rate[1])
+  paste0(prettyVariable()[1], ": ", ui_count_rate[1])
 })
 
 output$table2_title <- renderText({
-  if (validate())
-    prettyVariable()[2]
+  prettyVariable()[2]
 })
 
 
@@ -90,7 +91,7 @@ prettyAggr_level <- reactive({
 
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
-  browser()
+  req(input$variable)
   input$variable
   isolate({
     data_var_name <- selectedDataVars()[1]
@@ -149,15 +150,16 @@ selectedRateType <- reactive({
     "standardized"
   }
 })
-selectedDataVars <- function() {
+selectedDataVars <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
   var_stripped <- gsub("count_|rate_", "", input$variable)
   grep_str <- paste0(var_stripped, "$")
   grep(grep_str, colnames(subsetOutcome()), value = TRUE)
-}
+})
 
-subsetVars <- function() {
+subsetVars <- reactive({
+  
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -186,17 +188,18 @@ subsetVars <- function() {
   
   
   dat[]
-}
-subsetYear <- function() {
+})
+subsetYear <- reactive({
   # Subset the already partially subset data based on years
   subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
-}
+})
 
 
 # FORMATTING DATA FOR D3------------------------------------------------------
 outputCasesData <- function() {
+  
   # National level data shows all years
-  if (input$aggr_level != "national") {
+  if (!isNational()) {
     subsetYear()
   } else {
     subsetVars()
@@ -299,24 +302,24 @@ mapObj <- function() {
 mapData <- function() {
   out <- mapObj()
   data_var <- prettyVariableSingular()
-  keep_vars <- c("id", prettyAggr_level(), data_var)
+  keep_vars <- c(prettyAggr_level(), data_var)
   
   tmp <- copy(outputCasesD3Bar())
   # inx <- duplicated(tmp[, ..data_var])
   # # tmp[inx, (data_var) := jitter(get(data_var), amount = .1)]
-  
+  browser()
   # MALES
-  tmp <- tmp[get(ui_sex) == "male"]
-  setkeyv(tmp, prettyAggr_level())
-  out@data <- tmp[out@data, ..keep_vars]
-  setorder(out@data, id)
-  m <- out
+  tmp <- tmp[get(ui_sex) == "male" & get(prettyAggr_level()) != "Unknown"]
+  out <- spCbind(out, tmp)
+  out@data$old_id <- out@data$name_dk <- out@data$name_en <-  NULL
+  colnames(out@data) <- c(ui_sex, prettyAggr_level(), data_var)
   
   # Female
   out <- mapObj()
-  tmp <- outputCasesD3Bar()[get(ui_sex) == "female"]
-  setkeyv(tmp, prettyAggr_level())
-  out@data <- tmp[out@data, ..keep_vars]
+  tmp <- outputCasesD3Bar()[get(ui_sex) == "female" & get(prettyAggr_level()) != "Unknown"]
+  # setkeyv(tmp, prettyAggr_level())
+  undebug(merge)
+  out@data <- merge(out@data, tmp, by.x = paste0("name_", lang), by.y = prettyAggr_level(), all.x = TRUE)
   setorder(out@data, id)
   
   # Combine for output
@@ -381,7 +384,7 @@ dtCast <- reactive({
   # x <- copy(dat)
   # setkeyv(dat, c(ui_sex, group_var))
   # if (!all.equal(x, dat, check.attributes = FALSE))
-  # browser()
+  
   subset_cols = c(group_var, value_var)
   out = cbind(dat["male", ..subset_cols], dat["female", ..value_var])
   setnames(out, c("group_var", paste0(value_var, rep(
@@ -695,23 +698,4 @@ output$table_rates <- renderDT({
   if (validate()) {
     outputRateDTTable()
   }
-})
-
-
-# BENCHMARKING ------------------------------------------------------------
-
-
-observe({
-  req(input$year, input$variables)
-  print(
-    microbenchmark::microbenchmark(
-      prettyVariable(),
-      prettyAggr_level(),
-      prettyVariableSingular(),
-      outputRateDTTable(),
-      outputCasesD3Bar(),
-      outputCasesD3Line(),
-      times = 1
-    )
-  )
 })

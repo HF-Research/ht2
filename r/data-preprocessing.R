@@ -2,7 +2,9 @@ library(data.table)
 library(magrittr)
 library(sp)
 library(rgeos)
-
+library(maptools)
+# library(spdep)
+# OUTCOME DATA ------------------------------------------------------------
 
 export_opr <- fread("data/export_opr.txt", encoding = "UTF-8")
 export_med <- fread("data/export_med.txt", encoding = "UTF-8")
@@ -32,48 +34,9 @@ dat_opr <- preProccess(export_opr)
 dat_med <-  preProccess(export_med)
 dat_diag <-  preProccess(export_diag)
 
-# ADD DUMMY YEAR DATA -----------------------------------------------------
-# dummy_nms_opr <- colnames(dat_opr$b1$age)
-# dummy_nms_med <- colnames(dat_med$m1$age)
-# dummy_nms_diag <- colnames(dat_diag$d1$age)
-# 
-# dummy_data <- setDT(data.frame("sex" = rep(c("male", "female"), times= 13),
-#                                "grouping" = "national",
-#                                "year" = 2004:2016))
-# 
-# 
-# 
-# addData <- function(ht_dat, dummy_dat){
-#   
-#   nms <- colnames(ht_dat[[1]][[1]])
-#   dat <- matrix(1:((length(nms) - 3)*26), nrow = 26)  
-#   x <- cbind(dummy_dat, dat)
-#   setnames(x, nms)
-#   lapply(ht_dat, function(outcome){
-#     outcome$national <- x
-#     outcome
-#   })
-# }
-# 
-# 
-# outlist <- lapply(list(dat_opr, dat_med, dat_diag), addData, dummy_data)
-# dat_opr <- addData(dat_opr, dummy_data)
-# 
-#   
-# 
-# dat_opr <- outlist[[1]]
-# dat_med <- outlist[[2]]
-# dat_diag <- outlist[[3]]
-
-## Add lists together (med, diag, opr) and save output as one massive list
-# shiny_list <-
-#   list(opr_dat = dat_opr,
-#        med_dat = dat_med,
-#        diag_dat = dat_diag)
 shiny_dat <- c(dat_opr, dat_med, dat_diag)
 # saveRDS(shiny_list, file = "data/shiny_list.rds")
 saveRDS(shiny_dat, file = "data/shiny_dat.rds")
-
 # SPATIAL DATA PRE PROCESSING --------------------------------------
 
 # Script only run when updating the polygons for Danish kommunes, regions, etc.
@@ -96,13 +59,13 @@ proj4string(l1) == "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,
 l1@data <-
   l1@data %>%
   dplyr::select(OBJECTID, NAME_1, VARNAME_1) %>%
-  dplyr::rename(id = OBJECTID,
+  dplyr::rename(old_id = OBJECTID,
                 name_dk = NAME_1,
                 name_en = VARNAME_1)
 l2@data <-
   l2@data %>%
   dplyr::select(OBJECTID, NAME_2) %>%
-  dplyr::rename(id = OBJECTID,
+  dplyr::rename(old_id = OBJECTID,
                 name_dk = NAME_2)
 
 
@@ -112,11 +75,11 @@ setDT(l2@data)
 l2@data[name_dk == "Århus", name_dk := "Aarhus"]
 l2@data[name_dk == "Vesthimmerland", name_dk := "Vesthimmerlands"]
 l2@data$name_en <- l2@data$name_dk
-setkey(l2@data, name_dk)
+
 
 setDT(l1@data)
 l1@data[name_dk == "Midtjylland", name_dk := "Midtjydlland"]
-setkey(l1@data, name_dk)
+
 
 # Simplify poloygons because load time is too high with original resolution.
 # gSimplify remove @data, so will need to re-add that from original. See:
@@ -124,19 +87,22 @@ setkey(l1@data, name_dk)
 l1_data <- l1@data
 lx <- rgeos::gSimplify(l1, .001, topologyPreserve = TRUE)
 l1 <- SpatialPolygonsDataFrame(lx, data = l1@data)
+l1 <- l1[order(l1$name_dk),] # Re-order based on order found in shiny data
 
 l2_data <- l2@data
 lx <- rgeos::gSimplify(l2, .001, topologyPreserve = TRUE)
 l2 <- SpatialPolygonsDataFrame(lx, data = l2@data)
+l2 <- l2[order(l2$name_dk),] # Re-order based on order found in shiny data
 
+# # Move Bornholm to better part of mapÆ
 
-# Move Bornholm to better part of mapÆ
-
-
-
-
+bornholm <- l2[10, ]
+test <- l2
+x <- (elide(bornholm, shift = c(-3, 1.85)))
+# proj4string(x) <-  "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+l2@polygons[10] <- x@polygons[1]
 dk_sp_data <- list(l1 = l1,
-                   l2 = l2)
+              l2 = l2)
 
 # Check names
 kom_names_dst <- unique(shiny_dat$d1$kom$grouping)
