@@ -71,11 +71,11 @@ tabPanel(
         tabPanel(
           ui_d3_figures,
           conditionalPanel(condition = "input.aggr_level != 'national'",
-                           withSpinner(
+                           (
                              simpleD3BarOutput("d3_plot_bar", height = "550px")
                            )),
           conditionalPanel(condition = "input.aggr_level == 'national'",
-                           withSpinner(
+                           (
                              simpleD3LineOutput("d3_plot_line_html", height = "550px")
                            ))
         ),
@@ -87,14 +87,14 @@ tabPanel(
                             textOutput("table1_title")
                           )),
                           fluidRow((
-                            withSpinner(DTOutput("table_counts"))
+                            (DTOutput("table_counts"))
                           ))),
                    column(6,
                           fluidRow(tags$b(
                             textOutput("table2_title")
                           )),
                           fluidRow((
-                            withSpinner(DTOutput("table_rates"))
+                            (DTOutput("table_rates"))
                           )))
                  )),
         

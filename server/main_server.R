@@ -299,7 +299,7 @@ mapObj <- function() {
 
 mapData <- function() {
   data_var <- prettyVariableSingular()
-  keep_vars <- c("old_id", prettyAggr_level(), data_var)
+  keep_vars <- c("id", prettyAggr_level(), data_var)
   tmp <- copy(outputCasesD3Bar())
   # inx <- duplicated(tmp[, ..data_var])
   # # tmp[inx, (data_var) := jitter(get(data_var), amount = .1)]
@@ -317,7 +317,7 @@ mapData <- function() {
       all.y = TRUE
     )
   out_m@data <- out_m@data[, ..keep_vars]
-  setorder(out_m@data, old_id)
+  setorder(out_m@data, id)
   
   # Female
   out_f <- mapObj()
@@ -332,7 +332,7 @@ mapData <- function() {
       all.y = TRUE
     )
   out_f@data <- out_f@data[, ..keep_vars]
-  setorder(out_f@data, old_id)
+  setorder(out_f@data, id)
   
   # Combine for output
   list(male = out_m,

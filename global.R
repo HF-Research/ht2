@@ -17,7 +17,7 @@ library(simpled3)
 # This is a fork, because of the issue highlighted here with the master branch:
 # https://github.com/rstudio/leaflet/issues/347
 # devtools::install_github('matthew-phelps/leaflet.minicharts')
-# library(leaflet.minicharts)
+library(leaflet.minicharts)
 
 
 # OBJECTS ------------------------------------------------------------
@@ -27,8 +27,6 @@ dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 diag <- fread("data/definitions_diag.csv", encoding = "UTF-8")
 opr <- fread("data/definitions_opr.csv", encoding = "UTF-8")
 med <- fread("data/definitions_med.csv", encoding = "UTF-8")
-pop_summary_weighted <- fread("data/pop_summary_weighted.csv")
-setkey(pop_summary_weighted, year, sex, grouping)
 
 
 # LANGUAGE UI ---------------------------------------------------------
@@ -214,14 +212,15 @@ edu_DT <- DT::datatable(
 # LEAFLET MAPS -------------------------------------------------------
 pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
 makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines){
-  leaflet(options = leafletOptions(minZoom = 7)) %>%
-  setView(lng = 10.3018,
-          lat = 56.179752,
+  leaflet(options = leafletOptions(minZoom = 7,
+                                   preferCanvas = TRUE)) %>%
+  setView(lng = 10.6018,
+          lat = 56.199752,
           zoom = 7,
           ) %>%
-    setMaxBounds(lng1 = 7.0,
-                 lat1 = 54.0,
-                 lng2 = 14.0,
+    setMaxBounds(lng1 = 7.7,
+                 lat1 = 54.5,
+                 lng2 = 13.3,
                  lat2 = 58.0) %>%
   addPolygons(
     data = map_data,
@@ -238,5 +237,5 @@ makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines){
       direction = "auto",
       opacity = 1)
   ) %>%
-    addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 5, )
+    addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 5)
 }
