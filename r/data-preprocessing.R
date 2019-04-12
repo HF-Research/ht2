@@ -3,6 +3,9 @@ library(magrittr)
 library(sp)
 library(rgeos)
 library(maptools)
+library(sf)
+library(leaflet)
+library(dplyr)
 # library(spdep)
 # OUTCOME DATA ------------------------------------------------------------
 
@@ -64,7 +67,7 @@ l1@data <-
                 name_en = VARNAME_1)
 l2@data <-
   l2@data %>%
-  dplyr::select(OBJECTID, NAME_2) %>%
+  dplyr::select(OBJECTID, NAME_2, NAME_1) %>%
   dplyr::rename(old_id = OBJECTID,
                 name_dk = NAME_2)
 
@@ -98,9 +101,13 @@ bornholm <- l2[4, ]
 x <- (elide(bornholm, shift = c(-3.2, 1.88)))
 l2@polygons[4] <- x@polygons[1]
 plot(l2)
+
+elide(l1[1, ], shift = c(-3.2, 1.88))
+
+
+# Add vertices for mini-map graphical lines
 range(l2@polygons[4][[1]]@Polygons[[1]]@coords[,1])
 range(l2@polygons[4][[1]]@Polygons[[1]]@coords[,2])
-# Add vertices for mini-map graphical lines
 
 x_min <- 11.40
 x_max <- 12.0
@@ -113,8 +120,30 @@ bottom_left <- c(x_min, y_min)
 top_left <- c(x_min, y_max)
 mini_map_lines <- data.frame(rbind(bottom_right, bottom_left, top_left)) 
 mini_map_lines$name <- row.names(mini_map_lines)
-# leaflet::leaflet() %>% addTiles() %>%  addPolygons(data = l2)%>%
-#   addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 6)
+leaflet::leaflet() %>% addTiles() %>%  addPolygons(data = x) %>%
+  addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 6)
+
+
+# SF APPROACH -------------------------------------------------------------
+x <- st_as_sf(l2, coords = c("x", "y"))
+x <- x %>% dplyr::select(OBJECTID, NAME_1, NAME_2) %>% rename(id = OBJECTID,
+                                                              name_dk = NAME_2,
+                                                              region = NAME_1)
+z <- x %>% filter(name_dk == "Bornholm")
+
+st_combine(x)
+
+z + c(-3.2, 1.8)
+
+x_simple <- st_cast(x, "POLYGON")
+plot(x_simple)
+
+
+
+xgeo <- st_geometry(x)
+plot(xgeo)
+x2 <- (xgeo  + c(-3.2, 1.88))
+
 
 
 # Check names
