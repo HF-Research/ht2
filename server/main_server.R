@@ -307,7 +307,8 @@ mapData <- function() {
   # MALES
   out_m <- mapObj()
   tmp_m <-
-    tmp[get(ui_sex) == "male" & get(prettyAggr_level()) != "Unknown"]
+    tmp[get(ui_sex) == "male" &
+          get(prettyAggr_level()) != "Unknown"]
   out_m@data <-
     merge(
       tmp_m,
@@ -322,7 +323,8 @@ mapData <- function() {
   # Female
   out_f <- mapObj()
   tmp_f <-
-    tmp[get(ui_sex) == "female" & get(prettyAggr_level()) != "Unknown"]
+    tmp[get(ui_sex) == "female" &
+          get(prettyAggr_level()) != "Unknown"]
   out_f@data <-
     merge(
       tmp_f,
@@ -343,9 +345,54 @@ mapData <- function() {
 output$maps <- renderCombineWidgets({
   if (validate() && isGeo()) {
     name_lang <- paste0("name_", lang)
+    fill_data <-
+      rbind(mapData()$male@data, mapData()$female@data)[[prettyVariableSingular()]]
     
-    # Male
+    if (input$count_rates == 2) {
+      pal <- colorQuantile("YlOrRd", fill_data, n = 5, reverse = FALSE)
+      if (selectPercentOrRate()) {
+        labFormatter <- function(type, cuts) {
+          
+          n = length(cuts)
+          cuts <- round(cuts, digits = 1)
+          paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
+        }
+      } else {
+        labFormatter <- function(type, cuts) {
+          
+          n = length(cuts)
+          cuts <- round(cuts)
+          paste0(cuts[-n], " &ndash; ", cuts[-1])
+        }
+      }
+    } else {
+      pal <- colorBin("YlOrRd",
+                      fill_data,
+                      bins = 5,
+                      reverse = FALSE)
+      labFormatter <- function(type, cuts) {
+        
+        n = length(cuts)
+        cuts <- round(cuts)
+        paste0(cuts[-n], " &ndash; ", cuts[-1])
+      }
+    }
+    
+    
+    legend_title <- gsub("  ", "<br>", prettyVariableSingular())
+    
+    
+    # # Get min and max values used in legend
+    # legend_minmax <- range(attr(pal,which = "colorArgs")$bins)
+    # legend_nbins <- length(attr(pal,which = "colorArgs")$bins)
+    # legend_labels <- c(legend_minmax[1], rep("", legend_nbins - 1), legend_minmax[2])
+    # cols <- sort(unique(pal(fill_data)))
+    # cols <- cols[2:length(cols)]
+    
+    # Male map
     map_data <-  mapData()$male
+    fill_colors <-
+      ~ pal(map_data@data[[prettyVariableSingular()]])
     popup <- paste0(
       prettyAggr_level(),
       ": <strong>",
@@ -355,7 +402,7 @@ output$maps <- renderCombineWidgets({
     ) %>%
       lapply(htmltools::HTML)
     
-    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+    
     map_m <- makeLeaflet(
       map_data = map_data,
       fill_colors = fill_colors,
@@ -363,8 +410,10 @@ output$maps <- renderCombineWidgets({
       mini_map_lines = dk_sp$mini_map_lines
     )
     
-    # Female
+    # Female map
     map_data <-  mapData()$female
+    fill_colors <-
+      ~ pal(map_data@data[[prettyVariableSingular()]])
     popup <- paste0(
       prettyAggr_level(),
       ": <strong>",
@@ -374,14 +423,32 @@ output$maps <- renderCombineWidgets({
     ) %>%
       lapply(htmltools::HTML)
     
-    fill_colors <- ~ pal(map_data@data[[prettyVariableSingular()]])
+    
     map_f <- makeLeaflet(
       map_data = map_data,
       fill_colors = fill_colors,
       label_popup = popup,
       mini_map_lines = dk_sp$mini_map_lines
       
-    )
+    ) %>%
+      addLegend(
+        "topright",
+        pal = pal,
+        values = fill_data,
+        # colors =cols,
+        title = legend_title,
+        labels = legend_labels,
+        layerId = "legend",
+        labFormat = function(type, cuts, p = NULL) {
+          
+          type <- type
+          cuts <- cuts
+          
+          labFormatter(type = type,
+                       cuts = cuts
+                      )
+        }
+      )
     
     combineWidgets(map_m, map_f, ncol = 2)
     
