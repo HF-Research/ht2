@@ -1,15 +1,18 @@
 # INTRO -------------------------------------------------------------------
+###########################
+# Requires shiny_dat_* to be loaded - but will load this in global.R file before running this ui file
+###########################
+
 library(data.table)
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
-shiny_dat <- readRDS(file = "data/shiny_dat.rds")
-
-load(file = "data/codes_tables.rda")
 load(file = "data/outcome_descriptions.Rdata")
 # load(file = "data/variable_ui.Rdata")
-variable_ui <- fread(file = "data/variable_ui.csv", encoding = "UTF-8")
-ui_about_text <- fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
+variable_ui <-
+  fread(file = "data/variable_ui.csv", encoding = "UTF-8")
+ui_about_text <-
+  fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 outcome_descriptions <-
   outcome_descriptions[, lapply(.SD, enc2native)]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
@@ -111,16 +114,15 @@ col_names_diag <-
 col_names_opr <-
   c("Sygdomme",
     "ICD-kode",
-    "Grep string"
-  )
+    "Grep string")
 
 col_names_med <-
   c("Medicin type",
     "ATC kode",
-    "Grep string"
-  )
+    "Grep string")
 
-col_names_edu <- c("Uddannelsesniveau",
+col_names_edu <- c("Uddannelsesniveau (kort)",
+                   "Uddannelsesniveau (lang)",
                    "DISCED-15 kode")
 
 

@@ -7,6 +7,8 @@ library(sf)
 library(leaflet)
 library(dplyr)
 # library(spdep)
+edu <- fread("data/edu_description.csv")
+
 # OUTCOME DATA ------------------------------------------------------------
 
 export_opr <- fread("data/export_opr.txt", encoding = "UTF-8")
@@ -17,7 +19,6 @@ export_diag <- rbind(export_diag, export_diag2)
 
 preProccess <- function(export_dat) {
   dat <- split(export_dat, by = "outcome") %>%
-    
     lapply(., split, by = "aggr_level")
   
   lapply(dat, function(outcome) {
@@ -35,11 +36,45 @@ preProccess <- function(export_dat) {
 dat_opr <- preProccess(export_opr)
 dat_med <-  preProccess(export_med)
 dat_diag <-  preProccess(export_diag)
+shiny_dat_en <- c(dat_opr, dat_med, dat_diag)
 
-shiny_dat <- c(dat_opr, dat_med, dat_diag)
-# saveRDS(shiny_list, file = "data/shiny_list.rds")
-saveRDS(shiny_dat, file = "data/shiny_dat.rds")
+cleanGeoData <- function(x){
+  # Remove unknowns from Region. and remove Christiansoe
+    lapply(x, function(outcome){
+      outcome$region <- outcome$region[grouping != "Unknown", ]
+      outcome$kom <- outcome$kom[grouping != "Christiansø", ]
+      outcome
+    })
+  
+}
 
+shiny_dat_en <- cleanGeoData(shiny_dat_en)
+saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
+
+
+
+# DANISH LANGUAGE SUPPORT -------------------------------------------------
+
+makeDanish <- function(dat) {
+  # Change english education labels to Danish labels
+    lapply(dat, function(outcome) {
+      
+      outcome$edu <-
+        merge(
+          outcome$edu,
+          edu[, .(edu_name_dk, edu_name_en)],
+          by.x = "grouping",
+          by.y = "edu_name_en",
+          all.x = TRUE
+        )
+      outcome$edu[, `:=` (grouping = edu_name_dk)]
+      outcome$edu[, `:=` (edu_name_dk = NULL)]
+      outcome
+  })
+}
+
+shiny_dat_dk <- makeDanish(shiny_dat_en)
+saveRDS(shiny_dat_dk, file = "data/shiny_dat_dk.rds")
 # SF APPROACH -------------------------------------------------------------
 l1 <- readRDS("data/DNK_adm1.rds")
 l2 <- readRDS("data/DNK_adm2.rds")
@@ -74,7 +109,8 @@ attr_tmp <- list() # hold attributes for regions
 out_sf <- list()
 for (reg in regions) {
   geo_tmp[[reg]] <- l2 %>% filter(region == reg) %>% st_union()
-  attr_tmp[[reg]] <- l2 %>% filter(region == reg) %>% .[1, c("id", "region")] %>% st_drop_geometry()
+  attr_tmp[[reg]] <-
+    l2 %>% filter(region == reg) %>% .[1, c("id", "region")] %>% st_drop_geometry()
   out_sf[[reg]] <- st_as_sf(merge(geo_tmp[[reg]], attr_tmp[[reg]]))
   
 }
@@ -84,13 +120,13 @@ l1 <- do.call("rbind", out_sf)
 # plot(l2)
 
 # Formatting columns
-colnames(l1) <- c("id","name_dk","geometry")
+colnames(l1) <- c("id", "name_dk", "geometry")
 l2$region <- NULL
 
 
 
 # mini-map lines
-# 
+#
 x_min <- 11.40
 x_max <- 12.0
 y_min <- 56.82
@@ -109,7 +145,7 @@ l1 <- as(l1, "Spatial")
 l2 <- as(l2, "Spatial")
 
 l1 <- rmapshaper::ms_simplify(l1)
-l2 <- rmapshaper::ms_simplify(l2) 
+l2 <- rmapshaper::ms_simplify(l2)
 
 # leaflet() %>% addPolygons(data = l1)
 

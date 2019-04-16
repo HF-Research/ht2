@@ -791,13 +791,13 @@ map <- reactiveValues(dat = 0)
 output$downloadMapsMale <- downloadHandler(
   filename = "map_male.png",
   content = function(file) {
-    mapview::mapshot(map$map_m, file = file, cliprect = "viewport")
+    mapshot(map$map_m, file = file, cliprect = "viewport")
   }
 )
 output$downloadMapsFemale <- downloadHandler(
   filename = "map_female.png",
   content = function(file) {
-    mapview::mapshot(map$map_f, file = file, cliprect = "viewport")
+    mapshot(map$map_f, file = file, cliprect = "viewport")
   }
 )
 # RENDER FUNCTIONS --------------------------------------------------------
@@ -805,6 +805,7 @@ output$downloadMapsFemale <- downloadHandler(
 # PLOT
 #
 output$d3_plot_bar <- renderSimpleD3Bar({
+  
   if (validate() & input$aggr_level != "national") {
     plot_d3_bar()
   }
@@ -833,3 +834,6 @@ output$table_rates <- renderDT({
 })
 
 output$maps <- renderCombineWidgets(combinedMaps())
+
+
+

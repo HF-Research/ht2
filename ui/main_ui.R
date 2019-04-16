@@ -1,7 +1,7 @@
 tabPanel(ui_main_title,
          
          tags$head(
-           tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css")
+           tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
          ),
          fluidRow(
            column(id = "col_input",
@@ -66,7 +66,7 @@ tabPanel(ui_main_title,
              align = "center",
              tabsetPanel(
                id = "data_vis_tabs",
-               type = "tab",
+               type = "pill",
                tabPanel(
                  ui_d3_figures,
                  conditionalPanel(condition = "input.aggr_level != 'national'",
