@@ -76,10 +76,21 @@ output$table2_title <- renderText({
 
 
 output$tabs <- reactive({
-  
   input$data_vis_tabs != ui_data
 })
+
+output$tabFigure <- reactive({
+  input$data_vis_tabs == ui_d3_figures
+})
+output$tabMap <- reactive({
+  
+  input$data_vis_tabs == ui_map && isGeo()
+})
+
+
 outputOptions(output, "tabs", suspendWhenHidden = FALSE)
+outputOptions(output, "tabFigure", suspendWhenHidden = FALSE)
+outputOptions(output, "tabMap", suspendWhenHidden = FALSE)
 
 
 # DYNAMIC VARIABLES/COLUMN NAMES ------------------------------------------
@@ -349,117 +360,128 @@ mapData <- function() {
   
 }
 
-output$maps <- renderCombineWidgets({
-  if (validate() && isGeo()) {
-    name_lang <- paste0("name_", lang)
-    fill_data <-
-      rbind(mapData()$male@data, mapData()$female@data)[[prettyVariableSingular()]]
-    
-    if (input$count_rates == 2) {
-      pal <- colorQuantile("YlOrRd", fill_data, n = 5, reverse = FALSE)
-      if (selectPercentOrRate()) {
-        labFormatter <- function(type, cuts) {
-          
-          n = length(cuts)
-          cuts <- round(cuts, digits = 1)
-          paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
-        }
-      } else {
-        labFormatter <- function(type, cuts) {
-          
-          n = length(cuts)
-          cuts <- round(cuts)
-          paste0(cuts[-n], " &ndash; ", cuts[-1])
-        }
+combinedMaps <- reactive({
+  req((input$aggr_level == "region" || input$aggr_level == "kom"))
+  name_lang <- paste0("name_", lang)
+  fill_data <-
+    rbind(mapData()$male@data, mapData()$female@data)[[prettyVariableSingular()]]
+  
+  if (input$count_rates == 2) {
+    pal <- colorQuantile("YlOrRd", fill_data, n = 5, reverse = FALSE)
+    if (selectPercentOrRate()) {
+      labFormatter <- function(type, cuts) {
+        n = length(cuts)
+        cuts <- round(cuts, digits = 1)
+        paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
       }
     } else {
-      pal <- colorBin("YlOrRd",
-                      fill_data,
-                      bins = 5,
-                      reverse = FALSE)
       labFormatter <- function(type, cuts) {
-        
         n = length(cuts)
         cuts <- round(cuts)
         paste0(cuts[-n], " &ndash; ", cuts[-1])
       }
     }
-    
-    
-    legend_title <- gsub("  ", "<br>", prettyVariableSingular())
-    
-    
-    # # Get min and max values used in legend
-    # legend_minmax <- range(attr(pal,which = "colorArgs")$bins)
-    # legend_nbins <- length(attr(pal,which = "colorArgs")$bins)
-    # legend_labels <- c(legend_minmax[1], rep("", legend_nbins - 1), legend_minmax[2])
-    # cols <- sort(unique(pal(fill_data)))
-    # cols <- cols[2:length(cols)]
-    
-    # Male map
-    map_data <-  mapData()$male
-    fill_colors <-
-      ~ pal(map_data@data[[prettyVariableSingular()]])
-    popup <- paste0(
-      prettyAggr_level(),
-      ": <strong>",
-      map_data@data[[prettyAggr_level()]],
-      "</strong><br><br>",
-      map_data@data[[prettyVariableSingular()]]
-    ) %>%
-      lapply(htmltools::HTML)
-    
-    
-    map_m <- makeLeaflet(
-      map_data = map_data,
-      fill_colors = fill_colors,
-      label_popup = popup,
-      mini_map_lines = dk_sp$mini_map_lines
-    )
-    
-    # Female map
-    map_data <-  mapData()$female
-    fill_colors <-
-      ~ pal(map_data@data[[prettyVariableSingular()]])
-    popup <- paste0(
-      prettyAggr_level(),
-      ": <strong>",
-      map_data@data[["name_dk"]],
-      "</strong><br><br>",
-      map_data@data[[prettyVariableSingular()]]
-    ) %>%
-      lapply(htmltools::HTML)
-    
-    
-    map_f <- makeLeaflet(
-      map_data = map_data,
-      fill_colors = fill_colors,
-      label_popup = popup,
-      mini_map_lines = dk_sp$mini_map_lines
-      
-    ) %>%
-      addLegend(
-        "topright",
-        pal = pal,
-        values = fill_data,
-        # colors =cols,
-        title = legend_title,
-        labels = legend_labels,
-        layerId = "legend",
-        labFormat = function(type, cuts, p = NULL) {
-          
-          type <- type
-          cuts <- cuts
-          
-          labFormatter(type = type,
-                       cuts = cuts
-                      )
-        }
-      )
-    
-    combineWidgets(map_m, map_f, ncol = 2)
-    
+  } else {
+    pal <- colorBin("YlOrRd",
+                    fill_data,
+                    bins = 5,
+                    reverse = FALSE)
+    labFormatter <- function(type, cuts) {
+      n = length(cuts)
+      cuts <- round(cuts)
+      paste0(cuts[-n], " &ndash; ", cuts[-1])
+    }
   }
+  
+  
+  legend_title <- gsub("  ", "<br>", prettyVariableSingular())
+  
+  
+  # Male map
+  map_data <-  mapData()$male
+  fill_colors <-
+    ~ pal(map_data@data[[prettyVariableSingular()]])
+  popup <- paste0(
+    prettyAggr_level(),
+    ": <strong>",
+    map_data@data[[prettyAggr_level()]],
+    "</strong><br><br>",
+    map_data@data[[prettyVariableSingular()]]
+  ) %>%
+    lapply(htmltools::HTML)
+  
+  
+  map_m <- makeLeaflet(
+    map_data = map_data,
+    fill_colors = fill_colors,
+    label_popup = popup,
+    mini_map_lines = dk_sp$mini_map_lines
+  )
+  
+  # Female map
+  map_data <-  mapData()$female
+  fill_colors <-
+    ~ pal(map_data@data[[prettyVariableSingular()]])
+  popup <- paste0(
+    prettyAggr_level(),
+    ": <strong>",
+    map_data@data[["name_dk"]],
+    "</strong><br><br>",
+    map_data@data[[prettyVariableSingular()]]
+  ) %>%
+    lapply(htmltools::HTML)
+  
+  
+  map_f <- makeLeaflet(
+    map_data = map_data,
+    fill_colors = fill_colors,
+    label_popup = popup,
+    mini_map_lines = dk_sp$mini_map_lines
+    
+  ) %>%
+    addLegend(
+      "topright",
+      pal = pal,
+      values = fill_data,
+      # colors =cols,
+      title = legend_title,
+      labels = legend_labels,
+      layerId = "legend",
+      labFormat = function(type, cuts, p = NULL) {
+        type <- type
+        cuts <- cuts
+        
+        labFormatter(type = type,
+                     cuts = cuts)
+      }
+    )
+  
+  # Store maps on "map" reactiveValues object - these will be accessed by the
+  # downloadHandler for downloading functionality. I do not know how to
+  # download both maps together.
+  map$map_f <- map_f
+  
+  # Need to add legend to male map in case it's downloaded without female map
+  map$map_m <- map_m %>%
+    addLegend(
+      "topright",
+      pal = pal,
+      values = fill_data,
+      # colors =cols,
+      title = legend_title,
+      labels = legend_labels,
+      layerId = "legend",
+      labFormat = function(type, cuts, p = NULL) {
+        type <- type
+        cuts <- cuts
+        
+        labFormatter(type = type,
+                     cuts = cuts)
+      }
+    )
+  combineWidgets(map_m, map_f, ncol = 2)
+  
+  
 })
 
 
@@ -663,21 +685,6 @@ output$varButtonChoices <- renderUI({
 })
 
 
-output$downloadButton <- renderUI({
-  if (!isNational()) {
-    actionBttn(inputId = "download_bar",
-               label = "Hente figure",
-               size = "sm")
-  } else if (isNational()) {
-    actionBttn(inputId = "download_line",
-               label = "Download",
-               size = "sm")
-  }
-  
-})
-
-out
-
 choiceYears <- reactive({
   # The following additional if-else logic is needed to stop the year count
   # always resetting to 2015 when changing aggr_level.
@@ -711,6 +718,7 @@ choiceYears <- reactive({
       
     } else {
       year_range <- c(2006:year_max)
+      
     }
     return(list(selected_year = selected_year,
                 year_range = year_range))
@@ -740,9 +748,6 @@ observe({
   }
 })
 
-
-
-
 observe({
   # Disable "year" when showing longitudinal data
   shinyjs::toggleState(id = "year",
@@ -760,7 +765,41 @@ observe({
 })
 
 
+# Switch tabs when isGeo == FALSE
+observeEvent(input$aggr_level, {
+  if (!isGeo())
+    updateTabsetPanel(session = session,
+                      inputId = "data_vis_tabs",
+                      selected = ui_d3_figures)
+})
 
+# DOWNLOAD BUTTONS --------------------------------------------------------
+output$downloadButton <- renderUI({
+  if (!isNational()) {
+    actionBttn(inputId = "download_bar",
+               label = "Hente figure",
+               size = "sm")
+  } else if (isNational()) {
+    actionBttn(inputId = "download_line",
+               label = "Hente figure",
+               size = "sm")
+  }
+  
+})
+
+map <- reactiveValues(dat = 0)
+output$downloadMapsMale <- downloadHandler(
+  filename = "map_male.png",
+  content = function(file) {
+    mapview::mapshot(map$map_m, file = file, cliprect = "viewport")
+  }
+)
+output$downloadMapsFemale <- downloadHandler(
+  filename = "map_female.png",
+  content = function(file) {
+    mapview::mapshot(map$map_f, file = file, cliprect = "viewport")
+  }
+)
 # RENDER FUNCTIONS --------------------------------------------------------
 
 # PLOT
@@ -792,3 +831,5 @@ output$table_rates <- renderDT({
     outputRateDTTable()
   }
 })
+
+output$maps <- renderCombineWidgets(combinedMaps())
