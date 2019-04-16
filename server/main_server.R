@@ -10,6 +10,7 @@ output$outcome_title <- renderText({
 })
 output$outcome_description <- renderUI({
   req(input$outcome)
+  
   out <-
     outcome_descriptions[hjertetal_code == outcomeCode(), .(desc_dk, link_dk)]
   # Add link for further reading - if link exists, otherwise just desc
@@ -73,6 +74,12 @@ output$table2_title <- renderText({
   prettyVariable()[2]
 })
 
+
+output$tabs <- reactive({
+  
+  input$data_vis_tabs != ui_data
+})
+outputOptions(output, "tabs", suspendWhenHidden = FALSE)
 
 
 # DYNAMIC VARIABLES/COLUMN NAMES ------------------------------------------
@@ -668,6 +675,8 @@ output$downloadButton <- renderUI({
   }
   
 })
+
+out
 
 choiceYears <- reactive({
   # The following additional if-else logic is needed to stop the year count

@@ -82,8 +82,11 @@ ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andele")
+
+# Tab names
 ui_map <- "Kort"
 ui_d3_figures <- "Figures"
+ui_data <- "Data"
 
 # ABOUT PANEL -------------------------------------------------------------
 

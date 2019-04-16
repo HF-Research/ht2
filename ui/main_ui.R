@@ -80,7 +80,7 @@ tabPanel(
                            ))
         ),
         
-        tabPanel("Data",
+        tabPanel(ui_data,
                  fluidRow(
                    column(6,
                           fluidRow(tags$b(
@@ -108,28 +108,31 @@ tabPanel(
                    br()
                  ))
       ),
-      fluidRow(
-        column(
-          id = "col_rate_count",
-          3,
-          align = "left",
-          radioGroupButtons(
-            inputId = "count_rates",
-            label =  NULL,
-            choices = count_rate_choices,
-            justified = TRUE
-          )
+      conditionalPanel(condition = "output.tabs",
+        fluidRow(
+          column(
+            id = "col_rate_count",
+            3,
+            align = "left",
+            radioGroupButtons(
+              inputId = "count_rates",
+              label =  NULL,
+              choices = count_rate_choices,
+              justified = TRUE
+            )
+          ),
+          column(3,
+                 offset = 6,
+                 uiOutput("downloadButton"))
         ),
-        column(3,
-               offset = 6,
-               uiOutput("downloadButton"))
-      ),
-      fluidRow(column(
-        12, align = "left",
-        uiOutput("rate_count_desc"),
-        br()
-      )),
-      fluidRow(br(), br())
+        fluidRow(column(
+          12, align = "left",
+          uiOutput("rate_count_desc"),
+          br()
+        )),
+        fluidRow(br(), br())
+      )
+      
     )
     
     # fluidRow(column(12, align = "left",
