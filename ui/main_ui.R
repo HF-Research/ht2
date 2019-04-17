@@ -4,65 +4,63 @@ tabPanel(ui_main_title,
            tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
          ),
          fluidRow(
-           column(id = "col_input",
-                  5,
-                  wellPanel(
-                    class = "well_input",
-                    fluidRow(
-                      selectInput(
-                        inputId = "outcome",
-                        label = choose_outcome,
-                        choices = outcome_choices,
-                        selectize = TRUE
-                      )
-                    ),
-                    fluidRow(column(
-                      7,
-                      # This UI has to change based on "outcome" choice
-                      fluidRow(uiOutput("varButtonChoices")),
-                      fluidRow(
-                        selectInput(
-                          inputId = "year",
-                          label = choose_year,
-                          choices = NULL,
-                          selected = 2015
-                        )
-                      )
-                    ),
-                    column(
-                      5,
-                      radioGroupButtons(
-                        inputId = "aggr_level",
-                        label = choose_aggr_lv,
-                        choices = aggr_choices,
-                        justified = TRUE,
-                        direction = "vertical"
-                      )
-                      
-                      
-                    ))
-                  )),
-           
+           # Column for inputs
            column(
-             id = "col_description",
-             7,
-             profvis_ui("profiler"),
-             wellPanel(
-               class = "well_description",
-               textOutput("outcome_title"),
-               hr(),
-               uiOutput("outcome_description"),
-               br(),
-               uiOutput("variable_desc")
-               
+             id = "col_input",
+             5,
+             wellPanel(class = "well_input",
+                       fluidRow(
+                         selectInput(
+                           inputId = "outcome",
+                           label = choose_outcome,
+                           choices = outcome_choices,
+                           selectize = TRUE
+                         )
+                       ),
+                       fluidRow(
+                         column(7,
+                                # This UI has to change based on "outcome" choice
+                                fluidRow(uiOutput("varButtonChoices")),
+                                fluidRow(
+                                  selectInput(
+                                    inputId = "year",
+                                    label = choose_year,
+                                    choices = NULL,
+                                    selected = 2015
+                                  )
+                                )),
+                         column(
+                           5,
+                           radioGroupButtons(
+                             inputId = "aggr_level",
+                             label = choose_aggr_lv,
+                             choices = aggr_choices,
+                             justified = TRUE,
+                             direction = "vertical"
+                           )
+                           
+                           
+                         )
+                       )),
+             # DESCRITPIONS
+             fluidRow(
+               profvis_ui("profiler"),
+               wellPanel(
+                 class = "well_description",
+                 textOutput("outcome_title"),
+                 hr(),
+                 uiOutput("outcome_description"),
+                 br(),
+                 uiOutput("variable_desc")
+                 
+               )
              )
-           )
-         ),
-         
-         fluidRow(
+           ),
+           
+           # RESULTS
            column(
              id = "col_output",
-             12,
+             7,
              align = "center",
              tabsetPanel(
                id = "data_vis_tabs",
@@ -108,46 +106,45 @@ tabPanel(ui_main_title,
                         ))
              ),
              br(),
-             conditionalPanel(condition = "output.tabs",
-                              fluidRow(
-                                column(
-                                  id = "col_rate_count",
-                                  3,
-                                  align = "left",
-                                  radioGroupButtons(
-                                    inputId = "count_rates",
-                                    label =  NULL,
-                                    choices = count_rate_choices,
-                                    justified = TRUE
-                                  )
-                                ),
-                                column(
-                                  6,
-                                  offset = 3,
-                                  conditionalPanel(condition = "output.tabFigure", uiOutput("downloadButton")),
-                                  conditionalPanel(
-                                    condition = "output.tabMap",
-                                    downloadBttn(
-                                      "downloadMapsMale",
-                                      label = paste0("Hente ", ui_sex_levels[2]),
-                                      size = "sm"
-                                    ),
-                                    downloadBttn(
-                                      "downloadMapsFemale",
-                                      label = paste0("Hente ", ui_sex_levels[1]),
-                                      size = "sm"
-                                    )
-                                  )
-                                )),
-                                fluidRow(column(
-                                  12, align = "left",
-                                  uiOutput("rate_count_desc"),
-                                  br()
-                                )),
-                                fluidRow(br(), br())
-                              ))
-             
-             # fluidRow(column(12, align = "left",
-             #                 h3("Data")))
-             # # DataTables)
-           ))
+             conditionalPanel(
+               condition = "output.tabs",
+               fluidRow(
+                 column(
+                   id = "col_rate_count",
+                   3,
+                   align = "left",
+                   radioGroupButtons(
+                     inputId = "count_rates",
+                     label =  NULL,
+                     choices = count_rate_choices,
+                     justified = TRUE
+                   )
+                 ),
+                 column(
+                   6,
+                   offset = 3,
+                   conditionalPanel(condition = "output.tabFigure", uiOutput("downloadButton")),
+                   conditionalPanel(
+                     condition = "output.tabMap",
+                     downloadBttn(
+                       "downloadMapsMale",
+                       label = paste0("Hente ", ui_sex_levels[2]),
+                       size = "sm"
+                     ),
+                     downloadBttn(
+                       "downloadMapsFemale",
+                       label = paste0("Hente ", ui_sex_levels[1]),
+                       size = "sm"
+                     )
+                   )
+                 )
+               ),
+               fluidRow(column(
+                 12, align = "left",
+                 uiOutput("rate_count_desc"),
+                 br()
+               )),
+               fluidRow(br(), br())
+             )
+           )
+         ))
