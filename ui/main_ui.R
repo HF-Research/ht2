@@ -7,7 +7,7 @@ tabPanel(ui_main_title,
            # Column for inputs
            column(
              id = "col_input",
-             5,
+             4,
              wellPanel(class = "well_input",
                        fluidRow(
                          selectInput(
@@ -60,11 +60,13 @@ tabPanel(ui_main_title,
            # RESULTS
            column(
              id = "col_output",
-             7,
+             8,
              align = "right",
              tabsetPanel(
                id = "data_vis_tabs",
                type = "pill",
+               
+               
                tabPanel(
                  title = ui_d3_figures,
                  br(),
@@ -77,7 +79,6 @@ tabPanel(ui_main_title,
                                     simpleD3LineOutput("d3_plot_line_html", height = "550px")
                                   ))
                ),
-               
                tabPanel(
                  title = ui_data,
                  fluidRow(
@@ -95,7 +96,7 @@ tabPanel(ui_main_title,
                    column(
                      class = "col_DT",
                      6,
-                     align = "left",
+                     align = "center",
                      fluidRow(tags$b(textOutput("table1_title"))),
                      fluidRow(((
                        DTOutput("table_counts")
@@ -104,7 +105,7 @@ tabPanel(ui_main_title,
                    column(
                      class = "col_DT",
                      6,
-                     align = "left",
+                     align = "center",
                      fluidRow(tags$b(textOutput("table2_title"))),
                      fluidRow(((
                        DTOutput("table_rates")
@@ -128,17 +129,23 @@ tabPanel(ui_main_title,
                  fluidRow(column(
                    class = "col_leaflet",
                    6,
-                   withSpinner(leafletOutput("map_male", width = 420, height = 550))
+                   align = "left",
+                   withSpinner(leafletOutput("map_male", width = 420, height = 550)),
+                   textOutput("map_title_male")
                  ),
                  column(
                    class = "col_leaflet",
                    6,
-                   withSpinner(leafletOutput("map_female", width =420, height = 550))
+                   align = "left",
+                   withSpinner(leafletOutput("map_female", width = 420, height = 550)),
+                   textOutput("map_title_female")
                  ),
                  br())
                )
              ),
+             
              br(),
+             
              conditionalPanel(
                condition = "output.tabs",
                fluidRow(
@@ -154,13 +161,13 @@ tabPanel(ui_main_title,
                    )
                  ),
                  conditionalPanel(condition = "output.tabFigure",
-                                  column(6,
-                                         offset = 3,
+                                  column(8,
+                                    align = "right",
                                          uiOutput("downloadButton"))),
                  conditionalPanel(condition = "output.tabMap",
                                   column(
-                                    6,
-                                    offset = 2,
+                                    9,
+                                    align = "right",
                                     downloadBttn(
                                       "downloadMapsMale",
                                       label = paste0("Hente ", ui_sex_levels[2]),

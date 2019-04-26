@@ -5,9 +5,6 @@ options(DT.options = list(
 ))
 callModule(profvis_server, "profiler")
 # TEXT RENDERING ----------------------------------------------------------
-output$outcome_title <- renderText({
-  input$outcome
-})
 output$outcome_description <- renderUI({
   req(input$outcome)
   
@@ -66,6 +63,22 @@ output$rate_count_desc <- renderUI({
   })
 })
 
+
+# Titles
+output$outcome_title <- renderText({
+  input$outcome
+})
+
+output$outcome_title_dt <- renderText({
+  plotTitle()
+})
+
+output$outcome_title_map <- renderText({
+  plotTitle()
+})
+
+
+# Datatables titles
 output$table1_title <- renderText({
   ui_count_rate[1]
 })
@@ -75,6 +88,11 @@ output$table2_title <- renderText({
 })
 
 
+# Maps titles
+output$map_title_male <- renderText(ui_sex_levels[2])
+output$map_title_female <- renderText(ui_sex_levels[1])
+
+# Tabs
 output$tabs <- reactive({
   input$data_vis_tabs != ui_data
 })
@@ -83,11 +101,8 @@ output$tabFigure <- reactive({
   input$data_vis_tabs == ui_d3_figures
 })
 output$tabMap <- reactive({
-  
   input$data_vis_tabs == ui_map && isGeo()
 })
-
-
 outputOptions(output, "tabs", suspendWhenHidden = FALSE)
 outputOptions(output, "tabFigure", suspendWhenHidden = FALSE)
 outputOptions(output, "tabMap", suspendWhenHidden = FALSE)
@@ -208,7 +223,7 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
 })
 
 
@@ -361,7 +376,6 @@ mapData <- function() {
 }
 
 combinedMaps <- reactive({
-  
   req((input$aggr_level == "region" || input$aggr_level == "kom"))
   
   name_lang <- paste0("name_", lang)
@@ -481,7 +495,7 @@ combinedMaps <- reactive({
                      cuts = cuts)
       }
     )
-map
+  map
 })
 
 
@@ -504,7 +518,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4, ])
+    return(out[group_var <= year_max - 4,])
     
   } else {
     return(out)
@@ -565,7 +579,6 @@ outputCountDTTable <- reactive({
 })
 
 outputRateDTTable <- reactive({
-  
   dat <- dtCast()
   # Subset to either counts or rates
   vars <-
@@ -768,7 +781,7 @@ observe({
 
 # Switch tabs when isGeo == FALSE
 observeEvent(input$aggr_level, {
-  if (input$data_vis_tabs == ui_map && !isGeo() )
+  if (input$data_vis_tabs == ui_map && !isGeo())
     updateTabsetPanel(session = session,
                       inputId = "data_vis_tabs",
                       selected = ui_d3_figures)
@@ -806,7 +819,6 @@ output$downloadMapsFemale <- downloadHandler(
 # PLOT
 #
 output$d3_plot_bar <- renderSimpleD3Bar({
-  
   if (validate() & input$aggr_level != "national") {
     plot_d3_bar()
   }
@@ -835,18 +847,8 @@ output$table_rates <- renderDT({
 # MAPS
 output$map_male <- renderLeaflet({
   combinedMaps()$map_m
-  })
+})
 
 output$map_female <- renderLeaflet({
   combinedMaps()$map_f
 })
-
-# TITLE
-output$outcome_title_dt <- renderText({
-  plotTitle()
-})
-
-output$outcome_title_map <- renderText({
-  plotTitle()
-})
-
