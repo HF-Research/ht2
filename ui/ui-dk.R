@@ -7,7 +7,7 @@ library(data.table)
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
-load(file = "data/outcome_descriptions.Rdata")
+outcome_descriptions <- fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8")
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
   fread(file = "data/variable_ui.csv", encoding = "UTF-8")

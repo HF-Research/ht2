@@ -61,12 +61,13 @@ tabPanel(ui_main_title,
            column(
              id = "col_output",
              7,
-             align = "center",
+             align = "right",
              tabsetPanel(
                id = "data_vis_tabs",
                type = "pill",
                tabPanel(
-                 ui_d3_figures,
+                 title = ui_d3_figures,
+                 br(),
                  conditionalPanel(condition = "input.aggr_level != 'national'",
                                   (
                                     simpleD3BarOutput("d3_plot_bar", height = "550px")
@@ -77,33 +78,65 @@ tabPanel(ui_main_title,
                                   ))
                ),
                
-               tabPanel(ui_data,
-                        fluidRow(
-                          column(6,
-                                 fluidRow(tags$b(
-                                   textOutput("table1_title")
-                                 )),
-                                 fluidRow(((
-                                   DTOutput("table_counts")
-                                 )))),
-                          column(6,
-                                 fluidRow(tags$b(
-                                   textOutput("table2_title")
-                                 )),
-                                 fluidRow(((
-                                   DTOutput("table_rates")
-                                 ))))
-                        )),
+               tabPanel(
+                 title = ui_data,
+                 fluidRow(
+                   class = "row_outcome_title",
+                   column(
+                     11,
+                     offset = 1,
+                     class = "output_titles",
+                     align = "left",
+                     textOutput("outcome_title_dt")
+                   )
+                 ),
+                 fluidRow(
+                   class = "row_outcome_title",
+                   column(
+                     class = "col_DT",
+                     6,
+                     align = "left",
+                     fluidRow(tags$b(textOutput("table1_title"))),
+                     fluidRow(((
+                       DTOutput("table_counts")
+                     )))
+                   ),
+                   column(
+                     class = "col_DT",
+                     6,
+                     align = "left",
+                     fluidRow(tags$b(textOutput("table2_title"))),
+                     fluidRow(((
+                       DTOutput("table_rates")
+                     )))
+                   )
+                 )
+               ),
                
-               tabPanel(ui_map,
-                        fluidRow(
-                          column(12, align = "left",
-                                 withSpinner(
-                                   combineWidgetsOutput("maps", height = 550)
-                                 )),
-                          
-                          br()
-                        ))
+               tabPanel(
+                 title = ui_map,
+                 fluidRow(
+                   class = "row_outcome_title",
+                   column(
+                     11,
+                     offset = 1,
+                     class = "output_titles",
+                     align = "left",
+                     textOutput("outcome_title_map")
+                   )
+                 ),
+                 fluidRow(column(
+                   class = "col_leaflet",
+                   6,
+                   withSpinner(leafletOutput("map_male", width = 420, height = 550))
+                 ),
+                 column(
+                   class = "col_leaflet",
+                   6,
+                   withSpinner(leafletOutput("map_female", width =420, height = 550))
+                 ),
+                 br())
+               )
              ),
              br(),
              conditionalPanel(
@@ -120,24 +153,25 @@ tabPanel(ui_main_title,
                      justified = TRUE
                    )
                  ),
-                 column(
-                   6,
-                   offset = 3,
-                   conditionalPanel(condition = "output.tabFigure", uiOutput("downloadButton")),
-                   conditionalPanel(
-                     condition = "output.tabMap",
-                     downloadBttn(
-                       "downloadMapsMale",
-                       label = paste0("Hente ", ui_sex_levels[2]),
-                       size = "sm"
-                     ),
-                     downloadBttn(
-                       "downloadMapsFemale",
-                       label = paste0("Hente ", ui_sex_levels[1]),
-                       size = "sm"
-                     )
-                   )
-                 )
+                 conditionalPanel(condition = "output.tabFigure",
+                                  column(6,
+                                         offset = 3,
+                                         uiOutput("downloadButton"))),
+                 conditionalPanel(condition = "output.tabMap",
+                                  column(
+                                    6,
+                                    offset = 2,
+                                    downloadBttn(
+                                      "downloadMapsMale",
+                                      label = paste0("Hente ", ui_sex_levels[2]),
+                                      size = "sm"
+                                    ),
+                                    downloadBttn(
+                                      "downloadMapsFemale",
+                                      label = paste0("Hente ", ui_sex_levels[1]),
+                                      size = "sm"
+                                    )
+                                  ))
                ),
                fluidRow(column(
                  12, align = "left",

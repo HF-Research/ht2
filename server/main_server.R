@@ -41,7 +41,7 @@ output$variable_desc <- renderUI({
 })
 
 plotTitle <- reactive({
-  paste0(prettyVariable()[1], " - ", input$outcome)
+  paste0(input$outcome, ": ", prettyVariable()[1])
 })
 
 output$rate_count_desc <- renderUI({
@@ -67,7 +67,7 @@ output$rate_count_desc <- renderUI({
 })
 
 output$table1_title <- renderText({
-  paste0(prettyVariable()[1], ": ", ui_count_rate[1])
+  ui_count_rate[1]
 })
 
 output$table2_title <- renderText({
@@ -361,7 +361,9 @@ mapData <- function() {
 }
 
 combinedMaps <- reactive({
+  
   req((input$aggr_level == "region" || input$aggr_level == "kom"))
+  
   name_lang <- paste0("name_", lang)
   fill_data <-
     rbind(mapData()$male@data, mapData()$female@data)[[prettyVariableSingular()]]
@@ -460,9 +462,9 @@ combinedMaps <- reactive({
   # downloadHandler for downloading functionality. I do not know how to
   # download both maps together.
   map$map_f <- map_f
-  
+  map$map_m <- map_m
   # Need to add legend to male map in case it's downloaded without female map
-  map$map_m <- map_m %>%
+  map$map_m_legend <- map_m %>%
     addLegend(
       "topright",
       pal = pal,
@@ -479,9 +481,7 @@ combinedMaps <- reactive({
                      cuts = cuts)
       }
     )
-  combineWidgets(map_m, map_f, ncol = 2)
-  
-  
+map
 })
 
 
@@ -529,7 +529,7 @@ outputCountDTTable <- reactive({
     # Only calculate bottom margins for "age" - other aggr levels don't include
     # full data
     totals <-
-      dat[, colSums(dat[, .(female, male, Total)], na.rm = TRUE)]
+      dat[, colSums(dat[, .(male, female, Total)], na.rm = TRUE)]
     
     # Convert entire table to character to we can rbind() totals
     dat <- dat[, lapply(.SD, as.character)]
@@ -565,6 +565,7 @@ outputCountDTTable <- reactive({
 })
 
 outputRateDTTable <- reactive({
+  
   dat <- dtCast()
   # Subset to either counts or rates
   vars <-
@@ -767,7 +768,7 @@ observe({
 
 # Switch tabs when isGeo == FALSE
 observeEvent(input$aggr_level, {
-  if (!isGeo())
+  if (input$data_vis_tabs == ui_map && !isGeo() )
     updateTabsetPanel(session = session,
                       inputId = "data_vis_tabs",
                       selected = ui_d3_figures)
@@ -791,7 +792,7 @@ map <- reactiveValues(dat = 0)
 output$downloadMapsMale <- downloadHandler(
   filename = "map_male.png",
   content = function(file) {
-    mapshot(map$map_m, file = file, cliprect = "viewport")
+    mapshot(map$map_m_legend, file = file, cliprect = "viewport")
   }
 )
 output$downloadMapsFemale <- downloadHandler(
@@ -818,9 +819,7 @@ output$d3_plot_line_html <- renderSimpleD3Line({
   
 })
 
-
-# DATATABLES:
-# AGE
+# DATATABLES
 output$table_counts <- renderDT({
   if (validate()) {
     outputCountDTTable()
@@ -833,7 +832,21 @@ output$table_rates <- renderDT({
   }
 })
 
-output$maps <- renderCombineWidgets(combinedMaps())
+# MAPS
+output$map_male <- renderLeaflet({
+  combinedMaps()$map_m
+  })
 
+output$map_female <- renderLeaflet({
+  combinedMaps()$map_f
+})
 
+# TITLE
+output$outcome_title_dt <- renderText({
+  plotTitle()
+})
+
+output$outcome_title_map <- renderText({
+  plotTitle()
+})
 

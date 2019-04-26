@@ -48,9 +48,25 @@ cleanGeoData <- function(x){
   
 }
 
-shiny_dat_en <- cleanGeoData(shiny_dat_en)
-saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
+setNAtoZero <- function(x){
+  lapply(x, function(outcome){
+    lapply(outcome, function(aggr_level){
+      data_vars <- grep("count|rate", colnames(aggr_level), value = TRUE)
+      aggr_level[,(data_vars) := lapply(.SD, function(i){
+        i[is.na(i)] <- 0L
+        i
+      }),
+      .SDcols = data_vars]
+      
+  })
+})
+}
 
+
+shiny_dat_en <- cleanGeoData(shiny_dat_en)
+shiny_dat_en <- setNAtoZero(shiny_dat_en)
+saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
+shiny_dat_en$b1$age
 
 
 # DANISH LANGUAGE SUPPORT -------------------------------------------------
@@ -69,6 +85,7 @@ makeDanish <- function(dat) {
         )
       outcome$edu[, `:=` (grouping = edu_name_dk)]
       outcome$edu[, `:=` (edu_name_dk = NULL)]
+      setkey(outcome$edu, sex, grouping, year)
       outcome
   })
 }
@@ -93,6 +110,10 @@ l2[l2$name_dk == "Århus", ]$name_dk <- "Aarhus"
 l2[l2$name_dk == "Vesthimmerland", ]$name_dk <- "Vesthimmerlands"
 l2[l2$region == "Midtjylland", ]$region <- "Midtjydlland"
 
+l2$name_dk
+# Delete Christiansoe polygon
+l2 <- l2[l2$name_dk != "Christiansø", ]
+l2$name_dk
 # Move Bornholm
 bornholm <- l2 %>% filter(name_dk == "Bornholm")
 b.geo <- st_geometry(bornholm) # Subset geometry of of object

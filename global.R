@@ -65,6 +65,19 @@ formatNumbers <- function(dat, lang) {
   x[]
 }
 
+# DATA TABLE FUNCTIONS ----------------------------------------------------
+
+# From:
+# https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
+formatSuppressedValues <- JS("
+  function(data, type) {
+  debugger;
+    if (type !== 'display') return data;
+    if (data !== 0) return data;
+    return '<10';
+  }
+")
+
 makeCountDT <- function(dat, group_var, thousands_sep) {
   col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
@@ -76,7 +89,9 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
       columnDefs = list(list(
         # Hides the "flag" column
         visible = FALSE, targets = 0
-      )),
+        
+      ),
+      list(render = formatSuppressedValues, targets = "_all")),
       buttons = list(
         list(
           extend = "collection",
@@ -93,11 +108,11 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
       )
     )
   ) %>%
-    formatCurrency(col_format,
-                   currency = "",
-                   interval = 3,
-                   mark = thousands_sep,
-                   digits = 0) %>%
+    # formatCurrency(col_format,
+    #                currency = "",
+    #                interval = 3,
+    #                mark = thousands_sep,
+                   # digits = 0) %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
     formatStyle("flag",
@@ -146,6 +161,7 @@ diag_DT <- DT::datatable(
   rownames = FALSE,
   class = 'hover row-border',
   options = list(
+    paging = FALSE, searching = FALSE, pageLength = 13,
     buttons = list('pdf'),
     initComplete = JS(
       "function(settings, json) {",
@@ -215,7 +231,7 @@ pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
 makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines){
   leaflet(options = leafletOptions(minZoom = 7,
                                    preferCanvas = TRUE)) %>%
-  setView(lng = 10.6018,
+  setView(lng = 10.408,
           lat = 56.199752,
           zoom = 7,
           ) %>%

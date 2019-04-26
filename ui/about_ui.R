@@ -24,8 +24,8 @@ tabPanel(
   )),
   br(),
   conditionalPanel(condition = "input.about_selection == 'def_diag'",
-                   fluidRow(column(
-                     11, align = "center",
+                   fluidRow(column(id = "col_about_diag",
+                     12, align = "center",
                      DTOutput("table_diag")
                    ))),
   conditionalPanel(condition = "input.about_selection == 'def_opr'",
@@ -48,4 +48,8 @@ tabPanel(
                    fluidRow(column(
                      11, align = "center",
                      DTOutput("table_edu")
-                   ))))
+                   )
+                   )
+                   ),
+  br(),br(),br()
+  )
