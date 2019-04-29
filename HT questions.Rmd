@@ -1,0 +1,6 @@
+---
+title: "HT Questions"
+output: html_document
+---
+
+- Hide kommune level results for rare outcomes?

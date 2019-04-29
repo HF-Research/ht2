@@ -38,7 +38,15 @@ output$variable_desc <- renderUI({
 })
 
 plotTitle <- reactive({
-  paste0(input$outcome, ": ", prettyVariable()[1])
+  if (isNational()) {
+    paste0(input$outcome, ": ", tolower(prettyVariable()[1]))
+  } else {
+    paste0(input$outcome,
+           ": ",
+           tolower(prettyVariable()[1]),
+           ", ",
+           input$year)
+  }
 })
 
 output$rate_count_desc <- renderUI({
@@ -223,7 +231,7 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
 })
 
 
@@ -518,7 +526,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4,])
+    return(out[group_var <= year_max - 4, ])
     
   } else {
     return(out)

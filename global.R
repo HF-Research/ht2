@@ -71,7 +71,7 @@ formatNumbers <- function(dat, lang) {
 # https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
 formatSuppressedValues <- JS("
   function(data, type) {
-  debugger;
+  
     if (type !== 'display') return data;
     if (data !== 0) return data;
     return '<10';
@@ -145,6 +145,37 @@ makeRateDT <- function(dat, group_var, thousands_sep, digits, dec_mark) {
     formatStyle(group_var,  backgroundColor = "#e7e7e7")
 }
 
+
+# LEAFLET MAPS -------------------------------------------------------
+pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
+makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines){
+  leaflet(options = leafletOptions(minZoom = 7,
+                                   preferCanvas = TRUE)) %>%
+    setView(lng = 10.408,
+            lat = 56.199752,
+            zoom = 7,
+    ) %>%
+    setMaxBounds(lng1 = 7.7,
+                 lat1 = 54.5,
+                 lng2 = 13.3,
+                 lat2 = 58.0) %>%
+    addPolygons(
+      data = map_data,
+      fillColor  = fill_colors,
+      weight = 1,
+      opacity = 1,
+      color = "grey",
+      fillOpacity = 0.7,
+      label = label_popup,
+      labelOptions = labelOptions(
+        style = list("font-weight" = "normal", # CSS styles
+                     padding = "3px 8px"),
+        textsize = "17px",
+        direction = "auto",
+        opacity = 1)
+    ) %>%
+    addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 5)
+}
 
 # ABOUT PANEL ------------------------------------------------------------
 col_subset <-
@@ -226,33 +257,3 @@ edu_DT <- DT::datatable(
 )
 
 
-# LEAFLET MAPS -------------------------------------------------------
-pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
-makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines){
-  leaflet(options = leafletOptions(minZoom = 7,
-                                   preferCanvas = TRUE)) %>%
-  setView(lng = 10.408,
-          lat = 56.199752,
-          zoom = 7,
-          ) %>%
-    setMaxBounds(lng1 = 7.7,
-                 lat1 = 54.5,
-                 lng2 = 13.3,
-                 lat2 = 58.0) %>%
-  addPolygons(
-    data = map_data,
-    fillColor  = fill_colors,
-    weight = 1,
-    opacity = 1,
-    color = "grey",
-    fillOpacity = 0.7,
-    label = label_popup,
-    labelOptions = labelOptions(
-      style = list("font-weight" = "normal", # CSS styles
-                   padding = "3px 8px"),
-      textsize = "17px",
-      direction = "auto",
-      opacity = 1)
-  ) %>%
-    addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 5)
-}

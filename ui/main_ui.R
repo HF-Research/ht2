@@ -131,14 +131,14 @@ tabPanel(ui_main_title,
                    6,
                    align = "left",
                    withSpinner(leafletOutput("map_male", width = 420, height = 550)),
-                   textOutput("map_title_male")
+                   fluidRow(align = "center", textOutput("map_title_male"))
                  ),
                  column(
                    class = "col_leaflet",
                    6,
                    align = "left",
                    withSpinner(leafletOutput("map_female", width = 420, height = 550)),
-                   textOutput("map_title_female")
+                   fluidRow(align = "center", (textOutput("map_title_female")))
                  ),
                  br())
                )

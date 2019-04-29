@@ -15,7 +15,7 @@ tabPanel(
     )
     
   ), 
-  column(9,
+  column(9, class = "col_about_text",
          fluidRow(h3(textOutput("ui_about_title"))),
          fluidRow(textOutput("ui_about_desc"),
                   br()),
@@ -24,20 +24,20 @@ tabPanel(
   )),
   br(),
   conditionalPanel(condition = "input.about_selection == 'def_diag'",
-                   fluidRow(column(id = "col_about_diag",
+                   fluidRow(column(class = "col_about_dt",
                      12, align = "center",
                      DTOutput("table_diag")
                    ))),
   conditionalPanel(condition = "input.about_selection == 'def_opr'",
                    
-                   fluidRow(column(
-                     11, align = "center",
+                   fluidRow(column(class = "col_about_dt",
+                     12, align = "center",
                      DTOutput("table_opr")
                    ))),
   conditionalPanel(condition = "input.about_selection == 'def_med'",
                    
-                   fluidRow(column(
-                     11, align = "center",
+                   fluidRow(column(class = "col_about_dt",
+                     12, align = "center",
                      DTOutput("table_med")
                    ))),
   conditionalPanel(condition = "input.about_selection == 'def_variables'"),
@@ -45,8 +45,8 @@ tabPanel(
   conditionalPanel(condition = "input.about_selection == 'def_populations'"),
   conditionalPanel(condition = "input.about_selection == 'def_edu'",
                    
-                   fluidRow(column(
-                     11, align = "center",
+                   fluidRow(column(class = "col_about_dt",
+                     12, align = "center",
                      DTOutput("table_edu")
                    )
                    )
