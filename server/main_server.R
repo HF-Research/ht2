@@ -678,11 +678,18 @@ output$varChoices <- renderUI({
   # have to restrict the output that depends on this (which is nearly
   # everything) from running until a non-NULL value is supplied. This is
   # acheived by an if-statement in the validate() reactive.
-  browser()
-  outcome_subset <- shiny_dat[[outcomeCode()]]$age
+  # browser()
+  outcome_subset <- shiny_dat[[outcomeCode()]][[input$aggr_level]]
+  
   var_names <-
     grep("count", names(outcome_subset), value = TRUE)
   var_names <- var_names[!grepl("mean", var_names)]
+  
+  
+  # Remove columns with data that should not be shown to user
+  inx <- outcome_subset[1, ] == -99
+  cols_remove <- colnames(outcome_subset)[inx[1,]]
+  var_names <- var_names[!var_names %in% cols_remove]
   
   # Select the plain language terms matching the variables in data
   variable_choices <-
