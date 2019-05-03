@@ -44,6 +44,8 @@ source(ui_file_path, encoding = "UTF-8")
 
 valid_output_combos <- fread("data/valid_output_combos.txt")
 valid_output_combos[, var := paste0("count_", var)]
+variables_not_used <- c("count_n_ambulatory", "count_n_bed_days")
+
 
 # FUNCTIONS ------------------------------------------------
 formatNumbers <- function(dat, lang) {

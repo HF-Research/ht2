@@ -202,7 +202,6 @@ selectedDataVars <- reactive({
 })
 
 subsetVars <- reactive({
-  
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -675,27 +674,21 @@ output$varChoices <- renderUI({
   # Gives a dynamic button UI. The buttons change depending on the selected
   # outcome Keep variables that have "count" in their name.
   #
-  # When page loads, this UI element initally returns NULL to server fn(),
-  # then it re-runs and returns the initial value - eg. "age". This means we
-  # have to restrict the output that depends on this (which is nearly
-  # everything) from running until a non-NULL value is supplied. This is
-  # acheived by an if-statement in the validate() reactive.
-  input$aggr_level
+  # This requires an valid aggr_level input 
   req(input$aggr_level)
+  
   aggr_selected <- input$aggr_level
-  if (is.null(aggr_selected))
-    aggr_selected <- "age"
+  
+  
   outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
   
-  var_names <-
-    grep("count", names(outcome_subset), value = TRUE)
-  var_names <- var_names[!grepl("mean", var_names)]
+  
+  var_names <- valid_output_combos[outcome == outcomeCode() &
+                                     aggr_level == aggr_selected, unique(var)]
   
   
   # Remove columns with data that should not be shown to user
-  inx <- outcome_subset[1,] == -99
-  cols_remove <- colnames(outcome_subset)[inx[1, ]]
-  var_names <- var_names[!var_names %in% cols_remove]
+  var_names <- var_names[!var_names %in% variables_not_used]
   
   # Select the plain language terms matching the variables in data
   variable_choices <-
@@ -703,50 +696,104 @@ output$varChoices <- renderUI({
   var_names <- variable_choices$code_name
   names(var_names) <- variable_choices$var_dk
   
-  # If the previous selected var is available in the new outcome vars, make that
-  # the default, else the first variable
+  # This next code allows the variable chosen by the user to remain, when
+  # switching to a new outcome, while on a aggr_level not supported with the new
+  # outcome. F.x. Switch from all-CVD, 30-day mortality, kommune-level, to
+  # hjerteklapoperation. Hjerteklaoperation only supports 30-day mort at
+  # national level, so aggr_is switched to that level.
+  #
+  # If the previous selected var is not available, test to see if it is
+  # available in the previously selected aggr_level. If not to both, set
+  # selected_var to be the first variable.
   selected_var <- isolate(input$variable)
-  if (is.null(selected_var) || !selected_var %in% var_names) {
+  if (is.null(selected_var)) {
+    # If no previous selection:
     selected_var <- var_names[1]
+  } else if (!selected_var %in% var_names) {
+    # If selected var not in current selection AND...
+    aggr_selected_next <-
+      isolate(aggrButtonChoices()$selected_aggr)
+    if(is.null(aggr_selected_next)) aggr_selected_next <- "national"
+    browser()
+    var_names_2 <-
+      valid_output_combos[outcome == outcomeCode() &
+                            aggr_level == aggr_selected_next,
+                          unique(var)]
+    if (!selected_var %in% var_names_2) {
+      # ...selected var also not in set of vars attached to previously
+      # selected aggr_level:
+      selected_var <- var_names[1]
+    } else {
+      var_names <- var_names_2
+    }
   }
+  
   selectInput(
     inputId = "variable",
     label = choose_var,
     choices = var_names,
     selectize = TRUE,
     selected = selected_var
-    
   )
 })
 
-output$aggrButtonChoices <- renderUI({
+aggrButtonChoices <- reactive({
   # Dynamically chanages which aggre_level options are available depending on
   # which outcome and which variable is selected
-  # browser()
+  
   var_selected <- input$variable
-  valid_output_combos <- valid_output_combos[outcome == outcomeCode()]
+  valid_output_combos <-
+    valid_output_combos[outcome == outcomeCode()]
+  
+  # When app first starts, input$variable will be null, but need to get range of
   if (is.null(input$variable))
-    var_selected <-valid_output_combos[1, var]
+    var_selected <- valid_output_combos[1, var]
+  
   
   aggr_level_choices <-
     valid_output_combos[outcome == outcomeCode() &
                           var == var_selected, unique(aggr_level)]
+  
   # When switching between d, b, and m outcomes, this will return NULL at first calling
-  if(length(aggr_level_choices) == 0) return(NULL)
+  if (length(aggr_level_choices) == 0)
+    return(NULL)
   
   aggr_choices <- aggr_choices[name_ht %in% aggr_level_choices]
   row.names(aggr_choices) <- aggr_choices$name_dk
   button_vals <-
-    setNames(split(aggr_choices$name_ht, seq(nrow(aggr_choices))), row.names(aggr_choices))
+    setNames(split(aggr_choices$name_ht, seq(nrow(aggr_choices))),
+             row.names(aggr_choices))
   
-  radioGroupButtons(
+  
+  # If the previous selected aggr_level is available in the new outcome vars, make that
+  # the default, else the first variable
+  selected_aggr <- isolate(input$aggr_level)
+  if (is.null(selected_aggr) ||
+      !selected_aggr %in% aggr_choices$name_ht) {
+    selected_aggr <- aggr_choices$name_ht[1]
+  }
+  
+  html_output <- radioGroupButtons(
     inputId = "aggr_level",
     label = choose_aggr_lv,
     choices = button_vals,
     justified = TRUE,
-    direction = "vertical"
+    direction = "vertical",
+    selected = selected_aggr
   )
   
+  return(
+    list(
+      button_vals = button_vals,
+      selected_aggr = selected_aggr,
+      html_output = html_output
+    )
+  )
+})
+
+
+output$aggrButtonChoices <- renderUI({
+  aggrButtonChoices()$html_output
 })
 
 choiceYears <- reactive({
