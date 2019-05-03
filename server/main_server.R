@@ -128,7 +128,8 @@ outcomeCode <- reactive({
 
 prettyAggr_level <- reactive({
   # Outputs same character string that's used in the UI input field
-  names(which(aggr_choices == input$aggr_level))
+  aggr_choices[name_ht == input$aggr_level, name_dk]
+  
 })
 
 prettyVariable <- reactive({
@@ -201,6 +202,7 @@ selectedDataVars <- reactive({
 })
 
 subsetVars <- reactive({
+  
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -232,7 +234,7 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
 })
 
 
@@ -526,7 +528,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4, ])
+    return(out[group_var <= year_max - 4,])
     
   } else {
     return(out)
@@ -678,8 +680,12 @@ output$varChoices <- renderUI({
   # have to restrict the output that depends on this (which is nearly
   # everything) from running until a non-NULL value is supplied. This is
   # acheived by an if-statement in the validate() reactive.
-  # browser()
-  outcome_subset <- shiny_dat[[outcomeCode()]][[input$aggr_level]]
+  input$aggr_level
+  req(input$aggr_level)
+  aggr_selected <- input$aggr_level
+  if (is.null(aggr_selected))
+    aggr_selected <- "age"
+  outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
   
   var_names <-
     grep("count", names(outcome_subset), value = TRUE)
@@ -687,8 +693,8 @@ output$varChoices <- renderUI({
   
   
   # Remove columns with data that should not be shown to user
-  inx <- outcome_subset[1, ] == -99
-  cols_remove <- colnames(outcome_subset)[inx[1,]]
+  inx <- outcome_subset[1,] == -99
+  cols_remove <- colnames(outcome_subset)[inx[1, ]]
   var_names <- var_names[!var_names %in% cols_remove]
   
   # Select the plain language terms matching the variables in data
@@ -716,6 +722,30 @@ output$varChoices <- renderUI({
 output$aggrButtonChoices <- renderUI({
   # Dynamically chanages which aggre_level options are available depending on
   # which outcome and which variable is selected
+  # browser()
+  var_selected <- input$variable
+  valid_output_combos <- valid_output_combos[outcome == outcomeCode()]
+  if (is.null(input$variable))
+    var_selected <-valid_output_combos[1, var]
+  
+  aggr_level_choices <-
+    valid_output_combos[outcome == outcomeCode() &
+                          var == var_selected, unique(aggr_level)]
+  # When switching between d, b, and m outcomes, this will return NULL at first calling
+  if(length(aggr_level_choices) == 0) return(NULL)
+  
+  aggr_choices <- aggr_choices[name_ht %in% aggr_level_choices]
+  row.names(aggr_choices) <- aggr_choices$name_dk
+  button_vals <-
+    setNames(split(aggr_choices$name_ht, seq(nrow(aggr_choices))), row.names(aggr_choices))
+  
+  radioGroupButtons(
+    inputId = "aggr_level",
+    label = choose_aggr_lv,
+    choices = button_vals,
+    justified = TRUE,
+    direction = "vertical"
+  )
   
 })
 
@@ -809,6 +839,7 @@ observeEvent(input$aggr_level, {
 
 # DOWNLOAD BUTTONS --------------------------------------------------------
 output$downloadButton <- renderUI({
+  req(input$aggr_level)
   if (!isNational()) {
     actionBttn(inputId = "download_bar",
                label = "Hente figure",
@@ -839,6 +870,7 @@ output$downloadMapsFemale <- downloadHandler(
 # PLOT
 #
 output$d3_plot_bar <- renderSimpleD3Bar({
+  req(input$aggr_level, input$variable)
   if (validate() & input$aggr_level != "national") {
     plot_d3_bar()
   }

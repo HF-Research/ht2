@@ -32,13 +32,7 @@ tabPanel(ui_main_title,
                          column(
                            5,
                            # This UI has to change based on "outcome" & "var" choice
-                           radioGroupButtons(
-                             inputId = "aggr_level",
-                             label = choose_aggr_lv,
-                             choices = aggr_choices,
-                             justified = TRUE,
-                             direction = "vertical"
-                           )
+                           uiOutput("aggrButtonChoices")
                            
                            
                          )

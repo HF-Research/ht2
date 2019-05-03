@@ -64,13 +64,14 @@ choose_var <- enc2utf8("Vælg statistik")
 
 
 aggr_choices <-
-  list(
-    "Alder" = "age",
-    "Uddannelse" = "edu",
-    "Kommune" = "kom",
-    "Region" = "region",
-    "År" = "national"
-  )
+  data.table(name_dk = c("Alder",
+                         "Uddannelse",
+                         "Kommune",
+                         "Region",
+                         "År"),
+             name_ht = c("age","edu","kom","region","national"))
+row.names(aggr_choices) <- aggr_choices$name_dk
+
 count_rate_choices <- list("Vis rater" = 2,
                            "Vis antal" = 1)
 

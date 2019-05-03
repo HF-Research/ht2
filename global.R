@@ -35,14 +35,15 @@ if (lang == "dk") {
 # OBJECTS ------------------------------------------------------------
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)
-
-ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
-source(ui_file_path, encoding = "UTF-8")
-
 edu <- fread(file = "data/edu_description.csv")
 dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 year_max <- 2016
 
+ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
+source(ui_file_path, encoding = "UTF-8")
+
+valid_output_combos <- fread("data/valid_output_combos.txt")
+valid_output_combos[, var := paste0("count_", var)]
 
 # FUNCTIONS ------------------------------------------------
 formatNumbers <- function(dat, lang) {
