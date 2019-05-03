@@ -13,7 +13,9 @@ library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 library(mapview)
-if (is.null(suppressMessages(webshot:::find_phantom()))) { webshot::install_phantomjs() }
+if (is.null(suppressMessages(webshot:::find_phantom()))) {
+  webshot::install_phantomjs()
+}
 
 # This is a fork, because of the issue highlighted here with the master branch:
 # https://github.com/rstudio/leaflet/issues/347
@@ -39,9 +41,6 @@ source(ui_file_path, encoding = "UTF-8")
 
 edu <- fread(file = "data/edu_description.csv")
 dk_sp <- readRDS(file = "data/dk_sp_data.rds")
-diag <- fread("data/definitions_diag.csv", encoding = "UTF-8")
-opr <- fread("data/definitions_opr.csv", encoding = "UTF-8")
-med <- fread("data/definitions_med.csv", encoding = "UTF-8")
 year_max <- 2016
 
 
@@ -69,14 +68,16 @@ formatNumbers <- function(dat, lang) {
 
 # From:
 # https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
-formatSuppressedValues <- JS("
+formatSuppressedValues <- JS(
+  "
   function(data, type) {
-  
+
     if (type !== 'display') return data;
     if (data !== 0) return data;
     return '<10';
   }
-")
+"
+)
 
 makeCountDT <- function(dat, group_var, thousands_sep) {
   col_format <- c(ui_sex_levels, "Total")
@@ -86,20 +87,13 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
     rownames = FALSE,
     class = ' hover row-border',
     options = list(
-      columnDefs = list(list(
-        # Hides the "flag" column
-        visible = FALSE, targets = 0
-        
+      dom = "tB",
+      columnDefs = list(
+        list(# Hides the "flag" column
+          visible = FALSE, targets = 0),
+        list(render = formatSuppressedValues, targets = "_all")
       ),
-      list(render = formatSuppressedValues, targets = "_all")),
-      buttons = list(
-        list(
-          extend = "collection",
-          buttons = c("excel", "pdf"),
-          exportOptions = list(columns = ":visible"),
-          text = "Hente"
-        )
-      ),
+      buttons = list('pdf', 'excel'),
       initComplete = JS(
         # Table hearder background color
         "function(settings, json) {",
@@ -112,7 +106,7 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
     #                currency = "",
     #                interval = 3,
     #                mark = thousands_sep,
-                   # digits = 0) %>%
+    # digits = 0) %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
     formatStyle("flag",
@@ -120,71 +114,91 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
                 fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
 }
 
-makeRateDT <- function(dat, group_var, thousands_sep, digits, dec_mark) {
-  col_format <- c(ui_sex_levels)
-  DT::datatable(
-    data = dat,
-    extensions = 'Buttons',
-    rownames = FALSE,
-    class = 'hover row-border',
-    options = list(
-      buttons = list('csv'),
-      initComplete = JS(
-        "function(settings, json) {",
-        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-        "}"
+makeRateDT <-
+  function(dat,
+           group_var,
+           thousands_sep,
+           digits,
+           dec_mark) {
+    col_format <- c(ui_sex_levels)
+    DT::datatable(
+      data = dat,
+      extensions = 'Buttons',
+      rownames = FALSE,
+      class = 'hover row-border',
+      options = list(
+        dom = "tB",
+        buttons = list('pdf', 'excel'),
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+          "}"
+        )
       )
-    )
-  ) %>%
-    formatCurrency(col_format,
-                   currency = "",
-                   interval = 3,
-                   mark = thousands_sep,
-                   digits = digits,
-                   dec.mark = dec_mark) %>%
-    formatStyle(group_var,  backgroundColor = "#e7e7e7")
-}
+    ) %>%
+      formatCurrency(
+        col_format,
+        currency = "",
+        interval = 3,
+        mark = thousands_sep,
+        digits = digits,
+        dec.mark = dec_mark
+      ) %>%
+      formatStyle(group_var,  backgroundColor = "#e7e7e7")
+  }
 
 
 # LEAFLET MAPS -------------------------------------------------------
 pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
-makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines){
-  leaflet(options = leafletOptions(minZoom = 7,
-                                   preferCanvas = TRUE)) %>%
-    setView(lng = 10.408,
-            lat = 56.199752,
-            zoom = 7,
-    ) %>%
-    setMaxBounds(lng1 = 7.7,
-                 lat1 = 54.5,
-                 lng2 = 13.3,
-                 lat2 = 58.0) %>%
-    addPolygons(
-      data = map_data,
-      fillColor  = fill_colors,
-      weight = 1,
-      opacity = 1,
-      color = "grey",
-      fillOpacity = 0.7,
-      label = label_popup,
-      labelOptions = labelOptions(
-        style = list("font-weight" = "normal", # CSS styles
-                     padding = "3px 8px"),
-        textsize = "17px",
-        direction = "auto",
-        opacity = 1)
-    ) %>%
-    addPolylines(data = mini_map_lines, lng = ~X1, lat = ~X2,color = "grey", weight = 5)
-}
+makeLeaflet <-
+  function(map_data,
+           fill_colors,
+           label_popup,
+           mini_map_lines) {
+    leaflet(options = leafletOptions(minZoom = 7,
+                                     preferCanvas = TRUE)) %>%
+      setView(lng = 10.408,
+              lat = 56.199752,
+              zoom = 7, ) %>%
+      setMaxBounds(
+        lng1 = 7.7,
+        lat1 = 54.5,
+        lng2 = 13.3,
+        lat2 = 58.0
+      ) %>%
+      addPolygons(
+        data = map_data,
+        fillColor  = fill_colors,
+        weight = 1,
+        opacity = 1,
+        color = "grey",
+        fillOpacity = 0.7,
+        label = label_popup,
+        labelOptions = labelOptions(
+          style = list("font-weight" = "normal", # CSS styles
+                       padding = "3px 8px"),
+          textsize = "17px",
+          direction = "auto",
+          opacity = 1
+        )
+      ) %>%
+      addPolylines(
+        data = mini_map_lines,
+        lng = ~ X1,
+        lat = ~ X2,
+        color = "grey",
+        weight = 5
+      )
+  }
 
 # ABOUT PANEL ------------------------------------------------------------
 col_subset <-
   c(paste0("name_", lang),
-    "icd_simple",
-    "ambulant",
+    paste0("desc_", lang),
+    "code_simple",
     "diag_type",
     "pat_type")
-diag <- diag[, ..col_subset]
+diag <- about_dat_diag[, ..col_subset]
 colnames(diag) <- col_names_diag
 diag_DT <- DT::datatable(
   data = diag,
@@ -192,7 +206,10 @@ diag_DT <- DT::datatable(
   rownames = FALSE,
   class = 'hover row-border',
   options = list(
-    paging = FALSE, searching = FALSE, pageLength = 13,
+    paging = FALSE,
+    searching = FALSE,
+    pageLength = 13,
+    dom = "Bt",
     buttons = list('pdf'),
     initComplete = JS(
       "function(settings, json) {",
@@ -202,8 +219,11 @@ diag_DT <- DT::datatable(
   )
 )
 
-col_subset <- c(paste0("name_", lang), "icd_simple", "grep_strings")
-opr <- opr[, ..col_subset]
+col_subset <-
+  c(paste0("name_", lang),
+    paste0("desc_", lang),
+    "code_simple")
+opr <- about_dat_opr[, ..col_subset]
 colnames(opr) <- col_names_opr
 opr_DT <- DT::datatable(
   data = opr,
@@ -211,6 +231,10 @@ opr_DT <- DT::datatable(
   rownames = FALSE,
   class = 'hover row-border',
   options = list(
+    dom = "Bt",
+    paging = FALSE,
+    searching = FALSE,
+    pageLength = 13,
     buttons = list('pdf'),
     initComplete = JS(
       "function(settings, json) {",
@@ -220,8 +244,12 @@ opr_DT <- DT::datatable(
   )
 )
 
-col_subset <- c(paste0("name_", lang), "atc_simple", "grep_strings")
-med <- med[, ..col_subset]
+col_subset <-
+  c(paste0("name_", lang),
+    paste0("desc_", lang),
+    "code_simple"
+    )
+med <- about_dat_med[, ..col_subset]
 colnames(med) <- col_names_med
 med_DT <- DT::datatable(
   data = med,
@@ -229,6 +257,10 @@ med_DT <- DT::datatable(
   rownames = FALSE,
   class = 'hover row-border',
   options = list(
+    dom = "Bt",
+    paging = FALSE,
+    searching = FALSE,
+    pageLength = 13,
     buttons = list('pdf'),
     initComplete = JS(
       "function(settings, json) {",
@@ -238,7 +270,10 @@ med_DT <- DT::datatable(
   )
 )
 
-col_subset <- c(paste0("edu_name_", lang), paste0("long_desc_", lang), "code_simple")
+col_subset <-
+  c(paste0("edu_name_", lang),
+    paste0("long_desc_", lang),
+    "code_simple")
 edu <- edu[, ..col_subset]
 colnames(edu) <- col_names_edu
 edu_DT <- DT::datatable(
@@ -247,6 +282,7 @@ edu_DT <- DT::datatable(
   rownames = FALSE,
   class = 'hover row-border',
   options = list(
+    dom = "Bt",
     buttons = list('pdf'),
     initComplete = JS(
       "function(settings, json) {",
@@ -255,5 +291,3 @@ edu_DT <- DT::datatable(
     )
   )
 )
-
-

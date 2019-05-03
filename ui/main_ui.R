@@ -20,7 +20,7 @@ tabPanel(ui_main_title,
                        fluidRow(
                          column(7,
                                 # This UI has to change based on "outcome" choice
-                                fluidRow(uiOutput("varButtonChoices")),
+                                fluidRow(uiOutput("varChoices")),
                                 fluidRow(
                                   selectInput(
                                     inputId = "year",
@@ -31,6 +31,7 @@ tabPanel(ui_main_title,
                                 )),
                          column(
                            5,
+                           # This UI has to change based on "outcome" & "var" choice
                            radioGroupButtons(
                              inputId = "aggr_level",
                              label = choose_aggr_lv,
@@ -47,8 +48,6 @@ tabPanel(ui_main_title,
                profvis_ui("profiler"),
                wellPanel(
                  class = "well_description",
-                 textOutput("outcome_title"),
-                 hr(),
                  uiOutput("outcome_description"),
                  br(),
                  uiOutput("variable_desc")

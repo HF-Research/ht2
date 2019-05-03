@@ -7,7 +7,8 @@ library(data.table)
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
-outcome_descriptions <- fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8")
+outcome_descriptions <-
+  fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8")
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
   fread(file = "data/variable_ui.csv", encoding = "UTF-8")
@@ -93,6 +94,24 @@ ui_data <- "Data"
 
 # ABOUT PANEL -------------------------------------------------------------
 
+about_dat_diag <-
+  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")
+
+
+about_dat_opr <-
+  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")
+
+about_dat_med <-
+  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")
+
+
+
 ui_about_title <- "Metoder"
 about_selection <- "Vælg definition"
 about_choices <- list(
@@ -106,20 +125,21 @@ about_choices <- list(
 )
 col_names_diag <-
   c("Sygdomme",
+    "Beskrivlse",
     "ICD-kode",
-    "Ambulant",
     "Diagnose type",
     "Patient type")
 
 col_names_opr <-
   c("Sygdomme",
-    "ICD-kode",
-    "Grep string")
+    "Beskrivlse",
+    "ICD-kode")
 
 col_names_med <-
   c("Medicin type",
-    "ATC kode",
-    "Grep string")
+    "Beskrivlse",
+    "ATC kode"
+    )
 
 col_names_edu <- c("Uddannelsesniveau (kort)",
                    "Uddannelsesniveau (lang)",

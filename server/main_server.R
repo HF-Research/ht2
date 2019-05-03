@@ -8,6 +8,7 @@ callModule(profvis_server, "profiler")
 output$outcome_description <- renderUI({
   req(input$outcome)
   
+  out_title <- tags$b(input$outcome)
   out <-
     outcome_descriptions[hjertetal_code == outcomeCode(), .(desc_dk, link_dk)]
   # Add link for further reading - if link exists, otherwise just desc
@@ -16,10 +17,10 @@ output$outcome_description <- renderUI({
            target = "_blank")
   
   if (out$link_dk != "na") {
-    tagList(out$desc_dk, url)
+    tagList(out_title, out$desc_dk, url)
   }
   else {
-    tagList(out$desc_dk)
+    tagList(out_title, out$desc_dk)
   }
 })
 
@@ -259,7 +260,7 @@ outputCasesD3Line <- reactive({
         value = TRUE
       ))
   dat <- dat[, ..vars]
-  setnames(dat, c(ui_year, "female", "male")) # TODO: needs to be language agnostic
+  setnames(dat, c(ui_year, "male", "female")) # TODO: needs to be language agnostic
   
   # Column containing variable name to send to D3. TODO: send this data as
   # single data point - so change d3 widget
@@ -315,7 +316,6 @@ plot_d3_line <- reactive({
   if (isNational()) {
     sex_vars <- ui_sex_levels
     color = c("#bd6916", "#166abd")
-    
     plot_title = plotTitle()
     simpleD3Line(
       data = outputCasesD3Line(),
@@ -669,7 +669,7 @@ is5YearMortality <- reactive({
 
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
-output$varButtonChoices <- renderUI({
+output$varChoices <- renderUI({
   # Gives a dynamic button UI. The buttons change depending on the selected
   # outcome Keep variables that have "count" in their name.
   #
@@ -678,7 +678,7 @@ output$varButtonChoices <- renderUI({
   # have to restrict the output that depends on this (which is nearly
   # everything) from running until a non-NULL value is supplied. This is
   # acheived by an if-statement in the validate() reactive.
-  
+  browser()
   outcome_subset <- shiny_dat[[outcomeCode()]]$age
   var_names <-
     grep("count", names(outcome_subset), value = TRUE)
@@ -706,6 +706,11 @@ output$varButtonChoices <- renderUI({
   )
 })
 
+output$aggrButtonChoices <- renderUI({
+  # Dynamically chanages which aggre_level options are available depending on
+  # which outcome and which variable is selected
+  
+})
 
 choiceYears <- reactive({
   # The following additional if-else logic is needed to stop the year count
