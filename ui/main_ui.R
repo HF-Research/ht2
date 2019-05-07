@@ -3,57 +3,55 @@ tabPanel(ui_main_title,
          tags$head(
            tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
          ),
-         fluidRow(
-           # Column for inputs
-           column(
-             id = "col_input",
-             4,
-             wellPanel(class = "well_input",
-                       fluidRow(
-                         selectInput(
-                           inputId = "outcome",
-                           label = choose_outcome,
-                           choices = outcome_choices,
-                           selectize = TRUE
-                         )
-                       ),
-                       fluidRow(
-                         column(7,
-                                # This UI has to change based on "outcome" choice
-                                fluidRow(uiOutput("varChoices")),
-                                fluidRow(
-                                  selectInput(
-                                    inputId = "year",
-                                    label = choose_year,
-                                    choices = NULL,
-                                    selected = 2015
-                                  )
-                                )),
-                         column(
-                           5,
-                           # This UI has to change based on "outcome" & "var" choice
-                           uiOutput("aggrButtonChoices")
-                           
-                           
-                         )
-                       )),
-             # DESCRITPIONS
-             fluidRow(
-               profvis_ui("profiler"),
-               wellPanel(
-                 class = "well_description",
-                 uiOutput("outcome_description"),
-                 br(),
-                 uiOutput("variable_desc")
+        fluidRow(
+          div(class = "col-xs-12 col-sm-6 col-md-4 col-lg-3",
                  
-               )
-             )
-           ),
+                    wellPanel(class = "well_input",
+                              fluidRow(
+                                selectInput(
+                                  inputId = "outcome",
+                                  label = choose_outcome,
+                                  choices = outcome_choices,
+                                  selectize = TRUE
+                                )
+                              ),
+                              fluidRow(
+                                column(6,
+                                       # This UI has to change based on "outcome" choice
+                                       fluidRow(uiOutput("varChoices")),
+                                       fluidRow(
+                                         selectInput(
+                                           inputId = "year",
+                                           label = choose_year,
+                                           choices = NULL,
+                                           selected = 2015
+                                         )
+                                       )),
+                                column(
+                                  6,
+                                  # This UI has to change based on "outcome" & "var" choice
+                                  uiOutput("aggrButtonChoices")
+                                  
+                                  
+                                )
+                              )),
+                    # DESCRITPIONS
+                    fluidRow(
+                      profvis_ui("profiler"),
+                      wellPanel(
+                        class = "well_description",
+                        uiOutput("outcome_description"),
+                        br(),
+                        uiOutput("variable_desc")
+                        
+                      )
+                    )
+         ),
+         
            
            # RESULTS
-           column(
-             id = "col_output",
-             8,
+           
+         div(class = "col-xs-12 col-sm-6 col-md-8 col-lg-9",
              align = "right",
              tabsetPanel(
                id = "data_vis_tabs",
@@ -181,4 +179,5 @@ tabPanel(ui_main_title,
                fluidRow(br(), br())
              )
            )
-         ))
+         )
+         )

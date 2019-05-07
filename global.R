@@ -31,7 +31,7 @@ if (lang == "dk") {
   thousands_sep <- ","
   dec_mark <- "."
 }
-
+2
 # OBJECTS ------------------------------------------------------------
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)
