@@ -42,7 +42,13 @@ tabPanel(
                    ))),
   conditionalPanel(condition = "input.about_selection == 'def_variables'"),
   
-  conditionalPanel(condition = "input.about_selection == 'def_populations'"),
+  conditionalPanel(condition = "input.about_selection == 'def_populations'",
+                   fluidRow(column(class = "col_about_dt",
+                                   12, align = "center",
+                                   DTOutput("table_pop")
+                   )
+                   )
+                   ),
   conditionalPanel(condition = "input.about_selection == 'def_edu'",
                    
                    fluidRow(column(class = "col_about_dt",

@@ -51,8 +51,8 @@ plotTitle <- reactive({
 })
 
 output$rate_count_desc <- renderUI({
-  req(input$count_rates, input$variable)
-  isolate({
+  req(input$count_rates, input$variable, selectedDataVars())
+  
     if (input$count_rates == 2) {
       title_text <- tags$b(prettyVariable()[2])
       col_selection <-
@@ -69,7 +69,7 @@ output$rate_count_desc <- renderUI({
         paste0(variable_ui[code_name == selectedDataVars()[1], ..col_selection])
       tagList(title_text, desc_text)
     }
-  })
+  
 })
 
 
@@ -134,16 +134,15 @@ prettyAggr_level <- reactive({
 
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
-  req(input$variable)
-  input$variable
-  isolate({
+  req(input$variable, input$aggr_level)
+  
     data_var_name <- selectedDataVars()[1]
     grep_selection <-
       paste0("var_rate_", selectedRateType(), "_", lang)
     col_names <- colnames(variable_ui)
     col_selection <- grep(grep_selection, col_names, value = TRUE)
     c(variable_ui[code_name == data_var_name, var_dk], paste0(variable_ui[code_name == data_var_name, ..col_selection]))
-  })
+  
 })
 
 prettyVariableSingular <- reactive({

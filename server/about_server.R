@@ -21,7 +21,8 @@ output$ui_about_desc_2 <- renderText({
 })
 
 
-output$table_diag <- renderDT({diag_DT})
-output$table_opr <- renderDT({opr_DT})
-output$table_med <- renderDT({med_DT})
-output$table_edu <- renderDT({edu_DT})
+output$table_diag <- renderDT({diag_DT}, server = FALSE)
+output$table_opr <- renderDT({opr_DT}, server = FALSE)
+output$table_med <- renderDT({med_DT}, server = FALSE)
+output$table_edu <- renderDT({edu_DT}, server = FALSE)
+output$table_pop <- renderDT({pop_DT})

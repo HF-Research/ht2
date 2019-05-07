@@ -142,9 +142,13 @@ col_names_med <-
     "ATC kode"
     )
 
-col_names_edu <- c("Uddannelsesniveau (kort)",
+col_names_edu <- enc2utf8(c("Uddannelsesniveau (kort)",
                    "Uddannelsesniveau (lang)",
-                   "DISCED-15 kode")
+                   "DISCED-15 kode"))
+
+col_names_pop <- enc2utf8(
+  c("År", "Sex", "Ælder grupper", "Befolkningen")
+  )
 
 
 def_diag_title <- "Definitioner af sygdomme"
