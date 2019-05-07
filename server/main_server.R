@@ -714,7 +714,7 @@ output$varChoices <- renderUI({
     aggr_selected_next <-
       isolate(aggrButtonChoices()$selected_aggr)
     if(is.null(aggr_selected_next)) aggr_selected_next <- "national"
-    browser()
+    
     var_names_2 <-
       valid_output_combos[outcome == outcomeCode() &
                             aggr_level == aggr_selected_next,
