@@ -248,7 +248,6 @@ outputCasesData <- function() {
 
 outputCasesD3Line <- reactive({
   # Replace value.var with reactive that corresponds to the variable the user selected
-  
   dat <- dtCast()
   vars <-
     c("group_var",

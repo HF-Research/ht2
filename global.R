@@ -21,7 +21,7 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
 # https://github.com/rstudio/leaflet/issues/347
 # devtools::install_github('matthew-phelps/leaflet.minicharts')
 library(leaflet.minicharts)
-2
+
 # LANGUAGE UI ---------------------------------------------------------
 lang = "dk"
 if (lang == "dk") {
