@@ -27,14 +27,48 @@ output$outcome_description <- renderUI({
 output$variable_desc <- renderUI({
   # Append title to front of variable descr text
   
-  req(input$variable)
+  req(input$variable,
+      input$year,
+      input$outcome,
+      selectedDataVars())
+  
   isolate({
     title_text <- tags$b(prettyVariable()[1])
     
     col_selection <- paste0("desc_general_", lang)
     desc_text <-
       variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-    tagList(title_text, desc_text)
+    
+    # Some variables desc need to be different for diag, opr, and med outcomes.
+    # This statement switches between those cases.
+    replace_type_string <- switch (
+      substr(outcomeCode(), 1, 1),
+      "b" = replace_type_string_opr,
+      "d" = replace_type_string_diag,
+      "m" = replace_type_string_med
+    )
+    
+    
+    # Replace sections of variable desc that are specific for
+    # outcome/year/outcome-type
+    desc_text <-
+      gsub(
+        "REPLACE_OUTCOME",
+        tolower(input$outcome),
+        (desc_text$desc_general_dk),
+        fixed = TRUE
+        
+      )
+    desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+    
+    desc_text <-
+      gsub("REPLACE_TYPE", replace_type_string, desc_text, useBytes = TRUE)
+    
+    desc_text <-
+      gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
+    
+    tagList(title_text, (desc_text))
+    
   })
 })
 
@@ -42,33 +76,46 @@ plotTitle <- reactive({
   if (isNational()) {
     paste0(input$outcome, ": ", tolower(prettyVariable()[1]))
   } else {
-    paste0(input$outcome,
-           ": ",
-           tolower(prettyVariable()[1]),
-           ", ",
-           input$year)
+    if (input$aggr_level == "edu") {
+      paste0(
+        input$outcome,
+        ": ",
+        tolower(prettyVariable()[1]),
+        " (",
+        ui_edu_age_range,
+        "), ",
+        input$year
+      )
+    } else {
+      paste0(input$outcome,
+             ": ",
+             tolower(prettyVariable()[1]),
+             ", ",
+             input$year)
+    }
+    
   }
 })
 
 output$rate_count_desc <- renderUI({
   req(input$count_rates, input$variable, selectedDataVars())
   
-    if (input$count_rates == 2) {
-      title_text <- tags$b(prettyVariable()[2])
-      col_selection <-
-        paste0("desc_", selectedRateType(), "_", lang)
-      desc_text <-
-        variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-      tagList(title_text, desc_text)
-    } else {
-      title_text <-
-        tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
-      
-      col_selection <- paste0("desc_", "count", "_", lang)
-      desc_text <-
-        paste0(variable_ui[code_name == selectedDataVars()[1], ..col_selection])
-      tagList(title_text, desc_text)
-    }
+  if (input$count_rates == 2) {
+    title_text <- tags$b(prettyVariable()[2])
+    col_selection <-
+      paste0("desc_", selectedRateType(), "_", lang)
+    desc_text <-
+      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
+    tagList(title_text, desc_text)
+  } else {
+    title_text <-
+      tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
+    
+    col_selection <- paste0("desc_", "count", "_", lang)
+    desc_text <-
+      paste0(variable_ui[code_name == selectedDataVars()[1], ..col_selection])
+    tagList(title_text, desc_text)
+  }
   
 })
 
@@ -136,12 +183,12 @@ prettyVariable <- reactive({
   # Outputs character string formatted for user.
   req(input$variable, input$aggr_level)
   
-    data_var_name <- selectedDataVars()[1]
-    grep_selection <-
-      paste0("var_rate_", selectedRateType(), "_", lang)
-    col_names <- colnames(variable_ui)
-    col_selection <- grep(grep_selection, col_names, value = TRUE)
-    c(variable_ui[code_name == data_var_name, var_dk], paste0(variable_ui[code_name == data_var_name, ..col_selection]))
+  data_var_name <- selectedDataVars()[1]
+  grep_selection <-
+    paste0("var_rate_", selectedRateType(), "_", lang)
+  col_names <- colnames(variable_ui)
+  col_selection <- grep(grep_selection, col_names, value = TRUE)
+  c(variable_ui[code_name == data_var_name, var_dk], paste0(variable_ui[code_name == data_var_name, ..col_selection]))
   
 })
 
@@ -672,7 +719,7 @@ output$varChoices <- renderUI({
   # Gives a dynamic button UI. The buttons change depending on the selected
   # outcome Keep variables that have "count" in their name.
   #
-  # This requires an valid aggr_level input 
+  # This requires an valid aggr_level input
   req(input$aggr_level)
   
   aggr_selected <- input$aggr_level
@@ -711,7 +758,8 @@ output$varChoices <- renderUI({
     # If selected var not in current selection AND...
     aggr_selected_next <-
       isolate(aggrButtonChoices()$selected_aggr)
-    if(is.null(aggr_selected_next)) aggr_selected_next <- "national"
+    if (is.null(aggr_selected_next))
+      aggr_selected_next <- "national"
     
     var_names_2 <-
       valid_output_combos[outcome == outcomeCode() &

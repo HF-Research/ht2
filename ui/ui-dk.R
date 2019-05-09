@@ -87,6 +87,12 @@ ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andele")
+ui_edu_age_range <- "35 - 84 årige"
+
+# Strings to place inside variable descriptions
+replace_type_string_opr <- "receiving"
+replace_type_string_diag <- "being diagnosed with"
+replace_type_string_med <- "receiving"
 
 # Tab names
 ui_map <- "Kort"
