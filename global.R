@@ -12,7 +12,7 @@ library(manipulateWidget)
 library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
-library(mapview)
+# library(mapview)
 if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
 }
@@ -118,6 +118,45 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
                 fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
 }
 
+
+makeCountKomDT <- function(dat, group_var, thousands_sep) {
+  col_format <- c(ui_sex_levels, "Total")
+  DT::datatable(
+    data = dat,
+    extensions = 'Buttons',
+    rownames = FALSE,
+    class = ' hover row-border',
+    options = list(
+      lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
+      pageLength = 15,
+      dom = "lftBsp",
+      columnDefs = list(
+        list(# Hides the "flag" column
+          visible = FALSE, targets = 0),
+        list(render = formatSuppressedValues, targets = "_all")
+      ),
+      buttons = list('pdf', 'excel'),
+      initComplete = JS(
+        # Table hearder background color
+        "function(settings, json) {",
+        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+        "}"
+      )
+    )
+  ) %>%
+    # formatCurrency(col_format,
+    #                currency = "",
+    #                interval = 3,
+    #                mark = thousands_sep,
+    # digits = 0) %>%
+    formatStyle('Total',  fontWeight = 'bold') %>%
+    formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
+    formatStyle("flag",
+                target = "row",
+                fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
+}
+
+
 makeRateDT <-
   function(dat,
            group_var,
@@ -132,6 +171,41 @@ makeRateDT <-
       class = 'hover row-border',
       options = list(
         dom = "tB",
+        buttons = list('pdf', 'excel'),
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+          "}"
+        )
+      )
+    ) %>%
+      formatCurrency(
+        col_format,
+        currency = "",
+        interval = 3,
+        mark = thousands_sep,
+        digits = digits,
+        dec.mark = dec_mark
+      ) %>%
+      formatStyle(group_var,  backgroundColor = "#e7e7e7")
+  }
+
+makeRateKomDT <-
+  function(dat,
+           group_var,
+           thousands_sep,
+           digits,
+           dec_mark) {
+    col_format <- c(ui_sex_levels)
+    DT::datatable(
+      data = dat,
+      extensions = 'Buttons',
+      rownames = FALSE,
+      class = 'hover row-border',
+      options = list(
+        lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
+        pageLength = 15,
+        dom = "lftBp",
         buttons = list('pdf', 'excel'),
         initComplete = JS(
           "function(settings, json) {",
@@ -228,6 +302,7 @@ col_subset <-
     "diag_type",
     "pat_type")
 diag <- about_dat_diag[, ..col_subset]
+colnames(diag) <- col_names_diag
 diag_DT <- makeAboutTables(diag, col_names_diag)
 
 col_subset <-
@@ -263,7 +338,7 @@ pop_DT <- DT::datatable(
   class = ' hover row-border',
   selection = c("multiple"),
   options = list(
-    lengthMenu = list(c(25, 50, -1), c('25', '50', 'All')),
+    lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
     pageLength = 15,
     dom = "Blftp",
     buttons = list('pdf', 'excel'),

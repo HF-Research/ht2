@@ -24,45 +24,53 @@ output$outcome_description <- renderUI({
   }
 })
 
+
+# Some variables desc need to be different for diag, opr, and med outcomes.
+# This statement switches between those cases.
+replaceTypeString <- reactive({
+  switch(
+    substr(outcomeCode(), 1, 1),
+    "b" = replace_type_string_opr,
+    "d" = replace_type_string_diag,
+    "m" = replace_type_string_med
+  )
+})
+
+replaceOutcomeString <- reactive({
+  replace_outcome_string <- input$outcome
+  substr(replace_outcome_string, 1, 1) <-
+    tolower(substr(replace_outcome_string, 1, 1))
+  replace_outcome_string
+})
+
 output$variable_desc <- renderUI({
-  # Append title to front of variable descr text
-  
   req(input$variable,
       input$year,
       input$outcome,
       selectedDataVars())
   
   isolate({
+    # Append title to front of variable descr text
     title_text <- tags$b(prettyVariable()[1])
     
     col_selection <- paste0("desc_general_", lang)
     desc_text <-
       variable_ui[code_name == selectedDataVars()[1], ..col_selection]
     
-    # Some variables desc need to be different for diag, opr, and med outcomes.
-    # This statement switches between those cases.
-    replace_type_string <- switch (
-      substr(outcomeCode(), 1, 1),
-      "b" = replace_type_string_opr,
-      "d" = replace_type_string_diag,
-      "m" = replace_type_string_med
-    )
-    
-    
     # Replace sections of variable desc that are specific for
     # outcome/year/outcome-type
     desc_text <-
       gsub(
         "REPLACE_OUTCOME",
-        tolower(input$outcome),
+        replaceOutcomeString(),
         (desc_text$desc_general_dk),
         fixed = TRUE
-        
       )
+    
     desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
     
     desc_text <-
-      gsub("REPLACE_TYPE", replace_type_string, desc_text, useBytes = TRUE)
+      gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
     
     desc_text <-
       gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
@@ -71,6 +79,57 @@ output$variable_desc <- renderUI({
     
   })
 })
+
+
+
+output$rate_count_desc <- renderUI({
+  req(input$count_rates, input$variable, selectedDataVars())
+  
+  
+  if (input$count_rates == 2) {
+    # For rates
+    title_text <- tags$b(prettyVariable()[2])
+    col_selection <-
+      paste0("desc_", selectedRateType(), "_", lang)
+    desc_text <-
+      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
+    
+    desc_text <-
+      gsub("REPLACE_OUTCOME",
+           replaceOutcomeString(),
+           desc_text,
+           fixed = TRUE)
+    desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+    desc_text <-
+      gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
+    desc_text <-
+      gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
+    tagList(title_text, desc_text)
+  } else {
+    # For counts
+    title_text <-
+      tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
+    
+    col_selection <- paste0("desc_", "count", "_", lang)
+    desc_text <-
+      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
+    desc_text <-
+      gsub("REPLACE_OUTCOME",
+           replaceOutcomeString(),
+           desc_text,
+           fixed = TRUE)
+    desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+    desc_text <-
+      gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
+    desc_text <-
+      gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
+    
+    tagList(title_text, desc_text)
+  }
+  
+})
+
+
 
 plotTitle <- reactive({
   if (isNational()) {
@@ -97,27 +156,6 @@ plotTitle <- reactive({
   }
 })
 
-output$rate_count_desc <- renderUI({
-  req(input$count_rates, input$variable, selectedDataVars())
-  
-  if (input$count_rates == 2) {
-    title_text <- tags$b(prettyVariable()[2])
-    col_selection <-
-      paste0("desc_", selectedRateType(), "_", lang)
-    desc_text <-
-      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-    tagList(title_text, desc_text)
-  } else {
-    title_text <-
-      tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
-    
-    col_selection <- paste0("desc_", "count", "_", lang)
-    desc_text <-
-      paste0(variable_ui[code_name == selectedDataVars()[1], ..col_selection])
-    tagList(title_text, desc_text)
-  }
-  
-})
 
 
 # Titles
@@ -279,7 +317,7 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
 })
 
 
@@ -490,12 +528,13 @@ combinedMaps <- reactive({
   
   # Female map
   map_data <-  mapData()$female
+  
   fill_colors <-
     ~ pal(map_data@data[[prettyVariableSingular()]])
   popup <- paste0(
     prettyAggr_level(),
     ": <strong>",
-    map_data@data[["name_dk"]],
+    map_data@data[[prettyAggr_level()]],
     "</strong><br><br>",
     map_data@data[[prettyVariableSingular()]]
   ) %>%
@@ -572,7 +611,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4,])
+    return(out[group_var <= year_max - 4, ])
     
   } else {
     return(out)
@@ -626,10 +665,15 @@ outputCountDTTable <- reactive({
   col_names <-
     c(col_names[length(col_names)], col_names[-length(col_names)])
   setcolorder(dat, neworder = col_names)
-  
-  makeCountDT(dat,
-              group_var = prettyAggr_level(),
-              thousands_sep = thousands_sep)
+  if (input$aggr_level == "kom") {
+    makeCountKomDT(dat,
+                   group_var = prettyAggr_level(),
+                   thousands_sep = thousands_sep)
+  } else {
+    makeCountDT(dat,
+                group_var = prettyAggr_level(),
+                thousands_sep = thousands_sep)
+  }
 })
 
 outputRateDTTable <- reactive({
@@ -660,13 +704,23 @@ outputRateDTTable <- reactive({
     new = c(prettyAggr_level(), ui_sex_levels)
   )
   # colnames(dat) <- c(group_var, ui_sex_levels)
-  makeRateDT(
-    dat = dat,
-    group_var = prettyAggr_level(),
-    thousands_sep = thousands_sep,
-    digits = digits,
-    dec_mark = dec_mark
-  )
+  if (input$aggr_level == "kom") {
+    makeRateKomDT(
+      dat = dat,
+      group_var = prettyAggr_level(),
+      thousands_sep = thousands_sep,
+      digits = digits,
+      dec_mark = dec_mark
+    )
+  } else {
+    makeRateDT(
+      dat = dat,
+      group_var = prettyAggr_level(),
+      thousands_sep = thousands_sep,
+      digits = digits,
+      dec_mark = dec_mark
+    )
+  }
   
 })
 
@@ -949,13 +1003,13 @@ map <- reactiveValues(dat = 0)
 output$downloadMapsMale <- downloadHandler(
   filename = "map_male.png",
   content = function(file) {
-    mapshot(map$map_m_legend, file = file, cliprect = "viewport")
+    mapview::mapshot(map$map_m_legend, file = file, cliprect = "viewport")
   }
 )
 output$downloadMapsFemale <- downloadHandler(
   filename = "map_female.png",
   content = function(file) {
-    mapshot(map$map_f, file = file, cliprect = "viewport")
+    mapview::mapshot(map$map_f, file = file, cliprect = "viewport")
   }
 )
 # RENDER FUNCTIONS --------------------------------------------------------
