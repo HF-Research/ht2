@@ -37,11 +37,25 @@ replaceTypeString <- reactive({
 })
 
 replaceOutcomeString <- reactive({
+  
   replace_outcome_string <- input$outcome
+  # Lowercase first character only (keeps abbreviations in caps)
   substr(replace_outcome_string, 1, 1) <-
     tolower(substr(replace_outcome_string, 1, 1))
   replace_outcome_string
 })
+
+replaceAllCVDString <- function(replace_outcome_string){
+  # Replace when All heart diseases
+  gsub("alle hjerte-kar-sygdomme", replace_allCVD_string,  replace_outcome_string)
+}
+
+
+replaceAggrLevelString <- reactive({
+  aggr_choices[name_ht == input$aggr_level, tolower(name_dk_long)]
+})
+
+
 
 output$variable_desc <- renderUI({
   req(input$variable,
@@ -59,6 +73,7 @@ output$variable_desc <- renderUI({
     
     # Replace sections of variable desc that are specific for
     # outcome/year/outcome-type
+  
     desc_text <-
       gsub(
         "REPLACE_OUTCOME",
@@ -66,8 +81,12 @@ output$variable_desc <- renderUI({
         (desc_text$desc_general_dk),
         fixed = TRUE
       )
+    # For some reason, some danish characters encoding is messed up after the
+    # gsub fn(). This fixes that
     
     desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+    desc_text <- replaceAllCVDString(desc_text)
+    
     
     desc_text <-
       gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
@@ -99,7 +118,16 @@ output$rate_count_desc <- renderUI({
            replaceOutcomeString(),
            desc_text,
            fixed = TRUE)
+    
+    desc_text <-
+      gsub("REPLACE_AGGR",
+           replaceAggrLevelString(),
+           desc_text,
+           fixed = TRUE)
+    
+    # Fix Danish letters
     desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+    
     desc_text <-
       gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
     desc_text <-
@@ -118,7 +146,14 @@ output$rate_count_desc <- renderUI({
            replaceOutcomeString(),
            desc_text,
            fixed = TRUE)
+    
+    desc_text <-
+      gsub("REPLACE_AGGR",
+           replaceAggrLevelString(),
+           desc_text,
+           fixed = TRUE)
     desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+    
     desc_text <-
       gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
     desc_text <-
@@ -286,6 +321,7 @@ selectedDataVars <- reactive({
 })
 
 subsetVars <- reactive({
+  
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -632,7 +668,7 @@ outputCountDTTable <- reactive({
   colnames(dat) <- c("group_var", "male", "female")
   # Calculate margins
   dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
-  if (input$aggr_level == "age") {
+  if (input$aggr_level != "national") {
     # Only calculate bottom margins for "age" - other aggr levels don't include
     # full data
     totals <-
@@ -657,7 +693,7 @@ outputCountDTTable <- reactive({
   
   # Flag last row so can be targeted for formatting
   dat[, flag := 0]
-  if (input$aggr_level == "age")
+  if (input$aggr_level != "national")
     dat[nrow(dat), flag := 1]
   # Make sure "flag" variable is always first column, so we can
   # reference by col index in formatting fn()
@@ -1003,13 +1039,13 @@ map <- reactiveValues(dat = 0)
 output$downloadMapsMale <- downloadHandler(
   filename = "map_male.png",
   content = function(file) {
-    mapview::mapshot(map$map_m_legend, file = file, cliprect = "viewport")
+    mapshot(map$map_m_legend, file = file, cliprect = "viewport")
   }
 )
 output$downloadMapsFemale <- downloadHandler(
   filename = "map_female.png",
   content = function(file) {
-    mapview::mapshot(map$map_f, file = file, cliprect = "viewport")
+    mapshot(map$map_f, file = file, cliprect = "viewport")
   }
 )
 # RENDER FUNCTIONS --------------------------------------------------------

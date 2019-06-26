@@ -20,7 +20,17 @@ pop[, range(count_diff)]
 pop[, range(diff_proportion)]
 
 pop[pop[, which.max(abs(count_diff))]]
+pop[pop[, which.max(abs(diff_proportion))]]
 head(pop[sex == "female"], 75)
 head(pop[sex == "male"], 75)
 hist(pop[, count_diff])
 hist(pop[, diff_proportion])
+
+
+# Sum over age and sex for each year
+pop_year <- pop[, .(count.ref = sum(count.ref), count.ht = sum(count.ht)), by = year]
+pop_year[, count.diff := count.ht - count.ref]
+pop_year[, diff.proportion := (count.diff / count.ref) * 100]
+diff(pop_year$diff.proportion)
+pop_year[, range(diff.proportion)]
+p

@@ -135,10 +135,11 @@ l2$name_dk
 # Delete Christiansoe polygon
 l2 <- l2[l2$name_dk != "Christiansø", ]
 l2$name_dk
+
 # Move Bornholm
 bornholm <- l2 %>% filter(name_dk == "Bornholm")
 b.geo <- st_geometry(bornholm) # Subset geometry of of object
-b.geo <- b.geo + c(-3.2, 1.88) # Move object
+b.geo <- b.geo + c(-2.6, 1.35) # Move object
 st_geometry(bornholm) <- b.geo # Re-assign geometry to object
 
 # Replace bornholm in main sf object
@@ -169,19 +170,20 @@ l2$region <- NULL
 
 # mini-map lines
 #
-x_min <- 11.40
-x_max <- 12.0
-y_min <- 56.82
-y_max <- 57.2
+x_min <- 12.03
+x_max <- 12.63
+y_min <- 56.31
+y_max <- 56.68
 
 
 bottom_right <- c(x_max, y_min)
 bottom_left <- c(x_min, y_min)
 top_left <- c(x_min, y_max)
+top_right <- c(x_max, y_max)
 mini_map_lines <-
-  data.frame(rbind(bottom_right, bottom_left, top_left))
+  data.frame(rbind(bottom_right, bottom_left, top_left, top_right, bottom_right))
 mini_map_lines$name <- row.names(mini_map_lines)
-
+# leaflet() %>% addPolygons(data = l1) %>% addPolylines(data = mini_map_lines, lng = ~ X1, lat = ~ X2)
 # Convert to sp obj for performance with leaflet
 l1 <- as(l1, "Spatial")
 l2 <- as(l2, "Spatial")
@@ -189,7 +191,7 @@ l2 <- as(l2, "Spatial")
 l1 <- rmapshaper::ms_simplify(l1)
 l2 <- rmapshaper::ms_simplify(l2)
 
-# leaflet() %>% addPolygons(data = l1)
+
 
 dk_sp_data <- list(l1 = l1,
                    l2 = l2,

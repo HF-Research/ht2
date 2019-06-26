@@ -11,7 +11,7 @@ outcome_descriptions <-
   fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8")
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
-  fread(file = "data/variable_ui.csv", encoding = "UTF-8")
+  fread(file = "data/variable_ui.csv", encoding = "UTF-8", header = TRUE)
 ui_about_text <-
   fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 outcome_descriptions <-
@@ -55,6 +55,7 @@ outcome_choices <- c(list(
   "Medicin" = enc2utf8(outcome_names_med$name_dk)
 ))
 
+
 dropdown_tooltip = enc2utf8("Click to choose data")
 choose_outcome <- enc2utf8("Vælge sygdome eller behandling:")
 # choose_theme <- enc2utf8("Vælge emne")
@@ -68,6 +69,11 @@ aggr_choices <-
                          "Uddannelse",
                          "Kommune",
                          "Region",
+                         "År"),
+             name_dk_long = c("Aldersgruppe",
+                         "Uddannelsesgruppe",
+                         "Kommune",
+                         "Regioner",
                          "År"),
              name_ht = c("age","edu","kom","region","national"))
 row.names(aggr_choices) <- aggr_choices$name_dk
@@ -86,13 +92,14 @@ ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
 ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
-ui_percent <- enc2utf8("andele")
+ui_percent <- enc2utf8("andel")
 ui_edu_age_range <- "35 - 84 årige"
 
 # Strings to place inside variable descriptions
-replace_type_string_opr <- "receiving"
-replace_type_string_diag <- "being diagnosed with"
-replace_type_string_med <- "receiving"
+replace_type_string_opr <- "fik foretaget en"
+replace_type_string_diag <- "blev diagnosticeret med"
+replace_type_string_med <- "fik udskrevet"
+replace_allCVD_string <- "en hjerte-kar-sygdom"
 
 # Tab names
 ui_map <- "Kort"
