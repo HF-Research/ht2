@@ -7,10 +7,10 @@ library(shinyWidgets)
 library(data.table)
 library(shinyBS)
 library(shinyjs)
+# library(sp)
 library(leaflet)
 library(manipulateWidget)
 library(shinycssloaders)
-library(sp)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 # library(mapview)
@@ -228,7 +228,7 @@ makeRateKomDT <-
 
 
 # LEAFLET MAPS -------------------------------------------------------
-pal <- colorBin("YlOrRd", NULL, bins = 5, reverse = FALSE)
+
 makeLeaflet <-
   function(map_data,
            fill_colors,

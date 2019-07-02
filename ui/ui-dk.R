@@ -73,7 +73,7 @@ aggr_choices <-
              name_dk_long = c("Aldersgruppe",
                          "Uddannelsesgruppe",
                          "Kommune",
-                         "Regioner",
+                         "Region",
                          "År"),
              name_ht = c("age","edu","kom","region","national"))
 row.names(aggr_choices) <- aggr_choices$name_dk

@@ -37,7 +37,6 @@ replaceTypeString <- reactive({
 })
 
 replaceOutcomeString <- reactive({
-  
   replace_outcome_string <- input$outcome
   # Lowercase first character only (keeps abbreviations in caps)
   substr(replace_outcome_string, 1, 1) <-
@@ -45,9 +44,11 @@ replaceOutcomeString <- reactive({
   replace_outcome_string
 })
 
-replaceAllCVDString <- function(replace_outcome_string){
+replaceAllCVDString <- function(replace_outcome_string) {
   # Replace when All heart diseases
-  gsub("alle hjerte-kar-sygdomme", replace_allCVD_string,  replace_outcome_string)
+  gsub("alle hjerte-kar-sygdomme",
+       replace_allCVD_string,
+       replace_outcome_string)
 }
 
 
@@ -73,7 +74,7 @@ output$variable_desc <- renderUI({
     
     # Replace sections of variable desc that are specific for
     # outcome/year/outcome-type
-  
+    
     desc_text <-
       gsub(
         "REPLACE_OUTCOME",
@@ -321,7 +322,6 @@ selectedDataVars <- reactive({
 })
 
 subsetVars <- reactive({
-  
   dat <- subsetOutcome()
   
   # Switch between RAW and MOVNIG AVG data
@@ -353,7 +353,7 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
 })
 
 
@@ -511,7 +511,7 @@ combinedMaps <- reactive({
     rbind(mapData()$male@data, mapData()$female@data)[[prettyVariableSingular()]]
   
   if (input$count_rates == 2) {
-    pal <- colorQuantile("YlOrRd", fill_data, n = 5, reverse = FALSE)
+    pal <- colorQuantile("YlOrRd", fill_data, n = 4, reverse = FALSE)
     if (selectPercentOrRate()) {
       labFormatter <- function(type, cuts) {
         n = length(cuts)
@@ -528,7 +528,7 @@ combinedMaps <- reactive({
   } else {
     pal <- colorBin("YlOrRd",
                     fill_data,
-                    bins = 5,
+                    bins = 4,
                     reverse = FALSE)
     labFormatter <- function(type, cuts) {
       n = length(cuts)
@@ -539,21 +539,47 @@ combinedMaps <- reactive({
   
   
   legend_title <- gsub("  ", "<br>", prettyVariableSingular())
-  
+  popup_var_title_1 <- gsub("  .*", "", prettyVariableSingular())
+  popup_var_title_2 <- gsub(".*  ", "", prettyVariableSingular())
   
   # Male map
   map_data <-  mapData()$male
   fill_colors <-
     ~ pal(map_data@data[[prettyVariableSingular()]])
-  popup <- paste0(
-    prettyAggr_level(),
-    ": <strong>",
-    map_data@data[[prettyAggr_level()]],
-    "</strong><br><br>",
-    map_data@data[[prettyVariableSingular()]]
-  ) %>%
-    lapply(htmltools::HTML)
   
+  makeMapPopup <- function(geo_name, var_title1, var_title2, data) {
+    if (var_title1 == var_title2) {
+      out <- paste0(
+        "<strong><center>",
+        geo_name,
+        "</strong></center>",
+        var_title1,
+        ': <br><strong><font size="+1">',
+        data,
+        "</strong></font>"
+      )
+    } else {
+      out <- paste0(
+        "<strong><center>",
+        geo_name,
+        "</strong></center>",
+        var_title1,
+        "<br>",
+        var_title2,
+        ': <br><strong><font size="+1">',
+        data,
+        "</strong></font>"
+      )
+    }
+    lapply(out, htmltools::HTML)
+  }
+  popup <-
+    makeMapPopup(
+      geo_name = map_data@data[[prettyAggr_level()]],
+      var_title1 = popup_var_title_1,
+      var_title2 = popup_var_title_2,
+      map_data@data[[prettyVariableSingular()]]
+    )
   
   map_m <- makeLeaflet(
     map_data = map_data,
@@ -567,14 +593,13 @@ combinedMaps <- reactive({
   
   fill_colors <-
     ~ pal(map_data@data[[prettyVariableSingular()]])
-  popup <- paste0(
-    prettyAggr_level(),
-    ": <strong>",
-    map_data@data[[prettyAggr_level()]],
-    "</strong><br><br>",
-    map_data@data[[prettyVariableSingular()]]
-  ) %>%
-    lapply(htmltools::HTML)
+  popup <-
+    makeMapPopup(
+      geo_name = map_data@data[[prettyAggr_level()]],
+      var_title1 = popup_var_title_1,
+      var_title2 = popup_var_title_2,
+      map_data@data[[prettyVariableSingular()]]
+    )
   
   
   map_f <- makeLeaflet(
@@ -647,7 +672,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4, ])
+    return(out[group_var <= year_max - 4,])
     
   } else {
     return(out)
