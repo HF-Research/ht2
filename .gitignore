@@ -3,4 +3,5 @@
 !*.rmd
 !*.txt
 !*.js
+!*.css
 .Rproj.user

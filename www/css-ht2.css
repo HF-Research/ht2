@@ -1,0 +1,443 @@
+/*Copied from bootstrop page */
+
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");
+:root {
+  --blue: #008cba;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #F04124;
+  --orange: #fd7e14;
+  --yellow: #E99002;
+  --green: #43ac6a;
+  --teal: #20c997;
+  --cyan: #5bc0de;
+  --white: #fff;
+  --gray: #888;
+  --gray-dark: #333;
+  --primary: #008cba;
+  --secondary: #eee;
+  --success: #43ac6a;
+  --info: #5bc0de;
+  --warning: #E99002;
+  --danger: #F04124;
+  --light: #eee;
+  --dark: #222;
+  --bleeding: #B73338;
+  --btnColor: #166abd;
+  --btnBorder1: #e2e2e2
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #222;
+  text-align: left;
+  background-color: #fff;
+}
+
+button {
+  border-radius: 0;
+}
+
+button:focus {
+  outline: 1px dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+}
+
+input,
+button,
+select,
+optgroup,
+textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button,
+input {
+  overflow: visible;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  padding: 0;
+  border-style: none;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/*END COPY FROM BOOTSTRAP */
+
+/* Override bootstrap style that forces input well to wrap sub columns too early */
+
+
+label{
+  font-size:1.5rem;
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/* Dropdown styling */
+.selectize-dropdown-content{
+  max-height: 400px;
+}
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  
+}
+
+
+/* BUTTON coloring */
+.btn.radiobtn.btn-default.active {
+  background-color:var(--btnColor) ;
+  border-color:#337ab7;
+  font-weight:bold;
+  color:white;
+  font-size: 1.5rem;
+  padding-right:5px;
+  padding-left:5px;
+}
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: #efefef;
+  border-color: #e2e2e2;
+  color:black;
+}
+
+.btn.radiobtn.btn-default:hover {
+  background-color: #bad5f1;
+  border-color: #bad5f1;
+  color:black;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding-right:5px;
+  padding-left:5px;
+}
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:#337ab7;
+  border-color:#337ab7;
+  font-weight:bold;
+  color:white;
+  font-size: 1.5rem;
+  
+}
+
+
+/* DT Buttom styling */
+.dt-button.buttons-excel.buttons-html5{
+  margin-top:7px;
+  background-color: #efefef;
+  border-color: #e2e2e2;
+}
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #efefef;
+  border-color: #e2e2e2;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+ background-color: #bad5f1;
+  border-color: #bad5f1;
+  
+}
+
+
+
+/* Tooltip styling*/
+#tooltipBar {	
+    position: absolute;			
+    text-align: center;			
+    
+    font: 16px sans-serif;		
+    
+    border-radius: 8px;
+    pointer-events: none;	
+}
+
+#tooltipLine {	
+    position: absolute;			
+    text-align: left;			;				
+    font: 16px sans-serif;	
+    pointer-events: none;
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#ccc;
+}
+
+td {
+ text-align:left
+}
+
+.mouseSvg {
+  opacity: 0.2;
+  fill: white;
+}
+
+.mouseSvgBarChart {
+  opacity: 0.0;
+  fill: white;
+}
+
+.guide {
+  stroke-width: 1;
+  stroke: black;
+}
+
+
+#container {
+  position: relative;
+}
+
+.popover {
+			pointer-events: none;
+			background: lightsteelblue;
+}
+
+
+
+/* OUTOUTS */
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+ min-width: 376px;
+}
+
+
+/*PLOT FONTS*/
+.plot_text{
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.output_titles {  
+ font-size: 150%;
+}
+
+.axis{
+  font-size: 90%;
+}z
+
+.axisTitle{
+  font-size: 110%;
+}
+
+
+/* MAPS */
+
+.leaflet-container { 
+  background:white !important;
+}
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+#map_title_male{
+font-size: 1.6rem;
+font-weight: 550;
+}
+
+#map_title_female{
+font-size: 1.6rem;
+font-weight: 550;
+}
+
+/*Sizes of several wells and containers*/
+.container-fluid {
+  margin:auto;
+  
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+.row{
+  margin-left:-10px;
+  margin-right:-10px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+
+}
+.explanitory_text{
+  font-size:1.6rem;
+}
+.ref{
+  font-size: 1.2rem;}
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+
+/* TABS & NAPAGEs */
+
+.nav.navbar-nav > li > a[data-value=Apopleski]{
+  font-size: 1.4rem;
+  color: white;
+  background-color: #1976D2;
+
+}
+
+.nav.navbar-nav > li[class=active] > a[data-value=Apopleski]{
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  background-color: #1976D2;
+  -moz-box-shadow: inset -5px 5px 11px -6px #000000;
+  -webkit-box-shadow: inset -5px 5px 11px -6px #000000;
+  -box-shadow:inset -5px 5px 11px -6px #000000;
+}
+
+.nav.navbar-nav > li > a[data-value=Blødning]{
+  font-size: 1.4rem;
+  color: white;
+  background-color: #B73338;
+}
+
+.nav.navbar-nav > li[class=active] > a[data-value=Blødning]{
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  background-color: var(--bleeding);
+  -moz-box-shadow: inset -5px 5px 11px -6px #000000;
+  -webkit-box-shadow: inset -5px 5px 11px -6px #000000;
+  -box-shadow:inset -5px 5px 11px -6px #000000;
+}
+
+ .tabbable > .nav > li[class=active] >a {
+   color:black;
+   font-size: 1.3rem;
+
+ }
+.tabbable > .nav > li > a {
+  background-color: white;
+  font-size: 1.2rem;
+}
+
+
+
+#col_input {
+  
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+#col_output {
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 0px;
+}
+
+#col_description {
+  min-height: 380px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+#col_rate_count {
+}
+  
+#outcome_title {
+ font-size: 2.4rem; 
+}
+
+#variable_title {  
+ font-size: 1.9rem; 
+}
+
+
+
+/*ABOUT PANEL*/
+.col_about_dt {
+max-width:1260px;
+}
+
+.about_well {
+  max-width: 200px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
