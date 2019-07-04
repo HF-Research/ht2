@@ -101,66 +101,90 @@ output$variable_desc <- renderUI({
 })
 
 
+rate_desc <- function(){
+  # For rates
+  
+  title_text <- tags$b(prettyVariable()[2])
+  col_selection <-
+    paste0("desc_", selectedRateType(), "_", lang)
+  desc_text <-
+    variable_ui[code_name == selectedDataVars()[1], ..col_selection]
+  
+  desc_text <-
+    gsub("REPLACE_OUTCOME",
+         replaceOutcomeString(),
+         desc_text,
+         fixed = TRUE)
+  
+  desc_text <-
+    gsub("REPLACE_AGGR",
+         replaceAggrLevelString(),
+         desc_text,
+         fixed = TRUE)
+  
+  # Fix Danish letters
+  desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+  
+  desc_text <-
+    gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
+  desc_text <-
+    gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
+  tagList(title_text, desc_text)
+}
+
+
+count_desc <- function(){
+  # For counts
+  title_text <-
+    tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
+  
+  col_selection <- paste0("desc_", "count", "_", lang)
+  desc_text <-
+    variable_ui[code_name == selectedDataVars()[1], ..col_selection]
+  desc_text <-
+    gsub("REPLACE_OUTCOME",
+         replaceOutcomeString(),
+         desc_text,
+         fixed = TRUE)
+  
+  desc_text <-
+    gsub("REPLACE_AGGR",
+         replaceAggrLevelString(),
+         desc_text,
+         fixed = TRUE)
+  desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
+  
+  desc_text <-
+    gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
+  desc_text <-
+    gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
+  
+  tagList(title_text, desc_text)
+}
+
+
+output$rate_desc <- renderUI({
+  rate_desc()
+})
+
+output$rate_desc_map <- renderUI({
+  rate_desc()
+})
+
+
+output$count_desc <- renderUI({
+  count_desc()
+})
+
 
 output$rate_count_desc <- renderUI({
-  req(input$count_rates, input$variable, selectedDataVars())
+  req(input$rate_count, input$variable, selectedDataVars())
   
   
-  if (input$count_rates == 2) {
-    # For rates
-    title_text <- tags$b(prettyVariable()[2])
-    col_selection <-
-      paste0("desc_", selectedRateType(), "_", lang)
-    desc_text <-
-      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-    
-    desc_text <-
-      gsub("REPLACE_OUTCOME",
-           replaceOutcomeString(),
-           desc_text,
-           fixed = TRUE)
-    
-    desc_text <-
-      gsub("REPLACE_AGGR",
-           replaceAggrLevelString(),
-           desc_text,
-           fixed = TRUE)
-    
-    # Fix Danish letters
-    desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
-    
-    desc_text <-
-      gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
-    desc_text <-
-      gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
-    tagList(title_text, desc_text)
+  if (input$rate_count == 2) {
+   rate_desc()
   } else {
-    # For counts
-    title_text <-
-      tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
-    
-    col_selection <- paste0("desc_", "count", "_", lang)
-    desc_text <-
-      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-    desc_text <-
-      gsub("REPLACE_OUTCOME",
-           replaceOutcomeString(),
-           desc_text,
-           fixed = TRUE)
-    
-    desc_text <-
-      gsub("REPLACE_AGGR",
-           replaceAggrLevelString(),
-           desc_text,
-           fixed = TRUE)
-    desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
-    
-    desc_text <-
-      gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
-    desc_text <-
-      gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
-    
-    tagList(title_text, desc_text)
+   count_desc()
   }
   
 })
@@ -267,7 +291,7 @@ prettyVariable <- reactive({
 })
 
 prettyVariableSingular <- reactive({
-  prettyVariable()[as.integer(input$count_rates)]
+  prettyVariable()[as.integer(input$rate_count)]
 })
 
 
@@ -417,7 +441,7 @@ plot_d3_bar <- reactive({
     
     # For kommune data re-order based on rate or count
     dat <- copy(outputCasesD3Bar())
-    if (input$aggr_level == "kom") {
+    if (isKom()) {
       setorderv(dat, c(ui_sex, prettyVariableSingular()), order = -1L)
     }
     
@@ -451,19 +475,17 @@ plot_d3_line <- reactive({
 # LEAFLET MAPS ------------------------------------------------------
 
 mapObj <- function() {
-  if (input$aggr_level == "kom") {
+  if (isKom()) {
     dk_sp$l2
-  } else if (input$aggr_level == "region") {
+  } else if (isRegion()) {
     dk_sp$l1
   }
 }
 
-mapData <- function() {
-  data_var <- prettyVariableSingular()
+mapData <- reactive({
+  data_var <- prettyVariable()[2] # Only use rate data
   keep_vars <- c("id", prettyAggr_level(), data_var)
-  tmp <- copy(outputCasesD3Bar())
-  # inx <- duplicated(tmp[, ..data_var])
-  # # tmp[inx, (data_var) := jitter(get(data_var), amount = .1)]
+  tmp <- copy(outputCasesData()) # Make copy so not corrput reactive data
   
   # MALES
   out_m <- mapObj()
@@ -478,6 +500,8 @@ mapData <- function() {
       by.y = paste0("name_", lang),
       all.y = TRUE
     )
+  
+  # Remove unneed vars and re-order data
   out_m@data <- out_m@data[, ..keep_vars]
   setorder(out_m@data, id)
   
@@ -494,6 +518,8 @@ mapData <- function() {
       by.y = paste0("name_", lang),
       all.y = TRUE
     )
+  
+  # Remove unneed vars and re-order data
   out_f@data <- out_f@data[, ..keep_vars]
   setorder(out_f@data, id)
   
@@ -501,51 +527,43 @@ mapData <- function() {
   list(male = out_m,
        female = out_f)
   
-}
+})
 
 combinedMaps <- reactive({
-  req((input$aggr_level == "region" || input$aggr_level == "kom"))
+  req((isRegion() || isKom()))
   
+  var_name <- prettyVariable()[2]
   name_lang <- paste0("name_", lang)
   fill_data <-
-    rbind(mapData()$male@data, mapData()$female@data)[[prettyVariableSingular()]]
+    rbind(mapData()$male@data, mapData()$female@data)[[var_name]]
   
-  if (input$count_rates == 2) {
     pal <- colorQuantile("YlOrRd", fill_data, n = 4, reverse = FALSE)
     if (selectPercentOrRate()) {
+      # If variable is percent:
       labFormatter <- function(type, cuts) {
         n = length(cuts)
         cuts <- round(cuts, digits = 1)
         paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
       }
     } else {
+      # If variable is rate:
       labFormatter <- function(type, cuts) {
         n = length(cuts)
         cuts <- round(cuts)
         paste0(cuts[-n], " &ndash; ", cuts[-1])
       }
     }
-  } else {
-    pal <- colorBin("YlOrRd",
-                    fill_data,
-                    bins = 4,
-                    reverse = FALSE)
-    labFormatter <- function(type, cuts) {
-      n = length(cuts)
-      cuts <- round(cuts)
-      paste0(cuts[-n], " &ndash; ", cuts[-1])
-    }
-  }
   
   
-  legend_title <- gsub("  ", "<br>", prettyVariableSingular())
-  popup_var_title_1 <- gsub("  .*", "", prettyVariableSingular())
-  popup_var_title_2 <- gsub(".*  ", "", prettyVariableSingular())
+  
+  legend_title <- gsub("  ", "<br>", var_name)
+  popup_var_title_1 <- gsub("  .*", "", var_name)
+  popup_var_title_2 <- gsub(".*  ", "", var_name)
   
   # Male map
   map_data <-  mapData()$male
   fill_colors <-
-    ~ pal(map_data@data[[prettyVariableSingular()]])
+    ~ pal(map_data@data[[var_name]])
   
   makeMapPopup <- function(geo_name, var_title1, var_title2, data) {
     if (var_title1 == var_title2) {
@@ -578,7 +596,7 @@ combinedMaps <- reactive({
       geo_name = map_data@data[[prettyAggr_level()]],
       var_title1 = popup_var_title_1,
       var_title2 = popup_var_title_2,
-      map_data@data[[prettyVariableSingular()]]
+      map_data@data[[var_name]]
     )
   
   map_m <- makeLeaflet(
@@ -592,13 +610,13 @@ combinedMaps <- reactive({
   map_data <-  mapData()$female
   
   fill_colors <-
-    ~ pal(map_data@data[[prettyVariableSingular()]])
+    ~ pal(map_data@data[[var_name]])
   popup <-
     makeMapPopup(
       geo_name = map_data@data[[prettyAggr_level()]],
       var_title1 = popup_var_title_1,
       var_title2 = popup_var_title_2,
-      map_data@data[[prettyVariableSingular()]]
+      map_data@data[[var_name]]
     )
   
   
@@ -662,9 +680,6 @@ dtCast <- reactive({
   dat <- outputCasesData()
   group_var <- prettyAggr_level()
   value_var <- prettyVariable()
-  # x <- copy(dat)
-  # setkeyv(dat, c(ui_sex, group_var))
-  # if (!all.equal(x, dat, check.attributes = FALSE))
   
   subset_cols = c(group_var, value_var)
   out = cbind(dat["male", ..subset_cols], dat["female", ..value_var])
@@ -726,7 +741,7 @@ outputCountDTTable <- reactive({
   col_names <-
     c(col_names[length(col_names)], col_names[-length(col_names)])
   setcolorder(dat, neworder = col_names)
-  if (input$aggr_level == "kom") {
+  if (isKom()) {
     makeCountKomDT(dat,
                    group_var = prettyAggr_level(),
                    thousands_sep = thousands_sep)
@@ -765,7 +780,7 @@ outputRateDTTable <- reactive({
     new = c(prettyAggr_level(), ui_sex_levels)
   )
   # colnames(dat) <- c(group_var, ui_sex_levels)
-  if (input$aggr_level == "kom") {
+  if (isKom()) {
     makeRateKomDT(
       dat = dat,
       group_var = prettyAggr_level(),
@@ -806,7 +821,7 @@ validateKom <- reactive({
   # is created during an intermediate step in Shiny, before the "year" selected
   # is reset. This validate step stops Shiny from processing the data steps -
   # and thus throwing an error - during this intermediate step.
-  if (input$aggr_level == "kom") {
+  if (isKom()) {
     input$year >= 2009
   } else if (input$aggr_level != "kom") {
     TRUE
@@ -815,10 +830,20 @@ validateKom <- reactive({
   }
 })
 
+
+isKom <- reactive({
+  input$aggr_level == "kom"
+  })
+
+isRegion <- reactive({
+  input$aggr_level == "region"
+  })
+
 isGeo <- reactive({
-  input$aggr_level == "kom" ||
-    input$aggr_level == "region"
+  isKom() ||
+    isRegion()
 })
+
 
 isNational <- reactive({
   input$aggr_level == "national"
@@ -1027,14 +1052,33 @@ observe({
   
 })
 
+
+observe({
+  # Disable "rate/count" when when not showing figure tab
+  shinyjs::toggleState(id = "rate_count",
+                       condition = input$data_vis_tabs == ui_d3_figures)
+  
+})
+
+
 observe({
   # Shows map tab only when geo data is selected
   shinyjs::toggle(
-    condition = (input$aggr_level == "kom" ||
-                   input$aggr_level == "region"),
+    condition = (isKom() ||
+                   isRegion()),
     selector = paste0("#data_vis_tabs li a[data-value=", ui_map, "]")
   )
 })
+
+
+observe({
+  # Hides Figures tab when showing kommne level
+  shinyjs::toggle(
+    condition = (input$aggr_level != "kom"),
+    selector = paste0("#data_vis_tabs li a[data-value=", ui_d3_figures, "]")
+  )
+})
+
 
 
 # Switch tabs when isGeo == FALSE
@@ -1044,6 +1088,16 @@ observeEvent(input$aggr_level, {
                       inputId = "data_vis_tabs",
                       selected = ui_d3_figures)
 })
+
+# Switch tabs when landing on kommune Figures tab (since this tab should not be
+# shown to users)
+observeEvent(input$aggr_level, {
+  if (isKom() && input$data_vis_tabs == ui_d3_figures)
+    updateTabsetPanel(session = session,
+                      inputId = "data_vis_tabs",
+                      selected = ui_map)
+})
+
 
 # DOWNLOAD BUTTONS --------------------------------------------------------
 output$downloadButton <- renderUI({
@@ -1079,13 +1133,13 @@ output$downloadMapsFemale <- downloadHandler(
 #
 output$d3_plot_bar <- renderSimpleD3Bar({
   req(input$aggr_level, input$variable)
-  if (validate() & input$aggr_level != "national") {
+  if (validate() && !isNational() && !isKom()) {
     plot_d3_bar()
   }
 })
 
 output$d3_plot_line_html <- renderSimpleD3Line({
-  if (validate()) {
+  if (validate() && isNational()) {
     plot_d3_line()
   }
   

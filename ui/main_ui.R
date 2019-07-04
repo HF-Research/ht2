@@ -28,7 +28,16 @@ tabPanel(ui_main_title,
                                     choices = NULL,
                                     selected = 2015
                                   )
-                                )),
+                                ),
+                                fluidRow(
+                                  radioGroupButtons(
+                                    inputId = "rate_count",
+                                    label =  choose_rate_count,
+                                    choices = count_rate_choices,
+                                    justified = TRUE
+                                  )
+                                )
+                                ),
                          column(6,
                                 # This UI has to change based on "outcome" & "var" choice
                                 uiOutput("aggrButtonChoices"))
@@ -66,7 +75,20 @@ tabPanel(ui_main_title,
                  conditionalPanel(condition = "input.aggr_level == 'national'",
                                   (
                                     simpleD3LineOutput("d3_plot_line_html", height = "550px")
-                                  ))
+                                  )),
+                 fluidRow(
+                   div(
+                     class = "col-xs-6 col-sm-6 col-md-6 col-lg-9",
+                     align = "left",
+                     uiOutput("downloadButton")
+                   )
+                 ),
+                 fluidRow(column(
+                   12, align = "left",
+                   uiOutput("rate_count_desc"),
+                   br()
+                 )),
+                 fluidRow(br(), br())
                ),
                tabPanel(
                  title = ui_data,
@@ -74,7 +96,6 @@ tabPanel(ui_main_title,
                    class = "row_outcome_title",
                    column(
                      11,
-                     
                      class = "output_titles",
                      align = "left",
                      textOutput("outcome_title_dt")
@@ -89,7 +110,10 @@ tabPanel(ui_main_title,
                      fluidRow(tags$b(textOutput("table1_title"))),
                      fluidRow(((
                        DTOutput("table_counts")
-                     )))
+                     ))),
+                     fluidRow(align = "left",
+                              uiOutput("count_desc"),
+                              br())
                    ),
                    column(
                      class = "col_DT",
@@ -98,7 +122,10 @@ tabPanel(ui_main_title,
                      fluidRow(tags$b(textOutput("table2_title"))),
                      fluidRow(((
                        DTOutput("table_rates")
-                     )))
+                     ))),
+                     fluidRow(align = "left",
+                              uiOutput("rate_desc_dt"),
+                              br())
                    )
                  )
                ),
@@ -135,35 +162,10 @@ tabPanel(ui_main_title,
                      fluidRow(align = "center", (textOutput("map_title_female")))
                    ),
                    br()
-                 )
-               )
-             ),
-             
-             br(),
-             
-             conditionalPanel(
-               condition = "output.tabs",
-               fluidRow(
-                 div(
-                   class = "col-xs-6 col-sm-6 col-md-6 col-lg-3",  
-                   id = "col_rate_count",
-                   align = "left",
-                   radioGroupButtons(
-                     inputId = "count_rates",
-                     label =  NULL,
-                     choices = count_rate_choices,
-                     justified = TRUE
-                   )
                  ),
-                 conditionalPanel(condition = "output.tabFigure",
-                                  div(
-                                    class = "col-xs-6 col-sm-6 col-md-6 col-lg-9", 
-                                         align = "right",
-                                         uiOutput("downloadButton"))),
-                 conditionalPanel(
-                   condition = "output.tabMap",
+                 fluidRow(
                    column(
-                     9,
+                       9,
                      align = "right",
                      downloadBttn(
                        "downloadMapsMale",
@@ -176,14 +178,30 @@ tabPanel(ui_main_title,
                        size = "sm"
                      )
                    )
-                 )
-               ),
-               fluidRow(column(
-                 12, align = "left",
-                 uiOutput("rate_count_desc"),
-                 br()
-               )),
-               fluidRow(br(), br())
-             )
+                 ),
+                 fluidRow(align = "left",
+                          uiOutput("rate_desc_map"),
+                          br())
+               )
+             ),
+             
+             br()
+             
+             # conditionalPanel(
+             #   condition = "output.tabFigure",
+             #   fluidRow(
+             #     div(
+             #       class = "col-xs-6 col-sm-6 col-md-6 col-lg-9",
+             #       align = "left",
+             #       uiOutput("downloadButton")
+             #     )
+             #   ),
+             #   fluidRow(column(
+             #     12, align = "left",
+             #     uiOutput("rate_count_desc"),
+             #     br()
+             #   )),
+             #   fluidRow(br(), br())
+             # )
            )
          ))

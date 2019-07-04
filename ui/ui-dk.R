@@ -57,12 +57,12 @@ outcome_choices <- c(list(
 
 
 dropdown_tooltip = enc2utf8("Click to choose data")
-choose_outcome <- enc2utf8("Vælge sygdome eller behandling:")
+choose_outcome <- enc2utf8("Vælge sygdom eller behandling:")
 # choose_theme <- enc2utf8("Vælge emne")
-choose_year <- enc2utf8("Vælg år")
-choose_aggr_lv <- enc2utf8("Opdælt efter:")
-choose_var <- enc2utf8("Vælg statistik")
-
+choose_year <- enc2utf8("Vælg år:")
+choose_aggr_lv <- enc2utf8("Opdelt efter:")
+choose_var <- enc2utf8("Vælg statistik:")
+choose_rate_count <- enc2utf8("Vælg rater/antal:")
 
 aggr_choices <-
   data.table(name_dk = c("Alder",
@@ -78,8 +78,8 @@ aggr_choices <-
              name_ht = c("age","edu","kom","region","national"))
 row.names(aggr_choices) <- aggr_choices$name_dk
 
-count_rate_choices <- list("Vis rater" = 2,
-                           "Vis antal" = 1)
+count_rate_choices <- list("Rate" = 2,
+                           "Antal" = 1)
 
 ui_main_title <- enc2utf8("Hjemme")
 ui_age <- enc2utf8("Aldre")
