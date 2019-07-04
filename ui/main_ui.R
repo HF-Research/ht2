@@ -1,5 +1,5 @@
 tabPanel(ui_main_title,
-         
+         useShinyjs(),
          tags$head(
            tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
          ),
@@ -44,7 +44,7 @@ tabPanel(ui_main_title,
                        )),
              # DESCRITPIONS
              fluidRow(
-               profvis_ui("profiler"),
+               # profvis_ui("profiler"),
                wellPanel(
                  class = "well_description",
                  uiOutput("outcome_description"),
