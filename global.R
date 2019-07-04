@@ -48,7 +48,15 @@ valid_output_combos <- fread("data/valid_output_combos.txt")
 valid_output_combos[, var := paste0("count_", var)]
 variables_not_used <- c("count_n_ambulatory", "count_n_bed_days")
 
+male_color <- "#10c8a6"
+female_color <- "#166abd"
 
+male_color <- "#4185be"
+female_color <- "#6dc067"
+
+
+graph_colors <- c(male_color, female_color)
+rm(male_color, female_color)
 # FUNCTIONS ------------------------------------------------
 formatNumbers <- function(dat, lang) {
   x <- copy(dat)

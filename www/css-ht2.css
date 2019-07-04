@@ -1,4 +1,4 @@
-/*Copied from bootstrop page */
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");
 :root {
@@ -24,8 +24,12 @@
   --light: #eee;
   --dark: #222;
   --bleeding: #B73338;
-  --btnColor: #166abd;
-  --btnBorder1: #e2e2e2
+  --hfRed: #c8102f;
+  --hfRedBright: #dc1232;
+  --hfText: #454747;
+  --hfVeryLight: #f4f5f7;
+  --btnBorderActive: #c8102f;
+  --btnBorder1: #e2e2e2;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
@@ -46,6 +50,7 @@ body {
   text-align: left;
   background-color: #fff;
 }
+
 
 button {
   border-radius: 0;
@@ -108,7 +113,36 @@ input[type="month"] {
 
 /*END COPY FROM BOOTSTRAP */
 
-/* Override bootstrap style that forces input well to wrap sub columns too early */
+
+/* HEADER */
+
+
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand{
+  font-weight: 600;
+  font-size: 1.2em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border-right: 1px solid #d6453d;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+
 
 
 label{
@@ -119,7 +153,8 @@ label{
 }
 
 
-/* Dropdown styling */
+/* DROPDOWNSTYLING */
+
 .selectize-dropdown-content{
   max-height: 400px;
 }
@@ -136,14 +171,18 @@ label{
 
 .selectize-input{
   line-height:22px;
-  
+  border: 0px;
+  border-right:1px solid #cccccc;
+  border-bottom:1px solid #cccccc;;
 }
+
+
 
 
 /* BUTTON coloring */
 .btn.radiobtn.btn-default.active {
-  background-color:var(--btnColor) ;
-  border-color:#337ab7;
+  background-color:var(--hfRed);
+  border-color:var(--hfRed);
   font-weight:bold;
   color:white;
   font-size: 1.5rem;
@@ -156,15 +195,18 @@ label{
 }
 
 .btn.radiobtn.btn-default {
-  background-color: #efefef;
-  border-color: #e2e2e2;
-  color:black;
+  background-color: var(--hfVeryLight);
+  border-color: var(--hfVeryLight);
+  color:var(--hfRed);
+  font-size:1.5rem;
+  font-weight:600;
+  ;
 }
 
 .btn.radiobtn.btn-default:hover {
-  background-color: #bad5f1;
-  border-color: #bad5f1;
-  color:black;
+  background-color: var(--hfRedBright);
+  border-color: var(--hfRedBright);
+  color:white;
   font-size: 1.5rem;
   font-weight: 600;
   padding-right:5px;
@@ -172,8 +214,8 @@ label{
 }
 
 .btn.radiobtn.btn-default.active:hover {
-  background-color:#337ab7;
-  border-color:#337ab7;
+  background-color:var(--hfRed);
+  border-color:var(--hfRed);
   font-weight:bold;
   color:white;
   font-size: 1.5rem;

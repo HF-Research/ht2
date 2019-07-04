@@ -436,7 +436,7 @@ plot_d3_bar <- reactive({
   if (nrow(outputCasesD3Bar()) > 0  &&
       !isNational()) {
     sex_vars <- ui_sex_levels
-    color = c("#bd6916", "#166abd")
+    color = c(graph_colors[1], graph_colors[2])
     plot_title = plotTitle()
     
     # For kommune data re-order based on rate or count
@@ -447,7 +447,7 @@ plot_d3_bar <- reactive({
     
     simpleD3Bar(
       data = dat,
-      colors = c("#bd6916", "#166abd"),
+      colors = c(graph_colors[1], graph_colors[2]),
       plotTitle = plot_title,
       sexVars = sex_vars
     )
@@ -459,11 +459,11 @@ plot_d3_bar <- reactive({
 plot_d3_line <- reactive({
   if (isNational()) {
     sex_vars <- ui_sex_levels
-    color = c("#bd6916", "#166abd")
+    color = c(graph_colors[1], graph_colors[2])
     plot_title = plotTitle()
     simpleD3Line(
       data = outputCasesD3Line(),
-      colors = c("#bd6916", "#166abd"),
+      colors = c(graph_colors[1], graph_colors[2]),
       plotTitle = plot_title,
       sexVars = sex_vars
     )
