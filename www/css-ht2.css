@@ -111,12 +111,14 @@ input[type="month"] {
   -webkit-appearance: listbox;
 }
 
-/*END COPY FROM BOOTSTRAP */
+/***************END COPY FROM BOOTSTRAP ************************/
 
 
-/* HEADER */
+/**** NAVBAR STYLING *****/
 
-
+.navbar{
+  margin-bottom: 30px;
+}
 .navbar-default{
   background-color: var(--hfRed);
 }
@@ -142,8 +144,19 @@ input[type="month"] {
   background-color: white;
 }
 
+/******   TABS STYLING   *******/
 
+.tabbable > .nav > li[class=active] >a{
+  background-color: var(--hfRed);
+  color: white;
+  font-weight: 600;
+}
 
+.tabbable > .nav > li > a{
+  background-color: var(--hfVeryLight);
+  color: var(--hfRed);
+  font-weight:600;
+}
 
 label{
   font-size:1.5rem;
@@ -153,7 +166,7 @@ label{
 }
 
 
-/* DROPDOWNSTYLING */
+/**** DROPDOWN *****/
 
 .selectize-dropdown-content{
   max-height: 400px;
@@ -179,7 +192,8 @@ label{
 
 
 
-/* BUTTON coloring */
+/**** BUTTON STYLES *****/
+
 .btn.radiobtn.btn-default.active {
   background-color:var(--hfRed);
   border-color:var(--hfRed);
@@ -223,7 +237,7 @@ label{
 }
 
 
-/* DT Buttom styling */
+/******   DT BOTTOM STYLING   *******/
 .dt-button.buttons-excel.buttons-html5{
   margin-top:7px;
   background-color: #efefef;
@@ -245,7 +259,8 @@ label{
 
 
 
-/* Tooltip styling*/
+/**** D3 TOOLTIP STYLING *****/
+
 #tooltipBar {	
     position: absolute;			
     text-align: center;			
@@ -277,6 +292,9 @@ td {
  text-align:left
 }
 
+
+
+/**** D3 MOUSEOVER STYLES  *****/
 .mouseSvg {
   opacity: 0.2;
   fill: white;
@@ -304,18 +322,7 @@ td {
 
 
 
-/* OUTOUTS */
-.row_outcome_title{
-  margin-top: 17px;
-  margin-bottom: 10px;
-}
-
-.col_DT {
- min-width: 376px;
-}
-
-
-/*PLOT FONTS*/
+/**** D3 PLOT FONTS *****/
 .plot_text{
   font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
@@ -332,8 +339,18 @@ td {
   font-size: 110%;
 }
 
+/* OUTOUTS */
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
 
-/* MAPS */
+.col_DT {
+ min-width: 376px;
+}
+
+
+/******   MAPS   *******/
 
 .leaflet-container { 
   background:white !important;
@@ -354,20 +371,22 @@ font-size: 1.6rem;
 font-weight: 550;
 }
 
-/*Sizes of several wells and containers*/
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
 .container-fluid {
   margin:auto;
-  
 }
+
 .well_input{
   background-color:white;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   min-height: 350px;
 }
+
 .row{
   margin-left:-10px;
   margin-right:-10px;
 }
+
 .well_description {
   background-color:white;
   margin-left: auto;
@@ -380,9 +399,11 @@ font-weight: 550;
   font-size: 2.1rem;
 
 }
+
 .explanitory_text{
   font-size:1.6rem;
 }
+
 .ref{
   font-size: 1.2rem;}
 .tab-pane.active{
@@ -390,55 +411,7 @@ font-weight: 550;
 }
 
 
-/* TABS & NAPAGEs */
-
-.nav.navbar-nav > li > a[data-value=Apopleski]{
-  font-size: 1.4rem;
-  color: white;
-  background-color: #1976D2;
-
-}
-
-.nav.navbar-nav > li[class=active] > a[data-value=Apopleski]{
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: white;
-  background-color: #1976D2;
-  -moz-box-shadow: inset -5px 5px 11px -6px #000000;
-  -webkit-box-shadow: inset -5px 5px 11px -6px #000000;
-  -box-shadow:inset -5px 5px 11px -6px #000000;
-}
-
-.nav.navbar-nav > li > a[data-value=Blødning]{
-  font-size: 1.4rem;
-  color: white;
-  background-color: #B73338;
-}
-
-.nav.navbar-nav > li[class=active] > a[data-value=Blødning]{
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: white;
-  background-color: var(--bleeding);
-  -moz-box-shadow: inset -5px 5px 11px -6px #000000;
-  -webkit-box-shadow: inset -5px 5px 11px -6px #000000;
-  -box-shadow:inset -5px 5px 11px -6px #000000;
-}
-
- .tabbable > .nav > li[class=active] >a {
-   color:black;
-   font-size: 1.3rem;
-
- }
-.tabbable > .nav > li > a {
-  background-color: white;
-  font-size: 1.2rem;
-}
-
-
-
 #col_input {
-  
   margin-left: auto;
   margin-right: auto;
 }
@@ -456,8 +429,6 @@ font-weight: 550;
   margin-right: auto;
 }
 
-
-
 #col_rate_count {
 }
   
@@ -465,13 +436,24 @@ font-weight: 550;
  font-size: 2.4rem; 
 }
 
+#outcome_title_dt{
+ margin-top:10px;
+}
+
 #variable_title {  
  font-size: 1.9rem; 
 }
 
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+ margin-bottom:10px;
+}
 
 
-/*ABOUT PANEL*/
+/******   ABOUT TABPAGE   *******/
 .col_about_dt {
 max-width:1260px;
 }

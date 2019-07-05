@@ -79,6 +79,7 @@ tabPanel(ui_main_title,
                  fluidRow(
                    div(
                      class = "col-xs-6 col-sm-6 col-md-6 col-lg-9",
+                     id = "download_button_row",
                      align = "left",
                      uiOutput("downloadButton")
                    )
@@ -124,7 +125,7 @@ tabPanel(ui_main_title,
                        DTOutput("table_rates")
                      ))),
                      fluidRow(align = "left",
-                              uiOutput("rate_desc_dt"),
+                              uiOutput("rate_desc"),
                               br())
                    )
                  )
