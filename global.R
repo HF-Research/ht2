@@ -283,6 +283,10 @@ makeLeaflet <-
           textsize = "17px",
           direction = "auto",
           opacity = 1
+        ),
+        highlightOptions = highlightOptions(
+          weight = 4,
+          bringToFront = TRUE
         )
       ) %>%
       addPolylines(

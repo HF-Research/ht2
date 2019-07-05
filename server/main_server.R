@@ -566,29 +566,22 @@ combinedMaps <- reactive({
     ~ pal(map_data@data[[var_name]])
   
   makeMapPopup <- function(geo_name, var_title1, var_title2, data) {
-    if (var_title1 == var_title2) {
+   # geo_name is place name. var_title1 and var_title two is the title broken
+   # where two spaces occur ("  "). Data is the datapoint passed to the function
       out <- paste0(
         "<strong><center>",
         geo_name,
-        "</strong></center>",
+        '</strong></center>',
+        '<p style = "font-size:0.8em; margin-bottom:0px">',
         var_title1,
-        ': <br><strong><font size="+1">',
-        data,
-        "</strong></font>"
-      )
-    } else {
-      out <- paste0(
-        "<strong><center>",
-        geo_name,
-        "</strong></center>",
-        var_title1,
-        "<br>",
+        '</p>',
+        '<p style = "font-size:0.8em; margin-bottom:3px">',
         var_title2,
-        ': <br><strong><font size="+1">',
+        ': </p>',
+        '<strong><center><p style = "font-size:1.2em; margin-bottom:0px">',
         data,
-        "</strong></font>"
+        "</strong></p></center>"
       )
-    }
     lapply(out, htmltools::HTML)
   }
   popup <-
