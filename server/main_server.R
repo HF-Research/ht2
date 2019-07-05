@@ -9,8 +9,9 @@ showModal(
     title = "Beta testing Hjertetal2",
     easyClose = TRUE,
     fade = TRUE,
-    "This is a beta version of HjerteTal2 that should only be used for testing purposes.
-    The data presented has not been evaluated for accuracy and should not be used for reporting.",
+    tags$b("Does not work with Internet Explorer. Please choose Chrome/Firefox/Safari"),
+    tags$p("This is a beta version of HjerteTal2 that should only be used for testing purposes.
+    The data presented has not been evaluated for accuracy and should not be used for reporting."),
     tags$p("Please send any feedback to mphelps@hjerteforeningen.dk"),
     tags$br(),
     tags$p("Click anywhere to dismiss")

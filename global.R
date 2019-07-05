@@ -1,6 +1,6 @@
 # LIBRARIES ----------------------------------------------------
 # devtools::install_github("rstudio/profvis")
-library(profvis)
+# library(profvis)
 library(shiny)
 library(DT)
 library(shinyWidgets)
