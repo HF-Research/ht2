@@ -429,9 +429,6 @@ font-weight: 550;
   margin-right: auto;
 }
 
-#col_rate_count {
-}
-  
 #outcome_title {
  font-size: 2.4rem; 
 }
@@ -445,11 +442,19 @@ font-weight: 550;
 }
 
 #download_button_row{
-margin-bottom:20px;
+  margin-bottom:20px;
 }
 
 #data_vis_tabs{
  margin-bottom:10px;
+}
+
+#count_desc{
+  margin-top: 10px;
+}
+
+#rate_desc{
+  margin-top:10px;
 }
 
 

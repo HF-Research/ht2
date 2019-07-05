@@ -104,7 +104,7 @@ replace_allCVD_string <- "en hjerte-kar-sygdom"
 # Tab names
 ui_map <- "Kort"
 ui_d3_figures <- "Figures"
-ui_data <- "Data"
+ui_data <- "Tabeller"
 
 # ABOUT PANEL -------------------------------------------------------------
 
