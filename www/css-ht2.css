@@ -296,7 +296,7 @@ td {
 
 /**** D3 MOUSEOVER STYLES  *****/
 .mouseSvg {
-  opacity: 0.2;
+  opacity: 0.0;
   fill: white;
 }
 
@@ -340,14 +340,6 @@ td {
 }
 
 /* OUTOUTS */
-.row_outcome_title{
-  margin-top: 17px;
-  margin-bottom: 10px;
-}
-
-.col_DT {
- min-width: 376px;
-}
 
 
 /******   MAPS   *******/
@@ -406,9 +398,20 @@ font-weight: 550;
 
 .ref{
   font-size: 1.2rem;}
+
 .tab-pane.active{
   margin-top: -15px;
 }
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+ min-width: 376px;
+}
+
 
 
 #col_input {
