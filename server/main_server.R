@@ -3,7 +3,21 @@ options(DT.options = list(
   dom = "Bt",
   buttons = c('copy', 'csv', 'pdf')
 ))
-callModule(profvis_server, "profiler")
+# POPUP DISCLAIMER --------------------------------------------------------
+showModal(
+  modalDialog(
+    title = "Beta testing Hjertetal2",
+    easyClose = TRUE,
+    fade = TRUE,
+    "This is a beta version of HjerteTal2 that should only be used for testing purposes.
+    The data presented has not been evaluated for accuracy and should not be used for reporting.",
+    tags$p("Please send any feedback to mphelps@hjerteforeningen.dk"),
+    tags$br(),
+    tags$p("Click anywhere to dismiss")
+  )
+)
+
+# callModule(profvis_server, "profiler")
 # TEXT RENDERING ----------------------------------------------------------
 output$outcome_description <- renderUI({
   req(input$outcome)
@@ -727,17 +741,6 @@ outputCountDTTable <- reactive({
     old = c("group_var", "male", "female"),
     new = c(prettyAggr_level(), rev(ui_sex_levels))
   )
-  # 
-  # # Flag last row so can be targeted for formatting
-  # dat[, flag := 0]
-  # if (input$aggr_level != "national")
-  #   dat[nrow(dat), flag := 1]
-  # # Make sure "flag" variable is always first column, so we can
-  # # reference by col index in formatting fn()
-  # col_names <- colnames(dat)
-  # col_names <-
-  #   c(col_names[length(col_names)], col_names[-length(col_names)])
-  # setcolorder(dat, neworder = col_names)
   if (isKom()) {
     makeCountKomDT(dat,
                    group_var = prettyAggr_level(),

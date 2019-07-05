@@ -7,6 +7,7 @@ library(shinyWidgets)
 library(data.table)
 library(shinyBS)
 library(shinyjs)
+
 # library(sp)
 library(leaflet)
 library(manipulateWidget)
@@ -116,11 +117,7 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
       )
     )
   ) %>%
-    # formatCurrency(col_format,
-    #                currency = "",
-    #                interval = 3,
-    #                mark = thousands_sep,
-    # digits = 0) %>%
+    
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
     formatStyle( 
@@ -160,11 +157,6 @@ makeCountKomDT <- function(dat, group_var, thousands_sep) {
       )
     )
   ) %>%
-    # formatCurrency(col_format,
-    #                currency = "",
-    #                interval = 3,
-    #                mark = thousands_sep,
-    # digits = 0) %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
     formatStyle( 
