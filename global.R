@@ -93,6 +93,7 @@ formatSuppressedValues <- JS(
 )
 
 makeCountDT <- function(dat, group_var, thousands_sep) {
+  
   col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
     data = dat,
@@ -100,6 +101,7 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
     rownames = FALSE,
     class = ' hover row-border',
     options = list(
+      ordering = FALSE,
       dom = "tB",
       columnDefs = list(
         list(render = formatSuppressedValues, targets = "_all")
@@ -113,11 +115,11 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
       )
     )
   ) %>%
-    # formatCurrency(col_format,
-    #                currency = "",
-    #                interval = 3,
-    #                mark = thousands_sep,
-    # digits = 0) %>%
+    formatCurrency(col_format,
+                   currency = "",
+                   interval = 3,
+                   mark = thousands_sep,
+    digits = 0) %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
     formatStyle( 
@@ -141,6 +143,7 @@ makeCountKomDT <- function(dat, group_var, thousands_sep) {
     rownames = FALSE,
     class = ' hover row-border',
     options = list(
+      ordering = FALSE,
       lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
       pageLength = 15,
       dom = "lftBsp",
@@ -190,6 +193,7 @@ makeRateDT <-
       rownames = FALSE,
       class = 'hover row-border',
       options = list(
+        ordering = FALSE,
         dom = "tB",
         buttons = list('pdf', 'excel'),
         initComplete = JS(
@@ -223,6 +227,7 @@ makeRateKomDT <-
       rownames = FALSE,
       class = 'hover row-border',
       options = list(
+        ordering = FALSE,
         lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
         pageLength = 15,
         dom = "lftBp",
