@@ -744,11 +744,14 @@ outputCountDTTable <- reactive({
   if (isKom()) {
     makeCountKomDT(dat,
                    group_var = prettyAggr_level(),
-                   thousands_sep = thousands_sep)
+                   thousands_sep = thousands_sep,
+                   dt_title = plotTitle()
+                   )
   } else {
     makeCountDT(dat,
                 group_var = prettyAggr_level(),
-                thousands_sep = thousands_sep)
+                thousands_sep = thousands_sep,
+                dt_title = plotTitle())
   }
 })
 
@@ -786,7 +789,8 @@ outputRateDTTable <- reactive({
       group_var = prettyAggr_level(),
       thousands_sep = thousands_sep,
       digits = digits,
-      dec_mark = dec_mark
+      dec_mark = dec_mark,
+      dt_title = plotTitle()
     )
   } else {
     makeRateDT(
@@ -794,7 +798,8 @@ outputRateDTTable <- reactive({
       group_var = prettyAggr_level(),
       thousands_sep = thousands_sep,
       digits = digits,
-      dec_mark = dec_mark
+      dec_mark = dec_mark,
+      dt_title = plotTitle()
     )
   }
   

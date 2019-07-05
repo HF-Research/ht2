@@ -94,8 +94,7 @@ formatSuppressedValues <- JS(
 "
 )
 
-makeCountDT <- function(dat, group_var, thousands_sep) {
-  
+makeCountDT <- function(dat, group_var, thousands_sep, dt_title) {
   col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
     data = dat,
@@ -105,10 +104,13 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
     options = list(
       ordering = FALSE,
       dom = "tB",
-      columnDefs = list(
-        list(render = formatSuppressedValues, targets = "_all")
+      columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
+      buttons = list(
+        list(extend = "pdf",
+             messageTop = dt_title),
+        list(extend = "excel",
+             messageTop = dt_title)
       ),
-      buttons = list('pdf', 'excel'),
       initComplete = JS(
         # Table hearder background color
         "function(settings, json) {",
@@ -120,7 +122,7 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
     
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
-    formatStyle( 
+    formatStyle(
       # Bolds the "Totals" row which has character == "Total" in column 1
       1,
       target = "row",
@@ -133,44 +135,48 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
 }
 
 
-makeCountKomDT <- function(dat, group_var, thousands_sep) {
-  col_format <- c(ui_sex_levels, "Total")
-  DT::datatable(
-    data = dat,
-    extensions = 'Buttons',
-    rownames = FALSE,
-    class = ' hover row-border',
-    options = list(
-      ordering = FALSE,
-      lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
-      pageLength = 15,
-      dom = "lftBsp",
-      columnDefs = list(
-        list(render = formatSuppressedValues, targets = "_all")
-      ),
-      buttons = list('pdf', 'excel'),
-      initComplete = JS(
-        # Table hearder background color
-        "function(settings, json) {",
-        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-        "}"
+makeCountKomDT <-
+  function(dat, group_var, thousands_sep, dt_title) {
+    col_format <- c(ui_sex_levels, "Total")
+    DT::datatable(
+      data = dat,
+      extensions = 'Buttons',
+      rownames = FALSE,
+      class = ' hover row-border',
+      options = list(
+        ordering = FALSE,
+        lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
+        pageLength = 15,
+        dom = "lftBsp",
+        columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
+        buttons = list(
+          list(extend = "pdf",
+               messageTop = dt_title),
+          list(extend = "excel",
+               messageTop = dt_title)
+        ),
+        initComplete = JS(
+          # Table hearder background color
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+          "}"
+        )
       )
-    )
-  ) %>%
-    formatStyle('Total',  fontWeight = 'bold') %>%
-    formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
-    formatStyle( 
-      # Bolds the "Totals" row which has character == "Total" in column 1
-      1,
-      target = "row",
-      fontWeight = styleEqual(
-        levels = c("Total"),
-        values =  c("bold"),
-        default = "normal"
+    ) %>%
+      formatStyle('Total',  fontWeight = 'bold') %>%
+      formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
+      formatStyle(
+        # Bolds the "Totals" row which has character == "Total" in column 1
+        1,
+        target = "row",
+        fontWeight = styleEqual(
+          levels = c("Total"),
+          values =  c("bold"),
+          default = "normal"
+        )
       )
-      )
-  
-}
+    
+  }
 
 
 makeRateDT <-
@@ -178,7 +184,8 @@ makeRateDT <-
            group_var,
            thousands_sep,
            digits,
-           dec_mark) {
+           dec_mark,
+           dt_title) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
       data = dat,
@@ -188,7 +195,12 @@ makeRateDT <-
       options = list(
         ordering = FALSE,
         dom = "tB",
-        buttons = list('pdf', 'excel'),
+        buttons = list(
+          list(extend = "pdf",
+               messageTop = dt_title),
+          list(extend = "excel",
+               messageTop = dt_title)
+        ),
         initComplete = JS(
           "function(settings, json) {",
           "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
@@ -212,7 +224,8 @@ makeRateKomDT <-
            group_var,
            thousands_sep,
            digits,
-           dec_mark) {
+           dec_mark,
+           dt_title) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
       data = dat,
@@ -224,7 +237,12 @@ makeRateKomDT <-
         lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
         pageLength = 15,
         dom = "lftBp",
-        buttons = list('pdf', 'excel'),
+        buttons = list(
+          list(extend = "pdf",
+               messageTop = dt_title),
+          list(extend = "excel",
+               messageTop = dt_title)
+        ),
         initComplete = JS(
           "function(settings, json) {",
           "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
@@ -277,10 +295,8 @@ makeLeaflet <-
           direction = "auto",
           opacity = 1
         ),
-        highlightOptions = highlightOptions(
-          weight = 4,
-          bringToFront = TRUE
-        )
+        highlightOptions = highlightOptions(weight = 4,
+                                            bringToFront = TRUE)
       ) %>%
       addPolylines(
         data = mini_map_lines,

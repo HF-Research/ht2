@@ -188,21 +188,6 @@ tabPanel(ui_main_title,
              
              br()
              
-             # conditionalPanel(
-             #   condition = "output.tabFigure",
-             #   fluidRow(
-             #     div(
-             #       class = "col-xs-6 col-sm-6 col-md-6 col-lg-9",
-             #       align = "left",
-             #       uiOutput("downloadButton")
-             #     )
-             #   ),
-             #   fluidRow(column(
-             #     12, align = "left",
-             #     uiOutput("rate_count_desc"),
-             #     br()
-             #   )),
-             #   fluidRow(br(), br())
-             # )
+          
            )
          ))
