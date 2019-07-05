@@ -730,17 +730,17 @@ outputCountDTTable <- reactive({
     old = c("group_var", "male", "female"),
     new = c(prettyAggr_level(), rev(ui_sex_levels))
   )
-  
-  # Flag last row so can be targeted for formatting
-  dat[, flag := 0]
-  if (input$aggr_level != "national")
-    dat[nrow(dat), flag := 1]
-  # Make sure "flag" variable is always first column, so we can
-  # reference by col index in formatting fn()
-  col_names <- colnames(dat)
-  col_names <-
-    c(col_names[length(col_names)], col_names[-length(col_names)])
-  setcolorder(dat, neworder = col_names)
+  # 
+  # # Flag last row so can be targeted for formatting
+  # dat[, flag := 0]
+  # if (input$aggr_level != "national")
+  #   dat[nrow(dat), flag := 1]
+  # # Make sure "flag" variable is always first column, so we can
+  # # reference by col index in formatting fn()
+  # col_names <- colnames(dat)
+  # col_names <-
+  #   c(col_names[length(col_names)], col_names[-length(col_names)])
+  # setcolorder(dat, neworder = col_names)
   if (isKom()) {
     makeCountKomDT(dat,
                    group_var = prettyAggr_level(),

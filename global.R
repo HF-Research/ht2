@@ -21,7 +21,7 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
 # This is a fork, because of the issue highlighted here with the master branch:
 # https://github.com/rstudio/leaflet/issues/347
 # devtools::install_github('matthew-phelps/leaflet.minicharts')
-library(leaflet.minicharts)
+# library(leaflet.minicharts)
 
 # LANGUAGE UI ---------------------------------------------------------
 lang = "dk"
@@ -102,8 +102,6 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
     options = list(
       dom = "tB",
       columnDefs = list(
-        list(# Hides the "flag" column
-          visible = FALSE, targets = 0),
         list(render = formatSuppressedValues, targets = "_all")
       ),
       buttons = list('pdf', 'excel'),
@@ -122,9 +120,16 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
     # digits = 0) %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
-    formatStyle("flag",
-                target = "row",
-                fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
+    formatStyle( 
+      # Bolds the "Totals" row which has character == "Total" in column 1
+      1,
+      target = "row",
+      fontWeight = styleEqual(
+        levels = c("Total"),
+        values =  c("bold"),
+        default = "normal"
+      )
+    )
 }
 
 
@@ -140,8 +145,6 @@ makeCountKomDT <- function(dat, group_var, thousands_sep) {
       pageLength = 15,
       dom = "lftBsp",
       columnDefs = list(
-        list(# Hides the "flag" column
-          visible = FALSE, targets = 0),
         list(render = formatSuppressedValues, targets = "_all")
       ),
       buttons = list('pdf', 'excel'),
@@ -160,9 +163,17 @@ makeCountKomDT <- function(dat, group_var, thousands_sep) {
     # digits = 0) %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
-    formatStyle("flag",
-                target = "row",
-                fontWeight = styleEqual(c(0, 1), c("normal", "bold")))
+    formatStyle( 
+      # Bolds the "Totals" row which has character == "Total" in column 1
+      1,
+      target = "row",
+      fontWeight = styleEqual(
+        levels = c("Total"),
+        values =  c("bold"),
+        default = "normal"
+      )
+      )
+  
 }
 
 
@@ -246,7 +257,7 @@ makeLeaflet <-
                                      preferCanvas = TRUE)) %>%
       setView(lng = 10.408,
               lat = 56.199752,
-              zoom = 7, ) %>%
+              zoom = 7,) %>%
       setMaxBounds(
         lng1 = 7.7,
         lat1 = 54.5,
@@ -280,7 +291,7 @@ makeLeaflet <-
 
 # ABOUT PANEL ------------------------------------------------------------
 
-makeAboutTables <- function(dat, col_names){
+makeAboutTables <- function(dat, col_names) {
   colnames(diag) <- col_names_diag
   DT::datatable(
     data = dat,
@@ -325,8 +336,7 @@ opr_DT <- makeAboutTables(opr, col_names_opr)
 col_subset <-
   c(paste0("name_", lang),
     paste0("desc_", lang),
-    "code_simple"
-    )
+    "code_simple")
 med <- about_dat_med[, ..col_subset]
 colnames(med) <- col_names_med
 med_DT <- makeAboutTables(med, col_names_med)
@@ -358,5 +368,4 @@ pop_DT <- DT::datatable(
       "}"
     )
   )
-) 
- 
+)
