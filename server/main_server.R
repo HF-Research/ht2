@@ -716,6 +716,10 @@ outputCountDTTable <- reactive({
     col_convert <- c("male", "female", "Total")
     dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
     
+    # Format numbers according to language
+    dat[, (col_convert) := lapply(.SD, function(x){
+      formatC(x, digits = 0, format = "d", big.mark = thousands_sep, decimal.mark = dec_mark)
+    }), .SDcols = col_convert]
   }
   
   setnames(

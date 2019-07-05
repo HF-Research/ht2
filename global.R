@@ -86,8 +86,9 @@ formatSuppressedValues <- JS(
   function(data, type) {
 
     if (type !== 'display') return data;
-    if (data !== 0) return data;
-    return '<10';
+    if (data !== '0') return data;
+    debugger
+    return '<4';
   }
 "
 )
@@ -115,11 +116,11 @@ makeCountDT <- function(dat, group_var, thousands_sep) {
       )
     )
   ) %>%
-    formatCurrency(col_format,
-                   currency = "",
-                   interval = 3,
-                   mark = thousands_sep,
-    digits = 0) %>%
+    # formatCurrency(col_format,
+    #                currency = "",
+    #                interval = 3,
+    #                mark = thousands_sep,
+    # digits = 0) %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
     formatStyle( 

@@ -123,14 +123,21 @@ input[type="month"] {
   background-color: var(--hfRed);
 }
 
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: var(--hfRedBright);
+  color: white;
+}
+
 .navbar-default .navbar-nav>li>a{
   font-weight: 600;
   color: white;
 }
 
-.navbar-default .navbar-brand{
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
   font-weight: 600;
-  font-size: 1.2em;
+  font-size: 1.5em;
   color: white;
 }
 
@@ -164,32 +171,6 @@ label{
   margin-bottom:7px;
   margin-top:5px;
 }
-
-
-/**** DROPDOWN *****/
-
-.selectize-dropdown-content{
-  max-height: 400px;
-}
-
-.selectize-dropdown-content{
-  line-height: 25px;
-}
-
-.selectize-dropdown .optgroup-header{
-  color:black;
-  font-weight:bold;
-  font-size:1.4rem;
-}
-
-.selectize-input{
-  line-height:22px;
-  border: 0px;
-  border-right:1px solid #cccccc;
-  border-bottom:1px solid #cccccc;;
-}
-
-
 
 
 /**** BUTTON STYLES *****/
@@ -235,6 +216,32 @@ label{
   font-size: 1.5rem;
   
 }
+
+
+
+/**** DROPDOWN *****/
+
+.selectize-dropdown-content{
+  max-height: 400px;
+}
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #cccccc;
+  border-bottom:1px solid #cccccc;;
+}
+
 
 
 /******   DT BOTTOM STYLING   *******/
