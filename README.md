@@ -15,4 +15,12 @@ The shiny app consists of three main R files, all located in the parent director
 - `server.R` calls the server logic. The server logic for this app is kept in two separate files, one for each navbar page of the shiny app. Thus there is on file for the main data page - `main_server.R` and one for the methods page - `about_server.R`. These files are located under the server/ directory
 - `ui.R` defines the app's user interface. Like the server logic - the UI is broken up into two files, one for each nabar page. The `main_ui.R` conatins the UI for the main data page and `about_ui.R` contains the UI for the methods page. Both files are located in the ui/ directory
 
-Data from DST is placed in the `data/` directory.
+The `data/` directory contains data exported from DST, as well as the UI data (text descriptions of outcomes, variables, etc) and the geographic data (shp files for the kommunes). Some key files are the follwing:
+#### DST exports
+- `export_diag1.txt` and `export_diag2.txt` contain the export from DST for diseases for every outcome, year and aggregation level
+- `export_opr.txt` contain the export from DST for operation/procedure for every outcome, year and aggregation level
+- `export_med.txt` contain the export from DST for medication regime for every outcome, year and aggregation level
+#### UI text
+- `outcome_descriptions.csv`contains the text descriptions of the all the outcomes (i.e. diseases/operations/medications), as well as the ICD/ATC codes, diag type and pattype used.
+- `variable_ui.csv` contains the text descriptions explaining variables (i.e. what an age standardized rate means). To allow this text to be dynamic and specific to each outcome the user selects, there are several key words that are dynamically replaced within the shiny sessions. These key words are `REPLACE_OUTCOME`, `REPLACE_YEAR`, `REPLACE_AGGR`, `REPLACE_TYPE`.
+- `ui_about_text.csv` contains the text descriptions used in the "methods" page of the app.
