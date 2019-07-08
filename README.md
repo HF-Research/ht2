@@ -12,6 +12,7 @@ The shiny app consists of three main shiny/R files, all located in the parent di
 - `global.R` contains global variables and functions that are accessible to all users across sessions.
 - `server.R` calls the server logic. The server logic for this app is kept in two separate files, one for each navbar page of the shiny app. Thus there is on file for the main data page - `main_server.R` and one for the methods page - `about_server.R`. These files are located under the server/ directory
 - `ui.R` defines the app's user interface. Like the server logic - the UI is broken up into two files, one for each nabar page. The `main_ui.R` conatins the UI for the main data page and `about_ui.R` contains the UI for the methods page. Both files are located in the ui/ directory
+- `ui-dk.R` contains several bits of the shiny UI that are language specific. A parallel English file needs to be created for the English version of the app.
 
 ### R code
 The `r/` directory contains the file for data preprocessing and validation
