@@ -1,0 +1,6 @@
+edu_name_dk,edu_name_en,long_desc_dk,long_desc_en,code_simple,grep_str
+Grundskole,Basic,Grundskole op til 10. klasse / Forberedende uddannelser,Primary or lower secondary education,0 - 20,[012]0
+Gymnasial/ erhvervsfaglig,Secondary,Gymnasiale og erhvervsfaglige uddannelser,High school or other secondary education,30,30
+Mellemlang videregånde,Tertiary,Korte eller mellemlang videregående uddannelser,Bachelor's or other tertiary education (including vocational schools),50 - 60,[56]0
+Lange videregående,Postgraduate,Lange videregående uddannelser og PhD,"Master's, Ph.D or other posgraduate education",70 - 80,[78]0
+Uoplyst,Unknown,Uoplyst mv.,Unknown,90,90

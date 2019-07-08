@@ -1,7 +1,2 @@
-*.*
-!*.R
-!*.rmd
-!*.txt
-!*.js
-!*.css
 .Rproj.user
+.Rhistory
