@@ -113,8 +113,10 @@ makeDanish <- function(dat) {
 
 shiny_dat_dk <- makeDanish(shiny_dat_en)
 saveRDS(shiny_dat_dk, file = "data/shiny_dat_dk.rds")
+
+
+
 # SF APPROACH -------------------------------------------------------------
-l1 <- readRDS("data/DNK_adm1.rds")
 l2 <- readRDS("data/DNK_adm2.rds")
 
 l2 <- st_as_sf(l2, coords = c("x", "y"))
