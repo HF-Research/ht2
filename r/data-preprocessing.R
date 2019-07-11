@@ -7,8 +7,8 @@ library(sf)
 library(leaflet)
 library(dplyr)
 # library(spdep)
-edu <- fread("data/edu_description.csv")
-
+edu <- fread("data/edu_description.csv", encoding = "UTF-8")
+edu <- edu[, lapply(.SD, enc2native)]
 # OUTCOME DATA ------------------------------------------------------------
 
 export_opr <- fread("data/export_opr.txt", encoding = "UTF-8")
@@ -76,11 +76,8 @@ setNAtoZero <- function(x) {
 shiny_dat_en <- cleanGeoData(shiny_dat_en)
 shiny_dat_en <- setNAtoZero(shiny_dat_en)
 saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
-shiny_dat_en$b1$age
-
 
 # DANISH LANGUAGE SUPPORT -------------------------------------------------
-
 makeDanish <- function(dat) {
   # Change english education labels to Danish labels
   lapply(dat, function(outcome) {
@@ -106,10 +103,6 @@ makeDanish <- function(dat) {
     outcome
   })
 }
-
-
-
-
 
 shiny_dat_dk <- makeDanish(shiny_dat_en)
 saveRDS(shiny_dat_dk, file = "data/shiny_dat_dk.rds")

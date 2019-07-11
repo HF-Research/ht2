@@ -37,7 +37,6 @@ if (lang == "dk") {
 # OBJECTS ------------------------------------------------------------
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)
-edu <- fread(file = "data/edu_description.csv")
 dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 pop <- fread("data/pop_summary_age.txt")
 year_max <- 2016

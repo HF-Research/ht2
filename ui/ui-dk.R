@@ -3,20 +3,26 @@
 # Requires shiny_dat_* to be loaded - but will load this in global.R file before running this ui file
 ###########################
 
-library(data.table)
-
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
 outcome_descriptions <-
   fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8")
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
-  fread(file = "data/variable_ui.csv", encoding = "UTF-8", header = TRUE)
+  fread(file = "data/variable_ui.csv",
+        encoding = "UTF-8",
+        header = TRUE)
+edu <- fread(file = "data/edu_description.csv", encoding = "UTF-8")
 ui_about_text <-
   fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
+
+
+# Encode to native
 outcome_descriptions <-
   outcome_descriptions[, lapply(.SD, enc2native)]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
+edu <- edu[, lapply(.SD, enc2native)]
+
 
 outcome_names_treatment <-
   merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
@@ -65,17 +71,19 @@ choose_var <- enc2utf8("Vælg statistik:")
 choose_rate_count <- enc2utf8("Vælg rater/antal:")
 
 aggr_choices <-
-  data.table(name_dk = c("Alder",
-                         "Uddannelse",
-                         "Kommune",
-                         "Region",
-                         "År"),
-             name_dk_long = c("Aldersgruppe",
-                         "Uddannelsesgruppe",
-                         "Kommune",
-                         "Region",
-                         "År"),
-             name_ht = c("age","edu","kom","region","national"))
+  data.table(
+    name_dk = c("Alder",
+                "Uddannelse",
+                "Kommune",
+                "Region",
+                "År"),
+    name_dk_long = c("Aldersgruppe",
+                     "Uddannelsesgruppe",
+                     "Kommune",
+                     "Region",
+                     "År"),
+    name_ht = c("age", "edu", "kom", "region", "national")
+  )
 row.names(aggr_choices) <- aggr_choices$name_dk
 
 count_rate_choices <- list("Rate" = 2,
@@ -152,16 +160,15 @@ col_names_opr <-
 col_names_med <-
   c("Medicin type",
     "Beskrivlse",
-    "ATC kode"
-    )
+    "ATC kode")
 
-col_names_edu <- enc2utf8(c("Uddannelsesniveau (kort)",
-                   "Uddannelsesniveau (lang)",
-                   "DISCED-15 kode"))
+col_names_edu <- enc2utf8(c(
+  "Uddannelsesniveau (kort)",
+  "Uddannelsesniveau (lang)",
+  "DISCED-15 kode"
+))
 
-col_names_pop <- enc2utf8(
-  c("År", "Sex", "Ælder grupper", "Befolkningen")
-  )
+col_names_pop <- enc2utf8(c("År", "Sex", "Ælder grupper", "Befolkningen"))
 
 
 def_diag_title <- "Definitioner af sygdomme"
