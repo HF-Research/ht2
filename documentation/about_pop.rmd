@@ -1,0 +1,18 @@
+---
+title: "Befolkning"
+output: html_document
+---
+
+The Danish CPR register contains data on all individuals who have recieved a CPR number. In order to construct an accurate estimate of the Danish population for any given year, we had to excluded the recprds of those who had died, immigrated, or were temporarily living outside of Denmark as of 1. January for the given year. Additionally, some records were excluded due to incomplete information. The records remaining were considered to comprise the Danish population for that year.  
+
+Records were excluded from the dataset if they met any of the following critera:  
+
+* Contain a `NA` value for `bef_year`
+* Contain a `NA` value for date of birth (`fdato`)
+* Are under aged 35 as of 1. January
+* Those with a registered death occuring before 1. January
+* Those who are not residents of Denmark as of 1. January. This is defined using immigration records, and records were excluded if they met the following critera:
+  + Emmigrated from Denmark before 1. January
+  + Immigrated to Denmark after 1. January
+  + Were born outside of Denmark, but have no data on date of arrival in Denmark
+  + Those temporarily living outside of Denmark as of 1. January. This estimate likely slightly undercounts the true nummber of people temporarily living oversears, meaning a small number of records in our dataset might not truly reside in Denmark for the given year.

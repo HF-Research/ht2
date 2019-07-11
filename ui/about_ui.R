@@ -43,6 +43,8 @@ tabPanel(
   conditionalPanel(condition = "input.about_selection == 'def_variables'" ),
   
   conditionalPanel(condition = "input.about_selection == 'def_populations'",
+                   
+                   fluidRow(includeMarkdown(path = "documentation/about_pop.rmd")),
                    fluidRow(column(class = "col_about_dt",
                                    12, align = "center",
                                    DTOutput("table_pop")
