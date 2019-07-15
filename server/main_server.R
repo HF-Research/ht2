@@ -211,21 +211,35 @@ plotTitle <- reactive({
   if (isNational()) {
     paste0(input$outcome, ": ", tolower(prettyVariable()[1]))
   } else {
-    if (input$aggr_level == "edu") {
+    
+    if (isGeo()) {
+      paste0(
+        input$outcome,
+        ": ",
+        tolower(prettyVariable()[1]),
+        "  ",
+        input$year,
+        ", ",
+        ui_moving_avg_desc
+      )
+    }
+    else if (input$aggr_level == "edu") {
       paste0(
         input$outcome,
         ": ",
         tolower(prettyVariable()[1]),
         " (",
         ui_edu_age_range,
-        "), ",
-        input$year
+        ")  ",
+        input$year,
+        ", ",
+        ui_moving_avg_desc
       )
     } else {
       paste0(input$outcome,
              ": ",
              tolower(prettyVariable()[1]),
-             ", ",
+             "  ",
              input$year)
     }
     

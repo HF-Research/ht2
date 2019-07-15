@@ -64,11 +64,8 @@ tabPanel(
                             12, align = "center",
                             DTOutput("table_edu"))
                    )),
-  conditionalPanel(condition = "input.about_selection == 'r_code'",
-                   fluidRow(
-                     class = "col-xs-12 col-sm-10 col-md-8 col-lg-6",
-                     includeMarkdown("documentation/r_code.md")
-                   )),
+  conditionalPanel(condition = "input.about_selection == 'r_code'"
+                   ),
   br(),
   br(),
   br()
