@@ -386,4 +386,3 @@ pop_DT <- DT::datatable(
     )
   )
 )
-2

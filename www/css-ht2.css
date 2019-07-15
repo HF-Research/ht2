@@ -336,15 +336,21 @@ td {
 
 .output_titles {  
  font-size: 150%;
+ font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .axis{
   font-size: 90%;
-}z
+}
 
 .axisTitle{
   font-size: 110%;
 }
+
+.legend{
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
 
 /* OUTOUTS */
 
@@ -479,4 +485,10 @@ max-width:1260px;
 
 .col_about_text{
   max-width:1060px;
+}
+
+
+/******   CODE TABPAGE   *******/
+summary{
+  padding-bottom: 15px;
 }

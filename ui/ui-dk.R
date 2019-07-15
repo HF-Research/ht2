@@ -102,7 +102,7 @@ ui_count_rate <-
 ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andel")
 ui_edu_age_range <- "35 - 84 årige"
-
+ui_moving_avg_desc <- "3-år glidende gennemsnit"
 # Strings to place inside variable descriptions
 replace_type_string_opr <- "fik foretaget en"
 replace_type_string_diag <- "blev diagnosticeret med"
@@ -115,6 +115,8 @@ ui_d3_figures <- "Grafer"
 ui_data <- "Tabeller"
 
 # ABOUT PANEL -------------------------------------------------------------
+ui_about_title <- "Metoder"
+about_selection <- "Vælg definition"
 
 about_dat_diag <-
   merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
@@ -133,17 +135,13 @@ about_dat_med <-
         by = "hjertetal_code")
 
 
-
-ui_about_title <- "Metoder"
-about_selection <- "Vælg definition"
 about_choices <- list(
   "Sygdomme" = "def_diag",
   "Procedurer" = "def_opr",
   "Medicin" = "def_med",
   "Statistik" = "def_variables",
   "Befolkninger" = "def_populations",
-  "Uddannelse" = "def_edu",
-  "R kode" = "r_code"
+  "Uddannelse" = "def_edu"
 )
 col_names_diag <-
   c("Sygdomme",
@@ -177,3 +175,6 @@ def_med_title <- "Definitioner af medicin"
 def_variables_title <- "Definitioner af statistiker"
 def_population_title <- "Definitioner af befolkninger"
 def_stratas_title <- "Definitioner af stratifikationer"
+# CODE PANEL --------------------------------------------------------------
+ui_code_title <- "Code"
+

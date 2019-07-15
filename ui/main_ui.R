@@ -70,11 +70,11 @@ tabPanel(ui_main_title,
                  br(),
                  conditionalPanel(condition = "input.aggr_level != 'national'",
                                   (
-                                    simpleD3BarOutput("d3_plot_bar", height = "550px")
+                                    simpleD3BarOutput("d3_plot_bar", height = "600px")
                                   )),
                  conditionalPanel(condition = "input.aggr_level == 'national'",
                                   (
-                                    simpleD3LineOutput("d3_plot_line_html", height = "550px")
+                                    simpleD3LineOutput("d3_plot_line_html", height = "600px")
                                   )),
                  fluidRow(
                    div(
