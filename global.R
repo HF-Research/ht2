@@ -87,7 +87,6 @@ formatSuppressedValues <- JS(
 
     if (type !== 'display') return data;
     if (data !== '0') return data;
-    debugger
     return '<4';
   }
 "
@@ -100,7 +99,6 @@ formatNAValues <- JS(
 
     if (type !== 'display') return data;
     if (data !== '0,0') return data;
-    debugger
     return 'NA';
   }
 "
