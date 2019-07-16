@@ -54,7 +54,7 @@ tabPanel(
   
   conditionalPanel(condition = "input.about_selection == 'def_populations'",
                    fluidRow(
-                     column(class = "col_about_dt",
+                     column(class = "col_about_dt col-xs-12 col-sm-7 col-md-6 col-lg-4",
                             12, align = "center",
                             DTOutput("table_pop"))
                    )),

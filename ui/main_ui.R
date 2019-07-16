@@ -64,7 +64,7 @@ tabPanel(ui_main_title,
                id = "data_vis_tabs",
                type = "pill",
                
-               
+               # Graph panel
                tabPanel(
                  title = ui_d3_figures,
                  br(),
@@ -91,53 +91,14 @@ tabPanel(ui_main_title,
                  )),
                  fluidRow(br(), br())
                ),
-               tabPanel(
-                 title = ui_data,
-                 fluidRow(
-                   class = "row_outcome_title",
-                   column(
-                     11,
-                     class = "output_titles",
-                     align = "left",
-                     textOutput("outcome_title_dt")
-                   )
-                 ),
-                 fluidRow(
-                   class = "row_outcome_title",
-                   column(
-                     class = "col_DT",
-                     6,
-                     align = "center",
-                     fluidRow(tags$b(textOutput("table1_title"))),
-                     fluidRow(((
-                       DTOutput("table_counts")
-                     ))),
-                     fluidRow(align = "left",
-                              uiOutput("count_desc"),
-                              br())
-                   ),
-                   column(
-                     class = "col_DT",
-                     6,
-                     align = "center",
-                     fluidRow(tags$b(textOutput("table2_title"))),
-                     fluidRow(((
-                       DTOutput("table_rates")
-                     ))),
-                     fluidRow(align = "left",
-                              uiOutput("rate_desc"),
-                              br())
-                   )
-                 )
-               ),
                
+               # Map Panel
                tabPanel(
                  title = ui_map,
                  fluidRow(
                    class = "row_outcome_title",
                    column(
-                     11,
-                     offset = 1,
+                     12,
                      class = "output_titles",
                      align = "left",
                      textOutput("outcome_title_map")
@@ -183,6 +144,48 @@ tabPanel(ui_main_title,
                  fluidRow(align = "left",
                           uiOutput("rate_desc_map"),
                           br())
+               
+               ),
+               
+               # Data panel
+               tabPanel(
+                 title = ui_data,
+                 fluidRow(
+                   class = "row_outcome_title",
+                   column(
+                     11,
+                     class = "output_titles",
+                     align = "left",
+                     textOutput("outcome_title_dt")
+                   )
+                 ),
+                 fluidRow(
+                   class = "row_outcome_title",
+                   column(
+                     class = "col_DT",
+                     6,
+                     align = "center",
+                     fluidRow(tags$b(textOutput("table1_title"))),
+                     fluidRow(((
+                       DTOutput("table_counts")
+                     ))),
+                     fluidRow(align = "left",
+                              uiOutput("count_desc"),
+                              br())
+                   ),
+                   column(
+                     class = "col_DT",
+                     6,
+                     align = "center",
+                     fluidRow(tags$b(textOutput("table2_title"))),
+                     fluidRow(((
+                       DTOutput("table_rates")
+                     ))),
+                     fluidRow(align = "left",
+                              uiOutput("rate_desc"),
+                              br())
+                   )
+                 )
                )
              ),
              
