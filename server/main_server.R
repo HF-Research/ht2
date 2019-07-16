@@ -586,7 +586,8 @@ combinedMaps <- reactive({
   
   fill_data[fill_data == 0] <- NA
   # Define breaks using the "pretty" algorithm
-  map_breaks <- classIntervals(fill_data, style = "pretty", n = 5)
+  map_breaks <-
+    suppressWarnings(classIntervals(fill_data, style = "pretty", n = 5))
   pal <-
     colorBin(
       palette = "YlOrRd",
@@ -631,7 +632,8 @@ combinedMaps <- reactive({
     map_data = map_data,
     fill_colors = fill_colors,
     label_popup = popup,
-    mini_map_lines = dk_sp$mini_map_lines
+    mini_map_lines = dk_sp$mini_map_lines,
+    element_id = "map_male"
   )
   
   # Female map
@@ -649,9 +651,9 @@ combinedMaps <- reactive({
     map_data = map_data,
     fill_colors = fill_colors,
     label_popup = popup,
-    mini_map_lines = dk_sp$mini_map_lines
-    
-  ) %>%
+    mini_map_lines = dk_sp$mini_map_lines,
+    element_id = "map_female"
+    ) %>%
     addLegend(
       "topright",
       pal = pal,
@@ -1182,13 +1184,25 @@ map <- reactiveValues(dat = 0)
 output$downloadMapsMale <- downloadHandler(
   filename = "map_male.png",
   content = function(file) {
-    mapshot(map$map_m_legend, file = file, cliprect = "viewport")
+    mapshot(
+      map$map_m_legend,
+      file = file,
+      selector = "#map_male",
+      vwidth = 483,
+      vheight = 590
+    )
   }
 )
 output$downloadMapsFemale <- downloadHandler(
   filename = "map_female.png",
   content = function(file) {
-    mapshot(map$map_f, file = file, cliprect = "viewport")
+    mapshot(
+      map$map_f,
+      file = file,
+      selector = "#map_female",
+      vwidth = 483,
+      vheight = 590
+    )
   }
 )
 # RENDER FUNCTIONS --------------------------------------------------------

@@ -14,15 +14,11 @@ library(manipulateWidget)
 library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
-# library(mapview)
+library(mapview) # For map downloads
 if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
 }
 
-# This is a fork, because of the issue highlighted here with the master branch:
-# https://github.com/rstudio/leaflet/issues/347
-# devtools::install_github('matthew-phelps/leaflet.minicharts')
-# library(leaflet.minicharts)
 
 # LANGUAGE UI ---------------------------------------------------------
 lang = "dk"
@@ -277,8 +273,10 @@ makeLeaflet <-
   function(map_data,
            fill_colors,
            label_popup,
-           mini_map_lines) {
-    leaflet(options = leafletOptions(minZoom = 7,
+           mini_map_lines,
+           element_id) {
+    leaflet(elementId = element_id,
+            options = leafletOptions(minZoom = 7,
                                      preferCanvas = TRUE)) %>%
       setView(lng = 10.408,
               lat = 56.199752,
