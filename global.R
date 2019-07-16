@@ -7,7 +7,7 @@ library(shinyWidgets)
 library(data.table)
 library(shinyBS)
 library(shinyjs)
-
+library(classInt) # For choropleth map breaks
 # library(sp)
 library(leaflet)
 library(manipulateWidget)
@@ -263,6 +263,24 @@ makeRateKomDT <-
 
 # LEAFLET MAPS -------------------------------------------------------
 
+
+makeMapPopup <- function(geo_name, var_title1, data) {
+  # geo_name is place name. var_title1 and var_title two is the title broken
+  # where two spaces occur ("  "). Data is the datapoint passed to the function
+  out <- paste0(
+    "<strong><center>",
+    geo_name,
+    '</strong></center>',
+    '<p style = "font-size:0.8em; margin-bottom:0px">',
+    var_title1, ": ",
+    '</p>',
+    '<strong><center><p style = "font-size:1.2em; margin-bottom:0px">',
+    formatC(data, ),
+    "</strong></p></center>"
+  )
+  lapply(out, htmltools::HTML)
+}
+
 makeLeaflet <-
   function(map_data,
            fill_colors,
@@ -274,9 +292,9 @@ makeLeaflet <-
               lat = 56.199752,
               zoom = 7,) %>%
       setMaxBounds(
-        lng1 = 7.7,
+        lng1 = 8.1,
+        lng2 = 12.7,
         lat1 = 54.5,
-        lng2 = 13.3,
         lat2 = 58.0
       ) %>%
       addPolygons(
@@ -290,6 +308,8 @@ makeLeaflet <-
         labelOptions = labelOptions(
           style = list("font-weight" = "normal", # CSS styles
                        padding = "3px 8px"),
+          offset = c(0, 0),
+          sticky = FALSE,
           textsize = "17px",
           direction = "auto",
           opacity = 1

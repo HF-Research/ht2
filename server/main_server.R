@@ -9,10 +9,16 @@ showModal(
     title = "Beta testing Hjertetal2",
     easyClose = TRUE,
     fade = TRUE,
-    tags$p(tags$b("Does not work with Internet Explorer. Please choose Chrome/Firefox/Safari")),
+    tags$p(
+      tags$b(
+        "Does not work with Internet Explorer. Please choose Chrome/Firefox/Safari"
+      )
+    ),
     tags$br(),
-    tags$p("This is a beta version of HjerteTal2 that should only be used for testing purposes.
-    The data presented has not been evaluated for accuracy and should not be used for reporting."),
+    tags$p(
+      "This is a beta version of HjerteTal2 that should only be used for testing purposes.
+    The data presented has not been evaluated for accuracy and should not be used for reporting."
+    ),
     tags$p("Please send any feedback to mphelps@hjerteforeningen.dk"),
     tags$br(),
     tags$p("Click anywhere to dismiss")
@@ -82,7 +88,10 @@ output$variable_desc <- renderUI({
   
   isolate({
     # Append title to front of variable descr text
-    title_text <- tags$b(prettyVariable()[1])
+    
+    title_text <- tolower(prettyVariable()[1])
+    title_text <- tags$b(paste0("Den ", title_text))
+    
     
     col_selection <- paste0("desc_general_", lang)
     desc_text <-
@@ -117,10 +126,11 @@ output$variable_desc <- renderUI({
 })
 
 
-rate_desc <- function(){
+rate_desc <- function() {
   # For rates
+  title_text <- tolower(prettyVariable()[2])
+  title_text <- tags$b(paste0("Den ", title_text))
   
-  title_text <- tags$b(prettyVariable()[2])
   col_selection <-
     paste0("desc_", selectedRateType(), "_", lang)
   desc_text <-
@@ -149,7 +159,7 @@ rate_desc <- function(){
 }
 
 
-count_desc <- function(){
+count_desc <- function() {
   # For counts
   title_text <-
     tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
@@ -198,9 +208,9 @@ output$rate_count_desc <- renderUI({
   
   
   if (input$rate_count == 2) {
-   rate_desc()
+    rate_desc()
   } else {
-   count_desc()
+    count_desc()
   }
   
 })
@@ -211,7 +221,6 @@ plotTitle <- reactive({
   if (isNational()) {
     paste0(input$outcome, ": ", tolower(prettyVariable()[1]))
   } else {
-    
     if (isGeo()) {
       paste0(
         input$outcome,
@@ -254,10 +263,12 @@ output$outcome_title <- renderText({
 })
 
 output$outcome_title_dt <- renderText({
+  req(input$data_vis_tabs == ui_data)
   plotTitle()
 })
 
 output$outcome_title_map <- renderText({
+  req(input$data_vis_tabs == ui_map)
   plotTitle()
 })
 
@@ -515,7 +526,8 @@ mapObj <- function() {
 mapData <- reactive({
   data_var <- prettyVariable()[2] # Only use rate data
   keep_vars <- c("id", prettyAggr_level(), data_var)
-  tmp <- copy(outputCasesData()) # Make copy so not corrput reactive data
+  tmp <-
+    copy(outputCasesData()) # Make copy so not corrput reactive data
   
   # MALES
   out_m <- mapObj()
@@ -564,63 +576,51 @@ combinedMaps <- reactive({
   
   var_name <- prettyVariable()[2]
   name_lang <- paste0("name_", lang)
-  fill_data <-
-    rbind(mapData()$male@data, mapData()$female@data)[[var_name]]
   
-    pal <- colorQuantile("YlOrRd", fill_data, n = 4, reverse = FALSE)
-    if (selectPercentOrRate()) {
-      # If variable is percent:
-      labFormatter <- function(type, cuts) {
-        n = length(cuts)
-        cuts <- round(cuts, digits = 1)
-        paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
-      }
-    } else {
-      # If variable is rate:
-      labFormatter <- function(type, cuts) {
-        n = length(cuts)
-        cuts <- round(cuts)
-        paste0(cuts[-n], " &ndash; ", cuts[-1])
-      }
+  fill_data <-
+    subsetVars()[get(ui_year) >= 2009,][[var_name]]
+  
+  # Define breaks using the "pretty" algorithm
+  map_breaks <- classIntervals(fill_data, style = "pretty", n = 5)
+  pal <-
+    colorBin(
+      palette = "YlOrRd",
+      bins = length(map_breaks$brks),
+      domain = map_breaks$brks
+    )
+  
+  if (selectPercentOrRate()) {
+    # If variable is percent:
+    labFormatter <- function(type, cuts) {
+      n = length(cuts)
+      cuts <- round(cuts, digits = 1)
+      paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
     }
+  } else {
+    # If variable is rate:
+    labFormatter <- function(type, cuts) {
+      n = length(cuts)
+      cuts <- round(cuts)
+      paste0(cuts[-n], " &ndash; ", cuts[-1])
+    }
+  }
   
   
   
   legend_title <- gsub("  ", "<br>", var_name)
   popup_var_title_1 <- gsub("  .*", "", var_name)
-  popup_var_title_2 <- gsub(".*  ", "", var_name)
+  
   
   # Male map
   map_data <-  mapData()$male
   fill_colors <-
     ~ pal(map_data@data[[var_name]])
   
-  makeMapPopup <- function(geo_name, var_title1, var_title2, data) {
-   # geo_name is place name. var_title1 and var_title two is the title broken
-   # where two spaces occur ("  "). Data is the datapoint passed to the function
-      out <- paste0(
-        "<strong><center>",
-        geo_name,
-        '</strong></center>',
-        '<p style = "font-size:0.8em; margin-bottom:0px">',
-        var_title1,
-        '</p>',
-        '<p style = "font-size:0.8em; margin-bottom:3px">',
-        var_title2,
-        ': </p>',
-        '<strong><center><p style = "font-size:1.2em; margin-bottom:0px">',
-        data,
-        "</strong></p></center>"
-      )
-    lapply(out, htmltools::HTML)
-  }
+  
   popup <-
-    makeMapPopup(
-      geo_name = map_data@data[[prettyAggr_level()]],
-      var_title1 = popup_var_title_1,
-      var_title2 = popup_var_title_2,
-      map_data@data[[var_name]]
-    )
+    makeMapPopup(geo_name = map_data@data[[prettyAggr_level()]],
+                 var_title1 = popup_var_title_1,
+                 map_data@data[[var_name]])
   
   map_m <- makeLeaflet(
     map_data = map_data,
@@ -635,12 +635,9 @@ combinedMaps <- reactive({
   fill_colors <-
     ~ pal(map_data@data[[var_name]])
   popup <-
-    makeMapPopup(
-      geo_name = map_data@data[[prettyAggr_level()]],
-      var_title1 = popup_var_title_1,
-      var_title2 = popup_var_title_2,
-      map_data@data[[var_name]]
-    )
+    makeMapPopup(geo_name = map_data@data[[prettyAggr_level()]],
+                 var_title1 = popup_var_title_1,
+                 map_data@data[[var_name]])
   
   
   map_f <- makeLeaflet(
@@ -747,8 +744,14 @@ outputCountDTTable <- reactive({
     dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
     
     # Format numbers according to language
-    dat[, (col_convert) := lapply(.SD, function(x){
-      formatC(x, digits = 0, format = "d", big.mark = thousands_sep, decimal.mark = dec_mark)
+    dat[, (col_convert) := lapply(.SD, function(x) {
+      formatC(
+        x,
+        digits = 0,
+        format = "d",
+        big.mark = thousands_sep,
+        decimal.mark = dec_mark
+      )
     }), .SDcols = col_convert]
   }
   
@@ -758,16 +761,19 @@ outputCountDTTable <- reactive({
     new = c(prettyAggr_level(), rev(ui_sex_levels))
   )
   if (isKom()) {
-    makeCountKomDT(dat,
-                   group_var = prettyAggr_level(),
-                   thousands_sep = thousands_sep,
-                   dt_title = plotTitle()
-                   )
+    makeCountKomDT(
+      dat,
+      group_var = prettyAggr_level(),
+      thousands_sep = thousands_sep,
+      dt_title = plotTitle()
+    )
   } else {
-    makeCountDT(dat,
-                group_var = prettyAggr_level(),
-                thousands_sep = thousands_sep,
-                dt_title = plotTitle())
+    makeCountDT(
+      dat,
+      group_var = prettyAggr_level(),
+      thousands_sep = thousands_sep,
+      dt_title = plotTitle()
+    )
   }
 })
 
@@ -854,11 +860,11 @@ validateKom <- reactive({
 
 isKom <- reactive({
   input$aggr_level == "kom"
-  })
+})
 
 isRegion <- reactive({
   input$aggr_level == "region"
-  })
+})
 
 isGeo <- reactive({
   isKom() ||
