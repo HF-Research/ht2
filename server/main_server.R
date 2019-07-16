@@ -882,59 +882,78 @@ is5YearMortality <- reactive({
 
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
+
+  # This requires an valid aggr_level input
+  
+  validateSelectedVars <- reactive({
+    # Evalutes current variable selection to see if it is a valid selection for
+    # the current selection of outcome and aggr_level combination. Returns
+    # binary valid T/F, as well as current selection and current valid var
+    # possibilities.
+    req(input$aggr_level)
+    
+    aggr_selected <- input$aggr_level
+    
+    
+    outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
+    
+    
+    var_names <- valid_output_combos[outcome == outcomeCode() &
+                                       aggr_level == aggr_selected, unique(var)]
+    
+    
+    # Remove columns with data that should not be shown to user
+    var_names <- var_names[!var_names %in% variables_not_used]
+    
+    # Select the plain language terms matching the variables in data
+    variable_choices <-
+      variable_ui[code_name %in% var_names, .(code_name, var_dk)]
+    var_names <- variable_choices$code_name
+    names(var_names) <- variable_choices$var_dk
+    
+    
+    selected_var <- isolate(input$variable)  
+    
+    list(selected_var = selected_var,
+         var_names = var_names,
+         valid_selection = selected_var %in% var_names)
+  })
+
 output$varChoices <- renderUI({
+  req(input$aggr_level)
   # Gives a dynamic button UI. The buttons change depending on the selected
   # outcome Keep variables that have "count" in their name.
   #
-  # This requires an valid aggr_level input
-  req(input$aggr_level)
-  
-  aggr_selected <- input$aggr_level
-  
-  
-  outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
-  
-  
-  var_names <- valid_output_combos[outcome == outcomeCode() &
-                                     aggr_level == aggr_selected, unique(var)]
-  
-  
-  # Remove columns with data that should not be shown to user
-  var_names <- var_names[!var_names %in% variables_not_used]
-  
-  # Select the plain language terms matching the variables in data
-  variable_choices <-
-    variable_ui[code_name %in% var_names, .(code_name, var_dk)]
-  var_names <- variable_choices$code_name
-  names(var_names) <- variable_choices$var_dk
-  
   # This next code allows the variable chosen by the user to remain, when
   # switching to a new outcome, while on a aggr_level not supported with the new
   # outcome. F.x. Switch from all-CVD, 30-day mortality, kommune-level, to
   # hjerteklapoperation. Hjerteklaoperation only supports 30-day mort at
-  # national level, so aggr_is switched to that level.
+  # national level, so the variable is switched to incidence.
   #
   # If the previous selected var is not available, test to see if it is
   # available in the previously selected aggr_level. If not to both, set
   # selected_var to be the first variable.
-  selected_var <- isolate(input$variable)
+  selected_var <- validateSelectedVars()$selected_var
+  var_names <- validateSelectedVars()$var_names
+  valid_selection <- validateSelectedVars()$valid_selection
   if (is.null(selected_var)) {
     # If no previous selection:
     selected_var <- var_names[1]
-  } else if (!selected_var %in% var_names) {
+  } else if (!valid_selection) {
     # If selected var not in current selection AND...
     aggr_selected_next <-
       isolate(aggrButtonChoices()$selected_aggr)
-    if (is.null(aggr_selected_next))
+    if (is.null(aggr_selected_next)) {
       aggr_selected_next <- "national"
-    
+    }
+    # Variable available for aggr_selected_next and outcome
     var_names_2 <-
       valid_output_combos[outcome == outcomeCode() &
                             aggr_level == aggr_selected_next,
                           unique(var)]
     if (!selected_var %in% var_names_2) {
       # ...selected var also not in set of vars attached to previously
-      # selected aggr_level:
+      # selected aggr_level: Set var to incidence
       selected_var <- var_names[1]
     } else {
       var_names <- var_names_2
@@ -1187,9 +1206,11 @@ output$table_rates <- renderDT({
 
 # MAPS
 output$map_male <- renderLeaflet({
+  req(validateSelectedVars()$valid_selection)
   combinedMaps()$map_m
 })
 
 output$map_female <- renderLeaflet({
+  req(validateSelectedVars()$valid_selection)
   combinedMaps()$map_f
 })
