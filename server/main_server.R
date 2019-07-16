@@ -529,6 +529,10 @@ mapData <- reactive({
   tmp <-
     copy(outputCasesData()) # Make copy so not corrput reactive data
   
+  # Set Zero values to NA - 0s mean <4 observations, so we don't know the actual
+  # value
+  tmp[get(data_var) == 0, (data_var) := NA]
+  
   # MALES
   out_m <- mapObj()
   tmp_m <-
@@ -580,6 +584,7 @@ combinedMaps <- reactive({
   fill_data <-
     subsetVars()[get(ui_year) >= 2009,][[var_name]]
   
+  fill_data[fill_data==0] <- NA
   # Define breaks using the "pretty" algorithm
   map_breaks <- classIntervals(fill_data, style = "pretty", n = 5)
   pal <-
@@ -791,14 +796,27 @@ outputRateDTTable <- reactive({
   dat <- dat[, ..vars]
   colnames(dat) <- c("group_var", "female", "male")
   
-  # If results are percentages - round with 1 sig fig. If results are rates -> 0
+   # If results are percentages - round with 1 sig fig. If results are rates -> 0
   # sig figs.
   if (!selectPercentOrRate()) {
     digits = 0
   } else {
     digits = 1
   }
-  
+ 
+  col_convert <- c("male", "female")
+  dat[, (col_convert) := lapply(.SD, function(x) {
+    
+    formatC(
+      x,
+      digits = digits,
+      format = "f",
+      big.mark = thousands_sep,
+      decimal.mark = dec_mark
+    )
+  }), .SDcols = col_convert]
+
+   
   setnames(
     dat,
     old = c("group_var", "male", "female"),
@@ -809,18 +827,12 @@ outputRateDTTable <- reactive({
     makeRateKomDT(
       dat = dat,
       group_var = prettyAggr_level(),
-      thousands_sep = thousands_sep,
-      digits = digits,
-      dec_mark = dec_mark,
       dt_title = plotTitle()
     )
   } else {
     makeRateDT(
       dat = dat,
       group_var = prettyAggr_level(),
-      thousands_sep = thousands_sep,
-      digits = digits,
-      dec_mark = dec_mark,
       dt_title = plotTitle()
     )
   }

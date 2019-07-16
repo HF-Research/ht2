@@ -93,6 +93,20 @@ formatSuppressedValues <- JS(
 "
 )
 
+
+formatNAValues <- JS(
+  "
+  function(data, type) {
+
+    if (type !== 'display') return data;
+    if (data !== '0,0') return data;
+    debugger
+    return 'NA';
+  }
+"
+)
+
+
 makeCountDT <- function(dat, group_var, thousands_sep, dt_title) {
   col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
@@ -181,9 +195,6 @@ makeCountKomDT <-
 makeRateDT <-
   function(dat,
            group_var,
-           thousands_sep,
-           digits,
-           dec_mark,
            dt_title) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
@@ -194,6 +205,7 @@ makeRateDT <-
       options = list(
         ordering = FALSE,
         dom = "tB",
+        columnDefs = list(list(render = formatNAValues, targets = "_all")),
         buttons = list(
           list(extend = "pdf",
                messageTop = dt_title),
@@ -206,24 +218,13 @@ makeRateDT <-
           "}"
         )
       )
-    ) %>%
-      formatCurrency(
-        col_format,
-        currency = "",
-        interval = 3,
-        mark = thousands_sep,
-        digits = digits,
-        dec.mark = dec_mark
-      ) %>%
+    )  %>%
       formatStyle(group_var,  backgroundColor = "#e7e7e7")
   }
 
 makeRateKomDT <-
   function(dat,
            group_var,
-           thousands_sep,
-           digits,
-           dec_mark,
            dt_title) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
@@ -236,6 +237,7 @@ makeRateKomDT <-
         lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
         pageLength = 15,
         dom = "lftBp",
+        columnDefs = list(list(render = formatNAValues, targets = "_all")),
         buttons = list(
           list(extend = "pdf",
                messageTop = dt_title),
@@ -249,14 +251,6 @@ makeRateKomDT <-
         )
       )
     ) %>%
-      formatCurrency(
-        col_format,
-        currency = "",
-        interval = 3,
-        mark = thousands_sep,
-        digits = digits,
-        dec.mark = dec_mark
-      ) %>%
       formatStyle(group_var,  backgroundColor = "#e7e7e7")
   }
 

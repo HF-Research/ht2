@@ -1,10 +1,10 @@
-name: hjertetal2
+name: HjerteTal2
 title:
 username:
 account: cars-online
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 632977
-bundleId: 2222081
+bundleId: 2236249
 url: https://cars-online.shinyapps.io/hjerteTal2/
-when: 1562856081.69213
+when: 1563266449.72222
