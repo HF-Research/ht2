@@ -1205,12 +1205,14 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 
 # DATATABLES
 output$table_counts <- renderDT({
+  req(validateSelectedVars()$valid_selection)
   if (validate()) {
     outputCountDTTable()
   }
 })
 
 output$table_rates <- renderDT({
+  req(validateSelectedVars()$valid_selection)
   if (validate()) {
     outputRateDTTable()
   }
