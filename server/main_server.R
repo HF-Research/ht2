@@ -418,7 +418,7 @@ subsetVars <- reactive({
 })
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
+  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
 })
 
 
@@ -582,9 +582,9 @@ combinedMaps <- reactive({
   name_lang <- paste0("name_", lang)
   
   fill_data <-
-    subsetVars()[get(ui_year) >= 2009,][[var_name]]
+    subsetVars()[get(ui_year) >= 2009, ][[var_name]]
   
-  fill_data[fill_data==0] <- NA
+  fill_data[fill_data == 0] <- NA
   # Define breaks using the "pretty" algorithm
   map_breaks <- classIntervals(fill_data, style = "pretty", n = 5)
   pal <-
@@ -712,7 +712,7 @@ dtCast <- reactive({
     c("_male", "_female"), c(2, 2)
   ))))
   if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4,])
+    return(out[group_var <= year_max - 4, ])
     
   } else {
     return(out)
@@ -796,17 +796,16 @@ outputRateDTTable <- reactive({
   dat <- dat[, ..vars]
   colnames(dat) <- c("group_var", "female", "male")
   
-   # If results are percentages - round with 1 sig fig. If results are rates -> 0
+  # If results are percentages - round with 1 sig fig. If results are rates -> 0
   # sig figs.
   if (!selectPercentOrRate()) {
     digits = 0
   } else {
     digits = 1
   }
- 
+  
   col_convert <- c("male", "female")
   dat[, (col_convert) := lapply(.SD, function(x) {
-    
     formatC(
       x,
       digits = digits,
@@ -815,8 +814,8 @@ outputRateDTTable <- reactive({
       decimal.mark = dec_mark
     )
   }), .SDcols = col_convert]
-
-   
+  
+  
   setnames(
     dat,
     old = c("group_var", "male", "female"),
@@ -824,17 +823,13 @@ outputRateDTTable <- reactive({
   )
   # colnames(dat) <- c(group_var, ui_sex_levels)
   if (isKom()) {
-    makeRateKomDT(
-      dat = dat,
-      group_var = prettyAggr_level(),
-      dt_title = plotTitle()
-    )
+    makeRateKomDT(dat = dat,
+                  group_var = prettyAggr_level(),
+                  dt_title = plotTitle())
   } else {
-    makeRateDT(
-      dat = dat,
-      group_var = prettyAggr_level(),
-      dt_title = plotTitle()
-    )
+    makeRateDT(dat = dat,
+               group_var = prettyAggr_level(),
+               dt_title = plotTitle())
   }
   
 })
@@ -895,41 +890,52 @@ is5YearMortality <- reactive({
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
 
-  # This requires an valid aggr_level input
+# This requires an valid aggr_level input
+
+validateSelectedVars <- reactive({
+  # Evalutes current variable selection to see if it is a valid selection for
+  # the current selection of outcome and aggr_level combination. Returns
+  # binary valid T/F, as well as current selection and current valid var
+  # possibilities.
+  req(input$aggr_level)
   
-  validateSelectedVars <- reactive({
-    # Evalutes current variable selection to see if it is a valid selection for
-    # the current selection of outcome and aggr_level combination. Returns
-    # binary valid T/F, as well as current selection and current valid var
-    # possibilities.
-    req(input$aggr_level)
-    
-    aggr_selected <- input$aggr_level
-    
-    
-    outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
-    
-    
-    var_names <- valid_output_combos[outcome == outcomeCode() &
-                                       aggr_level == aggr_selected, unique(var)]
-    
-    
-    # Remove columns with data that should not be shown to user
-    var_names <- var_names[!var_names %in% variables_not_used]
-    
-    # Select the plain language terms matching the variables in data
-    variable_choices <-
-      variable_ui[code_name %in% var_names, .(code_name, var_dk)]
-    var_names <- variable_choices$code_name
-    names(var_names) <- variable_choices$var_dk
-    
-    
-    selected_var <- isolate(input$variable)  
-    
-    list(selected_var = selected_var,
-         var_names = var_names,
-         valid_selection = selected_var %in% var_names)
-  })
+  aggr_selected <- input$aggr_level
+  
+  
+  outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
+  
+  
+  var_names <- valid_output_combos[outcome == outcomeCode() &
+                                     aggr_level == aggr_selected, unique(var)]
+  
+  
+  # Remove columns with data that should not be shown to user
+  var_names <- var_names[!var_names %in% variables_not_used]
+  
+  # Select the plain language terms matching the variables in data
+  variable_choices <-
+    variable_ui[code_name %in% var_names, .(code_name, var_dk)]
+  var_names <- variable_choices$code_name
+  names(var_names) <- variable_choices$var_dk
+  
+  
+  selected_var <- isolate(input$variable)
+  
+  # On start, var_selected is NULL, so set default value of validate_selection
+  # to TRUE, so tables are shown
+  validate_selection <- TRUE
+  
+  logic <- !(selected_var %in% var_names)
+  if (length(logic) >0 && logic == TRUE) {
+    validate_selection <- FALSE
+  }
+  
+  list(
+    selected_var = selected_var,
+    var_names = var_names,
+    valid_selection = validate_selection
+  )
+})
 
 output$varChoices <- renderUI({
   req(input$aggr_level)
