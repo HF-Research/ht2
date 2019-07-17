@@ -1,6 +1,9 @@
 tabPanel(ui_main_title,
          useShinyjs(),
+         
          tags$head(
+           tags$link(href="https://www.googletagmanager.com/gtag/js?id=UA-143999008-1"),
+           includeScript("www/google-analytics.js"),
            tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
          ),
          fluidRow(
