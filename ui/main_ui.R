@@ -134,12 +134,12 @@ tabPanel(ui_main_title,
                      align = "right",
                      downloadBttn(
                        "downloadMapsMale",
-                       label = paste0("Hente ", ui_sex_levels[2]),
+                       label = paste0(ui_download, " ", ui_sex_levels[2]),
                        size = "sm"
                      ),
                      downloadBttn(
                        "downloadMapsFemale",
-                       label = paste0("Hente ", ui_sex_levels[1]),
+                       label = paste0(ui_download, " ", ui_sex_levels[1]),
                        size = "sm"
                      )
                    )

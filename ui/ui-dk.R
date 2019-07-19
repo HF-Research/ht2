@@ -103,6 +103,9 @@ ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andel")
 ui_edu_age_range <- "35 - 84 årige"
 ui_moving_avg_desc <- "3-år glidende gennemsnit"
+ui_download <- "Hent"
+ui_download_graph <- "Hent figur"
+
 # Strings to place inside variable descriptions
 replace_type_string_opr <- "fik foretaget en"
 replace_type_string_diag <- "blev diagnosticeret med"

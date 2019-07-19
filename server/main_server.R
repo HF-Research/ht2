@@ -1170,11 +1170,11 @@ output$downloadButton <- renderUI({
   req(input$aggr_level)
   if (!isNational()) {
     actionBttn(inputId = "download_bar",
-               label = "Hente figure",
+               label = ui_download_graph,
                size = "sm")
   } else if (isNational()) {
     actionBttn(inputId = "download_line",
-               label = "Hente figure",
+               label = ui_download_graph,
                size = "sm")
   }
   
