@@ -1,12 +1,15 @@
 ---
-title: "Comparison with Ht1"
+title: "Validation"
 author: "Matthew Phelps"
-date: "7/22/2019"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    css: validation.css
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 # Set WD to be parent dir of folder containing rmd file
 knitr::opts_knit$set(root.dir = normalizePath(".."))
@@ -17,7 +20,11 @@ library(magrittr)
 
 ```
 
-```{r, include = FALSE, cache = TRUE }
+```{r}
+source("r/validationFuncitons.R")
+```
+
+```{r, include = FALSE, warning= TRUE, cache=TRUE}
 
 pop_reference <- fread("data/pop_age_10yr_dst.csv")
 pop_ht <- fread("data/pop_summary_age.txt")
@@ -41,11 +48,26 @@ setnames(pop, "count", "count.sif")
 # Find difference between StatistikBanken population and my population and SIF
 ```
 
-```{r, cache=TRUE, cache.vars='pop'}
+```{r, cache=TRUE, cache.vars=c('pop_count', 'pop')}
 pop[, diff_count := count.ht - count.ref]
 pop[, diff_count_sif := count.sif - count.ref]
 pop[, diff_proportion := diff_count / count.ref * 100]
 pop[, diff_proportion_sif := diff_count_sif / count.ref * 100]
+
+# To long format for ggplot: (gives warning because some are Int, some are Num - can ignore)
+pop_long <- melt(
+  pop,
+  id.vars = c("sex", "age_group", "year"),
+  measure.vars = c(
+    "diff_count",
+    "diff_count_sif",
+    "diff_proportion",
+    "diff_proportion_sif"
+  )
+)
+count_vars <- grep("diff_count", colnames(pop), value = TRUE)
+pop_count <- pop_long[variable %in% count_vars, ]
+
 # Not huge differences in population numbers
 # pop[, range(diff_count)]
 # pop[, range(diff_proportion)]
@@ -61,25 +83,44 @@ pop[, diff_proportion_sif := diff_count_sif / count.ref * 100]
 # To avoid caching issues
 
 ```
-## Compare background Danish population {.tabset .tabset-fade}
+
+
+We look at the differences in data between SIF's HjerteTal and our new version
+
+
+# Compare background population {.tabset .tabset-fade}
 
 SIF has a *very* similar, but not exact background population as Statistikbanken (SB).  
-See historgraph of differences broken down by sex, age group, year:
+See behistogram of differences between SB and HjereTal's populations for each unique sex/age/year grouping (i.e. women aged 35-44 in 2007....etc)
 
-### New HT
+## Our HT
+
+Out HjerteTal usually has slightly more people in our population
 ```{r, cache=TRUE}
-pop[, range(diff_count)]
-hist(pop[, diff_count], col = "darkred", main = "HjeteTal2")
+
+ 
+ggplot(pop_count[variable == "diff_count"]) +
+  geom_histogram(aes(value, fill = variable), position = "identity", alpha = 0.5, binwidth = 100) +
+  theme_classic() +
+  xlab("Population difference")
+
+# pop[, range(diff_count)]
+# hist(pop[, diff_count], col = "darkred", main = "HjeteTal2")
 # hist(pop[, diff_proportion])
 
 ```
 
 
-### Old Ht
-```{r, cache = TRUE}
+## SIF's HT
 
-pop[, range(diff_count_sif)]
-hist(pop[, diff_count_sif], col = "darkblue", main = "SIF")
+```{r, cache = TRUE}
+ggplot(pop_count) +
+  geom_histogram(aes(value, fill = variable), position = "identity", alpha = 0.5, binwidth = 100) +
+  theme_classic() +
+  xlab("Population difference")
+# 
+# pop[, range(diff_count_sif)]
+# hist(pop[, diff_count_sif], col = "darkblue", main = "SIF")
 # hist(pop[, diff_proportion_sif])
 
 # # Sum over age and sex for each year
@@ -95,9 +136,23 @@ hist(pop[, diff_count_sif], col = "darkblue", main = "SIF")
 ```
 
 
+## Across age groups (count)
+Count of background population differences across age groups
+```{r}
+plot_age_pop(dat = pop[year == 2007 | year == 2014], diff_var = diff_count)
+
+```
+
+## Across age groups (prop)
+Background population differences as proportion across age groups
+```{r}
+plot_age_pop(dat = pop[year == 2007 | year == 2014], diff_var = diff_proportion)
+
+```
 
 
-```{r, include = FALSE, cache=TRUE}
+
+```{r, include = FALSE, cache=FALSE}
 
 shiny_dat <- readRDS(file = "data/shiny_dat_dk.rds")
 outcome_desc <-
@@ -128,16 +183,19 @@ dat_age <- lapply(data_files, function(i) {
 
 
 
-```{r, cache=TRUE, cache.vars='dat_ht1'}
-setnames(dat_ht1, c("outcome", "variable", "sex", "year", "count_ht1"))
+```{r, cache=FALSE}
+setnames(dat_ht1, c("sex", "year", "count_ht1", "outcome", "variable"))
 
 # Re-code variables in ht1 dataset
 dat_ht1[sex == "Kvinder", sex := "female"]
 dat_ht1[sex == "Mænd", sex := "male"]
 dat_ht1[is.na(sex), sex := "Total"]
+dat_ht1[, variable := tolower(variable) ]
+dat_ht1[variable == "dødelighed", variable := "dead_year"]
 dat_ht1[, variable := paste0("count_n_", variable)]
 dat_ht1[, outcome := tolower(outcome)]
 dat_ht1[, year := as.integer(year)]
+
 dat_ht1 <-
   merge(dat_ht1, outcome_desc[, .(hjertetal_code, name_dk)], by.x = "outcome", by.y = "name_dk")
 
@@ -145,7 +203,7 @@ dat_ht1 <-
 ```
 
 
-```{r cache = TRUE, cache.vars='dat_age'}
+```{r cache = FALSE}
 setnames(dat_age,
          c("sex", "grouping", "count_ht1", "year", "outcome", "variable"))
 
@@ -168,78 +226,20 @@ dat_age <-
 
 
 
-```{r, cache = FALSE}
-# Function definitions
-data_diff_national <- function(old, new, variable_str, ht_code) {
-  old <-
-    old[variable == variable_str &
-              hjertetal_code == ht_code,
-            sex != "Total", .(sex, year, count_ht1)]
-  
-  keep_vars <- c("sex", "year", variable_str)
-  new <-
-    new[[ht_code]]$national[, ..keep_vars]
-  x <- merge(old, new, by = c("sex", "year"))
-  x[, diff_count := get(variable_str) - count_ht1]
-  x[,  diff_prop := diff_count / get(variable_str) * 100]
-  x[]
-}
-
-data_diff_age <- function(old, new, variable_str, ht_code) {
-  x_old <-
-    old[variable == variable_str &
-          hjertetal_code == ht_code &
-          sex != "Total", .(sex, year, grouping, count_ht1, outcome)]
-  
-  keep_vars <- c("sex", "year", "grouping", variable_str)
-  x_new <-
-    new[[ht_code]]$age[, ..keep_vars]
-  x <- merge(x_old, x_new, by = c("sex", "year", "grouping"))
-  x[, diff_count := get(variable_str) - count_ht1]
-  x[, diff_prop := diff_count / get(variable_str)]
-  x[]
-}
-
-
-plot_national <- function(dat, diff_var) {
-  diff_var <- ensym(diff_var)
-  
-  out <- ggplot(dat) + geom_line(aes(
-    x = year,
-    y = !!diff_var,
-    group = sex,
-    color = sex
-  ), size = 1.5) + 
-    ylim(min(c(0, dat[[diff_var]])), max(dat[[diff_var]])) +
-    theme_classic() +
-    geom_hline(aes(yintercept = 0), linetype = 2 )
-  out
-}
-
-
-
-plot_age <- function(dat, diff_var) {
-  diff_var <- ensym(diff_var)
-  ggplot(dat) + geom_line(aes(
-    x = grouping,
-    y = !!diff_var,
-    group = sex,
-    color = sex
-  ), size = 1.5) +
-    geom_hline(aes(yintercept = 0), linetype = 2) +
-    facet_wrap("year") + theme_classic()
-}
-
-
-
-```
-
 ```{r}
+browser()
 d1_prev <-
   data_diff_national(dat_ht1,
             shiny_dat,
             variable_str =  "count_n_prevalence",
             ht_code = "d1")
+
+d1_dead_year <-
+  data_diff_national(dat_ht1,
+            shiny_dat,
+            variable_str =  "count_n_dead_year",
+            ht_code = "d1")
+
 d1_incidence <-
   data_diff_national(dat_ht1,
             shiny_dat,
@@ -259,16 +259,49 @@ d1_prev_age <-
                 ht_code = "d1")
 
 
+
+d9_prev <-
+  data_diff_national(dat_ht1,
+            shiny_dat,
+            variable_str =  "count_n_prevalence",
+            ht_code = "d9")
+d9_incidence <-
+  data_diff_national(dat_ht1,
+            shiny_dat,
+            variable_str =  "count_n_incidence",
+            ht_code = "d9")
+
+d9_incidence_age <-
+  data_diff_age(dat_age,
+                shiny_dat,
+                variable_str = "count_n_incidence",
+                ht_code = "d9")
+
+d9_prev_age <-
+  data_diff_age(dat_age,
+                shiny_dat,
+                variable_str = "count_n_prevalence",
+                ht_code = "d9")
+
+d9_dead_year <-
+  data_diff_national(dat_ht1,
+            shiny_dat,
+            variable_str =  "count_n_dead_year",
+            ht_code = "d9")
+
+
 ```
 
 
-## Compare incidence and prevalence for all CVDs {.tabset .tabset-fade}
+
+# Prevalence across time {.tabset .tabset-fade .tabset-pills}
+## All-CVD {.tabset .tabset-fade}
 
 
-HT2 overestimates the prevalence of all-CVDs, and the difference increases over time:
+We overestimate All-CVD prevalence
 
 ### Counts
-```{r, cache=TRUE}
+```{r, cache=FALSE}
 
 
 
@@ -282,11 +315,31 @@ plot_national(d1_prev, diff_var = diff_prop)
 ```
 
 
-#
+## Iskæmisk hjertesygdom {.tabset .tabset-fade}
+We overestimate Iskæmisk hjertesygdom prevalence
 
-## {.tabset .tabset-fade}
-However, the difference in incidence is not consistant:
+### Counts
+```{r, cache=FALSE}
 
+
+
+plot_national(d9_prev, diff_var = diff_count)
+```
+
+### Proportion
+
+```{r}
+plot_national(d9_prev, diff_var = diff_prop)
+```
+
+
+
+
+
+# Incidence across time {.tabset .tabset-fade .tabset-pills}
+However, the difference in incidence is not consistent:
+
+## All-CVDs {.tabset .tabset-fade}
 ### Counts
 ```{r cache = FALSE}
 plot_national(d1_incidence, diff_var = diff_count)
@@ -297,10 +350,53 @@ plot_national(d1_incidence, diff_var = diff_count)
 plot_national(d1_incidence, diff_var = diff_prop)
 ```
 
-#
 
-## Differences (by proportion) descease with age  {.tabset .tabset-fade}
+## Iskæmisk hjertesygdom {.tabset .tabset-fade}
+### Counts
+```{r cache = FALSE}
+plot_national(d9_incidence, diff_var = diff_count)
+```
 
+### Proportion
+```{r cache = FALSE}
+plot_national(d9_incidence, diff_var = diff_prop)
+```
+
+
+
+# Mortality across time {.tabset .tabset-fade .tabset-pills}
+How many people died due to the illness in each year
+
+## All-CVDs {.tabset .tabset-fade}
+### Counts
+```{r cache = FALSE}
+plot_national(d1_dead_year, diff_var = diff_count)
+```
+
+### Proportion
+```{r cache = FALSE}
+plot_national(d1_dead_year, diff_var = diff_prop)
+```
+
+
+## Iskæmisk hjertesygdom {.tabset .tabset-fade}
+### Counts
+```{r cache = FALSE}
+plot_national(d9_dead_year, diff_var = diff_count)
+```
+
+### Proportion
+```{r cache = FALSE}
+plot_national(d9_dead_year, diff_var = diff_prop)
+```
+
+
+
+
+
+
+# Prevalence across age-groups  {.tabset .tabset-fade .tabset-pills}
+## All-CVDs {.tabset .tabset-fade}
 ### Counts
 ```{r}
 plot_age(d1_prev_age, diff_var = diff_count)
@@ -309,5 +405,48 @@ plot_age(d1_prev_age, diff_var = diff_count)
 ### Proportions
 ```{r}
 plot_age(d1_prev_age, diff_var = diff_prop)
+```
+
+
+
+## Iskæmisk hjertesygdom {.tabset .tabset-fade}
+### Counts
+```{r}
+plot_age(d9_prev_age, diff_var = diff_count)
+```
+
+### Proportions
+```{r}
+plot_age(d9_prev_age, diff_var = diff_prop)
+```
+
+
+
+
+
+
+# Incidence across age-groups  {.tabset .tabset-fade .tabset-pills}
+## All-CVDs {.tabset .tabset-fade}
+### Counts
+```{r}
+plot_age(d1_incidence_age, diff_var = diff_count)
+```
+
+### Proportions
+```{r}
+plot_age(d1_incidence_age, diff_var = diff_prop)
+```
+
+
+
+## Iskæmisk hjertesygdom {.tabset .tabset-fade}
+### Counts
+```{r}
+plot_age(d9_incidence_age, diff_var = diff_count)
+```
+
+### Proportions
+```{r}
+plot_age(d9_incidence_age, diff_var = diff_prop)
 ```
 

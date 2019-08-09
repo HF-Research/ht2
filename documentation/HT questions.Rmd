@@ -3,9 +3,16 @@ title: "HjerteTal questions for SIF"
 output: html_document
 ---
 
-- Is the age for individuals assessed as of 1. January for each year, or on the date of the event (i.e. diganosis date)?
+- How is the "at-risk" (denominator) population defined for each ufald? Specifically:
+  + Does the population include Greenland and Faroe Islands?
+  + Is the population defined as of 1. Jan? If not, how is it defined?
+  + If someone moves to DK in February of year X and gets a diagnosis, would they be included in the denominator for the prevalent population for year X? Would they be included in the incident cases for year X?
 
-- Which causes of death were used when calculating how many died from a specific illness? Fx, do you count a death when the disease is listed among any of the  immediate, following, underlying and supplementary causes of death (umiddelbar, følgende, tilgrundliggende, supplerende)? This corresponses to variables (see pages 3 & 4 of the [linked to pdf](https://sundhedsdatastyrelsen.dk/-/media/sds/filer/registre-og-services/nationale-sundhedsregistre/doedsaarsager-og-biologisk-materiale/doedaarsagsregisteret/dokumentation-doedsaarsagregisteret-2002-2008.pdf?la=da) for more details of the variables and definitions).:
+- Is the age for individuals assessed as of 1. January for each year, or on the date of the event (i.e. diagnosis date)?
+
+- "To ensure a minimum 10-year hospital history, the Danish Heart Statistics provides statistics on cardiovascular variables from 2006 onwards". How does this work for the outcomes that use a 3-year moving avg? In 2006, this would require data from 10 years before 2004; however emergency room and outpatient data only starts in 1995
+
+- Which causes of death were used when calculating how many died from a specific illness? Fx, do you count a death when the disease is listed among any of the  immediate, following, underlying and supplementary causes of death (umiddelbar, følgende, tilgrundliggende, supplerende)? This corresponds to variables (see pages 3 & 4 of the [linked to pdf](https://sundhedsdatastyrelsen.dk/-/media/sds/filer/registre-og-services/nationale-sundhedsregistre/doedsaarsager-og-biologisk-materiale/doedaarsagsregisteret/dokumentation-doedsaarsagregisteret-2002-2008.pdf?la=da) for more details of the variables and definitions).:
   
   + c_dod_1a
   + c_dod_1b 
@@ -19,6 +26,3 @@ output: html_document
   + c_dod_26
   + c_dod_27
   + c_dod_28
-  
-- Do you have the inclusion/exclusion criteria for defining the background population (befolkning)? Specifically:
-- Can you provide the background population numbers for each 10-year age-group?
