@@ -11,7 +11,7 @@ showModal(
     fade = TRUE,
     tags$p(
       tags$b(
-        "Does not work with Internet Explorer. Please choose Chrome/Firefox/Safari"
+        "HjerteTal does not work with Internet Explorer. Please choose Chrome/Firefox/Safari/Edge"
       )
     ),
     tags$br(),
