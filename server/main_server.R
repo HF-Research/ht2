@@ -605,9 +605,14 @@ combinedMaps <- reactive({
   } else {
     # If variable is rate:
     labFormatter <- function(type, cuts) {
+      
       n = length(cuts)
-      cuts <- round(cuts)
-      paste0(cuts[-n], " &ndash; ", cuts[-1])
+      cuts_formatted <- formatC(round(cuts),
+                      digits = 0,
+                      format = "d",
+                      big.mark = thousands_sep,
+                      decimal.mark = dec_mark)
+      paste0(cuts_formatted[-n], " &ndash; ", cuts_formatted[-1])
     }
   }
   
@@ -663,6 +668,7 @@ combinedMaps <- reactive({
       labels = legend_labels,
       layerId = "legend",
       labFormat = function(type, cuts, p = NULL) {
+        
         type <- type
         cuts <- cuts
         
