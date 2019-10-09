@@ -73,7 +73,7 @@ formatNumbers <- function(dat, lang) {
   x[]
 }
 
-# DATA TABLE FUNCTIONS ----------------------------------------------------
+# DATATABLE FUNCTIONS ----------------------------------------------------
 
 # From:
 # https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
@@ -109,6 +109,7 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title) {
     rownames = FALSE,
     class = ' hover row-border',
     options = list(
+      language = list(url = "Danish.json"),
       ordering = FALSE,
       dom = "tB",
       columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
@@ -151,6 +152,7 @@ makeCountKomDT <-
       rownames = FALSE,
       class = ' hover row-border',
       options = list(
+        language = list(url = "Danish.json"),
         ordering = FALSE,
         lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
         pageLength = 15,
@@ -197,6 +199,7 @@ makeRateDT <-
       rownames = FALSE,
       class = 'hover row-border',
       options = list(
+        language = list(url = "Danish.json"),
         ordering = FALSE,
         dom = "tB",
         columnDefs = list(list(render = formatNAValues, targets = "_all")),
@@ -227,7 +230,7 @@ makeRateKomDT <-
       rownames = FALSE,
       class = 'hover row-border',
       options = list(
-        ordering = FALSE,
+        language = list(url = "Danish.json"),
         lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
         pageLength = 15,
         dom = "lftBp",
