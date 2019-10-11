@@ -605,17 +605,17 @@ combinedMaps <- reactive({
   } else {
     # If variable is rate:
     labFormatter <- function(type, cuts) {
-      
       n = length(cuts)
-      cuts_formatted <- formatC(round(cuts),
-                      digits = 0,
-                      format = "d",
-                      big.mark = thousands_sep,
-                      decimal.mark = dec_mark)
+      cuts_formatted <- formatC(
+        round(cuts),
+        digits = 0,
+        format = "d",
+        big.mark = thousands_sep,
+        decimal.mark = dec_mark
+      )
       paste0(cuts_formatted[-n], " &ndash; ", cuts_formatted[-1])
     }
   }
-  
   
   
   legend_title <- gsub("  ", "<br>", var_name)
@@ -658,7 +658,7 @@ combinedMaps <- reactive({
     label_popup = popup,
     mini_map_lines = dk_sp$mini_map_lines,
     element_id = "map_female"
-    ) %>%
+  ) %>%
     addLegend(
       "topright",
       pal = pal,
@@ -668,7 +668,6 @@ combinedMaps <- reactive({
       labels = legend_labels,
       layerId = "legend",
       labFormat = function(type, cuts, p = NULL) {
-        
         type <- type
         cuts <- cuts
         
@@ -778,14 +777,16 @@ outputCountDTTable <- reactive({
       dat,
       group_var = prettyAggr_level(),
       thousands_sep = thousands_sep,
-      dt_title = plotTitle()
+      dt_title = plotTitle(),
+      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1]))
     )
   } else {
     makeCountDT(
       dat,
       group_var = prettyAggr_level(),
       thousands_sep = thousands_sep,
-      dt_title = plotTitle()
+      dt_title = plotTitle(),
+      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1]))
     )
   }
 })
@@ -831,13 +832,19 @@ outputRateDTTable <- reactive({
   )
   # colnames(dat) <- c(group_var, ui_sex_levels)
   if (isKom()) {
-    makeRateKomDT(dat = dat,
-                  group_var = prettyAggr_level(),
-                  dt_title = plotTitle())
+    makeRateKomDT(
+      dat = dat,
+      group_var = prettyAggr_level(),
+      dt_title = plotTitle(),
+      messageBottom = prettyVariableSingular()
+      )
+    
   } else {
     makeRateDT(dat = dat,
                group_var = prettyAggr_level(),
-               dt_title = plotTitle())
+               dt_title = plotTitle(),
+               messageBottom = prettyVariableSingular()
+               )
   }
   
 })
@@ -934,7 +941,7 @@ validateSelectedVars <- reactive({
   validate_selection <- TRUE
   
   logic <- !(selected_var %in% var_names)
-  if (length(logic) >0 && logic == TRUE) {
+  if (length(logic) > 0 && logic == TRUE) {
     validate_selection <- FALSE
   }
   

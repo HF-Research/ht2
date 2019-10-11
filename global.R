@@ -101,7 +101,7 @@ formatNAValues <- JS(
 )
 
 
-makeCountDT <- function(dat, group_var, thousands_sep, dt_title) {
+makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom) {
   col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
     data = dat,
@@ -115,9 +115,11 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title) {
       columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
       buttons = list(
         list(extend = "pdf",
-             messageTop = dt_title),
+             messageTop = dt_title,
+             messageBottom = messageBottom),
         list(extend = "excel",
-             messageTop = dt_title)
+             messageTop = dt_title,
+             messageBottom = messageBottom)
       ),
       initComplete = JS(
         # Table hearder background color
@@ -144,7 +146,7 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title) {
 
 
 makeCountKomDT <-
-  function(dat, group_var, thousands_sep, dt_title) {
+  function(dat, group_var, thousands_sep, dt_title, messageBottom) {
     col_format <- c(ui_sex_levels, "Total")
     DT::datatable(
       data = dat,
@@ -160,9 +162,11 @@ makeCountKomDT <-
         columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
         buttons = list(
           list(extend = "pdf",
-               messageTop = dt_title),
+               messageTop = dt_title,
+               messageBottom = messageBottom),
           list(extend = "excel",
-               messageTop = dt_title)
+               messageTop = dt_title,
+               messageBottom = messageBottom)
         ),
         initComplete = JS(
           # Table hearder background color
@@ -191,7 +195,8 @@ makeCountKomDT <-
 makeRateDT <-
   function(dat,
            group_var,
-           dt_title) {
+           dt_title,
+           messageBottom) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
       data = dat,
@@ -205,9 +210,11 @@ makeRateDT <-
         columnDefs = list(list(render = formatNAValues, targets = "_all")),
         buttons = list(
           list(extend = "pdf",
-               messageTop = dt_title),
+               messageTop = dt_title,
+               messageBottom = messageBottom),
           list(extend = "excel",
-               messageTop = dt_title)
+               messageTop = dt_title,
+               messageBottom = messageBottom)
         ),
         initComplete = JS(
           "function(settings, json) {",
@@ -237,9 +244,11 @@ makeRateKomDT <-
         columnDefs = list(list(render = formatNAValues, targets = "_all")),
         buttons = list(
           list(extend = "pdf",
-               messageTop = dt_title),
+               messageTop = dt_title,
+               messageBottom = messageBottom),
           list(extend = "excel",
-               messageTop = dt_title)
+               messageTop = dt_title,
+               messageBottom = messageBottom)
         ),
         initComplete = JS(
           "function(settings, json) {",
