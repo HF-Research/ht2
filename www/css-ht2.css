@@ -24,10 +24,16 @@
   --light: #eee;
   --dark: #222;
   --bleeding: #B73338;
-  --hfRed: #c8102f;
+  
+  --hfRed: #c8102E;
   --hfRedBright: #dc1232;
   --hfText: #454747;
   --hfVeryLight: #f4f5f7;
+  
+  --hfBlue: #325461;
+  --hfBlueLight: #e5e9eb;
+  --hfBlueMedium: #b2bfc3;
+  
   --btnBorderActive: #c8102f;
   --btnBorder1: #e2e2e2;
   --breakpoint-xs: 0;
@@ -154,14 +160,14 @@ input[type="month"] {
 /******   TABS STYLING   *******/
 
 .tabbable > .nav > li[class=active] >a{
-  background-color: var(--hfRed);
+  background-color: var(--hfBlue);
   color: white;
   font-weight: 600;
 }
 
 .tabbable > .nav > li > a{
-  background-color: var(--hfVeryLight);
-  color: var(--hfRed);
+  background-color: var(--white);
+  color: var(--hfBlue);
   font-weight:600;
 }
 
@@ -176,8 +182,8 @@ label{
 /**** BUTTON STYLES *****/
 
 .btn.radiobtn.btn-default.active {
-  background-color:var(--hfRed);
-  border-color:var(--hfRed);
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
   font-weight:bold;
   color:white;
   font-size: 1.5rem;
@@ -190,17 +196,17 @@ label{
 }
 
 .btn.radiobtn.btn-default {
-  background-color: var(--hfVeryLight);
-  border-color: var(--hfVeryLight);
-  color:var(--hfRed);
+  background-color: var(--white);
+  border-color: var(--hfBlueLight);
+  color:var(--hfBlue);
   font-size:1.5rem;
   font-weight:600;
   ;
 }
 
 .btn.radiobtn.btn-default:hover {
-  background-color: var(--hfRedBright);
-  border-color: var(--hfRedBright);
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
   color:white;
   font-size: 1.5rem;
   font-weight: 600;
@@ -209,8 +215,8 @@ label{
 }
 
 .btn.radiobtn.btn-default.active:hover {
-  background-color:var(--hfRed);
-  border-color:var(--hfRed);
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
   font-weight:bold;
   color:white;
   font-size: 1.5rem;

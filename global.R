@@ -15,10 +15,16 @@ library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 library(mapview) # For map downloads
+
+print(suppressMessages(webshot:::find_phantom()))
 if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
 }
 
+
+
+
+print(suppressMessages(webshot:::find_phantom()))
 
 # LANGUAGE UI ---------------------------------------------------------
 lang = "dk"
@@ -47,8 +53,8 @@ variables_not_used <- c("count_n_ambulatory", "count_n_bed_days")
 male_color <- "#10c8a6"
 female_color <- "#166abd"
 
-male_color <- "#4185be"
-female_color <- "#6dc067"
+male_color <- "#19b9b1"
+female_color <- "#ea8438"
 
 
 graph_colors <- c(male_color, female_color)
@@ -229,7 +235,8 @@ makeRateDT <-
 makeRateKomDT <-
   function(dat,
            group_var,
-           dt_title) {
+           dt_title,
+           messageBottom = messageBottom) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
       data = dat,
