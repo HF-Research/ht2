@@ -1,4 +1,7 @@
 ui <- div(
+  tags$head(
+    includeHTML("www/google-analytics.html")
+  ),
   img(
     src = "hf-logo.png",
     align = "left",
@@ -11,6 +14,7 @@ ui <- div(
           title = "", windowTitle = "HjerteTal"
         ))
   ),
+  
   navbarPage(
     title = "HjerteTal",
     collapsible = TRUE,

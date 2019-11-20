@@ -4,8 +4,6 @@ output: html_document
 ---
 
 - How is the "at-risk" (denominator) population defined for each ufald? Specifically:
-  + Does the population include Greenland and Faroe Islands?
-  + Is the population defined as of 1. Jan? If not, how is it defined?
   + If someone moves to DK in February of year X and gets a diagnosis, would they be included in the denominator for the prevalent population for year X? Would they be included in the incident cases for year X?
 
 - Is the age for individuals assessed as of 1. January for each year, or on the date of the event (i.e. diagnosis date)?
