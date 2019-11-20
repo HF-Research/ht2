@@ -5,10 +5,8 @@ library(shiny)
 library(DT)
 library(shinyWidgets)
 library(data.table)
-library(shinyBS)
-library(shinyjs)
+library(shinyjs) # Hides un-used tabs
 library(classInt) # For choropleth map breaks
-# library(sp)
 library(leaflet)
 library(manipulateWidget)
 library(shinycssloaders)
@@ -21,8 +19,8 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
 }
 
-
-
+# install.packages(c("V8","jqr","protolite","crul","jsonvalidate","httpcode","urltools","maptools"))
+# install.packages(c("geojson","geojsonino","geojsonlint","rgeos","rmapshaper"))
 
 print(suppressMessages(webshot:::find_phantom()))
 
