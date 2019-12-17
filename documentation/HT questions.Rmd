@@ -8,7 +8,7 @@ Specifically: + If someone moves to DK in February of year X and gets a
 diagnosis, would they be included in the denominator for the prevalent
 population for year X? Would they be included in the incident cases for year X?
 
-
+- Is data from both lpr grund and lpr private included?
 
 - Which patient types (pattypes) are included when including ambulant patients
 (0,1,2,3)?

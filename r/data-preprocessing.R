@@ -179,6 +179,7 @@ mini_map_lines <-
   data.frame(rbind(bottom_right, bottom_left, top_left, top_right, bottom_right))
 mini_map_lines$name <- row.names(mini_map_lines)
 # leaflet() %>% addPolygons(data = l1) %>% addPolylines(data = mini_map_lines, lng = ~ X1, lat = ~ X2)
+
 # Convert to sp obj for performance with leaflet
 l1 <- as(l1, "Spatial")
 l2 <- as(l2, "Spatial")
