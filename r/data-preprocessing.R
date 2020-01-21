@@ -10,12 +10,14 @@ library(dplyr)
 edu <- fread("data/edu_description.csv", encoding = "UTF-8")
 edu <- edu[, lapply(.SD, enc2native)]
 # OUTCOME DATA ------------------------------------------------------------
+data_files <-
+  list.files(path = "data/",
+             pattern = "export_diag",
+             full.names = TRUE)
+export_diag <- lapply(data_files, fread, encoding = "UTF-8") %>% rbindlist()
 
 export_opr <- fread("data/export_opr.txt", encoding = "UTF-8")
 export_med <- fread("data/export_med.txt", encoding = "UTF-8")
-export_diag <- fread("data/export_diag1.txt", encoding = "UTF-8")
-export_diag2 <- fread("data/export_diag2.txt", encoding = "UTF-8")
-export_diag <- rbind(export_diag, export_diag2)
 
 preProccess <- function(export_dat) {
   dat <- split(export_dat, by = "outcome") %>%
@@ -31,14 +33,14 @@ preProccess <- function(export_dat) {
     })
     
     # Change edu to factor to ensure correct ordering
-    out$edu[, grouping := factor(grouping,
-                                 levels = c(
+    out$edu[, grouping := factor(tolower(grouping),
+                                 levels = tolower(c(
                                    "Basic",
                                    "Secondary",
                                    "Tertiary",
                                    "Postgraduate",
                                    "Unknown"
-                                 ))]
+                                 )))]
     out
   })
 }
@@ -78,6 +80,9 @@ shiny_dat_en <- setNAtoZero(shiny_dat_en)
 saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
 
 # DANISH LANGUAGE SUPPORT -------------------------------------------------
+
+# Make english lowercase for matching
+edu[, edu_name_en := tolower(edu_name_en)]
 makeDanish <- function(dat) {
   # Change english education labels to Danish labels
   lapply(dat, function(outcome) {
@@ -103,6 +108,7 @@ makeDanish <- function(dat) {
     outcome
   })
 }
+shiny_dat_en$d10$edu$grouping
 
 shiny_dat_dk <- makeDanish(shiny_dat_en)
 saveRDS(shiny_dat_dk, file = "data/shiny_dat_dk.rds")

@@ -7,11 +7,14 @@ output: html_document
 Specifically: + If someone moves to DK in February of year X and gets a
 diagnosis, would they be included in the denominator for the prevalent
 population for year X? Would they be included in the incident cases for year X?
+  + Answer: Those living in DK Jan 1st are at-risk for incidence. If they move in afterwards, and get diag, then they do not count as incident, but will count as prevalent next year
 
 - Is data from both lpr grund and lpr private included?
+  + Answer: Yes
 
 - Which patient types (pattypes) are included when including ambulant patients
 (0,1,2,3)?
+  + 
 
 - "To ensure a minimum 10-year hospital history, the Danish Heart Statistics
 provides statistics on cardiovascular variables from 2006 onwards". How does

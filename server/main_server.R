@@ -749,7 +749,7 @@ outputCountDTTable <- reactive({
     # Convert entire table to character to we can rbind() totals
     dat <- dat[, lapply(.SD, as.character)]
     # Rbind totals
-    dat <- rbindlist(list(dat, as.list(c("Total", totals))))
+    dat <- rbindlist(list(dat, as.list(c("Total", totals))), use.names = FALSE)
     
     # Convert back to numeric
     col_convert <- c("male", "female", "Total")
