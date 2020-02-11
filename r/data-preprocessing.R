@@ -205,17 +205,42 @@ saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
 
 
 # CHD ---------------------------------------------------------------------
-chd <- fread("data/chd/export_chd.txt")
+chd_agg_levels <- c("age", "sex", "totals")
 
-chd <- dcast(
-  chd,
+f.load <-
+  list.files(path = "data/chd/",
+             pattern = "export_chd_*",
+             full.names = TRUE)
+chd <- sapply(f.load, fread)
+
+names(chd) <- chd_agg_levels
+chd$age <- dcast(
+  chd$age,
   formula = sex + age_adult + ht.code++n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
 )
 
+chd$sex <- dcast(
+  chd$sex,
+  formula = sex  + ht.code++n_denom + year ~ variable,
+  value.var = c("count_n_", "rate_strat")
+)
+
+
+chd$totals <- dcast(
+  chd$totals,
+  formula = ht.code++n_denom + year ~ variable,
+  value.var = c("count_n_", "rate_strat")
+)
+
 # Remove extra__ in colnames
-setnames(chd, gsub("__", "_", colnames(chd)))
+lapply(chd, function(l1){
+  setnames(l1, gsub("__", "_", colnames(l1)))
+})
 
-shiny_dat_chd <- split(chd, by = "ht.code", keep.by = FALSE)
+
+# NOTE this has different structure than data list for main HT.
+# This list is agrr_level -> outcome, while HT is outcome -> aggr_level
+shiny_dat_chd <- lapply(chd, split, by = "ht.code", keep.by = TRUE)
 saveRDS(shiny_dat_chd, file ="data/chd/shiny_dat_chd.rds")
-
+saveRDS(chd_agg_levels, file  = "data/chd/aggr_levels_chd.rds")

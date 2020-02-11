@@ -102,8 +102,8 @@ aggr_choices <-
   )
 row.names(aggr_choices) <- aggr_choices$name_dk
 
-count_rate_choices <- list("Rate" = 2,
-                           "Antal" = 1)
+count_rate_choices <- list("Rate" = as.integer(2),
+                           "Antal" = as.integer(1))
 
 ui_main_title <- enc2utf8("Hjemme")
 ui_age <- enc2utf8("Aldre")
@@ -195,9 +195,15 @@ ui_chd_title <- "CHD"
 choose_outcome_chd <- enc2utf8("Vælge medfødt hjetefjel:")
 outcome_choices_chd <- c(enc2utf8(outcome_descriptions_chd$name_dk))
 
-
 choose_var_chd <- enc2utf8("Vælg statistik:")
-var_choices_chd <- c(enc2utf8(var_descriptions_chd$var_dk))
+var_choices_chd <- fread("data/chd/variable_ui_chd.csv", encoding = "UTF-8")
+
+ui_var_choices_chd <- var_choices_chd$code_name
+names(ui_var_choices_chd) <- enc2utf8(var_choices_chd$var_dk)
+
+aggr_levels_chd <- readRDS("data/chd/aggr_levels_chd.rds")
+aggr_levels_chd_pretty <- c("Alder", "Køn", "Total")
+choose_aggr_chd <-  enc2utf8("Opdelt efter:")
 
 # CODE PANEL --------------------------------------------------------------
 ui_code_title <- "Code"
