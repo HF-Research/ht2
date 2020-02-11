@@ -1225,6 +1225,7 @@ output$downloadMapsFemale <- downloadHandler(
 output$d3_plot_bar <- renderSimpleD3Bar({
   req(input$aggr_level, input$variable)
   if (validate() && !isNational() && !isKom()) {
+    
     plot_d3_bar()
   }
 })

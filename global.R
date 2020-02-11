@@ -1,6 +1,8 @@
 # LIBRARIES ----------------------------------------------------
 # devtools::install_github("rstudio/profvis")
 # library(profvis)
+# library(reactlog)
+# options(shiny.reactlog = TRUE)
 library(shiny)
 library(DT)
 library(shinyWidgets)
@@ -39,7 +41,7 @@ data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)
 dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 pop <- fread("data/pop_summary_age.txt")
-year_max <- 2016
+year_max <- 2017
 
 ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
 source(ui_file_path, encoding = "UTF-8")
@@ -413,3 +415,10 @@ pop_DT <- DT::datatable(
     )
   )
 )
+
+
+# CHD PANEL ---------------------------------------------------------------
+shiny_dat_chd <- readRDS("data/chd/shiny_dat_chd.rds")
+year_max_chd <- 2017
+year_min_chd <- 2014
+year_choices_chd <- year_min_chd:year_max_chd

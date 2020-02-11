@@ -202,3 +202,20 @@ dk_sp_data <- list(l1 = l1,
 
 
 saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
+
+
+# CHD ---------------------------------------------------------------------
+chd <- fread("data/chd/export_chd.txt")
+
+chd <- dcast(
+  chd,
+  formula = sex + age_adult + ht.code++n_denom + year ~ variable,
+  value.var = c("count_n_", "rate_strat")
+)
+
+# Remove extra__ in colnames
+setnames(chd, gsub("__", "_", colnames(chd)))
+
+shiny_dat_chd <- split(chd, by = "ht.code", keep.by = FALSE)
+saveRDS(shiny_dat_chd, file ="data/chd/shiny_dat_chd.rds")
+

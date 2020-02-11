@@ -28,7 +28,7 @@ tabPanel(ui_main_title,
                                     inputId = "year",
                                     label = choose_year,
                                     choices = NULL,
-                                    selected = 2015
+                                    selected = year_max
                                   )
                                 ),
                                 fluidRow(

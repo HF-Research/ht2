@@ -51,7 +51,23 @@ outcomes_all <-
         outcome_names_med)
 
 
-# LANGUAGE SPECIFIC SECTION -----------------------------------------------
+
+outcome_descriptions_chd <-
+  fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
+var_descriptions_chd <- fread("data/chd/variable_ui_chd.csv ", encoding = "UTF-8")
+
+
+
+# ALL PANELS --------------------------------------------------------------
+ui_sex <- enc2utf8("Køn")
+ui_year <- enc2utf8("År")
+ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
+choose_year <- enc2utf8("Vælg år:")
+ui_download <- "Hent"
+ui_download_graph <- "Hent figur"
+
+
+# MAIN PANEL -----------------------------------------------
 # Everything below here will need to be changed for the english verison
 
 # Outcome dropdown, broken up into sections
@@ -65,7 +81,7 @@ outcome_choices <- c(list(
 dropdown_tooltip = enc2utf8("Click to choose data")
 choose_outcome <- enc2utf8("Vælge sygdom eller behandling:")
 # choose_theme <- enc2utf8("Vælge emne")
-choose_year <- enc2utf8("Vælg år:")
+
 choose_aggr_lv <- enc2utf8("Opdelt efter:")
 choose_var <- enc2utf8("Vælg statistik:")
 choose_rate_count <- enc2utf8("Vælg rater/antal:")
@@ -94,17 +110,12 @@ ui_age <- enc2utf8("Aldre")
 ui_edu <- enc2utf8("Uddannelse")
 ui_region <- enc2utf8("Region")
 ui_national <- enc2utf8("National")
-ui_sex <- enc2utf8("Køn")
-ui_year <- enc2utf8("År")
-ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
 ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andel")
 ui_edu_age_range <- "35 - 84 årige"
 ui_moving_avg_desc <- "3-år glidende gennemsnit"
-ui_download <- "Hent"
-ui_download_graph <- "Hent figur"
 
 # Strings to place inside variable descriptions
 replace_type_string_opr <- "fik foretaget en"
@@ -178,6 +189,16 @@ def_med_title <- "Definitioner af medicin"
 def_variables_title <- "Definitioner af statistiker"
 def_population_title <- "Definitioner af befolkninger"
 def_stratas_title <- "Definitioner af stratifikationer"
+
+# CHD PANEL ---------------------------------------------------------------
+ui_chd_title <- "CHD"
+choose_outcome_chd <- enc2utf8("Vælge medfødt hjetefjel:")
+outcome_choices_chd <- c(enc2utf8(outcome_descriptions_chd$name_dk))
+
+
+choose_var_chd <- enc2utf8("Vælg statistik:")
+var_choices_chd <- c(enc2utf8(var_descriptions_chd$var_dk))
+
 # CODE PANEL --------------------------------------------------------------
 ui_code_title <- "Code"
 

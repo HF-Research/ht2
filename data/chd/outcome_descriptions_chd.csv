@@ -1,0 +1,5 @@
+﻿ht.code,name_dk,name_en,icd8,icd10,diag_type,pat_type,grade,desc_dk,desc_en,link_dk,link_en
+c1,Simple CHD,Simple CHD,"74639, 74640, 746449, 74709, 74739, 74663","dq210, dq211, dq250, dq221","A,B","0,2",simple,Simple medfødt hjertefejl,Simple congenital heart defects,NA,NA
+c2,Medium ,Medium ,7461,dq203,"A,B","0,2",Medium ,Medium medfødt hjertefejl,Medium CHD,NA,NA
+c3,severe,severe,NA,NA,NA,NA,Severe,Severe,Severe,NA,NA
+c4,Any CHD,Any CHD,All,All,"A,B,","0,2",NA,All CHD,Any CHD,NA,NA
