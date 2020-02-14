@@ -127,6 +127,10 @@ ggplotObj <- reactive({
   pointsize = 2.9
   
   if (isTotals()) {
+    
+    plot_ly(data = x, x = ~year) %>% 
+      add_trace(y = ~get(prettyVarChd()), type = 'scatter', mode = 'lines+markers')
+    
     ggplot(data = x, mapping = aes(x = year,
                                    y = !!y.var)) +
       geom_line(size = linesize) +
@@ -246,8 +250,10 @@ isSex <- reactive({
 
 output$d3_chd <- renderPlotly({
   req(input$var_chd)
+  browser()
   ggplotly(ggplotObj(),
-           tooltip = selectedDataVarsChd())
+           hovertemplate = paste0("<br>", prettyVarChd()))
+  
 })
 
 output$table_counts_chd <- renderDT({
