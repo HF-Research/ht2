@@ -21,7 +21,10 @@ output$outcome_description_chd <- renderUI({
   }
 })
 
-
+prettyVarChd <- reactive({
+  x <- unlist(var_choices_chd[code_name == input$var_chd, .(var_dk, var_rate_dk)])
+  x[as.integer(input$rate_count_chd)]
+})
 
 
 
@@ -35,7 +38,7 @@ outcomeCodeChd <- reactive({
 
 
 
-# SUBSETTING --------------------------------------------------------------
+# DATA MUNGING --------------------------------------------------------------
 subsetOutcomeChd <- reactive({
   # Cache subset based on outcome
   subsetAggr()[[outcomeCodeChd()]]
@@ -54,66 +57,202 @@ selectedDataVarsChd <- reactive({
 })
 
 
-
-subsetYearChd <- reactive({
-  subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
-})
-
-
 keepVars <- reactive({
-  if(input$aggr_level_chd == "age") {
-    c("ht.code", "age_adult", "sex")
-  } else if (input$aggr_level_chd == "sex") {
-    c("ht.code", "sex")
+  if(isTotals()) {
+    c("year")
+  } else if (isSex()) {
+    c("sex", "year")
   } else {
-    "ht.code"
+    c("age_adult", "sex", "year")
   }
-  
 })
 
 
-# FORMAT FOR D3 -----------------------------------------------------------
-outputCasesDataChd <- function() {
-  # National level data shows all years
-  if (!isTotals()) {
-    subsetYear()
-  } else {
-    subsetVars()
-  }
-}
 
-d3PlotLineChd <- reactive({
+
+
+dataObj <- reactive({
+  keep.vars <- c(keepVars(), selectedDataVarsChd())
+  x <- copy(subsetOutcomeChd()[, ..keep.vars])
   
-    sex_vars <- ui_sex_levels
-    color = c(graph_colors[1], graph_colors[2])
-    keep.vars <- c(keepVars(), selectedDataVarsChd())
-    x <- subsetOutcomeChd()[, ..keep.vars]
+  # Rename value variables
+  x.names <- colnames(x)
+  inx1 <- grep("incidence", x.names)
+  if (any(inx1)) {
+    colnames(x)[inx1] <- prettyVarChd()
+  } else {
+    inx2 <- grep("prevalence", x.names)
+    colnames(x)[inx2] <- prettyVarChd()
+  }
+  x
+})
+
+toFactor <- reactive({
+  x <- copy(dataObj())
+  # Turn characters into factors
+  if (isTotals()) {
+    x
+  } else if (isSex()) {
+    x[, sex := factor(sex,
+                      c(levels = "f", "m"),
+                      labels = c(ui_sex_levels[1], ui_sex_levels[2]))]
+    x[, id_var := paste0(get(plotVarId()[1]))]
+  } else {
+    x[, sex := factor(sex,
+                      c(levels = "f", "m"),
+                      labels = c(ui_sex_levels[1], ui_sex_levels[2]))]
+    x[, id_var := paste0(get(plotVarId()[1]), " ", get(plotVarId()[2]))]
+  }
+})
+
+# FORMAT FOR plotly -----------------------------------------------------------
+plotVarId <- reactive({
+  if (isTotals()) {
+    c("1")
+  } else if (isSex()) {
+    c("sex")
+  } else {
+    c("sex", "age_adult")
+  }
+})
+
+ggplotObj <- reactive({
+  x <- toFactor()
+  color = c(graph_colors[1], graph_colors[2])
+  
+  y.var <- sym(prettyVarChd())
+  color.var <- sym(plotVarId()[1])
+  ymax <- x[, max(get(prettyVarChd()))]
+  linesize = 1.1
+  pointsize = 2.9
+  
+  if (isTotals()) {
+    ggplot(data = x, mapping = aes(x = year,
+                                   y = !!y.var)) +
+      geom_line(size = linesize) +
+      geom_point(size = pointsize) +
+      coord_cartesian(ylim = c(0, ymax)) +
+      theme_classic()
     
-    # plot_title = plotTitle()
+  } else if (isSex()) {
+    legend.labs <- ui_sex_levels
+    legend.cols <- graph_colors
     ggplot(
       data = x,
-      colors = c(graph_colors[1], graph_colors[2]),
-      plotTitle = plot_title,
-      sexVars = sex_vars
-    )
+      mapping = aes(
+        x = year,
+        y = !!y.var,
+        group = id_var,
+        color = !!color.var
+      )
+    ) +
+      geom_line(size = linesize) +
+      geom_point(size = pointsize) +
+      scale_color_manual(name = "",
+                         labels = legend.labs,
+                         values = legend.cols) +
+      guides(color = guide_legend(override.aes = list(shape = NA))) +
+      coord_cartesian(ylim = c(0, ymax)) +
+      theme_classic()
+    
+    
+  } else {
+    tmp1 <- rep(ui_sex_levels[1], 2)
+    tmp2 <- rep(ui_sex_levels[2], 2)
+    legend.labs <- paste0(c(tmp1, tmp2), c(" <15", " 15+"))
+    legend.cols <- rep(graph_colors, each = 2)
+    ggplot(
+      data = x,
+      mapping = aes(
+        x = year,
+        y = !!y.var,
+        group = id_var,
+        color = id_var,
+        linetype = id_var
+      )
+    ) +
+      geom_line(size = linesize) +
+      geom_point(size = pointsize) +
+      scale_color_manual(name = "",
+                         labels = legend.labs,
+                         values = legend.cols) +
+      scale_linetype_manual(
+        name = "",
+        labels = legend.labs,
+        values = c(1, 2, 1, 2),
+        drop = FALSE
+      ) +
+      coord_cartesian(ylim = c(0, ymax)) +
+      theme_classic() +
+      guides(color = guide_legend(override.aes = list(shape = NA)))
+    
+  }
+})
+
+
+# DATATABLES --------------------------------------------------------------
+
+dtCastChd <- reactive({
+  # One dcast for both rates and counts
+  
+  dat <- dataObj()
+  if(isTotals()){
+    dat
+  } else if (isSex()){
+    value_var <- prettyVarChd()
+    subset_cols = c("year", value_var)
+    out = cbind(dat["f", ..subset_cols], dat["m", ..value_var])
+    setnames(out, c("year", ui_sex_levels[1], ui_sex_levels[2]))
+  } else {
+    dat[, id_var := paste0(sex, age_adult)]
+    value_var <- prettyVarChd()
+    subset_cols = c("year", value_var)
+    out <-
+      cbind(dat[id_var == "f<15", ..subset_cols],
+            dat[id_var == "f15+", ..value_var],
+            dat[id_var == "m<15", ..value_var],
+            dat[id_var == "m15+", ..value_var])
+    
+    tmp1 <- rep(ui_sex_levels[1], 2)
+    tmp2 <- rep(ui_sex_levels[2], 2)
+    var_names <- paste0(c(tmp1, tmp2), c(" <15", " 15+"))
+    setnames(out, c("year", var_names))
+    out
+  }
+  
+  
   
 })
 
+
+outputDT_chd <- reactive({
+ x <- copy(dtCastChd())
+
+ makeRateDT_chd(x, group_var = "year", dt_title = "H", messageBottom = "B")
+  
+  })  
 
 # VALIDATE ----------------------------------------------------------------
 
 isTotals <- reactive({
-  input$aggr_level == "Totals"
+  input$aggr_level_chd == "totals"
 })
 
+isSex <- reactive({
+  input$aggr_level_chd == "sex"
+})
 
 # RENDER ------------------------------------------------------------------
 
-output$d3_chd <- renderSimpleD3Line({
-  browser()
+output$d3_chd <- renderPlotly({
   req(input$var_chd)
-  
-  d3PlotLineChd()
-  
+  ggplotly(ggplotObj(),
+           tooltip = selectedDataVarsChd())
 })
 
+output$table_counts_chd <- renderDT({
+  
+  req(input$var_chd)
+      outputDT_chd()
+  
+})

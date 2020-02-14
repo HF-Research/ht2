@@ -203,6 +203,9 @@ names(ui_var_choices_chd) <- enc2utf8(var_choices_chd$var_dk)
 
 aggr_levels_chd <- readRDS("data/chd/aggr_levels_chd.rds")
 aggr_levels_chd_pretty <- c("Alder", "Køn", "Total")
+
+aggr_levels_chd <- rev(aggr_levels_chd)
+aggr_levels_chd_pretty <- rev(aggr_levels_chd_pretty)
 choose_aggr_chd <-  enc2utf8("Opdelt efter:")
 
 # CODE PANEL --------------------------------------------------------------

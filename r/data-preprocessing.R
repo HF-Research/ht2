@@ -233,10 +233,19 @@ chd$totals <- dcast(
   value.var = c("count_n_", "rate_strat")
 )
 
+
 # Remove extra__ in colnames
 lapply(chd, function(l1){
   setnames(l1, gsub("__", "_", colnames(l1)))
 })
+
+# Round rates
+chd <- lapply(chd, function(l1){
+  l1[, rate_strat_incidence := round(rate_strat_incidence, digits = 1)]
+  l1[, rate_strat_prevalence := round(rate_strat_prevalence, digits = 1)]
+  l1
+})
+
 
 
 # NOTE this has different structure than data list for main HT.

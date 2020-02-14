@@ -16,6 +16,7 @@ library(shinycssloaders)
 library(simpled3)
 library(mapview) # For map downloads
 library(ggplot2)
+library(plotly)
 print(suppressMessages(webshot:::find_phantom()))
 if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
@@ -423,3 +424,82 @@ shiny_dat_chd <- readRDS("data/chd/shiny_dat_chd.rds")
 year_max_chd <- 2017
 year_min_chd <- 2014
 year_choices_chd <- year_min_chd:year_max_chd
+
+
+makeCountDT_chd <- function(dat, group_var, thousands_sep, dt_title, messageBottom) {
+  col_format <- c(ui_sex_levels, "Total")
+  DT::datatable(
+    data = dat,
+    extensions = 'Buttons',
+    rownames = FALSE,
+    class = ' hover row-border',
+    options = list(
+      language = list(url = "Danish.json"),
+      ordering = FALSE,
+      dom = "tB",
+      columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
+      buttons = list(
+        list(extend = "pdf",
+             messageTop = dt_title,
+             messageBottom = messageBottom),
+        list(extend = "excel",
+             messageTop = dt_title,
+             messageBottom = messageBottom)
+      ),
+      initComplete = JS(
+        # Table hearder background color
+        "function(settings, json) {",
+        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+        "}"
+      )
+    )
+  ) %>%
+    
+    formatStyle('Total',  fontWeight = 'bold') %>%
+    formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
+    formatStyle(
+      # Bolds the "Totals" row which has character == "Total" in column 1
+      1,
+      target = "row",
+      fontWeight = styleEqual(
+        levels = c("Total"),
+        values =  c("bold"),
+        default = "normal"
+      )
+    )
+}
+
+
+makeRateDT_chd <-
+  function(dat,
+           group_var,
+           dt_title,
+           messageBottom) {
+    col_format <- c(ui_sex_levels)
+    DT::datatable(
+      data = dat,
+      extensions = 'Buttons',
+      rownames = FALSE,
+      class = 'hover row-border',
+      options = list(
+        language = list(url = "Danish.json"),
+        ordering = FALSE,
+        dom = "tB",
+        columnDefs = list(list(render = formatNAValues, targets = "_all")),
+        buttons = list(
+          list(extend = "pdf",
+               messageTop = dt_title,
+               messageBottom = messageBottom),
+          list(extend = "excel",
+               messageTop = dt_title,
+               messageBottom = messageBottom)
+        ),
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+          "}"
+        )
+      )
+    )  %>%
+      formatStyle(group_var,  backgroundColor = "#e7e7e7")
+  }
