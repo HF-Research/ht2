@@ -16,6 +16,7 @@ ui <- div(
   ),
   
   navbarPage(
+    
     title = "HjerteTal",
     collapsible = TRUE,
     source(file.path("ui", "main_ui.R"), local = TRUE)$value,

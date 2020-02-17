@@ -216,9 +216,14 @@ chd <- sapply(f.load, fread)
 names(chd) <- chd_agg_levels
 chd$age <- dcast(
   chd$age,
-  formula = sex + age_adult + ht.code++n_denom + year ~ variable,
+  formula = sex + age_adult + ht.code+n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
 )
+
+# For some reason, pltly requires year to be in the correct plotting order in
+# the input data. And for some reason the year is out of order in data
+setorder(chd$age, ht.code, sex, age_adult, year)
+
 
 chd$sex <- dcast(
   chd$sex,

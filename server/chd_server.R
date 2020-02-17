@@ -1,4 +1,4 @@
-
+# callModule(profvis_server, "profiler")
 # TEXT --------------------------------------------------------------------
 
 
@@ -116,7 +116,7 @@ plotVarId <- reactive({
   }
 })
 
-ggplotObj <- reactive({
+plotlyObj <- reactive({
   x <- toFactor()
   color = c(graph_colors[1], graph_colors[2])
   
@@ -125,72 +125,67 @@ ggplotObj <- reactive({
   ymax <- x[, max(get(prettyVarChd()))]
   linesize = 1.1
   pointsize = 2.9
+  tooltip <-
+    paste0(prettyVarChd(), ": <br> <b> %{y} </b> <extra></extra>")
   
   if (isTotals()) {
     
-    plot_ly(data = x, x = ~year) %>% 
-      add_trace(y = ~get(prettyVarChd()), type = 'scatter', mode = 'lines+markers')
+    out <- plot_ly(data = x, x = ~ year) %>%
+      add_trace(y = ~ get(prettyVarChd()),
+                type = 'scatter',
+                mode = 'lines+markers',
+                hovertemplate = tooltip)
+      
     
-    ggplot(data = x, mapping = aes(x = year,
-                                   y = !!y.var)) +
-      geom_line(size = linesize) +
-      geom_point(size = pointsize) +
-      coord_cartesian(ylim = c(0, ymax)) +
-      theme_classic()
     
   } else if (isSex()) {
-    legend.labs <- ui_sex_levels
-    legend.cols <- graph_colors
-    ggplot(
-      data = x,
-      mapping = aes(
-        x = year,
-        y = !!y.var,
-        group = id_var,
-        color = !!color.var
-      )
-    ) +
-      geom_line(size = linesize) +
-      geom_point(size = pointsize) +
-      scale_color_manual(name = "",
-                         labels = legend.labs,
-                         values = legend.cols) +
-      guides(color = guide_legend(override.aes = list(shape = NA))) +
-      coord_cartesian(ylim = c(0, ymax)) +
-      theme_classic()
     
-    
-  } else {
+    out <- plot_ly(data = x, x = ~year) %>%
+      add_trace(y = ~ get(prettyVarChd()),
+                color = ~id_var,
+                colors = graph_colors,
+                type = 'scatter',
+                mode = 'lines+markers',
+                hovertemplate = tooltip) 
+      } else {
     tmp1 <- rep(ui_sex_levels[1], 2)
     tmp2 <- rep(ui_sex_levels[2], 2)
     legend.labs <- paste0(c(tmp1, tmp2), c(" <15", " 15+"))
     legend.cols <- rep(graph_colors, each = 2)
-    ggplot(
-      data = x,
-      mapping = aes(
-        x = year,
-        y = !!y.var,
-        group = id_var,
-        color = id_var,
-        linetype = id_var
-      )
-    ) +
-      geom_line(size = linesize) +
-      geom_point(size = pointsize) +
-      scale_color_manual(name = "",
-                         labels = legend.labs,
-                         values = legend.cols) +
-      scale_linetype_manual(
-        name = "",
-        labels = legend.labs,
-        values = c(1, 2, 1, 2),
-        drop = FALSE
-      ) +
-      coord_cartesian(ylim = c(0, ymax)) +
-      theme_classic() +
-      guides(color = guide_legend(override.aes = list(shape = NA)))
     
-  }
+    setorder(x, year)
+    out <- plot_ly(data = x ) %>%
+      add_trace(
+        x = ~ year,
+        y = ~ get(prettyVarChd()),
+        color = ~ sex,
+        colors = graph_colors,
+        linetype = ~ age_adult,
+        type = 'scatter',
+        mode = 'lines+markers',
+        hovertemplate = tooltip
+        
+      )
+          
+      }
+  
+  out %>% layout(
+    yaxis = list(title = prettyVarChd(),
+                 rangemode = "tozero"),
+    hoverlabel = list(font = list(size = 18))
+  ) %>%
+    config(
+      modeBarButtonsToRemove = c(
+        "zoomIn2d",
+        "zoomOut2d",
+        "zoom2d",
+        "pan2d",
+        "select2d",
+        "lasso2d",
+        "autoScale2d",
+        "resetScale2d"
+      )
+    )
 })
 
 
@@ -250,9 +245,9 @@ isSex <- reactive({
 
 output$d3_chd <- renderPlotly({
   req(input$var_chd)
-  browser()
-  ggplotly(ggplotObj(),
-           hovertemplate = paste0("<br>", prettyVarChd()))
+  
+  plotlyObj()
+           
   
 })
 

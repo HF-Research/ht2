@@ -15,7 +15,7 @@ library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 library(mapview) # For map downloads
-library(ggplot2)
+# library(ggplot2)
 library(plotly)
 print(suppressMessages(webshot:::find_phantom()))
 if (is.null(suppressMessages(webshot:::find_phantom()))) {

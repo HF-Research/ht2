@@ -5,6 +5,7 @@ tabPanel(ui_chd_title,
            tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
          ),
          fluidRow(
+           # profvis_ui("profiler"),
            div(# This changes the column width (i.e. proportion) based on width of screen)
              class = "col-xs-12 col-sm-5 col-md-4 col-lg-3",
              
