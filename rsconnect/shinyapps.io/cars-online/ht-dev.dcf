@@ -1,0 +1,10 @@
+name: ht-dev
+title:
+username:
+account: cars-online
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1811905
+bundleId: 2800729
+url: https://hjerteforeningen.shinyapps.io/ht-dev/
+when: 1581682636.26706
