@@ -12,8 +12,7 @@ variable_ui <-
   read_fst(path = "data/variable_ui.fst", as.data.table = TRUE
         )
 edu <- read_fst(path = "data/edu_description.fst", as.data.table = TRUE)
-ui_about_text <-
-  read_fst(path = "data/ui_about_text.fst", as.data.table = TRUE)
+
 
 
 # Encode to native
@@ -127,8 +126,11 @@ ui_map <- "Kort"
 ui_d3_figures <- "Grafer"
 ui_data <- "Tabeller"
 
-# ABOUT PANEL -------------------------------------------------------------
-ui_about_title <- "Metoder"
+# ABOUT MAIN PANEL -------------------------------------------------------------
+ui_about_text <-
+  read_fst(path = "data/ui_about_text.fst", as.data.table = TRUE)
+
+ui_about_title <- "Metoder: hjerte-kar sygdomme"
 about_selection <- "Vælg definition"
 
 about_dat_diag <-
@@ -208,6 +210,25 @@ aggr_levels_chd_pretty <- rev(aggr_levels_chd_pretty)
 choose_aggr_chd <-  enc2utf8("Opdelt efter:")
 
 ui_replace_all_chd <- "en medfødt hjertefjel"
+
+# ABOUT CHD PANEL ---------------------------------------------------------
+ui_about_title_chd <- "Metoder: medfødt hjertefjel"
+about_selection_chd <- "Vælg definition"
+ui_about_text <-
+  fread(file = "data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
+
+
+about_choices_chd <- list(
+  "Sygdomme" = "def_diag"
+  )
+
+col_names_diag_about_chd <-
+  c("Sygdomme",
+    "Beskrivlse",
+    "ICD-8 kode",
+    "ICD-10 kode",
+    "Diagnose type",
+    "Patient type")
 
 
 # CODE PANEL --------------------------------------------------------------

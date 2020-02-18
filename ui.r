@@ -22,7 +22,10 @@ ui <- div(
     collapsible = TRUE,
     source(file.path("ui", "main_ui.R"), local = TRUE)$value,
     source(file.path("ui", "chd_ui.R"), local = TRUE)$value,
-    source(file.path("ui", "about_ui.R"), local = TRUE)$value
+    navbarMenu(title = "Metoder",
+               source(file.path("ui", "about_ui.R"), local = TRUE)$value,
+               source(file.path("ui", "about_ui_chd.R"), local = TRUE)$value
+               )
     
   )
 )

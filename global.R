@@ -343,7 +343,7 @@ makeLeaflet <-
 # ABOUT PANEL ------------------------------------------------------------
 
 makeAboutTables <- function(dat, col_names) {
-  colnames(diag) <- col_names_diag
+  colnames(dat) <- col_names
   DT::datatable(
     data = dat,
     extensions = 'Buttons',
@@ -366,60 +366,9 @@ makeAboutTables <- function(dat, col_names) {
 }
 
 
-col_subset <-
-  c(paste0("name_", lang),
-    paste0("desc_", lang),
-    "code_simple",
-    "diag_type",
-    "pat_type")
-diag <- about_dat_diag[, ..col_subset]
-colnames(diag) <- col_names_diag
-diag_DT <- makeAboutTables(diag, col_names_diag)
 
-col_subset <-
-  c(paste0("name_", lang),
-    paste0("desc_", lang),
-    "code_simple")
-opr <- about_dat_opr[, ..col_subset]
-colnames(opr) <- col_names_opr
-opr_DT <- makeAboutTables(opr, col_names_opr)
 
-col_subset <-
-  c(paste0("name_", lang),
-    paste0("desc_", lang),
-    "code_simple")
-med <- about_dat_med[, ..col_subset]
-colnames(med) <- col_names_med
-med_DT <- makeAboutTables(med, col_names_med)
 
-col_subset <-
-  c(paste0("edu_name_", lang),
-    paste0("long_desc_", lang),
-    "code_simple")
-edu <- edu[, ..col_subset]
-colnames(edu) <- col_names_edu
-edu_DT <- makeAboutTables(edu, col_names_edu)
-
-colnames(pop) <- col_names_pop
-pop_DT <- DT::datatable(
-  data = pop,
-  extensions = 'Buttons',
-  rownames = FALSE,
-  class = ' hover row-border',
-  selection = c("multiple"),
-  options = list(
-    lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
-    pageLength = 15,
-    dom = "Blftp",
-    buttons = list('pdf', 'excel'),
-    initComplete = JS(
-      # Table hearder background color
-      "function(settings, json) {",
-      "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-      "}"
-    )
-  )
-)
 
 
 # CHD PANEL ---------------------------------------------------------------
