@@ -66,12 +66,6 @@ replaceOutcomeString <- reactive({
   replace_outcome_string
 })
 
-replaceAllCVDString <- function(replace_outcome_string) {
-  # Replace when All heart diseases
-  gsub("alle hjerte-kar-sygdomme",
-       replace_allCVD_string,
-       replace_outcome_string)
-}
 
 
 replaceAggrLevelString <- reactive({
@@ -111,7 +105,8 @@ output$variable_desc <- renderUI({
     # gsub fn(). This fixes that
     
     desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
-    desc_text <- replaceAllCVDString(desc_text)
+    desc_text <- desc_text <- gsub("alle hjerte-kar-sygdomme", replace_allCVD_string, desc_text)
+    
     
     
     desc_text <-

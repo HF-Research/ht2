@@ -17,6 +17,7 @@ library(simpled3)
 library(mapview) # For map downloads
 # library(ggplot2)
 library(plotly)
+library(fst)
 print(suppressMessages(webshot:::find_phantom()))
 if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
@@ -28,6 +29,8 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
 print(suppressMessages(webshot:::find_phantom()))
 
 # LANGUAGE UI ---------------------------------------------------------
+
+print(Sys.getlocale())
 lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
@@ -79,6 +82,7 @@ formatNumbers <- function(dat, lang) {
   
   x[]
 }
+
 
 # DATATABLE FUNCTIONS ----------------------------------------------------
 

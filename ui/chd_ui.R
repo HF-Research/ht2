@@ -16,7 +16,8 @@ tabPanel(ui_chd_title,
                    inputId = "outcome_chd",
                    label = choose_outcome_chd,
                    choices = outcome_choices_chd,
-                   selectize = TRUE
+                   selectize = TRUE,
+                   selected = ""
                  )
                ),
                fluidRow(
@@ -52,7 +53,20 @@ tabPanel(ui_chd_title,
                    )
                  )
                )
-             )),
+             ),
+             fluidRow(
+               # profvis_ui("profiler"),
+               wellPanel(
+                 class = "well_description",
+                 uiOutput("outcome_description_chd"),
+                 br(),
+                 uiOutput("variable_desc_chd")
+                 
+               )
+             )
+             ),
+           
+           
            
            # RESULTS ---------------------------
            # Graph

@@ -6,20 +6,19 @@
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
 outcome_descriptions <-
-  fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8")
+  fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8", header = TRUE)
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
-  fread(file = "data/variable_ui.csv",
-        encoding = "UTF-8",
-        header = TRUE)
-edu <- fread(file = "data/edu_description.csv", encoding = "UTF-8")
+  read_fst(path = "data/variable_ui.fst", as.data.table = TRUE
+        )
+edu <- read_fst(path = "data/edu_description.fst", as.data.table = TRUE)
 ui_about_text <-
-  fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
+  read_fst(path = "data/ui_about_text.fst", as.data.table = TRUE)
 
 
 # Encode to native
 outcome_descriptions <-
-  outcome_descriptions[, lapply(.SD, enc2native)]
+  outcome_descriptions[, lapply(.SD, enc2utf8)]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
 
@@ -105,7 +104,7 @@ row.names(aggr_choices) <- aggr_choices$name_dk
 count_rate_choices <- list("Rate" = as.integer(2),
                            "Antal" = as.integer(1))
 
-ui_main_title <- enc2utf8("Hjemme")
+ui_main_title <- enc2utf8("Hjerte-kar sygdomme")
 ui_age <- enc2utf8("Aldre")
 ui_edu <- enc2utf8("Uddannelse")
 ui_region <- enc2utf8("Region")
@@ -191,7 +190,7 @@ def_population_title <- "Definitioner af befolkninger"
 def_stratas_title <- "Definitioner af stratifikationer"
 
 # CHD PANEL ---------------------------------------------------------------
-ui_chd_title <- "CHD"
+ui_chd_title <- enc2utf8("Medfødt hjertefejl")
 choose_outcome_chd <- enc2utf8("Vælge medfødt hjetefjel:")
 outcome_choices_chd <- c(enc2utf8(outcome_descriptions_chd$name_dk))
 
@@ -207,6 +206,9 @@ aggr_levels_chd_pretty <- c("Alder", "Køn", "Total")
 aggr_levels_chd <- rev(aggr_levels_chd)
 aggr_levels_chd_pretty <- rev(aggr_levels_chd_pretty)
 choose_aggr_chd <-  enc2utf8("Opdelt efter:")
+
+ui_replace_all_chd <- "en medfødt hjertefjel"
+
 
 # CODE PANEL --------------------------------------------------------------
 ui_code_title <- "Code"

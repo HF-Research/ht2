@@ -6,9 +6,34 @@ library(maptools)
 library(sf)
 library(leaflet)
 library(dplyr)
+library(fst)
+library(Hmisc)
 # library(spdep)
-edu <- fread("data/edu_description.csv", encoding = "UTF-8")
+
+# DATA TO FST -------------------------------------------------------------
+# Data that needs to be loaded for each session should be in fst format for performance reasons
+outcome_descriptions <-
+fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8", header = TRUE)
+# load(file = "data/variable_ui.Rdata")
+variable_ui <-
+  fread(file = "data/variable_ui.csv",
+        encoding = "UTF-8",
+        header = TRUE)
+edu <- fread(file = "data/edu_description.csv", encoding = "UTF-8")
+ui_about_text <-
+  fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
+
+# Encode to native
+outcome_descriptions <-
+  outcome_descriptions[, lapply(.SD, enc2native)]
+variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
+
+write_fst(outcome_descriptions, path = "data/outcome_descriptions.fst", compress = 1)
+write_fst(variable_ui, path = "data/variable_ui.fst", compress = 1)
+write_fst(edu, path = "data/edu_description.fst", compress = 1)
+write_fst(ui_about_text, path = "data/ui_about_text.fst", compress = 1)
+
 # OUTCOME DATA ------------------------------------------------------------
 data_files <-
   list.files(path = "data/",
@@ -31,6 +56,9 @@ preProccess <- function(export_dat) {
       # interfere with cbind operation in dtCast()
       setkey(aggr_level, sex, grouping, year)
     })
+    
+    # Make sure regions start with capital letter
+    out$region[, grouping := capitalize(grouping)]
     
     # Change edu to factor to ensure correct ordering
     out$edu[, grouping := factor(tolower(grouping),

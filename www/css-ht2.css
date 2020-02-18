@@ -1,6 +1,6 @@
 /*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
 
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");
+/*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
 :root {
   --blue: #008cba;
   --indigo: #6610f2;
