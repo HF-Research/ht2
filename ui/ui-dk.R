@@ -21,38 +21,9 @@ outcome_descriptions <-
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
 
+file_name <- paste0("data/outcomes_all_", lang, ".rds")
+outcomes_all <- readRDS(file_name)
 
-outcome_names_treatment <-
-  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
-colnames(outcome_names_treatment) <-
-  c("hjertetal_code", "name_dk", "name_en")
-outcome_names_med <-
-  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
-colnames(outcome_names_med) <-
-  c("hjertetal_code", "name_dk", "name_en")
-outcome_names_diag <-
-  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, .(hjertetal_code, name_dk, name_en)]
-colnames(outcome_names_diag) <-
-  c("hjertetal_code", "name_dk", "name_en")
-
-
-
-outcomes_all <-
-  rbind(outcome_names_diag,
-        outcome_names_treatment,
-        outcome_names_med)
-
-
-
-outcome_descriptions_chd <-
-  fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
-var_descriptions_chd <- fread("data/chd/variable_ui_chd.csv ", encoding = "UTF-8")
 
 
 
@@ -70,13 +41,12 @@ ui_download_graph <- "Hent figur"
 
 # Outcome dropdown, broken up into sections
 outcome_choices <- c(list(
-  "Sygdomme" = enc2utf8(outcome_names_diag$name_dk),
-  "Behandling" = enc2utf8(outcome_names_treatment$name_dk),
-  "Medicin" = enc2utf8(outcome_names_med$name_dk)
+  "Sygdomme" = enc2utf8(outcomes_all[type == "diag"]$name),
+  "Behandling" = enc2utf8(outcomes_all[type == "treatment"]$name),
+  "Medicin" = enc2utf8(outcomes_all[type == "med"]$name)
 ))
 
 
-dropdown_tooltip = enc2utf8("Click to choose data")
 choose_outcome <- enc2utf8("Vælge sygdom eller behandling:")
 # choose_theme <- enc2utf8("Vælge emne")
 
@@ -86,19 +56,22 @@ choose_rate_count <- enc2utf8("Vælg rater/antal:")
 
 aggr_choices <-
   data.table(
-    name_dk = c("Alder",
+    label = c("År",
+                "Alder",
                 "Uddannelse",
                 "Kommune",
-                "Region",
-                "År"),
-    name_dk_long = c("Aldersgruppe",
+                "Region"
+),
+    label_long = c("År",
+                     "Aldersgruppe",
                      "Uddannelsesgruppe",
                      "Kommune",
-                     "Region",
-                     "År"),
-    name_ht = c("age", "edu", "kom", "region", "national")
+                     "Region"
+                     ),
+name_ht = c("national",
+            "age", "edu", "kom", "region")
   )
-row.names(aggr_choices) <- aggr_choices$name_dk
+row.names(aggr_choices) <- aggr_choices$label
 
 count_rate_choices <- list("Rate" = as.integer(2),
                            "Antal" = as.integer(1))
@@ -192,6 +165,9 @@ def_population_title <- "Definitioner af befolkninger"
 def_stratas_title <- "Definitioner af stratifikationer"
 
 # CHD PANEL ---------------------------------------------------------------
+outcome_descriptions_chd <-
+  fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
+
 ui_chd_title <- enc2utf8("Medfødt hjertefejl")
 choose_outcome_chd <- enc2utf8("Vælge medfødt hjetefjel:")
 outcome_choices_chd <- c(enc2utf8(outcome_descriptions_chd$name_dk))
@@ -212,6 +188,10 @@ choose_aggr_chd <-  enc2utf8("Opdelt efter:")
 ui_replace_all_chd <- "en medfødt hjertefjel"
 
 # ABOUT CHD PANEL ---------------------------------------------------------
+
+var_descriptions_chd <- fread("data/chd/variable_ui_chd.csv ", encoding = "UTF-8")
+
+
 ui_about_title_chd <- "Metoder: medfødt hjertefjel"
 about_selection_chd <- "Vælg definition"
 ui_about_text <-

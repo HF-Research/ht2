@@ -28,7 +28,7 @@ tabPanel(ui_main_title,
                                   selectInput(
                                     inputId = "year",
                                     label = choose_year,
-                                    choices = NULL,
+                                    choices = year_max,
                                     selected = year_max
                                   )
                                 ),

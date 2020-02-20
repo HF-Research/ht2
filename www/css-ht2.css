@@ -157,6 +157,13 @@ input[type="month"] {
   background-color: white;
 }
 
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: white;
+  background-color: var(--hfRedBright);
+}
+
+
 /******   TABS STYLING   *******/
 
 .tabbable > .nav > li[class=active] >a{

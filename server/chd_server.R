@@ -220,12 +220,14 @@ plotlyObj <- reactive({
       )
           
       }
-  
+
   out %>% layout(
+    margin = list(t = 60),
     title = list(
       text = plot_title,
       x = 0,
-      yanchor = "middle",
+      yanchor = "bottom",
+      
       font = list(family = c("Roboto"),
                   size = 25)
     ),

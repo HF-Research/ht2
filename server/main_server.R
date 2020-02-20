@@ -15,11 +15,7 @@ showModal(
       )
     ),
     tags$br(),
-    tags$p(
-      "This is a beta version of HjerteTal2 that should only be used for testing purposes.
-    The data presented has not been evaluated for accuracy and should not be used for reporting."
-    ),
-    tags$p("Please send any feedback to mphelps@hjerteforeningen.dk"),
+    tags$p("Please send any feedback to mPhelps@hjerteforeningen.dk"),
     tags$br(),
     tags$p("Click anywhere to dismiss")
   )
@@ -28,6 +24,7 @@ showModal(
 # callModule(profvis_server, "profiler")
 # TEXT RENDERING ----------------------------------------------------------
 output$outcome_description <- renderUI({
+  
   req(input$outcome)
   
   out_title <- tags$b(input$outcome)
@@ -69,7 +66,7 @@ replaceOutcomeString <- reactive({
 
 
 replaceAggrLevelString <- reactive({
-  aggr_choices[name_ht == input$aggr_level, tolower(name_dk_long)]
+  aggr_choices[name_ht == input$aggr_level, tolower(label_long)]
 })
 
 
@@ -304,12 +301,12 @@ outcomeCode <- reactive({
   # Connect the input in normal language to the hjertetal_code. This is so we
   # can change the description without having to rename allll the datasets.
   
-  outcomes_all[name_dk == input$outcome, hjertetal_code]
+  outcomes_all[name == input$outcome, hjertetal_code]
 })
 
 prettyAggr_level <- reactive({
   # Outputs same character string that's used in the UI input field
-  aggr_choices[name_ht == input$aggr_level, name_dk]
+  aggr_choices[name_ht == input$aggr_level, label]
   
 })
 
@@ -1019,7 +1016,7 @@ aggrButtonChoices <- reactive({
     return(NULL)
   
   aggr_choices <- aggr_choices[name_ht %in% aggr_level_choices]
-  row.names(aggr_choices) <- aggr_choices$name_dk
+  row.names(aggr_choices) <- aggr_choices$label
   button_vals <-
     setNames(split(aggr_choices$name_ht, seq(nrow(aggr_choices))),
              row.names(aggr_choices))
@@ -1106,6 +1103,7 @@ choiceYears <- reactive({
 
 
 observe({
+  
   req(input$variable)
   if (req(input$aggr_level) != "national") {
     # User can only select years >=2009 when viewing regional data and <=2012 when
@@ -1226,6 +1224,7 @@ output$d3_plot_bar <- renderSimpleD3Bar({
 
 output$d3_plot_line_html <- renderSimpleD3Line({
   if (validate() && isNational()) {
+    
     plot_d3_line()
   }
   

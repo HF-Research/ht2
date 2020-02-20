@@ -41,11 +41,13 @@ if (lang == "dk") {
 }
 
 # OBJECTS ------------------------------------------------------------
+year_max <- 2016
+
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)
 dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 pop <- fread("data/pop_summary_age.txt")
-year_max <- 2017
+
 
 ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
 source(ui_file_path, encoding = "UTF-8")
@@ -351,6 +353,7 @@ makeAboutTables <- function(dat, col_names) {
     class = ' hover row-border',
     selection = "multiple",
     options = list(
+      ordering = FALSE,
       paging = FALSE,
       searching = FALSE,
       pageLength = 13,

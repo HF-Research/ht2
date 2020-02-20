@@ -54,6 +54,8 @@ tabPanel(ui_chd_title,
                  )
                )
              ),
+             
+             # DESCRIPTION TEXT
              fluidRow(
                # profvis_ui("profiler"),
                wellPanel(
