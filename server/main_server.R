@@ -28,7 +28,7 @@ output$outcome_description <- renderUI({
   req(input$outcome)
   keep_vars <- c(paste0("desc_", lang), "link_dk")
   out_title <- tags$b(input$outcome)
-  
+  browser()
   out <-
     outcome_descriptions[hjertetal_code == outcomeCode(), ..keep_vars]
   # Add link for further reading - if link exists, otherwise just desc
@@ -62,7 +62,7 @@ replaceOutcomeString <- reactive({
   substr(replace_outcome_string, 1, 1) <-
     tolower(substr(replace_outcome_string, 1, 1))
   replace_outcome_string
-  browser()
+  
 })
 
 

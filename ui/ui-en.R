@@ -16,8 +16,6 @@ edu <- read_fst(path = "data/edu_description.fst", as.data.table = TRUE)
 
 
 # Encode to native
-outcome_descriptions <-
-  outcome_descriptions[, lapply(.SD, enc2utf8)]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
 

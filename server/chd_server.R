@@ -38,7 +38,7 @@ outcomeCodeChd <- reactive({
 })
 
 
-replaceOutcomeString <- reactive({
+replaceOutcomeStringChd <- reactive({
   replace_outcome_string <- input$outcome_chd
   # Lowercase first character only (keeps abbreviations in caps)
   substr(replace_outcome_string, 1, 1) <-
@@ -69,7 +69,7 @@ output$variable_desc_chd <- renderUI({
     desc_text <-
       gsub(
         "REPLACE_OUTCOME",
-        replaceOutcomeString(),
+        replaceOutcomeStringChd(),
         (desc_text$desc_general_dk),
         fixed = TRUE
       )

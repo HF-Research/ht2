@@ -185,7 +185,6 @@ outcomes_all <-
   rbind(outcome_names_diag,
         outcome_names_treatment,
         outcome_names_med)
-setkey(outcomes_all, name, type)
 file_name <- paste0("data/outcomes_all_", lang, ".rds")
 saveRDS(outcomes_all, file = file_name)
 
@@ -230,7 +229,6 @@ outcomes_all <-
   rbind(outcome_names_diag,
         outcome_names_treatment,
         outcome_names_med)
-setkey(outcomes_all, name, type)
 file_name <- paste0("data/outcomes_all_", lang, ".rds")
 saveRDS(outcomes_all, file = file_name)
 
