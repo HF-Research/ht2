@@ -23,9 +23,12 @@ edu <- fread(file = "data/edu_description.csv", encoding = "UTF-8")
 ui_about_text <-
   fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 
+
 # Encode to native
-outcome_descriptions <-
-  outcome_descriptions[, lapply(.SD, enc2native)]
+# cols_to_convert <- colnames(outcome_descriptions)
+# cols_to_convert <- cols_to_convert[1:12]
+# outcome_descriptions <-
+#   outcome_descriptions[, lapply(.SD, enc2native), .SDcols = cols_to_convert]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
 
@@ -33,82 +36,6 @@ write_fst(outcome_descriptions, path = "data/outcome_descriptions.fst", compress
 write_fst(variable_ui, path = "data/variable_ui.fst", compress = 1)
 write_fst(edu, path = "data/edu_description.fst", compress = 1)
 write_fst(ui_about_text, path = "data/ui_about_text.fst", compress = 1)
-
-# UI LANG SPECIFIC PREP ---------------------------------------------------
-# DK
-lang <- "dk"
-name_lang_var <- paste0("name_", lang)
-keep_vars <- c("hjertetal_code", name_lang_var)
-col_names <- c("hjertetal_code", "name")
-outcome_names_treatment <-
-  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, ..keep_vars]
-colnames(outcome_names_treatment) <- col_names
-outcome_names_treatment[, type := "treatment"]
-outcome_names_med <-
-  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, ..keep_vars]
-colnames(outcome_names_med) <- col_names
-outcome_names_med[, type := "med"]
-outcome_names_diag <-
-  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, ..keep_vars]
-colnames(outcome_names_diag) <-
-  col_names
-outcome_names_diag[, type := "diag"]
-
-
-
-outcomes_all <-
-  rbind(outcome_names_diag,
-        outcome_names_treatment,
-        outcome_names_med)
-setkey(outcomes_all, name, type)
-file_name <- paste0("data/outcomes_all_", lang, ".rds")
-saveRDS(outcomes_all, file = file_name)
-
-
-
-# EN
-lang <- "en"
-name_lang_var <- paste0("name_", lang)
-keep_vars <- c("hjertetal_code", name_lang_var)
-col_names <- c("hjertetal_code", "name")
-outcome_names_treatment <-
-  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, ..keep_vars]
-colnames(outcome_names_treatment) <- col_names
-outcome_names_treatment[, type := "treatment"]
-outcome_names_med <-
-  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, ..keep_vars]
-colnames(outcome_names_med) <- col_names
-outcome_names_med[, type := "med"]
-outcome_names_diag <-
-  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")[, ..keep_vars]
-colnames(outcome_names_diag) <-
-  col_names
-outcome_names_diag[, type := "diag"]
-
-
-
-outcomes_all <-
-  rbind(outcome_names_diag,
-        outcome_names_treatment,
-        outcome_names_med)
-setkey(outcomes_all, name, type)
-file_name <- paste0("data/outcomes_all_", lang, ".rds")
-saveRDS(outcomes_all, file = file_name)
-
-
-
 
 # OUTCOME DATA ------------------------------------------------------------
 data_files <-
@@ -218,6 +145,94 @@ shiny_dat_dk <- makeDanish(shiny_dat_en)
 saveRDS(shiny_dat_dk, file = "data/shiny_dat_dk.rds")
 
 
+
+# UI LANG SPECIFIC PREP ---------------------------------------------------
+# DK
+lang <- "dk"
+data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
+shiny_dat <- readRDS(file = data_path)
+
+name_lang_var <- paste0("name_", lang)
+keep_vars <- c("hjertetal_code", name_lang_var, "display_order")
+col_names <- c("hjertetal_code", "name", "display_order")
+outcome_names_treatment <-
+  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_treatment) <- col_names
+outcome_names_treatment[, type := "treatment"]
+setorder(outcome_names_treatment, display_order)
+
+outcome_names_med <-
+  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_med) <- col_names
+outcome_names_med[, type := "med"]
+setorder(outcome_names_med, display_order)
+
+outcome_names_diag <-
+  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_diag) <-
+  col_names
+outcome_names_diag[, type := "diag"]
+setorder(outcome_names_diag, display_order)
+
+
+outcomes_all <-
+  rbind(outcome_names_diag,
+        outcome_names_treatment,
+        outcome_names_med)
+setkey(outcomes_all, name, type)
+file_name <- paste0("data/outcomes_all_", lang, ".rds")
+saveRDS(outcomes_all, file = file_name)
+
+
+
+# EN
+lang <- "en"
+data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
+shiny_dat <- readRDS(file = data_path)
+
+name_lang_var <- paste0("name_", lang)
+keep_vars <- c("hjertetal_code", name_lang_var, "display_order")
+col_names <- c("hjertetal_code", "name", "display_order")
+outcome_names_treatment <-
+  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_treatment) <- col_names
+outcome_names_treatment[, type := "treatment"]
+setorder(outcome_names_treatment, display_order)
+
+outcome_names_med <-
+  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_med) <- col_names
+outcome_names_med[, type := "med"]
+setorder(outcome_names_med, display_order)
+
+outcome_names_diag <-
+  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_diag) <-
+  col_names
+outcome_names_diag[, type := "diag"]
+setorder(outcome_names_diag, display_order)
+
+
+
+outcomes_all <-
+  rbind(outcome_names_diag,
+        outcome_names_treatment,
+        outcome_names_med)
+setkey(outcomes_all, name, type)
+file_name <- paste0("data/outcomes_all_", lang, ".rds")
+saveRDS(outcomes_all, file = file_name)
 
 
 

@@ -26,10 +26,11 @@ showModal(
 output$outcome_description <- renderUI({
   
   req(input$outcome)
-  
+  keep_vars <- c(paste0("desc_", lang), "link_dk")
   out_title <- tags$b(input$outcome)
+  
   out <-
-    outcome_descriptions[hjertetal_code == outcomeCode(), .(desc_dk, link_dk)]
+    outcome_descriptions[hjertetal_code == outcomeCode(), ..keep_vars]
   # Add link for further reading - if link exists, otherwise just desc
   url <- a(ui_read_more,
            href = (out$link_dk),
@@ -61,6 +62,7 @@ replaceOutcomeString <- reactive({
   substr(replace_outcome_string, 1, 1) <-
     tolower(substr(replace_outcome_string, 1, 1))
   replace_outcome_string
+  browser()
 })
 
 
@@ -80,9 +82,13 @@ output$variable_desc <- renderUI({
   isolate({
     # Append title to front of variable descr text
     
+    if(lang == "dk"){
     title_text <- tolower(prettyVariable()[1])
-    title_text <- tags$b(paste0("Den ", title_text))
-    
+    title_text <- paste0(ui_the," ", title_text)
+    } else {
+      title_text <- prettyVariable()[1]
+    }
+    title_text <- tags$b(title_text)
     
     col_selection <- paste0("desc_general_", lang)
     desc_text <-
@@ -91,18 +97,18 @@ output$variable_desc <- renderUI({
     # Replace sections of variable desc that are specific for
     # outcome/year/outcome-type
     
-    desc_text <-
+    desc_text[1] <-
       gsub(
         "REPLACE_OUTCOME",
         replaceOutcomeString(),
-        (desc_text$desc_general_dk),
+        (desc_text[1]),
         fixed = TRUE
       )
     # For some reason, some danish characters encoding is messed up after the
     # gsub fn(). This fixes that
     
     desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
-    desc_text <- desc_text <- gsub("alle hjerte-kar-sygdomme", replace_allCVD_string, desc_text)
+    desc_text <- gsub("alle hjerte-kar-sygdomme", replace_allCVD_string, desc_text)
     
     
     
@@ -314,12 +320,14 @@ prettyVariable <- reactive({
   # Outputs character string formatted for user.
   req(input$variable, input$aggr_level)
   
+  var_lang <- paste0("var_", lang)
   data_var_name <- selectedDataVars()[1]
   grep_selection <-
     paste0("var_rate_", selectedRateType(), "_", lang)
   col_names <- colnames(variable_ui)
   col_selection <- grep(grep_selection, col_names, value = TRUE)
-  c(variable_ui[code_name == data_var_name, var_dk], paste0(variable_ui[code_name == data_var_name, ..col_selection]))
+  c(variable_ui[code_name == data_var_name, get(var_lang)],
+    paste0(variable_ui[code_name == data_var_name, ..col_selection]))
   
 })
 
@@ -491,6 +499,7 @@ plot_d3_bar <- reactive({
 
 plot_d3_line <- reactive({
   if (isNational()) {
+    
     sex_vars <- ui_sex_levels
     color = c(graph_colors[1], graph_colors[2])
     plot_title = plotTitle()

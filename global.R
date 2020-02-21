@@ -80,7 +80,7 @@ formatNumbers <- function(dat, lang) {
     i[is.na(i)] <- "<10"
     i
   }),
-  .SDcols = col_names]]
+  .SDcols = col_2names]]
   
   x[]
 }

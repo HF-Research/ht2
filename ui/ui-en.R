@@ -10,16 +10,14 @@ outcome_descriptions <-
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
   read_fst(path = "data/variable_ui.fst", as.data.table = TRUE
-        )
+  )
 edu <- read_fst(path = "data/edu_description.fst", as.data.table = TRUE)
 
 
 
 # Encode to native
-encode_vars <- colnames(outcome_descriptions)
-encode_vars <- encode_vars[1:12]
 outcome_descriptions <-
-  outcome_descriptions[, lapply(.SD, enc2utf8), .SDcols = encode_vars]
+  outcome_descriptions[, lapply(.SD, enc2utf8)]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
 
@@ -30,65 +28,65 @@ outcomes_all <- readRDS(file_name)
 
 
 # ALL PANELS --------------------------------------------------------------
-ui_sex <- enc2utf8("Køn")
-ui_year <- enc2utf8("År")
-ui_sex_levels <- enc2utf8(c("Kvinde", "Mand"))
-choose_year <- enc2utf8("Vælg år:")
-ui_download <- "Hent"
-ui_download_graph <- "Hent figur"
-ui_the <- "Den"
+ui_sex <- enc2utf8("Sex")
+ui_year <- enc2utf8("Year")
+ui_sex_levels <- enc2utf8(c("Women", "Men"))
+choose_year <- enc2utf8("Choose year:")
+ui_download <- "Download"
+ui_download_graph <- "Download figure"
+ui_the <- ""
 
 # MAIN PANEL -----------------------------------------------
 # Everything below here will need to be changed for the english verison
 
 # Outcome dropdown, broken up into sections
 outcome_choices <- c(list(
-  "Sygdomme" = enc2utf8(outcomes_all[type == "diag"]$name),
-  "Behandling" = enc2utf8(outcomes_all[type == "treatment"]$name),
-  "Medicin" = enc2utf8(outcomes_all[type == "med"]$name)
+  "Illness" = enc2utf8(outcomes_all[type == "diag"]$name),
+  "Procedure" = enc2utf8(outcomes_all[type == "treatment"]$name),
+  "Medicine" = enc2utf8(outcomes_all[type == "med"]$name)
 ))
 
 
-choose_outcome <- enc2utf8("Vælge sygdom eller behandling:")
+choose_outcome <- enc2utf8("Choose illness or treatment")
 # choose_theme <- enc2utf8("Vælge emne")
 
-choose_aggr_lv <- enc2utf8("Opdelt efter:")
-choose_var <- enc2utf8("Vælg statistik:")
-choose_rate_count <- enc2utf8("Vælg rater/antal:")
+choose_aggr_lv <- enc2utf8("Choose stratification:")
+choose_var <- enc2utf8("Choose metric:")
+choose_rate_count <- enc2utf8("Choose rates/counts")
 
 aggr_choices <-
   data.table(
-    label = c("År",
-                "Alder",
-                "Uddannelse",
-                "Kommune",
-                "Region"
-),
-    label_long = c("År",
-                     "Aldersgruppe",
-                     "Uddannelsesgruppe",
-                     "Kommune",
-                     "Region"
-                     ),
-name_ht = c("national",
-            "age", "edu", "kom", "region")
+    label = c("Year",
+              "Age groups",
+              "Education",
+              "Municipality",
+              "Region"
+    ),
+    label_long = c("Year",
+                   "Age groups",
+                   "Education",
+                   "Municipality",
+                   "Region"
+    ),
+    name_ht = c("national",
+                "age", "edu", "kom", "region")
   )
 row.names(aggr_choices) <- aggr_choices$label
 
-count_rate_choices <- list("Rate" = as.integer(2),
-                           "Antal" = as.integer(1))
+count_rate_choices <- list("Rates" = as.integer(2),
+                           "Counts" = as.integer(1))
 
-ui_main_title <- enc2utf8("Hjerte-kar sygdomme")
-ui_age <- enc2utf8("Aldre")
-ui_edu <- enc2utf8("Uddannelse")
+ui_main_title <- enc2utf8("Cardiovascular diseases")
+ui_age <- enc2utf8("Age")
+ui_edu <- enc2utf8("Education")
 ui_region <- enc2utf8("Region")
 ui_national <- enc2utf8("National")
 ui_count_rate <-
-  enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
-ui_read_more <- enc2utf8("Læse mere")
-ui_percent <- enc2utf8("andel")
-ui_edu_age_range <- "35 - 84 årige"
-ui_moving_avg_desc <- "3-år glidende gennemsnit"
+  enc2utf8(c("Counts", "Age-specific rate", "Age-standardized rate"))
+ui_read_more <- enc2utf8("Read more")
+ui_percent <- enc2utf8("proportion")
+ui_edu_age_range <- "35 - 84 years"
+ui_moving_avg_desc <- "3-year moving average"
 
 # Strings to place inside variable descriptions
 replace_type_string_opr <- "fik foretaget en"
@@ -97,16 +95,16 @@ replace_type_string_med <- "fik udskrevet"
 replace_allCVD_string <- "en hjerte-kar-sygdom"
 
 # Tab names
-ui_map <- "Kort"
-ui_d3_figures <- "Grafer"
-ui_data <- "Tabeller"
+ui_map <- "Map"
+ui_d3_figures <- "Graph"
+ui_data <- "Tabels"
 
 # ABOUT MAIN PANEL -------------------------------------------------------------
 ui_about_text <-
   read_fst(path = "data/ui_about_text.fst", as.data.table = TRUE)
 
-ui_about_title <- "Metoder: hjerte-kar sygdomme"
-about_selection <- "Vælg definition"
+ui_about_title <- "Methodds: cardiovascular diseases"
+about_selection <- "Choose definition"
 
 about_dat_diag <-
   merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
@@ -126,45 +124,45 @@ about_dat_med <-
 
 
 about_choices <- list(
-  "Sygdomme" = "def_diag",
-  "Procedurer" = "def_opr",
-  "Medicin" = "def_med",
-  "Statistik" = "def_variables",
-  "Befolkninger" = "def_populations",
-  "Uddannelse" = "def_edu"
+  "Illness" = "def_diag",
+  "Procedures" = "def_opr",
+  "Medicines" = "def_med",
+  "Metrics" = "def_variables",
+  "Population" = "def_populations",
+  "Education" = "def_edu"
 )
 col_names_diag <-
-  c("Sygdomme",
-    "Beskrivlse",
-    "ICD-kode",
-    "Diagnose type",
+  c("Illness",
+    "Description",
+    "ICD-code",
+    "Diagnosis type",
     "Patient type")
 
 col_names_opr <-
-  c("Sygdomme",
-    "Beskrivlse",
-    "ICD-kode")
+  c("Procedure",
+    "Description",
+    "ICD-code")
 
 col_names_med <-
-  c("Medicin type",
-    "Beskrivlse",
-    "ATC kode")
+  c("Medicine type",
+    "Description",
+    "ATC code")
 
 col_names_edu <- enc2utf8(c(
-  "Uddannelsesniveau (kort)",
-  "Uddannelsesniveau (lang)",
-  "DISCED-15 kode"
+  "Education level (short)",
+  "Education level (long)",
+  "DISCED-15 code"
 ))
 
-col_names_pop <- enc2utf8(c("År", "Sex", "Ælder grupper", "Befolkningen"))
+col_names_pop <- enc2utf8(c("Year", "Sex", "Age group", "Population"))
 
 
-def_diag_title <- "Definitioner af sygdomme"
-def_opr_title <- "Definitioner af procedurer"
-def_med_title <- "Definitioner af medicin"
-def_variables_title <- "Definitioner af statistiker"
-def_population_title <- "Definitioner af befolkninger"
-def_stratas_title <- "Definitioner af stratifikationer"
+def_diag_title <- "Definition of illness"
+def_opr_title <- "Definition of procedures"
+def_med_title <- "Definition of medicine"
+def_variables_title <- "Definition of metrics"
+def_population_title <- "Definition of population"
+def_stratas_title <- "Definition stratifications"
 
 # CHD PANEL ---------------------------------------------------------------
 outcome_descriptions_chd <-
@@ -202,7 +200,7 @@ ui_about_text <-
 
 about_choices_chd <- list(
   "Sygdomme" = "def_diag"
-  )
+)
 
 col_names_diag_about_chd <-
   c("Sygdomme",
