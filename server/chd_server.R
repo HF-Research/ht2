@@ -3,31 +3,32 @@
 
 output$outcome_description_chd <- renderUI({
   req(input$outcome_chd)
+  
   out_title <- tags$b(input$outcome_chd)
-  keep_vars <- c(paste0("desc_", lang), "link_dk")
+  keep_vars <- c("desc", "link")
   out <-
     outcome_descriptions_chd[ht.code == outcomeCodeChd(), ..keep_vars]
   # Add link for further reading - if link exists, otherwise just desc
   url <- a(ui_read_more,
-           href = (out$link_dk),
+           href = (out$link),
            target = "_blank")
   
-  if (!is.na(out$link_dk)) {
-    tagList(out_title, out$desc_dk, url)
+  if (!is.na(out$link)) {
+    tagList(out_title, out$desc, url)
   }
   else {
-    tagList(out_title, out$desc_dk)
+    tagList(out_title, out$desc)
   }
 })
 
 prettyVarUnits <- reactive({
   x <- prettyVarChd()
-  x[c("var_count_dk", "var_rate_dk")][as.integer(input$rate_count_chd)]
+  x[c("name_count", "name_rate")][as.integer(input$rate_count_chd)]
 })
 
 prettyVarChd <- reactive({
   
-  x <- unlist(var_choices_chd[code_name == input$var_chd, .(var_dk, var_count_dk, var_rate_dk)])
+  x <- unlist(var_descriptions_chd[code_name == input$var_chd, .(name, name_count, name_rate)])
   x
 })
 
@@ -35,7 +36,7 @@ outcomeCodeChd <- reactive({
   # Connect the input in normal language to the hjertetal_code. This is so we
   # can change the description without having to rename allll the datasets.
   
-  outcome_descriptions_chd[name_dk == input$outcome_chd, ht.code]
+  outcome_descriptions_chd[name == input$outcome_chd, ht.code]
 })
 
 
@@ -49,20 +50,22 @@ replaceOutcomeStringChd <- reactive({
 
 
 output$variable_desc_chd <- renderUI({
-  
-  req(input$var_chd,input$outcome_chd,
+  req(input$var_chd, input$outcome_chd,
       selectedDataVarsChd())
   
   isolate({
     # Append title to front of variable descr text
     
-    title_text <- tolower(prettyVarChd()[1])
-    title_text <- tags$b(paste0("Den ", title_text))
+    title_text <- prettyVarChd()[1]
     
+    if(lang == "dk"){
+    title_text <- (paste0("Den ", tolower(title_text)))
+    }
+    title_text <- tags$b(title_text)
     
-    col_selection <- paste0("desc_general_", lang)
+    col_selection <- "desc_general"
     desc_text <-
-      var_choices_chd[code_name == selectedDataVars()[1], ..col_selection]
+      var_descriptions_chd[code_name == selectedDataVars()[1], ..col_selection]
     
     # Replace sections of variable desc that are specific for
     # outcome/year/outcome-type
@@ -71,7 +74,7 @@ output$variable_desc_chd <- renderUI({
       gsub(
         "REPLACE_OUTCOME",
         replaceOutcomeStringChd(),
-        (desc_text$desc_general_dk),
+        (desc_text$desc_general),
         fixed = TRUE
       )
     # For some reason, some danish characters encoding is messed up after the
@@ -166,6 +169,7 @@ plotVarId <- reactive({
 })
 
 plotlyObj <- reactive({
+  
   x <- toFactor()
   plot_title <- paste0(input$outcome_chd, " ", prettyVarChd()[1])
   

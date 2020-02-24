@@ -3,34 +3,6 @@
 # Requires shiny_dat_* to be loaded - but will load this in global.R file before running this ui file
 ###########################
 
-# Use hjertetal_code to merge names and descriptions of outcomes. This will be
-# in seperate script run once - not on every launch.
-file.path <- paste0("language/outcome_descriptions_", lang, ".rds")
-outcome_descriptions <-
-  readRDS(file =  file.path)
-
-
-
-# load(file = "data/variable_ui.Rdata")
-variable_ui <-
-  read_fst(path = "data/variable_ui.fst", as.data.table = TRUE
-        )
-edu <- read_fst(path = "data/edu_description.fst", as.data.table = TRUE)
-
-# Encode to native
-# encode_vars <- colnames(outcome_descriptions)
-# encode_vars <- encode_vars[1:12]
-# outcome_descriptions <-
-#   outcome_descriptions[, lapply(.SD, enc2utf8), .SDcols = encode_vars]
-variable_ui <- variable_ui[, lapply(.SD, enc2native)]
-edu <- edu[, lapply(.SD, enc2native)]
-
-file_name <- paste0("data/outcomes_all_", lang, ".rds")
-outcomes_all <- readRDS(file_name)
-
-
-
-
 # ALL PANELS --------------------------------------------------------------
 ui_sex <- enc2utf8("Køn")
 ui_year <- enc2utf8("År")
@@ -104,27 +76,10 @@ ui_d3_figures <- "Grafer"
 ui_data <- "Tabeller"
 
 # ABOUT MAIN PANEL -------------------------------------------------------------
-ui_about_text <-
-  read_fst(path = "data/ui_about_text.fst", as.data.table = TRUE)
 
 ui_about_title <- "Metoder: hjerte-kar sygdomme"
 about_selection <- "Vælg definition"
 
-about_dat_diag <-
-  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")
-
-
-about_dat_opr <-
-  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")
-
-about_dat_med <-
-  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
-        outcome_descriptions,
-        by = "hjertetal_code")
 
 
 about_choices <- list(
@@ -169,31 +124,25 @@ def_population_title <- "Definitioner af befolkninger"
 def_stratas_title <- "Definitioner af stratifikationer"
 
 # CHD PANEL ---------------------------------------------------------------
+file.path <- paste0("language/outcome_descriptions_chd_", lang, ".rds")
 outcome_descriptions_chd <-
-  fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
+  readRDS(file =  file.path)
 
 ui_chd_title <- enc2utf8("Medfødt hjertefejl")
 choose_outcome_chd <- enc2utf8("Vælge medfødt hjetefjel:")
-outcome_choices_chd <- c(enc2utf8(outcome_descriptions_chd$name_dk))
+
 
 choose_var_chd <- enc2utf8("Vælg statistik:")
-var_choices_chd <- fread("data/chd/variable_ui_chd.csv", encoding = "UTF-8")
 
-ui_var_choices_chd <- var_choices_chd$code_name
-names(ui_var_choices_chd) <- enc2utf8(var_choices_chd$var_dk)
 
-aggr_levels_chd <- readRDS("data/chd/aggr_levels_chd.rds")
-aggr_levels_chd_pretty <- c("Alder", "Køn", "Total")
 
-aggr_levels_chd <- rev(aggr_levels_chd)
-aggr_levels_chd_pretty <- rev(aggr_levels_chd_pretty)
-choose_aggr_chd <-  enc2utf8("Opdelt efter:")
+aggr_levels_chd_pretty <- c( "Total", "Køn", "Alder")
+
+choose_aggr_lv_chd <-  enc2utf8("Opdelt efter:")
 
 ui_replace_all_chd <- "en medfødt hjertefjel"
 
 # ABOUT CHD PANEL ---------------------------------------------------------
-
-var_descriptions_chd <- fread("data/chd/variable_ui_chd.csv ", encoding = "UTF-8")
 
 
 ui_about_title_chd <- "Metoder: medfødt hjertefjel"

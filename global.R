@@ -31,7 +31,7 @@ print(suppressMessages(webshot:::find_phantom()))
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
-lang = "en"
+lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
@@ -48,7 +48,7 @@ shiny_dat <- readRDS(file = data_path)
 dk_sp <- readRDS(file = "data/dk_sp_data.rds")
 pop <- fread("data/pop_summary_age.txt")
 
-
+source("ui/ui-common.R")
 ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
 source(ui_file_path, encoding = "UTF-8")
 

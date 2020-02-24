@@ -6,8 +6,8 @@ output$about_title_chd <- renderText("Title")
 aboutDiagDTChd <- reactive({
   col_subset <-
     c(
-      paste0("name_", lang),
-      paste0("desc_", lang),
+      "name",
+      "desc",
       "icd8",
       "icd10",
       "diag_type",
