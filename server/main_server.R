@@ -24,23 +24,23 @@ showModal(
 # callModule(profvis_server, "profiler")
 # TEXT RENDERING ----------------------------------------------------------
 output$outcome_description <- renderUI({
-  
   req(input$outcome)
-  keep_vars <- c(paste0("desc_", lang), "link_dk")
+  
+  keep_vars <- c("desc", "link")
   out_title <- tags$b(input$outcome)
-  browser()
+  
   out <-
     outcome_descriptions[hjertetal_code == outcomeCode(), ..keep_vars]
   # Add link for further reading - if link exists, otherwise just desc
   url <- a(ui_read_more,
-           href = (out$link_dk),
+           href = (out$link),
            target = "_blank")
   
-  if (out$link_dk != "na") {
-    tagList(out_title, out$desc_dk, url)
+  if (out$link != "na") {
+    tagList(out_title, out$desc, url)
   }
   else {
-    tagList(out_title, out$desc_dk)
+    tagList(out_title, out$desc)
   }
 })
 
@@ -126,9 +126,13 @@ output$variable_desc <- renderUI({
 
 rate_desc <- function() {
   # For rates
-  title_text <- tolower(prettyVariable()[2])
-  title_text <- tags$b(paste0("Den ", title_text))
-  
+  title_text <- prettyVariable()[2]
+  if(lang == "dk") {
+    title_text <- paste0("Den ", tolower(title_text))
+  } else {
+    
+  }
+  title_text <- tags$b(title_text)
   col_selection <-
     paste0("desc_", selectedRateType(), "_", lang)
   desc_text <-
@@ -409,6 +413,7 @@ subsetVars <- reactive({
   }
   
   if (selectPercentOrRate()) {
+    
     var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
     dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
   }
@@ -539,12 +544,13 @@ mapData <- reactive({
   tmp_m <-
     tmp[get(ui_sex) == "male" &
           get(prettyAggr_level()) != "Unknown"]
+  
   out_m@data <-
     merge(
       tmp_m,
       out_m@data,
       by.x = prettyAggr_level(),
-      by.y = paste0("name_", lang),
+      by.y = "name_kom",
       all.y = TRUE
     )
   
@@ -557,12 +563,13 @@ mapData <- reactive({
   tmp_f <-
     tmp[get(ui_sex) == "female" &
           get(prettyAggr_level()) != "Unknown"]
+  
   out_f@data <-
     merge(
       tmp_f,
       out_f@data,
       by.x = prettyAggr_level(),
-      by.y = paste0("name_", lang),
+      by.y = "name_kom",
       all.y = TRUE
     )
   
@@ -929,10 +936,12 @@ validateSelectedVars <- reactive({
   var_names <- var_names[!var_names %in% variables_not_used]
   
   # Select the plain language terms matching the variables in data
+  var_lang <- paste0("var_", lang)
+  keep_vars <- c("code_name", var_lang)
   variable_choices <-
-    variable_ui[code_name %in% var_names, .(code_name, var_dk)]
+    variable_ui[code_name %in% var_names, ..keep_vars]
   var_names <- variable_choices$code_name
-  names(var_names) <- variable_choices$var_dk
+  names(var_names) <- variable_choices[[var_lang]]
   
   
   selected_var <- isolate(input$variable)
@@ -955,6 +964,7 @@ validateSelectedVars <- reactive({
 
 output$varChoices <- renderUI({
   req(input$aggr_level)
+  
   # Gives a dynamic button UI. The buttons change depending on the selected
   # outcome Keep variables that have "count" in their name.
   #
@@ -1257,6 +1267,7 @@ output$table_rates <- renderDT({
 # MAPS
 output$map_male <- renderLeaflet({
   req(validateSelectedVars()$valid_selection)
+  
   combinedMaps()$map_m
 })
 

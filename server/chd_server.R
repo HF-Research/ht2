@@ -4,8 +4,9 @@
 output$outcome_description_chd <- renderUI({
   req(input$outcome_chd)
   out_title <- tags$b(input$outcome_chd)
+  keep_vars <- c(paste0("desc_", lang), "link_dk")
   out <-
-    outcome_descriptions_chd[ht.code == outcomeCodeChd(), .(desc_dk, link_dk)]
+    outcome_descriptions_chd[ht.code == outcomeCodeChd(), ..keep_vars]
   # Add link for further reading - if link exists, otherwise just desc
   url <- a(ui_read_more,
            href = (out$link_dk),

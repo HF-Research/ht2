@@ -1,6 +1,16 @@
 ui <- div(
+  
+  
+  
   tags$head(
-    includeHTML("www/google-analytics.html")
+    includeHTML("www/google-analytics.html"),
+    {
+      # Link solution comes from:
+      # https://stackoverflow.com/questions/55987238/add-external-hyperlink-to-tabpanel-or-navbarmenu-in-r-shiny
+      js_lang <- paste0("www/navAppend-", lang, ".js")
+    includeScript(js_lang)
+    }  
+    
   ),
   img(
     src = "hf-logo.png",
@@ -15,7 +25,8 @@ ui <- div(
         ))
   ),
   
-  navbarPage(
+  
+   navbarPage(
     
     
     title = "HjerteTal",
@@ -27,5 +38,7 @@ ui <- div(
                source(file.path("ui", "about_ui_chd.R"), local = TRUE)$value
                )
     
+    
   )
+  
 )

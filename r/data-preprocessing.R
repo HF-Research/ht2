@@ -13,7 +13,9 @@ library(Hmisc)
 # DATA TO FST -------------------------------------------------------------
 # Data that needs to be loaded for each session should be in fst format for performance reasons
 outcome_descriptions <-
-fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8", header = TRUE)
+  fread(file = "data/outcome_descriptions.csv",
+        encoding = "UTF-8",
+        header = TRUE)
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
   fread(file = "data/variable_ui.csv",
@@ -42,7 +44,8 @@ data_files <-
   list.files(path = "data/",
              pattern = "export_diag",
              full.names = TRUE)
-export_diag <- lapply(data_files, fread, encoding = "UTF-8") %>% rbindlist()
+export_diag <-
+  lapply(data_files, fread, encoding = "UTF-8") %>% rbindlist()
 
 export_opr <- fread("data/export_opr.txt", encoding = "UTF-8")
 export_med <- fread("data/export_med.txt", encoding = "UTF-8")
@@ -65,13 +68,15 @@ preProccess <- function(export_dat) {
     
     # Change edu to factor to ensure correct ordering
     out$edu[, grouping := factor(tolower(grouping),
-                                 levels = tolower(c(
-                                   "Basic",
-                                   "Secondary",
-                                   "Tertiary",
-                                   "Postgraduate",
-                                   "Unknown"
-                                 )))]
+                                 levels = tolower(
+                                   c(
+                                     "Basic",
+                                     "Secondary",
+                                     "Tertiary",
+                                     "Postgraduate",
+                                     "Unknown"
+                                   )
+                                 ))]
     out
   })
 }
@@ -84,8 +89,8 @@ shiny_dat_en <- c(dat_opr, dat_med, dat_diag)
 cleanGeoData <- function(x) {
   # Remove unknowns from Region. and remove Christiansoe
   lapply(x, function(outcome) {
-    outcome$region <- outcome$region[grouping != "Unknown", ]
-    outcome$kom <- outcome$kom[grouping != "Christiansø", ]
+    outcome$region <- outcome$region[grouping != "Unknown",]
+    outcome$kom <- outcome$kom[grouping != "Christiansø",]
     outcome
   })
   
@@ -129,12 +134,8 @@ makeDanish <- function(dat) {
     outcome$edu[, `:=` (edu_name_dk = NULL)]
     
     # Turn DK edu into factor
-    outcome$edu[, `:=` (grouping = factor(
-      grouping,
-      levels = c(
-        edu[, edu_name_dk]
-      )
-    ))]
+    outcome$edu[, `:=` (grouping = factor(grouping,
+                                          levels = c(edu[, edu_name_dk])))]
     setkey(outcome$edu, sex, grouping, year)
     outcome
   })
@@ -146,7 +147,7 @@ saveRDS(shiny_dat_dk, file = "data/shiny_dat_dk.rds")
 
 
 
-# UI LANG SPECIFIC PREP ---------------------------------------------------
+# UI MAIN LANG PREP ---------------------------------------------------
 # DK
 lang <- "dk"
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
@@ -188,6 +189,26 @@ outcomes_all <-
 file_name <- paste0("data/outcomes_all_", lang, ".rds")
 saveRDS(outcomes_all, file = file_name)
 
+col_names <- colnames(outcome_descriptions)
+cols_delete <- grep("_en", col_names, value = TRUE)
+outcome_descriptions_dk <- outcome_descriptions[, -..cols_delete]
+setnames(
+  outcome_descriptions_dk,
+  c(
+    "hjertetal_code",
+    "name",
+    "name_long",
+    "desc",
+    "link",
+    "code_simple",
+    "grep_string",
+    "diag_type",
+    "pat_type",
+    "display_order"
+  )
+)
+
+saveRDS(outcome_descriptions_dk, file = "language/outcome_descriptions_dk.rds")
 
 
 # EN
@@ -232,7 +253,27 @@ outcomes_all <-
 file_name <- paste0("data/outcomes_all_", lang, ".rds")
 saveRDS(outcomes_all, file = file_name)
 
+col_names <- colnames(outcome_descriptions)
+cols_delete <- grep("_dk", col_names, value = TRUE)
+outcome_descriptions_en <- outcome_descriptions[, -..cols_delete]
+setnames(
+  outcome_descriptions_en,
+  c(
+    "hjertetal_code",
+    "name",
+    "name_long",
+    "desc",
+    "link",
+    "code_simple",
+    "grep_string",
+    "diag_type",
+    "pat_type",
+    "display_order"
+  )
+)
+saveRDS(outcome_descriptions_en, file = "language/outcome_descriptions_en.rds")
 
+stopifnot(length(colnames(outcome_descriptions_dk)) == length(colnames(outcome_descriptions_en)))
 
 
 # SF APPROACH -------------------------------------------------------------
@@ -243,28 +284,28 @@ l2 <-
   l2 %>%
   dplyr::select(OBJECTID, NAME_1, NAME_2) %>%
   rename(id = OBJECTID,
-         name_dk = NAME_2,
+         name_kom = NAME_2,
          region = NAME_1)
 
 
 
-l2[l2$name_dk == "Århus", ]$name_dk <- "Aarhus"
-l2[l2$name_dk == "Vesthimmerland", ]$name_dk <- "Vesthimmerlands"
-l2[l2$region == "Midtjylland", ]$region <- "Midtjydlland"
+l2[l2$name_kom == "Århus",]$name_kom <- "Aarhus"
+l2[l2$name_kom == "Vesthimmerland",]$name_kom <- "Vesthimmerlands"
+l2[l2$region == "Midtjylland",]$region <- "Midtjydlland"
 
-l2$name_dk
+l2$name_kom
 # Delete Christiansoe polygon
-l2 <- l2[l2$name_dk != "Christiansø", ]
-l2$name_dk
+l2 <- l2[l2$name_kom != "Christiansø",]
+l2$name_kom
 
 # Move Bornholm
-bornholm <- l2 %>% filter(name_dk == "Bornholm")
+bornholm <- l2 %>% filter(name_kom == "Bornholm")
 b.geo <- st_geometry(bornholm) # Subset geometry of of object
 b.geo <- b.geo + c(-2.6, 1.35) # Move object
 st_geometry(bornholm) <- b.geo # Re-assign geometry to object
 
 # Replace bornholm in main sf object
-l2[l2$name_dk == "Bornholm", ] <- bornholm
+l2[l2$name_kom == "Bornholm",] <- bornholm
 
 # Union kommune to regions
 regions <- unique(l2$region)
@@ -284,7 +325,7 @@ l1 <- do.call("rbind", out_sf)
 # plot(l2)
 
 # Formatting columns
-colnames(l1) <- c("id", "name_dk", "geometry")
+colnames(l1) <- c("id", "name_kom", "geometry")
 l2$region <- NULL
 
 
@@ -336,7 +377,7 @@ chd <- sapply(f.load, fread)
 names(chd) <- chd_agg_levels
 chd$age <- dcast(
   chd$age,
-  formula = sex + age_adult + ht.code+n_denom + year ~ variable,
+  formula = sex + age_adult + ht.code + n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
 )
 
@@ -360,12 +401,12 @@ chd$totals <- dcast(
 
 
 # Remove extra__ in colnames
-lapply(chd, function(l1){
+lapply(chd, function(l1) {
   setnames(l1, gsub("__", "_", colnames(l1)))
 })
 
 # Round rates
-chd <- lapply(chd, function(l1){
+chd <- lapply(chd, function(l1) {
   l1[, rate_strat_incidence := round(rate_strat_incidence, digits = 1)]
   l1[, rate_strat_prevalence := round(rate_strat_prevalence, digits = 1)]
   l1
@@ -373,8 +414,41 @@ chd <- lapply(chd, function(l1){
 
 
 
+
 # NOTE this has different structure than data list for main HT.
 # This list is agrr_level -> outcome, while HT is outcome -> aggr_level
 shiny_dat_chd <- lapply(chd, split, by = "ht.code", keep.by = TRUE)
-saveRDS(shiny_dat_chd, file ="data/chd/shiny_dat_chd.rds")
+saveRDS(shiny_dat_chd, file = "data/chd/shiny_dat_chd.rds")
 saveRDS(chd_agg_levels, file  = "data/chd/aggr_levels_chd.rds")
+
+# CHD LANG PREP -----------------------------------------------------------
+
+outcome_desc_chd <- fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
+
+
+lang <- "dk"
+col_names <- colnames(outcome_desc_chd)
+cols_delete <- grep("_en", col_names, value = TRUE)
+outcome_descriptions_dk <- outcome_desc_chd[, -..cols_delete]
+setnames(
+  outcome_descriptions_dk,
+  c(
+    "ht.code",
+    "name",
+    "ic8",
+    "icd10",
+    "diag_type",
+    "pat_type",
+    "grade",
+    "desc",
+    "link"
+    
+  )
+)
+
+
+
+
+
+
+

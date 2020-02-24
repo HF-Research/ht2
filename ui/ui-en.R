@@ -5,9 +5,10 @@
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
+file.path <- paste0("language/outcome_descriptions_", lang, ".rds")
 outcome_descriptions <-
-  fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8", header = TRUE)
-# load(file = "data/variable_ui.Rdata")
+  readRDS(file =  file.path)
+
 variable_ui <-
   read_fst(path = "data/variable_ui.fst", as.data.table = TRUE
   )
@@ -87,10 +88,10 @@ ui_edu_age_range <- "35 - 84 years"
 ui_moving_avg_desc <- "3-year moving average"
 
 # Strings to place inside variable descriptions
-replace_type_string_opr <- "fik foretaget en"
-replace_type_string_diag <- "blev diagnosticeret med"
-replace_type_string_med <- "fik udskrevet"
-replace_allCVD_string <- "en hjerte-kar-sygdom"
+replace_type_string_opr <- "having the operation"
+replace_type_string_diag <- "being diagnosed with"
+replace_type_string_med <- "received"
+replace_allCVD_string <- "any cardiovascular disease"
 
 # Tab names
 ui_map <- "Map"
@@ -166,18 +167,18 @@ def_stratas_title <- "Definition stratifications"
 outcome_descriptions_chd <-
   fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
 
-ui_chd_title <- enc2utf8("Medfødt hjertefejl")
-choose_outcome_chd <- enc2utf8("Vælge medfødt hjetefjel:")
+ui_chd_title <- enc2utf8("Congenital heart defects")
+choose_outcome_chd <- enc2utf8("Choose conongenital heart defect category")
 outcome_choices_chd <- c(enc2utf8(outcome_descriptions_chd$name_dk))
 
-choose_var_chd <- enc2utf8("Vælg statistik:")
+choose_var_chd <- enc2utf8("Choose metric:")
 var_choices_chd <- fread("data/chd/variable_ui_chd.csv", encoding = "UTF-8")
 
 ui_var_choices_chd <- var_choices_chd$code_name
 names(ui_var_choices_chd) <- enc2utf8(var_choices_chd$var_dk)
 
 aggr_levels_chd <- readRDS("data/chd/aggr_levels_chd.rds")
-aggr_levels_chd_pretty <- c("Alder", "Køn", "Total")
+aggr_levels_chd_pretty <- c("Age-sex", "Sex", "Totals")
 
 aggr_levels_chd <- rev(aggr_levels_chd)
 aggr_levels_chd_pretty <- rev(aggr_levels_chd_pretty)

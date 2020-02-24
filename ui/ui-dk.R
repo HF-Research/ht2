@@ -5,21 +5,23 @@
 
 # Use hjertetal_code to merge names and descriptions of outcomes. This will be
 # in seperate script run once - not on every launch.
+file.path <- paste0("language/outcome_descriptions_", lang, ".rds")
 outcome_descriptions <-
-  fread(file = "data/outcome_descriptions.csv", encoding = "UTF-8", header = TRUE)
+  readRDS(file =  file.path)
+
+
+
 # load(file = "data/variable_ui.Rdata")
 variable_ui <-
   read_fst(path = "data/variable_ui.fst", as.data.table = TRUE
         )
 edu <- read_fst(path = "data/edu_description.fst", as.data.table = TRUE)
 
-
-
 # Encode to native
-encode_vars <- colnames(outcome_descriptions)
-encode_vars <- encode_vars[1:12]
-outcome_descriptions <-
-  outcome_descriptions[, lapply(.SD, enc2utf8), .SDcols = encode_vars]
+# encode_vars <- colnames(outcome_descriptions)
+# encode_vars <- encode_vars[1:12]
+# outcome_descriptions <-
+#   outcome_descriptions[, lapply(.SD, enc2utf8), .SDcols = encode_vars]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
 
