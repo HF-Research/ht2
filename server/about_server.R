@@ -2,10 +2,11 @@ output$about_title <- renderText("Title")
 # DATATABLES --------------------------------------------------------------
 
 aboutDiagDT <- reactive({
+  
   col_subset <-
     c(
-      paste0("name_", lang),
-      paste0("desc_", lang),
+      "name",
+      "desc",
       "code_simple",
       "diag_type",
       "pat_type"
@@ -18,8 +19,8 @@ aboutDiagDT <- reactive({
 
 aboutOprDT <- reactive({
   col_subset <-
-    c(paste0("name_", lang),
-      paste0("desc_", lang),
+    c("name",
+    "desc",
       "code_simple")
   opr <- about_dat_opr[, ..col_subset]
   colnames(opr) <- col_names_opr
@@ -29,8 +30,8 @@ aboutOprDT <- reactive({
 
 aboutMedDT <- reactive({
   col_subset <-
-    c(paste0("name_", lang),
-      paste0("desc_", lang),
+    c("name",
+      "desc",
       "code_simple")
   med <- about_dat_med[, ..col_subset]
   colnames(med) <- col_names_med

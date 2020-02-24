@@ -109,16 +109,28 @@ setNAtoZero <- function(x) {
     })
   })
 }
+eduToFactorEnglish <- function(dat) {
+  # Change english education labels to Danish labels
+  lapply(dat, function(outcome) {
+    # Turn edu into factor
+    outcome$edu[, `:=` (grouping = factor(grouping,
+                                          levels = c(edu[, edu_name_en])))]
+    setkey(outcome$edu, sex, grouping, year)
+    outcome
+  })
+}
 
 
 shiny_dat_en <- cleanGeoData(shiny_dat_en)
 shiny_dat_en <- setNAtoZero(shiny_dat_en)
+edu[, edu_name_en := tolower(edu_name_en)]
+shiny_dat_en <- eduToFactorEnglish(shiny_dat_en)
 saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
 
 # DANISH LANGUAGE SUPPORT -------------------------------------------------
 
 # Make english lowercase for matching
-edu[, edu_name_en := tolower(edu_name_en)]
+
 makeDanish <- function(dat) {
   # Change english education labels to Danish labels
   lapply(dat, function(outcome) {
@@ -140,8 +152,6 @@ makeDanish <- function(dat) {
     outcome
   })
 }
-shiny_dat_en$d10$edu$grouping
-
 shiny_dat_dk <- makeDanish(shiny_dat_en)
 saveRDS(shiny_dat_dk, file = "data/shiny_dat_dk.rds")
 
@@ -420,6 +430,69 @@ chd <- lapply(chd, function(l1) {
 shiny_dat_chd <- lapply(chd, split, by = "ht.code", keep.by = TRUE)
 saveRDS(shiny_dat_chd, file = "data/chd/shiny_dat_chd.rds")
 saveRDS(chd_agg_levels, file  = "data/chd/aggr_levels_chd.rds")
+
+
+lang <- "dk"
+data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
+shiny_dat <- readRDS(file = data_path)
+
+name_lang_var <- paste0("name_", lang)
+keep_vars <- c("hjertetal_code", name_lang_var, "display_order")
+col_names <- c("hjertetal_code", "name", "display_order")
+outcome_names_treatment <-
+  merge(data.table(hjertetal_code = grep("b", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_treatment) <- col_names
+outcome_names_treatment[, type := "treatment"]
+setorder(outcome_names_treatment, display_order)
+
+outcome_names_med <-
+  merge(data.table(hjertetal_code = grep("m", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_med) <- col_names
+outcome_names_med[, type := "med"]
+setorder(outcome_names_med, display_order)
+
+outcome_names_diag <-
+  merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
+        outcome_descriptions,
+        by = "hjertetal_code")[, ..keep_vars]
+colnames(outcome_names_diag) <-
+  col_names
+outcome_names_diag[, type := "diag"]
+setorder(outcome_names_diag, display_order)
+
+
+outcomes_all <-
+  rbind(outcome_names_diag,
+        outcome_names_treatment,
+        outcome_names_med)
+file_name <- paste0("data/outcomes_all_", lang, ".rds")
+saveRDS(outcomes_all, file = file_name)
+
+col_names <- colnames(outcome_descriptions)
+cols_delete <- grep("_en", col_names, value = TRUE)
+outcome_descriptions_dk <- outcome_descriptions[, -..cols_delete]
+setnames(
+  outcome_descriptions_dk,
+  c(
+    "hjertetal_code",
+    "name",
+    "name_long",
+    "desc",
+    "link",
+    "code_simple",
+    "grep_string",
+    "diag_type",
+    "pat_type",
+    "display_order"
+  )
+)
+
+saveRDS(outcome_descriptions_dk, file = "language/outcome_descriptions_dk.rds")
+
 
 # CHD LANG PREP -----------------------------------------------------------
 
