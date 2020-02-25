@@ -3,24 +3,23 @@ options(DT.options = list(
   dom = "Bt",
   buttons = c('copy', 'csv', 'pdf')
 ))
-# POPUP DISCLAIMER --------------------------------------------------------
-showModal(
-  modalDialog(
-    title = "Beta testing Hjertetal2",
-    easyClose = TRUE,
-    fade = TRUE,
-    tags$p(
-      tags$b(
-        "HjerteTal does not work with Internet Explorer. Please choose Chrome/Firefox/Safari/Edge"
-      )
-    ),
-    tags$br(),
-    tags$p("Please send any feedback to mPhelps@hjerteforeningen.dk"),
-    tags$br(),
-    tags$p("Click anywhere to dismiss")
-  )
-)
+# POPUP IE WARNING --------------------------------------------------------
 
+observeEvent(isIE(), {
+  if (isIE()) {
+    showModal(
+      modalDialog(
+        title = "HjerteTal does not work with Internet Explorer",
+        easyClose = TRUE,
+        fade = TRUE,
+        tags$p(
+          "Please choose Chrome / Firefox / Safari / Edge"
+          )
+        
+      )
+    )
+  }
+})
 # callModule(profvis_server, "profiler")
 # TEXT RENDERING ----------------------------------------------------------
 output$outcome_description <- renderUI({
@@ -910,6 +909,12 @@ is5YearMortality <- reactive({
   input$variable == "count_n_dead5"
 })
 
+isIE <- reactive({
+  req(input$variable,
+      input$year,
+      input$outcome)  
+  input$check == "TRUE"
+})
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
 
