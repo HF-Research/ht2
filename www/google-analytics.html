@@ -7,3 +7,10 @@
 
   gtag('config', 'UA-11364067-37');
 </script>
+<script>$(document).on('shiny:inputchanged', function(event) {
+  if(event.name === 'outcome'){
+    gtag('event', 'outcome_main', {
+      'event_value': event.value
+    });
+  }
+});</script>

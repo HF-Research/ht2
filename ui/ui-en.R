@@ -81,7 +81,7 @@ ui_data <- "Tabels"
 
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
-ui_about_title <- "Methodds: cardiovascular diseases"
+ui_about_title <- "Methods: cardiovascular diseases"
 about_selection <- "Choose definition"
 
 
@@ -145,23 +145,23 @@ ui_replace_all_chd <- "en medfødt hjertefjel"
 
 
 
-ui_about_title_chd <- "Metoder: medfødt hjertefjel"
-about_selection_chd <- "Vælg definition"
+ui_about_title_chd <- "Methods: congenital heart defects"
+about_selection_chd <- "Choose definition"
 ui_about_text <-
   fread(file = "data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
 
 
 about_choices_chd <- list(
-  "Sygdomme" = "def_diag"
+  "Illness" = "def_diag"
 )
 
 col_names_diag_about_chd <-
-  c("Sygdomme",
-    "Beskrivlse",
-    "ICD-8 kode",
-    "ICD-10 kode",
-    "Diagnose type",
-    "Patient type")
+  c("Congenital heart defect category",
+    "Description",
+    "ICD-8 code",
+    "ICD-10 code",
+    "Diagnosis type",
+    "Patient tOype")
 
 
 # CODE PANEL --------------------------------------------------------------

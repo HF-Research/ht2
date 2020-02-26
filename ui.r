@@ -28,18 +28,22 @@ ui <- div(
   
   
    navbarPage(
-    
-    
     title = "HjerteTal",
     collapsible = TRUE,
     source(file.path("ui", "main_ui.R"), local = TRUE)$value,
     source(file.path("ui", "chd_ui.R"), local = TRUE)$value,
-    navbarMenu(title = "Metoder",
+    navbarMenu(title = {
+      methods_label <- "Metoder"
+      if (lang == "en") {
+        methods_label <- "Methods"
+      }
+      methods_label
+    },
                source(file.path("ui", "about_ui.R"), local = TRUE)$value,
                source(file.path("ui", "about_ui_chd.R"), local = TRUE)$value
                )
     
-    
+     
   )
   
 )
