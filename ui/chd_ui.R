@@ -1,5 +1,6 @@
 tabPanel(ui_chd_title,
-         useShinyjs(),
+         value = "chd",
+         
          
          tags$head(
            tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")

@@ -1,3 +1,23 @@
+
+
+# POP-UP WARNING ----------------------------------------------------------
+observeEvent(isChd(), {
+  if(isChd()){
+  showModal(modalDialog(
+    title = "TEST PAGE",
+    easyClose = TRUE,
+    fade = TRUE,
+    tags$p(
+      "The data for congenital heart defects in artifical data used for test
+      purposes only - please do not use it! The real data will be available in the
+      near future."
+    )
+    
+  ))
+  }
+})
+
+
 # TEXT --------------------------------------------------------------------
 
 
@@ -27,8 +47,8 @@ prettyVarUnits <- reactive({
 })
 
 prettyVarChd <- reactive({
-  
-  x <- unlist(var_descriptions_chd[code_name == input$var_chd, .(name, name_count, name_rate)])
+  x <-
+    unlist(var_descriptions_chd[code_name == input$var_chd, .(name, name_count, name_rate)])
   x
 })
 
@@ -58,8 +78,8 @@ output$variable_desc_chd <- renderUI({
     
     title_text <- prettyVarChd()[1]
     
-    if(lang == "dk"){
-    title_text <- (paste0("Den ", tolower(title_text)))
+    if (lang == "dk") {
+      title_text <- (paste0("Den ", tolower(title_text)))
     }
     title_text <- tags$b(title_text)
     
@@ -82,7 +102,7 @@ output$variable_desc_chd <- renderUI({
     
     desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
     desc_text <- gsub("Any CHD", ui_replace_all_chd, desc_text)
-      
+    
     tagList(title_text, (desc_text))
     
   })
@@ -104,13 +124,14 @@ selectedDataVarsChd <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
   var_stripped <- gsub("count_n_|rate_", "", input$var_chd)
-  tmp <- grep(var_stripped, colnames(subsetOutcomeChd()), value = TRUE)
+  tmp <-
+    grep(var_stripped, colnames(subsetOutcomeChd()), value = TRUE)
   tmp[as.integer(input$rate_count_chd)]
 })
 
 
 keepVars <- reactive({
-  if(isTotals()) {
+  if (isTotals()) {
     c("year")
   } else if (isSex()) {
     c("sex", "year")
@@ -169,7 +190,6 @@ plotVarId <- reactive({
 })
 
 plotlyObj <- reactive({
-  
   x <- toFactor()
   plot_title <- paste0(input$outcome_chd, " ", prettyVarChd()[1])
   
@@ -180,36 +200,38 @@ plotlyObj <- reactive({
     paste0(prettyVarUnits(), ": <br> <b> %{y} </b>")
   
   if (isTotals()) {
-    
     out <- plot_ly(data = x, x = ~ year) %>%
-      add_trace(y = ~ get(prettyVarUnits()),
-                type = 'scatter',
-                mode = 'lines+markers',
-                hovertemplate = tooltip,
-                line = list(width = linesize),
-                marker = list(size = pointsize))
-      
+      add_trace(
+        y = ~ get(prettyVarUnits()),
+        type = 'scatter',
+        mode = 'lines+markers',
+        hovertemplate = tooltip,
+        line = list(width = linesize),
+        marker = list(size = pointsize)
+      )
+    
     
     
   } else if (isSex()) {
-    
-    out <- plot_ly(data = x, x = ~year) %>%
-      add_trace(y = ~ get(prettyVarUnits()),
-                color = ~id_var,
-                colors = rev(graph_colors),
-                type = 'scatter',
-                mode = 'lines+markers',
-                line = list(width = linesize),
-                marker = list(size = pointsize),
-                hovertemplate = tooltip) 
-      } else {
+    out <- plot_ly(data = x, x = ~ year) %>%
+      add_trace(
+        y = ~ get(prettyVarUnits()),
+        color = ~ id_var,
+        colors = rev(graph_colors),
+        type = 'scatter',
+        mode = 'lines+markers',
+        line = list(width = linesize),
+        marker = list(size = pointsize),
+        hovertemplate = tooltip
+      )
+  } else {
     # tmp1 <- rep(ui_sex_levels[1], 2)
     # tmp2 <- rep(ui_sex_levels[2], 2)
     # legend.labs <- paste0(c(tmp1, tmp2), c(" <15", " 15+"))
     # legend.cols <- rep(graph_colors, each = 2)
-    # 
+    #
     setorder(x, year)
-    out <- plot_ly(data = x ) %>%
+    out <- plot_ly(data = x) %>%
       add_trace(
         x = ~ year,
         y = ~ get(prettyVarUnits()),
@@ -223,9 +245,9 @@ plotlyObj <- reactive({
         hovertemplate = tooltip
         
       )
-          
-      }
-
+    
+  }
+  
   out %>% layout(
     margin = list(t = 60),
     title = list(
@@ -236,12 +258,15 @@ plotlyObj <- reactive({
       font = list(family = c("Roboto"),
                   size = 25)
     ),
-    xaxis = list(title = list(text = ui_year,
-                              font = list(size = axis_font_size))),
-    yaxis = list(title = list(text = prettyVarUnits(),
-                              font = list(size = axis_font_size)),
-                 rangemode = "tozero"
-  ),
+    xaxis = list(title = list(
+      text = ui_year,
+      font = list(size = axis_font_size)
+    )),
+    yaxis = list(
+      title = list(text = prettyVarUnits(),
+                   font = list(size = axis_font_size)),
+      rangemode = "tozero"
+    ),
     hoverlabel = list(font = list(size = 18)),
     hovermode = "x"
     
@@ -267,9 +292,9 @@ dtCastChd <- reactive({
   # One dcast for both rates and counts
   
   dat <- dataObj()
-  if(isTotals()){
+  if (isTotals()) {
     dat
-  } else if (isSex()){
+  } else if (isSex()) {
     value_var <- prettyVarUnits()
     subset_cols = c("year", value_var)
     out = cbind(dat["f", ..subset_cols], dat["m", ..value_var])
@@ -297,11 +322,16 @@ dtCastChd <- reactive({
 
 
 outputDT_chd <- reactive({
- x <- copy(dtCastChd())
-
- makeRateDT_chd(x, group_var = "year", dt_title = "H", messageBottom = "B")
+  x <- copy(dtCastChd())
   
-  })  
+  makeRateDT_chd(
+    x,
+    group_var = "year",
+    dt_title = "H",
+    messageBottom = "B"
+  )
+  
+})
 
 # VALIDATE ----------------------------------------------------------------
 
@@ -313,19 +343,23 @@ isSex <- reactive({
   input$aggr_level_chd == "sex"
 })
 
+isChd <- reactive({
+  
+  input$navbar == "chd"
+})
+
 # RENDER ------------------------------------------------------------------
 
 output$d3_chd <- renderPlotly({
   req(input$var_chd)
   
   plotlyObj()
-           
+  
   
 })
 
 output$table_counts_chd <- renderDT({
-  
   req(input$var_chd)
-      outputDT_chd()
+  outputDT_chd()
   
 })

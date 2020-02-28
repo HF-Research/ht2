@@ -29,6 +29,8 @@ ui <- div(
   
    navbarPage(
     title = "HjerteTal",
+    id = "navbar",
+    selected = "cvd_adult",
     collapsible = TRUE,
     source(file.path("ui", "main_ui.R"), local = TRUE)$value,
     source(file.path("ui", "chd_ui.R"), local = TRUE)$value,

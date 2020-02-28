@@ -9,8 +9,39 @@
 </script>
 <script>$(document).on('shiny:inputchanged', function(event) {
   if(event.name === 'outcome'){
-    gtag('event', 'outcome_main', {
-      'event_value': event.value
-    });
+    gtag('event', 'outcome', {
+      'event_category' : 'main',
+      'event_label' : event.value
+      });
+      
+      /*aggr_level and variable events both fire every time 
+      outcome OR aggr_level OR variable are changed. Meaing
+      the total number of events for these two events can only
+      be interpreted with extreme caution =*/
+  } else if(event.name === 'aggr_level'){
+    gtag('event', 'aggr_level', {
+      'event_category' : 'main',
+      'event_label' : event.value
+      });
+  } else if(event.name === 'variable'){
+    gtag('event', 'variable', {
+      'event_category' : 'main',
+      'event_label' : event.value
+      });
+      
+      /*CHD events*/
+  } else if(event.name === 'navbar'){
+    gtag('event', 'navbar', {
+      'event_category' : 'navbar_change',
+      'event_label' : event.value
+      });
+  } else if(event.name === 'outcome_chd'){
+    gtag('event', 'outcome_chd', {
+      'event_category' : 'chd',
+      'event_label' : event.value
+      });
+      
+  
+      
   }
 });</script>

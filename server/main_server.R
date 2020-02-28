@@ -913,6 +913,7 @@ isIE <- reactive({
   req(input$variable,
       input$year,
       input$outcome)  
+  
   input$check == "TRUE"
 })
 # CHANGE UI BASED ON INPUTS -----------------------------------------------

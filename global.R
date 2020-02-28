@@ -31,7 +31,7 @@ print(suppressMessages(webshot:::find_phantom()))
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
-lang = "en"
+lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
