@@ -36,16 +36,18 @@ aggr_choices <-
                 "Alder",
                 "Uddannelse",
                 "Kommune",
-                "Region"
+                "Region",
+              "Etnicitet"
 ),
     label_long = c("År",
                      "Aldersgruppe",
                      "Uddannelsesgruppe",
                      "Kommune",
-                     "Region"
+                     "Region",
+                   "Etnicitet"
                      ),
 name_ht = c("national",
-            "age", "edu", "kom", "region")
+            "age", "edu", "kom", "region", "ethnicity")
   )
 row.names(aggr_choices) <- aggr_choices$label
 

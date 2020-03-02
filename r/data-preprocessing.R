@@ -25,6 +25,8 @@ edu <- fread(file = "data/edu_description.csv", encoding = "UTF-8")
 ui_about_text <-
   fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 
+ethnicity <- fread(file = "data/ethnicity.csv", encoding = "UTF-8")
+
 # Encode to native
 # cols_to_convert <- colnames(outcome_descriptions)
 # cols_to_convert <- cols_to_convert[1:12]
@@ -32,6 +34,8 @@ ui_about_text <-
 #   outcome_descriptions[, lapply(.SD, enc2native), .SDcols = cols_to_convert]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
+ethnicity <- ethnicity[, lapply(.SD, enc2native)]
+ethnicity_short <- unique(ethnicity, by = "group_en")[, .(group_dk, group_en)]
 
 write_fst(outcome_descriptions, path = "data/outcome_descriptions.fst", compress = 1)
 write_fst(variable_ui, path = "data/variable_ui.fst", compress = 1)
@@ -131,7 +135,7 @@ saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
 # Make english lowercase for matching
 
 makeDanish <- function(dat) {
-  # Change english education labels to Danish labels
+  # Change english education + ethnicity labels to Danish labels
   lapply(dat, function(outcome) {
     outcome$edu <-
       merge(
@@ -148,6 +152,17 @@ makeDanish <- function(dat) {
     outcome$edu[, `:=` (grouping = factor(grouping,
                                           levels = c(edu[, edu_name_dk])))]
     setkey(outcome$edu, sex, grouping, year)
+    
+    outcome$ethnicity <- 
+      merge(
+        outcome$ethnicity,
+        ethnicity_short,
+        by.x = "grouping",
+        by.y = "group_en",
+        all.x = TRUE
+        )
+    outcome$ethnicity[, `:=`(grouping = group_dk)]
+    setkey(outcome$ethnicity, sex, grouping, year)
     outcome
   })
 }

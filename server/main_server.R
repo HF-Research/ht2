@@ -345,7 +345,7 @@ selectRawOrMean <- reactive({
   # should be used
   if (input$aggr_level %in% c("age", "national")) {
     TRUE
-  } else if (input$aggr_level %in% c("edu", "region", "kom")) {
+  } else if (input$aggr_level %in% c("edu", "region", "kom", "ethnicity")) {
     FALSE
   }
 })
@@ -394,6 +394,7 @@ subsetVars <- reactive({
   
   # Switch between RAW and MOVNIG AVG data
   data_vars <- selectedDataVars()
+  
   if (selectRawOrMean()) {
     data_vars <- data_vars[!grepl("mean", data_vars)]
   } else {
@@ -715,7 +716,6 @@ combinedMaps <- reactive({
 # DATATABLES --------------------------------------------------------------
 dtCast <- reactive({
   # One dcast for both rates and counts
-  
   dat <- outputCasesData()
   group_var <- prettyAggr_level()
   value_var <- prettyVariable()
@@ -930,6 +930,9 @@ validateSelectedVars <- reactive({
   
   aggr_selected <- input$aggr_level
   
+  # This is just to make sure the reactive fires when the variable is changed by
+  # Shiny when switched between diag/med/opr sections:
+  input$variable 
   
   outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
   
@@ -1257,6 +1260,7 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 
 # DATATABLES
 output$table_counts <- renderDT({
+  
   req(validateSelectedVars()$valid_selection)
   if (validate()) {
     outputCountDTTable()
