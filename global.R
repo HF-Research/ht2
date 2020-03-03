@@ -24,14 +24,14 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
 }
 
 # install.packages(c("V8","jqr","protolite","crul","jsonvalidate","httpcode","urltools","maptools"))
-# install.packages(c("geojson","geojsonino","geojsonlint","rgeos","rmapshaper"))
+# install.packages(c("geojson","geo2jsonino","geojsonlint","rgeos","rmapshaper"))
 
 print(suppressMessages(webshot:::find_phantom()))
 
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
-lang = "dk"
+lang = "en"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
@@ -344,29 +344,35 @@ makeLeaflet <-
 
 # ABOUT PANEL ------------------------------------------------------------
 
-makeAboutTables <- function(dat, col_names) {
-  colnames(dat) <- col_names
-  DT::datatable(
-    data = dat,
-    extensions = 'Buttons',
-    rownames = FALSE,
-    class = ' hover row-border',
-    selection = "multiple",
-    options = list(
-      ordering = FALSE,
-      paging = FALSE,
-      searching = FALSE,
-      pageLength = 13,
-      dom = "Bt",
-      buttons = list('pdf'),
-      initComplete = JS(
-        "function(settings, json) {",
-        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-        "}"
+makeAboutTables <-
+  function(dat,
+           col_names,
+           order = FALSE,
+           paging = FALSE,
+           dom = "Bt",
+           search = FALSE) {
+    colnames(dat) <- col_names
+    DT::datatable(
+      data = dat,
+      extensions = 'Buttons',
+      rownames = FALSE,
+      class = ' hover row-border',
+      selection = "multiple",
+      options = list(
+        ordering = order,
+        paging = paging,
+        searching = search,
+        pageLength = 20,
+        dom = dom,
+        buttons = list('pdf'),
+        initComplete = JS(
+          "function(settings, json) {",
+          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+          "}"
+        )
       )
     )
-  )
-}
+  }
 
 
 

@@ -40,16 +40,16 @@ aggr_choices <-
               "Age groups",
               "Education",
               "Municipality",
-              "Region"
-    ),
+              "Region",
+              "Ethnicity"),
     label_long = c("Year",
                    "Age groups",
                    "Education",
                    "Municipality",
-                   "Region"
-    ),
+                   "Region",
+                   "Ethnicity"),
     name_ht = c("national",
-                "age", "edu", "kom", "region")
+                "age", "edu", "kom", "region", "ethnicity")
   )
 row.names(aggr_choices) <- aggr_choices$label
 
@@ -86,12 +86,14 @@ about_selection <- "Choose definition"
 
 
 about_choices <- list(
+  "General" = "general",
   "Illness" = "def_diag",
   "Procedures" = "def_opr",
   "Medicines" = "def_med",
-  "Metrics" = "def_variables",
-  "Population" = "def_populations",
-  "Education" = "def_edu"
+  "Education" = "def_edu",
+  "Ethnicity" = "def_ethnicity",
+  "Population" = "def_populations"
+  
 )
 col_names_diag <-
   c("Illness",
@@ -118,6 +120,11 @@ col_names_edu <- enc2utf8(c(
 
 col_names_pop <- enc2utf8(c("Year", "Sex", "Age group", "Population"))
 
+col_names_ethnicity <- enc2utf8(c(
+  "Code",
+  "Country",
+  "Ethnic grouping"
+))
 
 def_diag_title <- "Definition of illness"
 def_opr_title <- "Definition of procedures"
@@ -147,7 +154,7 @@ ui_replace_all_chd <- "en medfødt hjertefjel"
 
 ui_about_title_chd <- "Methods: congenital heart defects"
 about_selection_chd <- "Choose definition"
-ui_about_text <-
+ui_about_text_chd <-
   fread(file = "data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
 
 

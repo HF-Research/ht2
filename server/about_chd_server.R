@@ -22,7 +22,7 @@ aboutDiagDTChd <- reactive({
 
 # TEXT --------------------------------------------------------------------
 uiAboutTextChd <- reactive({
-  ui_about_text[code == input$about_selection_chd, ]
+  ui_about_text_chd[code == input$about_selection_chd, ]
 })
 output$ui_about_title_chd <- renderText({
   uiAboutText()[, title_text]

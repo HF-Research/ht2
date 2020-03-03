@@ -33,21 +33,21 @@ choose_rate_count <- enc2utf8("Vælg rater/antal:")
 aggr_choices <-
   data.table(
     label = c("År",
-                "Alder",
-                "Uddannelse",
-                "Kommune",
-                "Region",
-              "Etnicitet"
-),
-    label_long = c("År",
-                     "Aldersgruppe",
-                     "Uddannelsesgruppe",
-                     "Kommune",
-                     "Region",
-                   "Etnicitet"
-                     ),
-name_ht = c("national",
-            "age", "edu", "kom", "region", "ethnicity")
+              "Alder",
+              "Uddannelse",
+              "Kommune",
+              "Region",
+              "Etnicitet"),
+    label_long = c(
+      "År",
+      "Aldersgruppe",
+      "Uddannelsesgruppe",
+      "Kommune",
+      "Region",
+      "Etnicitet"
+    ),
+    name_ht = c("national",
+                "age", "edu", "kom", "region", "ethnicity")
   )
 row.names(aggr_choices) <- aggr_choices$label
 
@@ -85,12 +85,14 @@ about_selection <- "Vælg definition"
 
 
 about_choices <- list(
+  "Generel" = "general",
   "Sygdomme" = "def_diag",
   "Procedurer" = "def_opr",
   "Medicin" = "def_med",
-  "Statistik" = "def_variables",
-  "Befolkninger" = "def_populations",
-  "Uddannelse" = "def_edu"
+  "Uddannelse" = "def_edu",
+  "Etnisk herkomst" = "def_ethnicity",
+  "Befolkninger" = "def_populations"
+  
 )
 col_names_diag <-
   c("Sygdomme",
@@ -117,6 +119,11 @@ col_names_edu <- enc2utf8(c(
 
 col_names_pop <- enc2utf8(c("År", "Sex", "Ælder grupper", "Befolkningen"))
 
+col_names_ethnicity <- enc2utf8(c(
+  "Kode",
+  "Land",
+  "Gruppe"
+))
 
 def_diag_title <- "Definitioner af sygdomme"
 def_opr_title <- "Definitioner af procedurer"
@@ -149,7 +156,7 @@ ui_replace_all_chd <- "en medfødt hjertefjel"
 
 ui_about_title_chd <- "Metoder: medfødt hjertefjel"
 about_selection_chd <- "Vælg definition"
-ui_about_text <-
+ui_about_text_chd <-
   fread(file = "data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
 
 

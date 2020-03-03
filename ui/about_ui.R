@@ -27,7 +27,9 @@ tabPanel(
     )
   ),
   br(),
-  conditionalPanel(condition = "input.about_selection == 'def_diag'",
+ 
+  
+   conditionalPanel(condition = "input.about_selection == 'def_diag'",
                    fluidRow(
                      column(
                        class = "col_about_dt",
@@ -64,8 +66,12 @@ tabPanel(
                             12, align = "center",
                             DTOutput("table_edu"))
                    )),
-  conditionalPanel(condition = "input.about_selection == 'r_code'"
-                   ),
+  conditionalPanel(condition = "input.about_selection == 'def_ethnicity'",
+                   fluidRow(
+                     column(class = "col_about_dt",
+                            12, align = "center",
+                            DTOutput("table_ethnicity"))
+                   )),
   br(),
   br(),
   br()

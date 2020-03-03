@@ -25,9 +25,15 @@ outcomes_all <- readRDS(file_name)
 
 # MAIN-ABOUT SECTION ------------------------------------------------------
 
-
+file.path <- paste0("language/about_ui_", lang, ".rds")
 ui_about_text <-
-  read_fst(path = "data/ui_about_text.fst", as.data.table = TRUE)
+  readRDS(file =  file.path)
+
+file.path <- paste0("language/country_grps_", lang, ".rds")
+country_grps <-
+  readRDS(file =  file.path)
+
+
 
 about_dat_diag <-
   merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),

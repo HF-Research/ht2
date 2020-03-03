@@ -300,6 +300,69 @@ saveRDS(outcome_descriptions_en, file = "language/outcome_descriptions_en.rds")
 stopifnot(length(colnames(outcome_descriptions_dk)) == length(colnames(outcome_descriptions_en)))
 
 
+# UI ABOUT LANG PREP ------------------------------------------------------
+about_ui <- fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
+about_ui <- about_ui[, lapply(.SD, enc2native)]
+countries <- fread(file = "data/ethnicity.csv", encoding = "UTF-8")
+
+# Danish
+lang <- "dk"
+col_names <- colnames(about_ui)
+cols_delete <- grep("_en", col_names, value = TRUE)
+about_ui_tmp <- about_ui[, -..cols_delete]
+new_col_names <- c(
+  "code",
+  "title_text",
+  "desc_text",
+  "desc_text_2"
+  )
+setnames(about_ui_tmp, new_col_names)
+saveRDS(about_ui_tmp, file = "language/about_ui_dk.rds")
+
+col_names <- colnames(countries)
+cols_delete <- grep("_en", col_names, value = TRUE)
+tmp <- countries[, -..cols_delete]
+new_col_names <- c(
+  "code",
+  "country",
+  "group"
+)
+setnames(tmp, new_col_names)
+setkey(tmp, country)
+saveRDS(tmp, file = "language/country_grps_dk.rds")
+
+
+
+
+# English
+lang <- "en"
+col_names <- colnames(about_ui)
+cols_delete <- grep("_dk", col_names, value = TRUE)
+about_ui_tmp <- about_ui[, -..cols_delete]
+new_col_names <- c(
+  "code",
+  "title_text",
+  "desc_text",
+  "desc_text_2"
+)
+setnames(about_ui_tmp, new_col_names)
+saveRDS(about_ui_tmp, file = "language/about_ui_en.rds")
+
+col_names <- colnames(countries)
+cols_delete <- grep("_dk", col_names, value = TRUE)
+tmp <- countries[, -..cols_delete]
+new_col_names <- c(
+  "code",
+  "country",
+  "group"
+)
+setnames(tmp, new_col_names)
+setkey(tmp, country)
+saveRDS(tmp, file = "language/country_grps_en.rds")
+
+
+
+
 # SF APPROACH -------------------------------------------------------------
 l2 <- readRDS("data/DNK_adm2.rds")
 

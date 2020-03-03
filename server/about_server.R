@@ -24,7 +24,7 @@ aboutOprDT <- reactive({
       "code_simple")
   opr <- about_dat_opr[, ..col_subset]
   colnames(opr) <- col_names_opr
-  opr_DT <- makeAboutTables(opr, col_names_opr)
+  makeAboutTables(opr, col_names_opr)
 })
 
 
@@ -35,7 +35,7 @@ aboutMedDT <- reactive({
       "code_simple")
   med <- about_dat_med[, ..col_subset]
   colnames(med) <- col_names_med
-  med_DT <- makeAboutTables(med, col_names_med)
+  makeAboutTables(med, col_names_med)
 })
 
 aboutEduDT <- reactive({
@@ -45,8 +45,19 @@ aboutEduDT <- reactive({
       "code_simple")
   edu <- edu[, ..col_subset]
   colnames(edu) <- col_names_edu
-  edu_DT <- makeAboutTables(edu, col_names_edu)
+   makeAboutTables(edu, col_names_edu)
 })
+
+
+aboutEthnicityDT <- reactive({
+  makeAboutTables(country_grps,
+                  col_names_ethnicity,
+                  order = TRUE,
+                  paging = TRUE,
+                  search = TRUE,
+                  dom = "Bfpt")
+})
+
 
 aboutPopDT <- reactive({
   colnames(pop) <- col_names_pop
@@ -74,9 +85,11 @@ aboutPopDT <- reactive({
 
 # TEXT --------------------------------------------------------------------
 uiAboutText <- reactive({
+  
   ui_about_text[code == input$about_selection,]
 })
 output$ui_about_title <- renderText({
+  
   uiAboutText()[, title_text]
 })
 
@@ -104,4 +117,8 @@ output$table_edu <- renderDT({
 }, server = FALSE)
 output$table_pop <- renderDT({
   aboutPopDT()
+})
+
+output$table_ethnicity <- renderDT({
+  aboutEthnicityDT()
 })

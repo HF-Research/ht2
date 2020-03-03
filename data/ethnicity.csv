@@ -1,7 +1,7 @@
 ﻿opr_land,country_dk,country_en,group_dk,group_en
 0,Uoplyst (1)                                 ,Unknown  (1),andre,other
 5001,Uoplyst (2)                              ,Unknown  (2),andre,other
-5100,Danmark,denmark                                  ,danmark,denmark
+5100,Danmark,Denmark                                  ,danmark,denmark
 5101,Grønland                                 ,Greenland,danmark,denmark
 5102,Udlandet uoplyst                         ,"Unknown, not Denmark",andre,other
 5103,Statsløs                                 ,Stateless,andre,other
@@ -17,7 +17,7 @@
 5120,Sverige                                  ,Sweden,vestlige,west
 5122,Albanien                                 ,Albania,vestlige,west
 5124,Andorra                                  ,Andorra                                  ,vestlige,west
-5126,Belgien                                  ,Belgien                                  ,vestlige,west
+5126,Belgien                                  ,Belgium                               ,vestlige,west
 5128,Bulgarien                                ,Bulgaria,vestlige,west
 5129,Tjekkoslovakiet                          ,Czecholslovakia,vestlige,west
 5130,Frankrig                                 ,France,vestlige,west
@@ -70,40 +70,40 @@
 5255,Sierra Leone                             ,Sierra Leone                             ,andre,other
 5258,Sudan                                    ,Sudan                                    ,mellemøstlige / nordafrikankse,middle east / north africa
 5259,Swaziland                                ,Swaziland                                ,andre,other
-5260,Sydsudan                                 ,Sydsudan                                 ,andre,other
-5262,Sydafrika                                ,Sydafrika                                ,andre,other
-5266,Tanzania                                 ,Tanzania                                 ,andre,other
-5268,Tunesien                                 ,Tunesien                                 ,mellemøstlige / nordafrikankse,middle east / north africa
+5260,Sydsudan                                 ,South Sudan                                ,andre,other
+5262,Sydafrika                                ,South Africa,andre,other
+5266,Tanzania                                 ,Tanzania,andre,other
+5268,Tunesien                                 ,Tunisia,mellemøstlige / nordafrikankse,middle east / north africa
 5269,Uganda                                   ,Uganda                                   ,andre,other
-5272,Egypten                                  ,Egypten                                  ,mellemøstlige / nordafrikankse,middle east / north africa
+5272,Egypten                                  ,Egypt,mellemøstlige / nordafrikankse,middle east / north africa
 5273,Tuvalu                                   ,Tuvalu                                   ,andre,other
 5274,Kiribati                                 ,Kiribati                                 ,andre,other
 5275,Vanuatu                                  ,Vanuatu                                  ,andre,other
-5276,Centralafrikanske Republik               ,Centralafrikanske Republik               ,andre,other
+5276,Centralafrikanske Republik               ,Central African Republic,andre,other
 5277,Cameroun                                 ,Cameroun                                 ,andre,other
-5278,"Congo, Demokratiske Republik             ","Congo, Demokratiske Republik             ",andre,other
-5279,"Congo, Republikken                       ","Congo, Republikken                       ",andre,other
+5278,"Congo, Demokratiske Republik             ",Congo (DRC)             ,andre,other
+5279,"Congo, Republikken                       ","Congo, The Republic",andre,other
 5281,Benin                                    ,Benin                                    ,andre,other
-5282,Elfenbenskysten                          ,Elfenbenskysten                          ,andre,other
+5282,Elfenbenskysten                          ,Cote d'Ivoire,andre,other
 5283,Gabon                                    ,Gabon                                    ,andre,other
 5284,Mauretanien                              ,Mauretanien                              ,andre,other
 5285,Niger                                    ,Niger                                    ,andre,other
 5287,Rwanda                                   ,Rwanda                                   ,andre,other
 5288,Senegal                                  ,Senegal                                  ,andre,other
 5289,Somalia                                  ,Somalia                                  ,andre,other
-5292,Tchad                                    ,Tchad                                    ,andre,other
+5292,Tchad                                    ,Chad,andre,other
 5293,Togo                                     ,Togo                                     ,andre,other
 5294,Burkina Faso                             ,Burkina Faso                             ,andre,other
 5295,Zimbabwe                                 ,Zimbabwe                                 ,andre,other
 5296,Zambia                                   ,Zambia                                   ,andre,other
 5297,Malawi                                   ,Malawi                                   ,andre,other
 5298,Seychellerne                             ,Seychellerne                             ,andre,other
-5299,Afrika uoplyst                           ,Afrika uoplyst                           ,andre,other
+5299,Afrika uoplyst                           ,Africa - unknown,andre,other
 5302,Argentina                                ,Argentina                                ,andre,other
 5303,Bahamas                                  ,Bahamas                                  ,andre,other
 5304,Bolivia                                  ,Bolivia                                  ,andre,other
 5305,Barbados                                 ,Barbados                                 ,andre,other
-5306,Brasilien                                ,Brasilien                                ,andre,other
+5306,Brasilien                                ,Brasil,andre,other
 5308,Guyana                                   ,Guyana                                   ,andre,other
 5309,Antigua og Barbuda                       ,Antigua og Barbuda                       ,andre,other
 5310,Nauru                                    ,Nauru                                    ,andre,other
@@ -111,10 +111,10 @@
 5314,Canada                                   ,Canada                                   ,vestlige,west
 5316,Chile                                    ,Chile                                    ,andre,other
 5318,Colombia                                 ,Colombia                                 ,andre,other
-5319,Syd- og Mellemamerika uoplyst            ,Syd- og Mellemamerika uoplyst            ,andre,other
+5319,Syd- og Mellemamerika uoplyst            ,Central and South Amrica - unknown,andre,other
 5322,Costa Rica                               ,Costa Rica                               ,andre,other
 5324,Cuba                                     ,Cuba                                     ,andre,other
-5326,Dominikanske Republik                    ,Dominikanske Republik                    ,andre,other
+5326,Dominikanske Republik                    ,Dominican Republic,andre,other
 5328,Ecuador                                  ,Ecuador                                  ,andre,other
 5338,Guatemala                                ,Guatemala                                ,andre,other
 5339,Grenada                                  ,Grenada                                  ,andre,other
@@ -135,10 +135,10 @@
 5390,USA                                      ,USA                                      ,vestlige,west
 5392,Venezuela                                ,Venezuela                                ,andre,other
 5395,Vestindiske Øer                          ,Vestindiske Øer                          ,andre,other
-5397,Nordamerika uoplyst                      ,Nordamerika uoplyst                      ,vestlige,west
-5398,Syd- og Mellemamerika uoplyst            ,Syd- og Mellemamerika uoplyst            ,andre,other
+5397,Nordamerika uoplyst                      ,North America - unknown,vestlige,west
+5398,Syd- og Mellemamerika uoplyst            ,Central and South Amrica - unknown,andre,other
 5402,Yemen                                    ,Yemen                                    ,mellemøstlige / nordafrikankse,middle east / north africa
-5403,Forenede Arabiske Emirater               ,Forenede Arabiske Emirater               ,mellemøstlige / nordafrikankse,middle east / north africa
+5403,Forenede Arabiske Emirater               ,U.A.E,mellemøstlige / nordafrikankse,middle east / north africa
 5404,Afghanistan                              ,Afghanistan                              ,mellemøstlige / nordafrikankse,middle east / north africa
 5406,Bahrain                                  ,Bahrain                                  ,mellemøstlige / nordafrikankse,middle east / north africa
 5408,Bhutan                                   ,Bhutan                                   ,fjernøstlige,far east
@@ -151,9 +151,9 @@
 5424,Taiwan                                   ,Taiwan                                   ,fjernøstlige,far east
 5432,Indien                                   ,Indien                                   ,fjernøstlige,far east
 5434,Indonesien                               ,Indonesien                               ,fjernøstlige,far east
-5435,Østtimor                                 ,Østtimor                                 ,fjernøstlige,far east
-5436,Irak                                     ,Irak                                     ,mellemøstlige / nordafrikankse,middle east / north africa
-5438,Iran                                     ,Iran                                     ,mellemøstlige / nordafrikankse,middle east / north africa
+5435,Østtimor                                 ,East Timor,fjernøstlige,far east
+5436,Irak                                     ,Iraq,mellemøstlige / nordafrikankse,middle east / north africa
+5438,Iran                                     ,Iran,mellemøstlige / nordafrikankse,middle east / north africa
 5442,Israel                                   ,Israel                                   ,mellemøstlige / nordafrikankse,middle east / north africa
 5444,Japan                                    ,Japan                                    ,fjernøstlige,far east
 5446,Jordan                                   ,Jordan                                   ,mellemøstlige / nordafrikankse,middle east / north africa
@@ -163,24 +163,24 @@
 5456,Libanon                                  ,Libanon                                  ,mellemøstlige / nordafrikankse,middle east / north africa
 5457,Maldiverne                               ,Maldiverne                               ,andre,other
 5458,Malaysia                                 ,Malaysia                                 ,fjernøstlige,far east
-5459,Mongoliet                                ,Mongoliet                                ,fjernøstlige,far east
+5459,Mongoliet                                ,Mongolia                             ,fjernøstlige,far east
 5462,Oman                                     ,Oman                                     ,mellemøstlige / nordafrikankse,middle east / north africa
 5464,Nepal                                    ,Nepal                                    ,fjernøstlige,far east
-5466,Nordkorea                                ,Nordkorea                                ,fjernøstlige,far east
+5466,Nordkorea                                ,North Korea,fjernøstlige,far east
 5468,Vietnam (1)                              ,Vietnam (1)                              ,fjernøstlige,far east
-5471,Asien uoplyst                            ,Asien uoplyst                            ,fjernøstlige,far east
+5471,Asien uoplyst                            ,Asia - unknown,fjernøstlige,far east
 5472,Pakistan                                 ,Pakistan                                 ,mellemøstlige / nordafrikankse,middle east / north africa
-5474,Filippinerne                             ,Filippinerne                             ,fjernøstlige,far east
-5478,Saudi-Arabien                            ,Saudi-Arabien                            ,mellemøstlige / nordafrikankse,middle east / north africa
+5474,Filippinerne                             ,The Philippines,fjernøstlige,far east
+5478,Saudi-Arabien                            ,Saudi Arabia,mellemøstlige / nordafrikankse,middle east / north africa
 5482,Singapore                                ,Singapore                                ,fjernøstlige,far east
-5484,Sydkorea                                 ,Sydkorea                                 ,fjernøstlige,far east
-5486,Syrien                                   ,Syrien                                   ,mellemøstlige / nordafrikankse,middle east / north africa
-5487,Mellemøsten uoplyst                      ,Mellemøsten uoplyst                      ,mellemøstlige / nordafrikankse,middle east / north africa
+5484,Sydkorea                                 ,South Korea,fjernøstlige,far east
+5486,Syrien                                   ,Syria,mellemøstlige / nordafrikankse,middle east / north africa
+5487,Mellemøsten uoplyst                      ,The Middle East - unknown,mellemøstlige / nordafrikankse,middle east / north africa
 5488,Vietnam (2)                              ,Vietnam (2)                              ,fjernøstlige,far east
 5492,Thailand                                 ,Thailand                                 ,fjernøstlige,far east
 5496,Qatar                                    ,Qatar                                    ,mellemøstlige / nordafrikankse,middle east / north africa
-5499,Asien uoplyst                            ,Asien uoplyst                            ,fjernøstlige,far east
-5502,Australien                               ,Australien                               ,vestlige,west
+5499,Asien uoplyst                            ,Asia - unknown,fjernøstlige,far east
+5502,Australien                               ,Australia,vestlige,west
 5505,Tonga                                    ,Tonga                                    ,andre,other
 5508,Fiji                                     ,Fiji                                     ,andre,other
 5514,New Zealand                              ,New Zealand                              ,vestlige,west
@@ -189,40 +189,40 @@
 5526,Belize                                   ,Belize                                   ,andre,other
 5534,Papua Ny Guinea                          ,Papua Ny Guinea                          ,fjernøstlige,far east
 5599,Øer i Stillehavet                        ,Øer i Stillehavet                        ,andre,other
-5607,Estland                                  ,Estland                                  ,vestlige,west
-5609,Letland                                  ,Letland                                  ,vestlige,west
-5611,Litauen                                  ,Litauen                                  ,vestlige,west
+5607,Estland                                  ,Estonia,vestlige,west
+5609,Letland                                  ,Lativa,vestlige,west
+5611,Litauen                                  ,Lithuania,vestlige,west
 5621,Sao Tome og Principe                     ,Sao Tome og Principe                     ,andre,other
-5623,Salomonøerne                             ,Salomonøerne                             ,andre,other
+5623,Salomonøerne                             ,The Salomon Islands,andre,other
 5625,Skt. Kitts og Nevis                      ,Skt. Kitts og Nevis                      ,andre,other
-5700,Rusland                                  ,Rusland                                  ,vestlige,west
+5700,Rusland                                  ,Russia,vestlige,west
 5704,Ukraine                                  ,Ukraine                                  ,vestlige,west
-5706,Hviderusland                             ,Hviderusland                             ,vestlige,west
+5706,Hviderusland                             ,Belerus,vestlige,west
 5708,Armenien                                 ,Armenien                                 ,andre,other
-5710,Aserbajdsjan                             ,Aserbajdsjan                             ,andre,other
+5710,Aserbajdsjan                             ,Azerbaijan,andre,other
 5712,Moldova                                  ,Moldova                                  ,vestlige,west
-5714,Usbekistan                               ,Usbekistan                               ,andre,other
+5714,Usbekistan                               ,Uzbekistan,andre,other
 5716,Kasakhstan                               ,Kasakhstan                               ,andre,other
 5718,Turkmenistan                             ,Turkmenistan                             ,andre,other
-5720,Kirgisistan                              ,Kirgisistan                              ,andre,other
-5722,Tadsjikistan                             ,Tadsjikistan                             ,andre,other
-5724,Georgien                                 ,Georgien                                 ,andre,other
-5750,Kroatien                                 ,Kroatien                                 ,vestlige,west
-5752,Slovenien                                ,Slovenien                                ,vestlige,west
+5720,Kirgisistan                              ,kyrgyzstan,andre,other
+5722,Tadsjikistan                             ,Tajikistan,andre,other
+5724,Georgien                                 ,Georgia,andre,other
+5750,Kroatien                                 ,Croatia,vestlige,west
+5752,Slovenien                                ,Slovenia,vestlige,west
 5754,Bosnien-Hercegovina                      ,Bosnien-Hercegovina                      ,vestlige,west
-5756,Makedonien                               ,Makedonien                               ,vestlige,west
-5757,Serbien                                  ,Serbien                                  ,vestlige,west
-5758,"Jugoslavien, Forbundsrepublikken         ","Jugoslavien, Forbundsrepublikken         ",vestlige,west
+5756,Makedonien                               ,Macedonia,vestlige,west
+5757,Serbien                                  ,Serbia,vestlige,west
+5758,"Jugoslavien, Forbundsrepublikken         ",Federal Republic of Yugoslavia,vestlige,west
 5759,Montenegro                               ,Montenegro                               ,vestlige,west
 5761,Kosovo                                   ,Kosovo                                   ,vestlige,west
-5776,Tjekkiet                                 ,Tjekkiet                                 ,vestlige,west
-5778,Slovakiet                                ,Slovakiet                                ,vestlige,west
-5779,Cookøerne                                ,Cookøerne                                ,andre,other
-5800,Land ukendt (2)                          ,Land ukendt (2)                          ,andre,other
-5901,Færøerne uoplyst                         ,Færøerne uoplyst                         ,danmark,denmark
-5902,Færøerne                                 ,Færøerne                                 ,danmark,denmark
-5999,Land ukendt (1),Land ukendt (1),andre,other
-.,Land ukendt (1),Land ukendt (1),andre,other
-5184,Østtyskland,Østtyskland,vestlige,west
-5428,Hongkong,Hongkong,fjernøstlige,far east
+5776,Tjekkiet                                 ,Czech Republic,vestlige,west
+5778,Slovakiet                                ,Slovakia,vestlige,west
+5779,Cookøerne                                ,The Cook Islands,andre,other
+5800,Land ukendt (2)                          ,Unknown country,andre,other
+5901,Færøerne uoplyst                         ,Faroe Islands - unknown,danmark,denmark
+5902,Færøerne                                 ,Faroe Islands,danmark,denmark
+5999,Land ukendt (1),Unknown country,andre,other
+.,Land ukendt (1),Unknown country,andre,other
+5184,Østtyskland,East Germany,vestlige,west
+5428,Hongkong,Hong Kong,fjernøstlige,far east
 5528,Guadeloupe,Guadeloupe,vestlige,west
