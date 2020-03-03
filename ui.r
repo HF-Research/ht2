@@ -11,6 +11,7 @@ ui <- div(
     includeScript(js_lang)
     },
     includeScript("www/checkBrowser.js")
+    # tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
     
   ),
   img(
@@ -30,6 +31,7 @@ ui <- div(
    navbarPage(
     title = "HjerteTal",
     id = "navbar",
+    theme = "css-ht2.css",
     selected = "cvd_adult",
     collapsible = TRUE,
     source(file.path("ui", "main_ui.R"), local = TRUE)$value,

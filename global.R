@@ -3,6 +3,7 @@
 # library(profvis)
 # library(reactlog)
 # options(shiny.reactlog = TRUE)
+# devtools::install_version("shiny", version = "1.2.0")
 library(shiny)
 library(DT)
 library(shinyWidgets)
@@ -31,7 +32,7 @@ print(suppressMessages(webshot:::find_phantom()))
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
-lang = "en"
+lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
@@ -41,7 +42,7 @@ if (lang == "dk") {
 }
 
 # OBJECTS ------------------------------------------------------------
-year_max <- 2016
+year_max <- 2017
 
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)

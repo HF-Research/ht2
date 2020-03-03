@@ -3,10 +3,10 @@ tabPanel(ui_main_title,
          useShinyjs(),
          
          
-         tags$head(
+         # tags$head(
            
-           tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
-         ),
+           # tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
+         # ),
          fluidRow(
            div(
              # This changes the column width (i.e. proportion) based on width of screen)
@@ -113,7 +113,7 @@ tabPanel(ui_main_title,
                      class = "col_leaflet",
                      6,
                      align = "left",
-                     withSpinner(leafletOutput(
+                     (leafletOutput(
                        "map_male", width = 420, height = 550
                      )),
                      fluidRow(align = "center", textOutput("map_title_male"))
@@ -122,7 +122,7 @@ tabPanel(ui_main_title,
                      class = "col_leaflet",
                      6,
                      align = "left",
-                     withSpinner(leafletOutput(
+                     (leafletOutput(
                        "map_female", width = 420, height = 550
                      )),
                      fluidRow(align = "center", (textOutput("map_title_female")))
