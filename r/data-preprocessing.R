@@ -8,6 +8,7 @@ library(leaflet)
 library(dplyr)
 library(fst)
 library(Hmisc)
+devtools::install_github('HF-Research/HTData', force = FALSE)
 # library(spdep)
 
 # DATA TO FST -------------------------------------------------------------
@@ -47,11 +48,10 @@ data_files <-
   list.files(path = "data/",
              pattern = "export_diag",
              full.names = TRUE)
-export_diag <-
-  lapply(data_files, fread, encoding = "UTF-8") %>% rbindlist()
+export_diag <- HTData::export_diag
 
-export_opr <- fread("data/export_opr.txt", encoding = "UTF-8")
-export_med <- fread("data/export_med.txt", encoding = "UTF-8")
+export_opr <- HTData::export_opr
+export_med <- HTData::export_med
 
 preProccess <- function(export_dat) {
   dat <- split(export_dat, by = "outcome") %>%
