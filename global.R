@@ -12,13 +12,14 @@ library(shinyjs) # Hides un-used tabs
 library(classInt) # For choropleth map breaks
 library(leaflet)
 library(manipulateWidget)
-library(shinycssloaders)
+# library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 library(mapview) # For map downloads
 # library(ggplot2)
 library(plotly)
 library(fst)
+library(magrittr)
 print(suppressMessages(webshot:::find_phantom()))
 if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
