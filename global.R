@@ -33,7 +33,7 @@ print(suppressMessages(webshot:::find_phantom()))
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
-lang = "dk"
+lang = "en"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
@@ -56,7 +56,7 @@ source(ui_file_path, encoding = "UTF-8")
 
 valid_output_combos <- fread("data/valid_output_combos.txt")
 valid_output_combos[, var := paste0("count_", var)]
-variables_not_used <- c("count_n_bed_days")
+variables_not_used <- c("count_n_bed_days", "count_n_ambulatory")
 
 male_color <- "#10c8a6"
 female_color <- "#166abd"

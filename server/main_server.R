@@ -1277,7 +1277,6 @@ output$table_rates <- renderDT({
 # MAPS
 output$map_male <- renderLeaflet({
   req(validateSelectedVars()$valid_selection)
-  
   combinedMaps()$map_m
 })
 

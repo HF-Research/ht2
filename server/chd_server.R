@@ -2,13 +2,13 @@
 
 # POP-UP WARNING ----------------------------------------------------------
 observeEvent(isChd(), {
-  if(isChd()){
-  showModal(modalDialog(
-    title = "TEST PAGE",
+  if(isChd()) {
+    showModal(modalDialog(
+    title = "OBS!",
     easyClose = TRUE,
     fade = TRUE,
     tags$p(
-      "The data for congenital heart defects in artifical data used for test
+      "The data for congenital heart defects is artifical data used for test
       purposes only - please do not use it! The real data will be available in the
       near future."
     )

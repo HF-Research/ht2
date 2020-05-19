@@ -23,7 +23,9 @@ ui <- div(
   fluidPage(
     div(style = "padding-left: 0px; padding-right: 0px;",
         titlePanel(
-          title = "", windowTitle = "HjerteTal"
+          title = "", windowTitle = tags$head(
+            tags$link(rel = "icon", type = "image/png", href = "hf-icon.png"),
+            tags$title("HjerteTal"))
         ))
   ),
   
