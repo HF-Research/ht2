@@ -495,7 +495,8 @@ plot_d3_bar <- reactive({
       data = dat,
       colors = c(graph_colors[1], graph_colors[2]),
       plotTitle = plot_title,
-      sexVars = sex_vars
+      sexVars = sex_vars,
+      dataVar = prettyVariableSingular()
     )
   }
   
@@ -1246,6 +1247,7 @@ output$downloadMapsFemale <- downloadHandler(
 output$d3_plot_bar <- renderSimpleD3Bar({
   req(input$aggr_level, input$variable)
   if (validate() && !isNational() && !isKom()) {
+    bro
     plot_d3_bar()
   }
 })
