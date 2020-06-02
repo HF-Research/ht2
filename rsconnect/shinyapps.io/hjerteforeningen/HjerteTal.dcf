@@ -1,0 +1,10 @@
+name: HjerteTal
+title:
+username:
+account: hjerteforeningen
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1877821
+bundleId: 3218232
+url: https://hjerteforeningen.shinyapps.io/HjerteTal/
+when: 1591101634.38225
