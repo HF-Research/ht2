@@ -23,12 +23,12 @@ outcome_choices <- c(list(
 ))
 
 
-choose_outcome <- enc2utf8("Vælge sygdom eller behandling:")
-# choose_theme <- enc2utf8("Vælge emne")
+choose_outcome <- enc2utf8("Vælg sygdom eller behandling:")
+
 
 choose_aggr_lv <- enc2utf8("Opdelt efter:")
 choose_var <- enc2utf8("Vælg statistik:")
-choose_rate_count <- enc2utf8("Vælg rater/antal:")
+choose_rate_count <- enc2utf8("Vælg rate/antal:")
 
 aggr_choices <-
   data.table(
@@ -54,7 +54,7 @@ row.names(aggr_choices) <- aggr_choices$label
 count_rate_choices <- list("Rate" = as.integer(2),
                            "Antal" = as.integer(1))
 
-ui_main_title <- enc2utf8("Hjerte-kar sygdomme")
+ui_main_title <- enc2utf8("Hjerte-kar-sygdomme")
 ui_age <- enc2utf8("Aldre")
 ui_edu <- enc2utf8("Uddannelse")
 ui_region <- enc2utf8("Region")
@@ -79,7 +79,7 @@ ui_data <- "Tabeller"
 
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
-ui_about_title <- "Metoder: hjerte-kar sygdomme"
+ui_about_title <- "Metoder: hjerte-kar-sygdomme"
 about_selection <- "Vælg definition"
 
 
@@ -138,7 +138,7 @@ outcome_descriptions_chd <-
   readRDS(file =  file.path)
 
 ui_chd_title <- enc2utf8("Medfødt hjertefejl")
-choose_outcome_chd <- enc2utf8("Vælge medfødt hjetefjel:")
+choose_outcome_chd <- enc2utf8("Vælg medfødt hjetefjel:")
 
 
 choose_var_chd <- enc2utf8("Vælg statistik:")

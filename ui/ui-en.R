@@ -28,7 +28,7 @@ outcome_choices <- c(list(
 
 
 choose_outcome <- enc2utf8("Choose illness or treatment")
-# choose_theme <- enc2utf8("Vælge emne")
+
 
 choose_aggr_lv <- enc2utf8("Choose stratification:")
 choose_var <- enc2utf8("Choose metric:")

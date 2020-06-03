@@ -81,12 +81,8 @@ output$variable_desc <- renderUI({
   isolate({
     # Append title to front of variable descr text
     
-    if(lang == "dk"){
-    title_text <- tolower(prettyVariable()[1])
-    title_text <- paste0(ui_the," ", title_text)
-    } else {
-      title_text <- prettyVariable()[1]
-    }
+    title_text <- prettyVariable()[1]
+    
     title_text <- tags$b(title_text)
     
     col_selection <- paste0("desc_general_", lang)
@@ -127,7 +123,7 @@ rate_desc <- function() {
   # For rates
   title_text <- prettyVariable()[2]
   if(lang == "dk") {
-    title_text <- paste0("Den ", tolower(title_text))
+    # title_text <- paste0("Den ", tolower(title_text))
   } else {
     
   }
