@@ -425,6 +425,7 @@ subsetYear <- reactive({
 
 # FORMATTING DATA FOR D3------------------------------------------------------
 outputCasesData <- function() {
+  
   # National level data shows all years
   if (!isNational()) {
     subsetYear()
@@ -455,6 +456,7 @@ outputCasesD3Line <- reactive({
 })
 
 outputCasesD3Bar <- reactive({
+  
   # Restrict data to the user selected vairable, and give pretty column names
   count_rate <- prettyVariableSingular()
   keep_cols <- c(ui_sex, prettyAggr_level(), count_rate)
@@ -1246,6 +1248,7 @@ output$downloadMapsFemale <- downloadHandler(
 output$d3_plot_bar <- renderSimpleD3Bar({
   req(input$aggr_level, input$variable)
   if (validate() && !isNational() && !isKom()) {
+    
     plot_d3_bar()
   }
 })

@@ -5,6 +5,6 @@ account: cars-online
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1877821
-bundleId: 2850210
+bundleId: 3223455
 url: https://hjerteforeningen.shinyapps.io/HjerteTal/
-when: 1583325494.88274
+when: 1591195024.59358

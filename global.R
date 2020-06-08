@@ -88,6 +88,8 @@ formatNumbers <- function(dat, lang) {
 }
 
 
+
+
 # DATATABLE FUNCTIONS ----------------------------------------------------
 
 # From:

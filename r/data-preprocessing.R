@@ -9,7 +9,7 @@ library(dplyr)
 library(fst)
 library(Hmisc)
 # devtools::install_github('HF-Research/HTData', force = TRUE)
-
+source("r/helperFunctions.R")
 
 # DATA TO FST -------------------------------------------------------------
 # Data that needs to be loaded for each session should be in fst format for performance reasons
@@ -26,8 +26,6 @@ edu <- fread(file = "data/edu_description.csv", encoding = "UTF-8")
 ui_about_text <-
   fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 
-ethnicity <- fread(file = "data/ethnicity.csv", encoding = "UTF-8")
-
 # Encode to native
 # cols_to_convert <- colnames(outcome_descriptions)
 # cols_to_convert <- cols_to_convert[1:12]
@@ -35,8 +33,7 @@ ethnicity <- fread(file = "data/ethnicity.csv", encoding = "UTF-8")
 #   outcome_descriptions[, lapply(.SD, enc2native), .SDcols = cols_to_convert]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
 edu <- edu[, lapply(.SD, enc2native)]
-ethnicity <- ethnicity[, lapply(.SD, enc2native)]
-ethnicity_short <- unique(ethnicity, by = "group_en")[, .(group_dk, group_en)]
+
 
 write_fst(outcome_descriptions, path = "data/outcome_descriptions.fst", compress = 1)
 write_fst(variable_ui, path = "data/variable_ui.fst", compress = 1)
@@ -64,6 +61,9 @@ preProccess <- function(export_dat) {
 
     # Make sure regions start with capital letter
     out$region[, grouping := capitalize(grouping)]
+    out$region[grouping == "Midtjydlland", grouping := "Midtjylland"]
+    
+    out$ethnicity[, grouping := capWord(grouping)]
 
     # Change edu to factor to ensure correct ordering
     out$edu[, grouping := factor(tolower(grouping),
@@ -128,7 +128,11 @@ saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
 
 # DANISH LANGUAGE SUPPORT -------------------------------------------------
 
-# Make english lowercase for matching
+
+ethnicity <- fread(file = "data/ethnicity.csv", encoding = "UTF-8")
+ethnicity[, `:=` (group_dk = capWord(group_dk), group_en = capWord(group_en))]
+ethnicity <- ethnicity[, lapply(.SD, enc2native)]
+ethnicity_short <- unique(ethnicity, by = "group_en")[, .(group_dk, group_en)]
 
 makeDanish <- function(dat) {
   # Change english education + ethnicity labels to Danish labels
@@ -502,7 +506,7 @@ l2$name_kom <- enc2native(l2$name_kom)
 l2$region <- enc2native(l2$region)
 l2[l2$name_kom == "Århus",]$name_kom <- "Aarhus"
 l2[l2$name_kom == "Vesthimmerland",]$name_kom <- "Vesthimmerlands"
-l2[l2$region == "Midtjylland",]$region <- "Midtjydlland"
+
 
 l2$name_kom
 # Delete Christiansoe polygon
