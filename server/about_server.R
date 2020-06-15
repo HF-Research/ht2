@@ -1,6 +1,35 @@
 output$about_title <- renderText("Title")
 # DATATABLES --------------------------------------------------------------
 
+
+aboutFAQDT <- reactive({
+  colnames(about_dat_faq) <- col_names_faq
+  
+  DT::datatable(
+    data = about_dat_faq,
+    
+    rownames = FALSE,
+    class = ' hover row-border',
+    selection = c("multiple"),
+    options = list(
+      lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
+      pageLength = 15,
+      dom = "f",
+      
+      initComplete = JS(
+        # Table hearder background color
+        "function(settings, json) {",
+        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
+        "}"
+      )
+    )
+  )
+  
+  
+})
+
+
+
 aboutDiagDT <- reactive({
   
   col_subset <-
@@ -45,6 +74,14 @@ aboutEduDT <- reactive({
       "code_simple")
   edu <- edu[, ..col_subset]
   colnames(edu) <- col_names_edu
+  
+  edu[[1]] <- gsub("/ ", " / ", edu[[1]])
+  
+  edu[, (col_names_edu) := lapply(.SD, function(i){
+    gsub("<e5>", "å", i, fixed = TRUE)
+    })
+    ]
+  
    makeAboutTables(edu, col_names_edu)
 })
 
@@ -88,13 +125,20 @@ uiAboutText <- reactive({
   
   ui_about_text[code == input$about_selection,]
 })
+
 output$ui_about_title <- renderText({
   
   uiAboutText()[, title_text]
 })
 
-output$ui_about_desc <- renderText({
-  uiAboutText()[, desc_text]
+output$ui_about_desc <- renderUI({
+  if(input$about_selection == "general"){
+    str2 <- paste0("<ui><li>", paste0(ui_bullets, collapse = "</li><li>"), "</ui></li>")
+  HTML(paste(ui_gen_1, str2, "</br>", ui_gen_2))
+      
+  } else {
+  HTML(uiAboutText()[, desc_text])
+  }
 })
 
 output$ui_about_desc_2 <- renderText({
@@ -103,6 +147,11 @@ output$ui_about_desc_2 <- renderText({
 
 
 # RENDER ------------------------------------------------------------------
+
+output$table_faq <- renderDT({
+  aboutFAQDT()
+}, server = FALSE)
+
 output$table_diag <- renderDT({
   aboutDiagDT()
 }, server = FALSE)

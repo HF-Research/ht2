@@ -1,23 +1,3 @@
-
-
-# POP-UP WARNING ----------------------------------------------------------
-observeEvent(isChd(), {
-  if(isChd()) {
-    showModal(modalDialog(
-    title = "OBS!",
-    easyClose = TRUE,
-    fade = TRUE,
-    tags$p(
-      "The data for congenital heart defects is artifical data used for test
-      purposes only - please do not use it! The real data will be available in the
-      near future."
-    )
-    
-  ))
-  }
-})
-
-
 # TEXT --------------------------------------------------------------------
 
 
@@ -197,10 +177,14 @@ plotlyObj <- reactive({
   linesize = 3
   pointsize = 12
   tooltip <-
-    paste0(prettyVarUnits(), ": <br> <b> %{y} </b>")
+    paste0(prettyVarUnits(), ": <br> <b> %{y:.1f} </b>")
   
   if (isTotals()) {
-    out <- plot_ly(data = x, x = ~ year) %>%
+    
+    tooltip <-
+      paste0(prettyVarUnits(), ": <br> <b> %{y:.1f} </b><extra></extra>")
+    
+   out <-  plot_ly(data = x, x = ~ year) %>%
       add_trace(
         y = ~ get(prettyVarUnits()),
         type = 'scatter',
@@ -272,7 +256,7 @@ plotlyObj <- reactive({
     
   ) %>%
     config(
-      locale = "no",
+      locale = "da",
       modeBarButtonsToRemove = c(
         "zoomIn2d",
         "zoomOut2d",
@@ -283,7 +267,8 @@ plotlyObj <- reactive({
         "autoScale2d",
         "resetScale2d"
       )
-    )
+    ) %>% 
+    layout(separators = paste0(dec_mark, thousands_sep))
 })
 
 # DATATABLES --------------------------------------------------------------

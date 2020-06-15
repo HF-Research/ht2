@@ -1,8 +1,10 @@
 output$about_title_chd <- renderText("Title")
-
-
-
 # DATATABLES --------------------------------------------------------------
+aboutFAQDTChd <- reactive({
+  colnames(about_dat_faq) <- col_names_faq
+  makeAboutTables(about_dat_faq, col_names_faq)
+})
+
 aboutDiagDTChd <- reactive({
   col_subset <-
     c(
@@ -22,22 +24,34 @@ aboutDiagDTChd <- reactive({
 
 # TEXT --------------------------------------------------------------------
 uiAboutTextChd <- reactive({
+  
   ui_about_text_chd[code == input$about_selection_chd, ]
 })
 output$ui_about_title_chd <- renderText({
-  uiAboutText()[, title_text]
+  uiAboutTextChd()[, title_text]
 })
 
 output$ui_about_desc_chd <- renderText({
-  uiAboutText()[, desc_text]
+  
+  if(input$about_selection_chd == "general"){
+    str2 <- paste0("<ui><li>", paste0(ui_bullets_chd, collapse = "</li><li>"), "</ui></li>")
+    HTML(paste(ui_gen_1_chd, str2, "</br>", ui_gen_2_chd))
+    
+  } else {
+    HTML(uiAboutText()[, desc_text])
+  }
 })
 
 output$ui_about_desc_2_chd <- renderText({
-  uiAboutText()[, desc_text_2]
+  uiAboutTextChd()[, desc_text_2]
 })
 
 
 # RENDER ------------------------------------------------------------------
+output$table_faq_chd <- renderDT({
+  
+  aboutFAQDTChd()}, server = FALSE)
+
 output$table_diag_chd <- renderDT({
   
   aboutDiagDTChd()}, server = FALSE)

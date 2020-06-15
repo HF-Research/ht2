@@ -20,22 +20,33 @@ tabPanel(
       9,
       class = "col_about_text",
       fluidRow(h3(textOutput("ui_about_title_chd"))),
-      fluidRow(textOutput("ui_about_desc_chd"),
+      fluidRow(htmlOutput("ui_about_desc_chd"),
                br()),
-      fluidRow(textOutput("ui_about_desc_2_chd"),
-               br())
+      fluidRow(textOutput("ui_about_desc_2_chd")
+               ),
+      conditionalPanel(condition = "input.about_selection_chd == 'general'",
+                       fluidRow(
+                         column(
+                           class = "col_about_dt",
+                           12,
+                           align = "center",
+                           DTOutput("table_faq_chd")
+                         )
+                       )), 
+      br(),
+      
+      conditionalPanel(condition = "input.about_selection_chd == 'def_diag'",
+                       fluidRow(
+                         column(
+                           class = "col_about_dt",
+                           12,
+                           align = "center",
+                           DTOutput("table_diag_chd")
+                         )
+                       ))
     )
   ),
-  br(),
-  conditionalPanel(condition = "input.about_selection_chd == 'def_diag'",
-                   fluidRow(
-                     column(
-                       class = "col_about_dt",
-                       12,
-                       align = "center",
-                       DTOutput("table_diag_chd")
-                     )
-                   )),
+  
   
   
   br(),
