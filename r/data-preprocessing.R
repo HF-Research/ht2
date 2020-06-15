@@ -163,6 +163,8 @@ makeDanish <- function(dat) {
         )
     outcome$ethnicity[, `:=`(grouping = group_dk)]
     setkey(outcome$ethnicity, sex, grouping, year)
+    outcome$ethnicity[, grouping := capWord(grouping)]
+    
     outcome
   })
 }
@@ -329,6 +331,8 @@ new_col_names <- c(
 )
 setnames(tmp, new_col_names)
 setkey(tmp, country)
+tmp[, group := capWord(group)]
+
 saveRDS(tmp, file = "language/country_grps_dk.rds")
 
 
@@ -358,6 +362,7 @@ new_col_names <- c(
 )
 setnames(tmp, new_col_names)
 setkey(tmp, country)
+tmp[, group := capWord(group)]
 saveRDS(tmp, file = "language/country_grps_en.rds")
 
 

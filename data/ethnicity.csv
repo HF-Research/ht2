@@ -36,13 +36,13 @@
 5162,Sovjetunionen                            ,U.S.S.R.,vestlige,west
 5164,Spanien                                  ,Spain,vestlige,west
 5170,Storbritannien                           ,U.K.,vestlige,west
-5172,Tyrkiet                                  ,Turkey,mellemøstlige / nordafrikankse,middle east / north africa
+5172,Tyrkiet                                  ,Turkey,mellemøstlige / nordafrikanske,middle east / north africa
 5174,Ungarn                                   ,Hungry,vestlige,west
 5176,Vatikanstaten                            ,The Vatican,vestlige,west
 5180,Tyskland                                 ,Germany,vestlige,west
 5182,Østrig                                   ,Austria,vestlige,west
 5199,Europa uoplyst                           ,"Europe, unknown",vestlige,west
-5202,Algeriet                                 ,Algeria,mellemøstlige / nordafrikankse,middle east / north africa
+5202,Algeriet                                 ,Algeria,mellemøstlige / nordafrikanske,middle east / north africa
 5204,Angola                                   ,Angola                                   ,andre,other
 5207,Botswana                                 ,Botswana                                 ,andre,other
 5213,Burundi                                  ,Burundi                                  ,andre,other
@@ -58,24 +58,24 @@
 5234,Kenya                                    ,Kenya                                    ,andre,other
 5235,Lesotho                                  ,Lesotho                                  ,andre,other
 5236,Liberia                                  ,Liberia                                  ,andre,other
-5238,Libyen                                   ,Libyen                                   ,mellemøstlige / nordafrikankse,middle east / north africa
+5238,Libyen                                   ,Libyen                                   ,mellemøstlige / nordafrikanske,middle east / north africa
 5240,Mozambique                               ,Mozambique                               ,andre,other
 5242,Madagaskar                               ,Madagaskar                               ,andre,other
 5243,Mali                                     ,Mali                                     ,andre,other
-5244,Marokko                                  ,Morocco,mellemøstlige / nordafrikankse,middle east / north africa
+5244,Marokko                                  ,Morocco,mellemøstlige / nordafrikanske,middle east / north africa
 5245,Mauritius                                ,Mauritius                                ,andre,other
 5246,Nigeria                                  ,Nigeria                                  ,andre,other
 5247,Namibia                                  ,Namibia                                  ,andre,other
 5248,Marshalløerne                            ,Marshalløerne                            ,andre,other
 5255,Sierra Leone                             ,Sierra Leone                             ,andre,other
-5258,Sudan                                    ,Sudan                                    ,mellemøstlige / nordafrikankse,middle east / north africa
+5258,Sudan                                    ,Sudan                                    ,mellemøstlige / nordafrikanske,middle east / north africa
 5259,Swaziland                                ,Swaziland                                ,andre,other
 5260,Sydsudan                                 ,South Sudan                                ,andre,other
 5262,Sydafrika                                ,South Africa,andre,other
 5266,Tanzania                                 ,Tanzania,andre,other
-5268,Tunesien                                 ,Tunisia,mellemøstlige / nordafrikankse,middle east / north africa
+5268,Tunesien                                 ,Tunisia,mellemøstlige / nordafrikanske,middle east / north africa
 5269,Uganda                                   ,Uganda                                   ,andre,other
-5272,Egypten                                  ,Egypt,mellemøstlige / nordafrikankse,middle east / north africa
+5272,Egypten                                  ,Egypt,mellemøstlige / nordafrikanske,middle east / north africa
 5273,Tuvalu                                   ,Tuvalu                                   ,andre,other
 5274,Kiribati                                 ,Kiribati                                 ,andre,other
 5275,Vanuatu                                  ,Vanuatu                                  ,andre,other
@@ -137,10 +137,10 @@
 5395,Vestindiske Øer                          ,Vestindiske Øer                          ,andre,other
 5397,Nordamerika uoplyst                      ,North America - unknown,vestlige,west
 5398,Syd- og Mellemamerika uoplyst            ,Central and South Amrica - unknown,andre,other
-5402,Yemen                                    ,Yemen                                    ,mellemøstlige / nordafrikankse,middle east / north africa
-5403,Forenede Arabiske Emirater               ,U.A.E,mellemøstlige / nordafrikankse,middle east / north africa
-5404,Afghanistan                              ,Afghanistan                              ,mellemøstlige / nordafrikankse,middle east / north africa
-5406,Bahrain                                  ,Bahrain                                  ,mellemøstlige / nordafrikankse,middle east / north africa
+5402,Yemen                                    ,Yemen                                    ,mellemøstlige / nordafrikanske,middle east / north africa
+5403,Forenede Arabiske Emirater               ,U.A.E,mellemøstlige / nordafrikanske,middle east / north africa
+5404,Afghanistan                              ,Afghanistan                              ,mellemøstlige / nordafrikanske,middle east / north africa
+5406,Bahrain                                  ,Bahrain                                  ,mellemøstlige / nordafrikanske,middle east / north africa
 5408,Bhutan                                   ,Bhutan                                   ,fjernøstlige,far east
 5410,Bangladesh                               ,Bangladesh                               ,fjernøstlige,far east
 5412,Brunei                                   ,Brunei                                   ,fjernøstlige,far east
@@ -152,40 +152,40 @@
 5432,Indien                                   ,Indien                                   ,fjernøstlige,far east
 5434,Indonesien                               ,Indonesien                               ,fjernøstlige,far east
 5435,Østtimor                                 ,East Timor,fjernøstlige,far east
-5436,Irak                                     ,Iraq,mellemøstlige / nordafrikankse,middle east / north africa
-5438,Iran                                     ,Iran,mellemøstlige / nordafrikankse,middle east / north africa
-5442,Israel                                   ,Israel                                   ,mellemøstlige / nordafrikankse,middle east / north africa
+5436,Irak                                     ,Iraq,mellemøstlige / nordafrikanske,middle east / north africa
+5438,Iran                                     ,Iran,mellemøstlige / nordafrikanske,middle east / north africa
+5442,Israel                                   ,Israel                                   ,mellemøstlige / nordafrikanske,middle east / north africa
 5444,Japan                                    ,Japan                                    ,fjernøstlige,far east
-5446,Jordan                                   ,Jordan                                   ,mellemøstlige / nordafrikankse,middle east / north africa
+5446,Jordan                                   ,Jordan                                   ,mellemøstlige / nordafrikanske,middle east / north africa
 5448,Kina                                     ,Kina                                     ,fjernøstlige,far east
-5452,Kuwait                                   ,Kuwait                                   ,mellemøstlige / nordafrikankse,middle east / north africa
+5452,Kuwait                                   ,Kuwait                                   ,mellemøstlige / nordafrikanske,middle east / north africa
 5454,Laos                                     ,Laos                                     ,fjernøstlige,far east
-5456,Libanon                                  ,Libanon                                  ,mellemøstlige / nordafrikankse,middle east / north africa
+5456,Libanon                                  ,Libanon                                  ,mellemøstlige / nordafrikanske,middle east / north africa
 5457,Maldiverne                               ,Maldiverne                               ,andre,other
 5458,Malaysia                                 ,Malaysia                                 ,fjernøstlige,far east
 5459,Mongoliet                                ,Mongolia                             ,fjernøstlige,far east
-5462,Oman                                     ,Oman                                     ,mellemøstlige / nordafrikankse,middle east / north africa
+5462,Oman                                     ,Oman                                     ,mellemøstlige / nordafrikanske,middle east / north africa
 5464,Nepal                                    ,Nepal                                    ,fjernøstlige,far east
 5466,Nordkorea                                ,North Korea,fjernøstlige,far east
 5468,Vietnam (1)                              ,Vietnam (1)                              ,fjernøstlige,far east
 5471,Asien uoplyst                            ,Asia - unknown,fjernøstlige,far east
-5472,Pakistan                                 ,Pakistan                                 ,mellemøstlige / nordafrikankse,middle east / north africa
+5472,Pakistan                                 ,Pakistan                                 ,mellemøstlige / nordafrikanske,middle east / north africa
 5474,Filippinerne                             ,The Philippines,fjernøstlige,far east
-5478,Saudi-Arabien                            ,Saudi Arabia,mellemøstlige / nordafrikankse,middle east / north africa
+5478,Saudi-Arabien                            ,Saudi Arabia,mellemøstlige / nordafrikanske,middle east / north africa
 5482,Singapore                                ,Singapore                                ,fjernøstlige,far east
 5484,Sydkorea                                 ,South Korea,fjernøstlige,far east
-5486,Syrien                                   ,Syria,mellemøstlige / nordafrikankse,middle east / north africa
-5487,Mellemøsten uoplyst                      ,The Middle East - unknown,mellemøstlige / nordafrikankse,middle east / north africa
+5486,Syrien                                   ,Syria,mellemøstlige / nordafrikanske,middle east / north africa
+5487,Mellemøsten uoplyst                      ,The Middle East - unknown,mellemøstlige / nordafrikanske,middle east / north africa
 5488,Vietnam (2)                              ,Vietnam (2)                              ,fjernøstlige,far east
 5492,Thailand                                 ,Thailand                                 ,fjernøstlige,far east
-5496,Qatar                                    ,Qatar                                    ,mellemøstlige / nordafrikankse,middle east / north africa
+5496,Qatar                                    ,Qatar                                    ,mellemøstlige / nordafrikanske,middle east / north africa
 5499,Asien uoplyst                            ,Asia - unknown,fjernøstlige,far east
 5502,Australien                               ,Australia,vestlige,west
 5505,Tonga                                    ,Tonga                                    ,andre,other
 5508,Fiji                                     ,Fiji                                     ,andre,other
 5514,New Zealand                              ,New Zealand                              ,vestlige,west
 5522,Samoa                                    ,Samoa                                    ,andre,other
-5525,Djibouti                                 ,Djibouti                                 ,mellemøstlige / nordafrikankse,middle east / north africa
+5525,Djibouti                                 ,Djibouti                                 ,mellemøstlige / nordafrikanske,middle east / north africa
 5526,Belize                                   ,Belize                                   ,andre,other
 5534,Papua Ny Guinea                          ,Papua Ny Guinea                          ,fjernøstlige,far east
 5599,Øer i Stillehavet                        ,Øer i Stillehavet                        ,andre,other

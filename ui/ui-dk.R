@@ -1,8 +1,5 @@
 # INTRO -------------------------------------------------------------------
-###########################
 # Requires shiny_dat_* to be loaded - but will load this in global.R file before running this ui file
-###########################
-
 # ALL PANELS --------------------------------------------------------------
 ui_sex <- enc2utf8("Køn")
 ui_year <- enc2utf8("År")
@@ -79,13 +76,13 @@ ui_data <- "Tabeller"
 
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
-ui_about_title <- "Metoder: hjerte-kar-sygdomme"
+ui_about_title <- "Vejledning: hjerte-kar-sygdomme"
 about_selection <- "Vælg definition"
 
 
 
 about_choices <- list(
-  "Generel" = "general",
+  "Generelt/FAQ" = "general",
   "Sygdomme" = "def_diag",
   "Procedurer" = "def_opr",
   "Medicin" = "def_med",
@@ -94,30 +91,36 @@ about_choices <- list(
   "Befolkninger" = "def_populations"
   
 )
+
+col_names_faq <- c(
+  "Spørgsmål",
+  "Svar"
+)
+
 col_names_diag <-
   c("Sygdomme",
-    "Beskrivlse",
+    "Beskrivelse",
     "ICD-kode",
-    "Diagnose type",
-    "Patient type")
+    "Diagnosetype",
+    "Patienttype")
 
 col_names_opr <-
   c("Sygdomme",
-    "Beskrivlse",
+    "Beskrivelse",
     "ICD-kode")
 
 col_names_med <-
-  c("Medicin type",
-    "Beskrivlse",
+  c("Medicintype",
+    "Beskrivelse",
     "ATC kode")
 
 col_names_edu <- enc2utf8(c(
-  "Uddannelsesniveau (kort)",
-  "Uddannelsesniveau (lang)",
+  "Uddannelsesniveau",
+  "Beskrivelse",
   "DISCED-15 kode"
 ))
 
-col_names_pop <- enc2utf8(c("År", "Sex", "Ælder grupper", "Befolkningen"))
+col_names_pop <- enc2utf8(c("År", "Køn", "Aldersgrupper", "Antal"))
 
 col_names_ethnicity <- enc2utf8(c(
   "Kode",
@@ -132,13 +135,43 @@ def_variables_title <- "Definitioner af statistiker"
 def_population_title <- "Definitioner af befolkninger"
 def_stratas_title <- "Definitioner af stratifikationer"
 
+# UI general tabs - intro to HjerteTal
+ui_gen_1 <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
+
+bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne befolkning i Danmark.",
+                "Fordelingen kan vurderes på baggrund af køn, alder, uddannelse, etnisk herkomst og geografisk placering (bopæl).",
+                "Udviklingen af hjerte-kar-sygdomme fra 2006 og frem.",
+                "Overlevelsen efter hjerte-kar-sygdom og efter invasive behandlinger.",
+                "Omfanget af forbruget af hjerte-kar-medicin."
+)
+ui_bullets <- lapply(bullets, enc2utf8)
+
+
+ui_gen_2 <-
+  enc2utf8(
+    "Databasen er udviklet ved Hjerteforeningen og opdateres én gang årligt.
+    Opgørelserne findes som tabeller, søjlediagrammer eller som Danmarkskort,
+    hvor du let kan få et overblik over kommunale og regionale forskelle.
+    HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
+    læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
+    medier. Den fungerer på computeren, iPad, iPhone, og Android
+    
+    </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
+</br> <b>Maja Bülow Lykke</b>, Forskningskonsulent, Hjerteforeningen
+</br>Telefon: 3366 9953,
+</br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
+    <hr>
+    <h3> FAQ (Ofte stillede spørgsmål):</h3>"
+    )
+
+
 # CHD PANEL ---------------------------------------------------------------
 file.path <- paste0("language/outcome_descriptions_chd_", lang, ".rds")
 outcome_descriptions_chd <-
   readRDS(file =  file.path)
 
 ui_chd_title <- enc2utf8("Medfødt hjertefejl")
-choose_outcome_chd <- enc2utf8("Vælg medfødt hjetefjel:")
+choose_outcome_chd <- enc2utf8("Vælg medfødt hjertefejl:")
 
 
 choose_var_chd <- enc2utf8("Vælg statistik:")
@@ -149,29 +182,56 @@ aggr_levels_chd_pretty <- c( "Total", "Køn", "Alder")
 
 choose_aggr_lv_chd <-  enc2utf8("Opdelt efter:")
 
-ui_replace_all_chd <- "en medfødt hjertefjel"
+ui_replace_all_chd <- "en medfødt hjertefejl"
 
 # ABOUT CHD PANEL ---------------------------------------------------------
 
 
-ui_about_title_chd <- "Metoder: medfødt hjertefjel"
+ui_about_title_chd <- "Vejledning: medfødt hjertefejl"
 about_selection_chd <- "Vælg definition"
 ui_about_text_chd <-
   fread(file = "data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
 
 
 about_choices_chd <- list(
+  "Generelt/FAQ" = "general",
   "Sygdomme" = "def_diag"
   )
 
 col_names_diag_about_chd <-
   c("Sygdomme",
-    "Beskrivlse",
+    "Beskrivelse",
     "ICD-8 kode",
     "ICD-10 kode",
-    "Diagnose type",
-    "Patient type")
+    "Diagnosetype",
+    "Patienttype")
 
+# UI general tabs - intro to HjerteTal
+ui_gen_1_chd <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
+
+bullets <- list("Forekomsten og fordelingen af medfødt hjertefejl i den dansk befolkning.",
+                "Fordelingen kan vurderes på baggrund af køn, alder, og både køn og alder smatidig",
+                "Udviklingen af medfødt hjertefejl fra 2004 og frem."
+                
+)
+ui_bullets_chd <- lapply(bullets, enc2utf8)
+ui_gen_2_chd <-
+  enc2utf8(
+    "Databasen er udviklet ved Hjerteforeningen og opdateres én gang årligt.
+    Opgørelserne findes som tabeller, søjlediagrammer eller som Danmarkskort,
+    hvor du let kan få et overblik over kommunale og regionale forskelle.
+
+    HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
+    læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
+    medier. Den fungerer på computeren, iPad, iPhone, og Android
+    
+    </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
+    </br> <b>Maja Bülow Lykke</b>, Forskningskonsulent, Hjerteforeningen
+    </br>Telefon: 3366 9953,
+    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
+    <hr>
+    <h3> FAQ (Ofte stillede spørgsmål):</h3>"
+  )
 
 # CODE PANEL --------------------------------------------------------------
 ui_code_title <- "Code"

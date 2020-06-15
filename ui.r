@@ -39,9 +39,9 @@ ui <- div(
     source(file.path("ui", "main_ui.R"), local = TRUE)$value,
     source(file.path("ui", "chd_ui.R"), local = TRUE)$value,
     navbarMenu(title = {
-      methods_label <- "Metoder"
+      methods_label <- "Vejledning"
       if (lang == "en") {
-        methods_label <- "Methods"
+        methods_label <- "Help"
       }
       methods_label
     },
