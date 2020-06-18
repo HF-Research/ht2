@@ -71,6 +71,21 @@ names(ui_var_choices_chd) <- enc2utf8(var_descriptions_chd$name)
 
 aggr_levels_chd <- readRDS("data/chd/aggr_levels_chd.rds")
 
-aggr_levels_chd <- rev(aggr_levels_chd)
+# Set order in which labels will appear on UI
+tmp <- c("totals","age", "sex", "age_sex")
+
+# Make sure labels are the same as the data
+stopifnot(all(tmp %in% aggr_levels_chd))
+aggr_levels_chd <- tmp
+rm(tmp)
+
+
+# CHD ABOUT SECTION -------------------------------------------------------
+
+
+about_dat_faq_chd <- fread(file = "data/chd/faq_chd.csv", encoding = "UTF-8")
+keep_vars <- grep(lang, colnames(about_dat_faq_chd), value = TRUE)
+about_dat_faq_chd <- about_dat_faq_chd[, ..keep_vars]
+
 
 

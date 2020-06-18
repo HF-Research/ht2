@@ -29,7 +29,7 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
 # install.packages(c("geojson","geo2jsonino","geojsonlint","rgeos","rmapshaper"))
 
 print(suppressMessages(webshot:::find_phantom()))
-
+enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
@@ -65,8 +65,16 @@ male_color <- "#19b9b1"
 female_color <- "#ea8438"
 
 
+# COLORS ------------------------------------------------------------------
+hfBlue <- "#002A3A"
 graph_colors <- c(male_color, female_color)
 rm(male_color, female_color)
+
+single_val_col <- hfBlue
+
+DT_background_color <- "#002A3A"
+DT_background_color <- "#193f4d"
+
 # FUNCTIONS ------------------------------------------------
 formatNumbers <- function(dat, lang) {
   x <- copy(dat)
@@ -117,8 +125,16 @@ formatNAValues <- JS(
 "
 )
 
+header_JS <- JS(
+  # Table hearder background color
+  paste0("function(settings, json) {",
+  "$(this.api().table().header()).css({'background-color': '", DT_background_color, "', 'color':'white'});",
+  "}"
+  )
+)
 
-makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom) {
+
+makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom, n_col) {
   col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
     data = dat,
@@ -138,17 +154,12 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom) 
              messageTop = dt_title,
              messageBottom = messageBottom)
       ),
-      initComplete = JS(
-        # Table hearder background color
-        "function(settings, json) {",
-        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-        "}"
-      )
+      initComplete = header_JS
     )
   ) %>%
-    
+    formatStyle(1:n_col, border = "white") %>% 
     formatStyle('Total',  fontWeight = 'bold') %>%
-    formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
+    formatStyle(group_var,  backgroundColor = DT_background_color, color = "white") %>%
     formatStyle(
       # Bolds the "Totals" row which has character == "Total" in column 1
       1,
@@ -163,7 +174,7 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom) 
 
 
 makeCountKomDT <-
-  function(dat, group_var, thousands_sep, dt_title, messageBottom) {
+  function(dat, group_var, thousands_sep, dt_title, messageBottom, n_col) {
     col_format <- c(ui_sex_levels, "Total")
     DT::datatable(
       data = dat,
@@ -172,7 +183,7 @@ makeCountKomDT <-
       class = ' hover row-border',
       options = list(
         language = list(url = "Danish.json"),
-        ordering = FALSE,
+        ordering = TRUE,
         lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
         pageLength = 15,
         dom = "lftBsp",
@@ -185,16 +196,12 @@ makeCountKomDT <-
                messageTop = dt_title,
                messageBottom = messageBottom)
         ),
-        initComplete = JS(
-          # Table hearder background color
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-          "}"
-        )
+        initComplete = header_JS
       )
     ) %>%
+      formatStyle(1:n_col, border = "white") %>% 
       formatStyle('Total',  fontWeight = 'bold') %>%
-      formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
+      formatStyle(group_var,  backgroundColor = DT_background_color, color = "white") %>%
       formatStyle(
         # Bolds the "Totals" row which has character == "Total" in column 1
         1,
@@ -213,7 +220,7 @@ makeRateDT <-
   function(dat,
            group_var,
            dt_title,
-           messageBottom) {
+           messageBottom, n_col) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
       data = dat,
@@ -233,21 +240,18 @@ makeRateDT <-
                messageTop = dt_title,
                messageBottom = messageBottom)
         ),
-        initComplete = JS(
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-          "}"
-        )
+        initComplete = header_JS
       )
     )  %>%
-      formatStyle(group_var,  backgroundColor = "#e7e7e7")
+      formatStyle(1:n_col, border = "white") %>% 
+      formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
   }
 
 makeRateKomDT <-
   function(dat,
            group_var,
            dt_title,
-           messageBottom = messageBottom) {
+           messageBottom = messageBottom, n_col) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
       data = dat,
@@ -268,14 +272,11 @@ makeRateKomDT <-
                messageTop = dt_title,
                messageBottom = messageBottom)
         ),
-        initComplete = JS(
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-          "}"
-        )
+        initComplete = header_JS
       )
     ) %>%
-      formatStyle(group_var,  backgroundColor = "#e7e7e7")
+      formatStyle(1:n_col, border = "white") %>% 
+      formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
   }
 
 
@@ -393,55 +394,13 @@ year_min_chd <- 2014
 year_choices_chd <- year_min_chd:year_max_chd
 
 
-makeCountDT_chd <- function(dat, group_var, thousands_sep, dt_title, messageBottom) {
-  col_format <- c(ui_sex_levels, "Total")
-  DT::datatable(
-    data = dat,
-    extensions = 'Buttons',
-    rownames = FALSE,
-    class = ' hover row-border',
-    options = list(
-      language = list(url = "Danish.json"),
-      ordering = FALSE,
-      dom = "tB",
-      columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
-      buttons = list(
-        list(extend = "pdf",
-             messageTop = dt_title,
-             messageBottom = messageBottom),
-        list(extend = "excel",
-             messageTop = dt_title,
-             messageBottom = messageBottom)
-      ),
-      initComplete = JS(
-        # Table hearder background color
-        "function(settings, json) {",
-        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-        "}"
-      )
-    )
-  ) %>%
-    
-    formatStyle('Total',  fontWeight = 'bold') %>%
-    formatStyle(group_var,  backgroundColor = "#e7e7e7") %>%
-    formatStyle(
-      # Bolds the "Totals" row which has character == "Total" in column 1
-      1,
-      target = "row",
-      fontWeight = styleEqual(
-        levels = c("Total"),
-        values =  c("bold"),
-        default = "normal"
-      )
-    )
-}
-
-
 makeRateDT_chd <-
   function(dat,
            group_var,
            dt_title,
-           messageBottom) {
+           messageBottom,
+           n_col,
+           digits) {
     col_format <- c(ui_sex_levels)
     DT::datatable(
       data = dat,
@@ -461,12 +420,10 @@ makeRateDT_chd <-
                messageTop = dt_title,
                messageBottom = messageBottom)
         ),
-        initComplete = JS(
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-          "}"
-        )
+        initComplete = header_JS
       )
     )  %>%
-      formatStyle(group_var,  backgroundColor = "#e7e7e7")
+      formatStyle(1:n_col, border = "white") %>% 
+      formatStyle(group_var,  backgroundColor = DT_background_color, color = "white") %>% 
+      formatCurrency(columns = 2:n_col, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = digits)
   }

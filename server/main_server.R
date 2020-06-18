@@ -21,6 +21,10 @@ observeEvent(isIE(), {
   }
 })
 # callModule(profvis_server, "profiler")
+
+# URL BOOKMARKING ---------------------------------------------------------
+
+
 # TEXT RENDERING ----------------------------------------------------------
 output$outcome_description <- renderUI({
   req(input$outcome)
@@ -764,16 +768,6 @@ outputCountDTTable <- reactive({
     col_convert <- c("male", "female", "Total")
     dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
     
-    # Format numbers according to language
-    dat[, (col_convert) := lapply(.SD, function(x) {
-      formatC(
-        x,
-        digits = 0,
-        format = "d",
-        big.mark = thousands_sep,
-        decimal.mark = dec_mark
-      )
-    }), .SDcols = col_convert]
   }
   
   setnames(
@@ -781,22 +775,29 @@ outputCountDTTable <- reactive({
     old = c("group_var", "male", "female"),
     new = c(prettyAggr_level(), rev(ui_sex_levels))
   )
+  
+  col_convert <- c(ui_sex_levels, "Total")
+  n_col <- NCOL(dat)
   if (isKom()) {
     makeCountKomDT(
       dat,
       group_var = prettyAggr_level(),
       thousands_sep = thousands_sep,
       dt_title = plotTitle(),
-      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1]))
+      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])),
+      n_col = n_col
     )
   } else {
+    
     makeCountDT(
       dat,
       group_var = prettyAggr_level(),
       thousands_sep = thousands_sep,
       dt_title = plotTitle(),
-      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1]))
-    )
+      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])),
+      n_col = n_col
+    ) %>% 
+      formatCurrency(columns = col_convert, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = 0)
   }
 })
 
@@ -822,18 +823,8 @@ outputRateDTTable <- reactive({
     digits = 1
   }
   
-  col_convert <- c("male", "female")
-  dat[, (col_convert) := lapply(.SD, function(x) {
-    formatC(
-      x,
-      digits = digits,
-      format = "f",
-      big.mark = thousands_sep,
-      decimal.mark = dec_mark
-    )
-  }), .SDcols = col_convert]
-  
-  
+  col_convert <- c(ui_sex_levels)
+  n_col <- NCOL(dat)
   setnames(
     dat,
     old = c("group_var", "male", "female"),
@@ -845,15 +836,18 @@ outputRateDTTable <- reactive({
       dat = dat,
       group_var = prettyAggr_level(),
       dt_title = plotTitle(),
-      messageBottom = prettyVariableSingular()
+      messageBottom = prettyVariableSingular(),
+      n_col = n_col
       )
     
   } else {
     makeRateDT(dat = dat,
                group_var = prettyAggr_level(),
                dt_title = plotTitle(),
-               messageBottom = prettyVariableSingular()
-               )
+               messageBottom = prettyVariableSingular(),
+               n_col = n_col
+               ) %>%
+      formatCurrency(columns = col_convert, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = digits)
   }
   
 })
@@ -918,6 +912,17 @@ isIE <- reactive({
   
   input$check == "TRUE"
 })
+
+isPercentage <- reactive({
+  any(
+    input$variable == "count_n_dead30",
+    input$variable == "count_n_dead1",
+    input$variable == "count_n_dead5",
+    input$variable == "count_n_readmissions_ppl_30"
+  )
+  
+})
+
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
 

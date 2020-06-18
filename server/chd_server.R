@@ -1,5 +1,38 @@
-# TEXT --------------------------------------------------------------------
+# BOOKMARKING -------------------------------------------------------------
 
+setBookmarkExclude(
+  c(
+    "data_vis_tabs_chd",
+    "downloadMapsFemale_bttn",
+    "rate_count",
+    "downloadMapsMale_bttn",
+    "about_selection_chd",
+    "about_selection",
+    "year",
+    "data_vis_tabs",
+    "rate_count_chd",
+    "check",
+    "download_line",
+    "aggr_level_chd",
+    "aggr_level"
+  )
+)
+
+
+
+observe({
+  req(input$variable)
+  input$navbar
+  input$variable
+  input$output
+  
+  session$doBookmark()
+})
+onBookmarked(function(url) {
+  updateQueryString(url)
+})
+
+# TEXT --------------------------------------------------------------------
 
 output$outcome_description_chd <- renderUI({
   req(input$outcome_chd)
@@ -21,7 +54,7 @@ output$outcome_description_chd <- renderUI({
   }
 })
 
-prettyVarUnits <- reactive({
+prettyVarChdUnits <- reactive({
   x <- prettyVarChd()
   x[c("name_count", "name_rate")][as.integer(input$rate_count_chd)]
 })
@@ -50,6 +83,7 @@ replaceOutcomeStringChd <- reactive({
 
 
 output$variable_desc_chd <- renderUI({
+  
   req(input$var_chd, input$outcome_chd,
       selectedDataVarsChd())
   
@@ -58,14 +92,12 @@ output$variable_desc_chd <- renderUI({
     
     title_text <- prettyVarChd()[1]
     
-    if (lang == "dk") {
-      title_text <- (paste0("Den ", tolower(title_text)))
-    }
+    
     title_text <- tags$b(title_text)
     
     col_selection <- "desc_general"
     desc_text <-
-      var_descriptions_chd[code_name == selectedDataVars()[1], ..col_selection]
+      var_descriptions_chd[code_name == input$var_chd, ..col_selection]
     
     # Replace sections of variable desc that are specific for
     # outcome/year/outcome-type
@@ -115,13 +147,12 @@ keepVars <- reactive({
     c("year")
   } else if (isSex()) {
     c("sex", "year")
+  } else if (isAge()) {
+    c("age_adult", "year")
   } else {
-    c("age_adult", "sex", "year")
+    c("age_adult", "sex", "year", "id_var")
   }
 })
-
-
-
 
 
 dataObj <- reactive({
@@ -130,18 +161,14 @@ dataObj <- reactive({
   
   # Rename value variables
   x.names <- colnames(x)
-  inx1 <- grep("incidence", x.names)
-  if (any(inx1)) {
-    colnames(x)[inx1] <- prettyVarUnits()
-  } else {
-    inx2 <- grep("prevalence", x.names)
-    colnames(x)[inx2] <- prettyVarUnits()
-  }
+  inx1 <- grep("rate|count", x.names)
+  colnames(x)[inx1] <- prettyVarChdUnits()
   x
 })
 
 toFactor <- reactive({
   x <- copy(dataObj())
+  
   # Turn characters into factors
   if (isTotals()) {
     x
@@ -150,48 +177,57 @@ toFactor <- reactive({
                       c(levels = "f", "m"),
                       labels = c(ui_sex_levels[1], ui_sex_levels[2]))]
     x[, id_var := paste0(get(plotVarId()[1]))]
-  } else {
+  } else if (isAge()) {
+    x[, id_var := paste0(get(plotVarId()[1]))]
+    } else {
     x[, sex := factor(sex,
                       c(levels = "f", "m"),
                       labels = c(ui_sex_levels[1], ui_sex_levels[2]))]
-    x[, id_var := paste0(get(plotVarId()[1]), " ", get(plotVarId()[2]))]
+    
   }
 })
 
 # PLOTLY -----------------------------------------------------------
 plotVarId <- reactive({
+  
   if (isTotals()) {
     c("1")
   } else if (isSex()) {
     c("sex")
+  } else if (isAge()) {
+    c("age_adult")
   } else {
     c("sex", "age_adult")
   }
 })
 
 plotlyObj <- reactive({
+  
   x <- toFactor()
   plot_title <- paste0(input$outcome_chd, " ", prettyVarChd()[1])
   
   axis_font_size <- 20
+  legend_font_size <- 17
+  tick_font_size <- 14
   linesize = 3
-  pointsize = 12
+  pointsize = 8
   tooltip <-
-    paste0(prettyVarUnits(), ": <br> <b> %{y:.1f} </b>")
+    paste0(prettyVarChdUnits(), ": <br> <b> %{y:.1f} </b>")
   
   if (isTotals()) {
     
     tooltip <-
-      paste0(prettyVarUnits(), ": <br> <b> %{y:.1f} </b><extra></extra>")
+      paste0(prettyVarChdUnits(), ": <br> <b> %{y:.1f} </b><extra></extra>")
     
    out <-  plot_ly(data = x, x = ~ year) %>%
       add_trace(
-        y = ~ get(prettyVarUnits()),
+        y = ~ get(prettyVarChdUnits()),
         type = 'scatter',
         mode = 'lines+markers',
-        hovertemplate = tooltip,
+        color = I(single_val_col),
         line = list(width = linesize),
-        marker = list(size = pointsize)
+        marker = list(size = pointsize),
+        hovertemplate = tooltip
       )
     
     
@@ -199,9 +235,22 @@ plotlyObj <- reactive({
   } else if (isSex()) {
     out <- plot_ly(data = x, x = ~ year) %>%
       add_trace(
-        y = ~ get(prettyVarUnits()),
+        y = ~ get(prettyVarChdUnits()),
         color = ~ id_var,
         colors = rev(graph_colors),
+        type = 'scatter',
+        mode = 'lines+markers',
+        line = list(width = linesize),
+        marker = list(size = pointsize),
+        hovertemplate = tooltip
+      )
+  } else if (isAge()) {
+    
+    out <- plot_ly(data = x, x = ~ year) %>%
+      add_trace(
+        y = ~ get(prettyVarChdUnits()),
+        linetype = ~ age_adult,
+        color = I(single_val_col),
         type = 'scatter',
         mode = 'lines+markers',
         line = list(width = linesize),
@@ -218,7 +267,7 @@ plotlyObj <- reactive({
     out <- plot_ly(data = x) %>%
       add_trace(
         x = ~ year,
-        y = ~ get(prettyVarUnits()),
+        y = ~ get(prettyVarChdUnits()),
         color = ~ sex,
         colors = rev(graph_colors),
         linetype = ~ age_adult,
@@ -245,12 +294,13 @@ plotlyObj <- reactive({
     xaxis = list(title = list(
       text = ui_year,
       font = list(size = axis_font_size)
-    )),
-    yaxis = list(
-      title = list(text = prettyVarUnits(),
-                   font = list(size = axis_font_size)),
-      rangemode = "tozero"
     ),
+    tickfont = list(size = tick_font_size)),
+    yaxis = list(
+      title = list(text = prettyVarChdUnits(),
+                   font = list(size = axis_font_size)),
+      tickfont = list(size = tick_font_size),
+      rangemode = "tozero"),
     hoverlabel = list(font = list(size = 18)),
     hovermode = "x"
     
@@ -268,7 +318,9 @@ plotlyObj <- reactive({
         "resetScale2d"
       )
     ) %>% 
-    layout(separators = paste0(dec_mark, thousands_sep))
+    layout(separators = paste0(dec_mark, thousands_sep),
+           legend = list(
+             font = list(size = legend_font_size)))
 })
 
 # DATATABLES --------------------------------------------------------------
@@ -278,26 +330,33 @@ dtCastChd <- reactive({
   
   dat <- dataObj()
   if (isTotals()) {
+    setnames(dat, c(ui_year, "Total"))
     dat
   } else if (isSex()) {
-    value_var <- prettyVarUnits()
+    value_var <- prettyVarChdUnits()
     subset_cols = c("year", value_var)
-    out = cbind(dat["f", ..subset_cols], dat["m", ..value_var])
-    setnames(out, c("year", ui_sex_levels[1], ui_sex_levels[2]))
+    out = cbind(dat[sex == "f", ..subset_cols], dat[sex == "m", ..value_var])
+    setnames(out, c(ui_year, ui_sex_levels[1], ui_sex_levels[2]))
+  } else if (isAge()) {
+    value_var <- prettyVarChdUnits()
+    subset_cols = c("year", value_var)
+    out = cbind(dat[age_adult == "<18", ..subset_cols], dat[age_adult == "18+", ..value_var])
+    setnames(out, c(ui_year, "<18", "18+"))
   } else {
-    dat[, id_var := paste0(sex, age_adult)]
-    value_var <- prettyVarUnits()
+    
+    # Id_var created, and key set, in data pre-processing step 
+    value_var <- prettyVarChdUnits()
     subset_cols = c("year", value_var)
     out <-
-      cbind(dat[id_var == "f<15", ..subset_cols],
-            dat[id_var == "f15+", ..value_var],
-            dat[id_var == "m<15", ..value_var],
-            dat[id_var == "m15+", ..value_var])
+      cbind(dat["f<18", ..subset_cols],
+            dat["f18+", ..value_var],
+            dat["m<18", ..value_var],
+            dat["m18+", ..value_var])
     
     tmp1 <- rep(ui_sex_levels[1], 2)
     tmp2 <- rep(ui_sex_levels[2], 2)
-    var_names <- paste0(c(tmp1, tmp2), c(" <15", " 15+"))
-    setnames(out, c("year", var_names))
+    var_names <- paste0(c(tmp1, tmp2), c(" <18", " 18+"))
+    setnames(out, c(ui_year, var_names))
     out
   }
   
@@ -307,13 +366,22 @@ dtCastChd <- reactive({
 
 
 outputDT_chd <- reactive({
-  x <- copy(dtCastChd())
+  digits = 1
   
+  if(input$rate_count_chd == 1){
+    
+    digits = 0
+  }
+  
+  x <- copy(dtCastChd())
+  n_col <- NCOL(x)
   makeRateDT_chd(
     x,
-    group_var = "year",
+    group_var = ui_year,
     dt_title = "H",
-    messageBottom = "B"
+    messageBottom = "B",
+    n_col = n_col,
+    digits = digits
   )
   
 })
@@ -328,23 +396,46 @@ isSex <- reactive({
   input$aggr_level_chd == "sex"
 })
 
-isChd <- reactive({
+isAge <- reactive({
+  input$aggr_level_chd == "age"
+})
+
+isAgeSex <- reactive({
   
+  input$aggr_level_chd == "age_sex"
+})
+
+isChd <- reactive({
   input$navbar == "chd"
 })
+
+isValidSelection <- reactive({
+  !all( (isAge()|isAgeSex()), input$var_chd == "count_n_incidence", outcomeCodeChd() == 3)
+})
+
+
 
 # RENDER ------------------------------------------------------------------
 
 output$d3_chd <- renderPlotly({
-  req(input$var_chd)
-  
+  req(input$var_chd, isValidSelection())
   plotlyObj()
-  
-  
 })
 
 output$table_counts_chd <- renderDT({
-  req(input$var_chd)
+  req(input$var_chd, isValidSelection())
   outputDT_chd()
-  
 })
+
+
+output$invalid_selection_text <- renderText({
+  if(isValidSelection()){
+    ""
+  }  else {
+  HTML(paste0("<h3>", ui_warning_invalid_selection, "</h3>"))
+  }
+})
+
+# This ensures that the "invalid_selection_text object is always available in the browser - and so available to the conditionalPanel fn()
+# https://github.com/rstudio/shiny/issues/1318
+outputOptions(output, "invalid_selection_text", suspendWhenHidden = FALSE)

@@ -369,7 +369,9 @@ saveRDS(tmp, file = "language/country_grps_en.rds")
 
 
 # CHD ---------------------------------------------------------------------
-chd_agg_levels <- c("age", "sex", "totals")
+
+# This has to be in the same order the files are loaded in (f.load object)
+chd_agg_levels <- c("age", "age_sex", "sex", "totals")
 
 f.load <-
   list.files(path = "data/chd/",
@@ -378,30 +380,38 @@ f.load <-
 chd <- sapply(f.load, fread)
 
 names(chd) <- chd_agg_levels
-chd$age <- dcast(
-  chd$age,
+chd$age_sex <- dcast(
+  chd$age_sex,
   formula = sex + age_adult + ht.code + n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
-)
+) %>%
+  . [, id_var := paste0(sex, age_adult)] %>%
+  # For some reason, pltly requires year to be in the correct plotting order in
+  # the input data. And for some reason the year is out of order in data
+  setorder(ht.code, sex, age_adult, year)
 
-# For some reason, pltly requires year to be in the correct plotting order in
-# the input data. And for some reason the year is out of order in data
-setorder(chd$age, ht.code, sex, age_adult, year)
 
+chd$age <- dcast(
+  chd$age,
+  formula = age_adult + ht.code + n_denom + year ~ variable,
+  value.var = c("count_n_", "rate_strat")
+) %>% 
+  setorder(ht.code, age_adult, year)
+  
 
 chd$sex <- dcast(
   chd$sex,
-  formula = sex  + ht.code++n_denom + year ~ variable,
+  formula = sex  + ht.code + n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
-)
-
+) %>% 
+setorder(ht.code, sex, year) 
+  
 
 chd$totals <- dcast(
   chd$totals,
-  formula = ht.code++n_denom + year ~ variable,
+  formula = ht.code + n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
-)
-
+) %>% setorder(ht.code, year)
 
 # Remove extra__ in colnames
 lapply(chd, function(l1) {
@@ -421,6 +431,11 @@ chd <- lapply(chd, function(l1) {
 # NOTE this has different structure than data list for main HT.
 # This list is agrr_level -> outcome, while HT is outcome -> aggr_level
 shiny_dat_chd <- lapply(chd, split, by = "ht.code", keep.by = TRUE)
+
+# Set key for faster subsetting during live shiny use
+shiny_dat_chd$age_sex <- lapply(shiny_dat_chd$age_sex, setkey, "id_var")
+
+
 saveRDS(shiny_dat_chd, file = "data/chd/shiny_dat_chd.rds")
 saveRDS(chd_agg_levels, file  = "data/chd/aggr_levels_chd.rds")
 

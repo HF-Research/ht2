@@ -157,7 +157,7 @@ ui_gen_2 <-
     </br>Telephone: 3366 9953,
     </br>e-mail: <b>mblykke@hjerteforeningen.dk</b></p>
     
-    </br><h3>Note:</h3>"
+    </br><h3>FAQ:</h3>"
   )
 
 
@@ -169,11 +169,13 @@ choose_outcome_chd <- enc2utf8("Choose conongenital heart defect category")
 
 choose_var_chd <- enc2utf8("Choose metric:")
 
-aggr_levels_chd_pretty <- c("Totals", "Sex","Age-sex")
+aggr_levels_chd_pretty <- c("Totals", "Age", "Sex", "Age-sex")
 
 choose_aggr_lv_chd <-  enc2utf8("Choose stratification:")
 
 ui_replace_all_chd <- "en medfødt hjertefjel"
+
+ui_warning_invalid_selection <- "We cannot show new cases (incidence) of severe congenital heart disease by age or age-sex"
 
 # ABOUT CHD PANEL ---------------------------------------------------------
 
@@ -224,7 +226,7 @@ ui_gen_2_chd <-
     </br>Telephone: 3366 9953,
     </br>e-mail: <b>mblykke@hjerteforeningen.dk</b></p>
     
-    </br><h3>Note:</h3>"
+    </br><h3>FAQ:</h3>"
   )
 
 # CODE PANEL --------------------------------------------------------------

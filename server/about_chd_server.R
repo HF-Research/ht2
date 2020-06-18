@@ -1,8 +1,8 @@
 output$about_title_chd <- renderText("Title")
 # DATATABLES --------------------------------------------------------------
 aboutFAQDTChd <- reactive({
-  colnames(about_dat_faq) <- col_names_faq
-  makeAboutTables(about_dat_faq, col_names_faq)
+  colnames(about_dat_faq_chd) <- col_names_faq
+  makeAboutTables(about_dat_faq_chd, col_names_faq)
 })
 
 aboutDiagDTChd <- reactive({

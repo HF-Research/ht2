@@ -73,13 +73,19 @@ tabPanel(ui_chd_title,
            
            # RESULTS ---------------------------
            # Graph
+           conditionalPanel(condition = "output.invalid_selection_text !== ''",
+                            htmlOutput("invalid_selection_text")),
+           
+           conditionalPanel(condition = "output.invalid_selection_text == ''",
+                            
            div(
              class = "col-xs-12 col-sm-7 col-md-8 col-lg-9",
              align = "right",
+             
              tabsetPanel(
                id = "data_vis_tabs_chd",
                type = "pill",
-               
+              
                tabPanel(
                  title = ui_d3_figures,
                  br(),
@@ -107,7 +113,8 @@ tabPanel(ui_chd_title,
                      column(
                        11,
                        class = "output_titles",
-                       align = "left"
+                       align = "left",
+                       
                        # textOutput("outcome_title_dt_chd")
                      )
                    ),
@@ -123,27 +130,22 @@ tabPanel(ui_chd_title,
                        ))),
                        fluidRow(align = "left",
                                 # uiOutput("count_desc_chd"),
+                                
                                 br())
-                     )
-                     # column(
-                     #   class = "col_DT",
-                     #   6,
-                     #   align = "center",
-                     #   fluidRow(tags$b(textOutput("table2_title_chd"))),
-                     #   fluidRow(((
-                     #     DTOutput("table_rates_chd")
-                     #   ))),
-                     #   fluidRow(align = "left",
-                     #            uiOutput("rate_desc_chd"),
-                     #            br())
-                     # )
+                     ),
+                     
+                     # Warning panel
+                     fluidRow()
+                     
                    )
                  )
 
 
                )
                
-             )
+             
+           )
+           )
            )
          )
 
