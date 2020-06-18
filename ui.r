@@ -1,4 +1,5 @@
-ui <- div(
+ui <- function(request) {
+  div(
   
   
   
@@ -53,3 +54,4 @@ ui <- div(
   )
   
 )
+}
