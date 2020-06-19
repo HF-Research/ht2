@@ -295,7 +295,7 @@ plotlyObj <- reactive({
 dtCastChd <- reactive({
   # One dcast for both rates and counts
   
-  dat <- dataObj()
+  dat <- copy(dataObj())
   if (isTotals()) {
     setnames(dat, c(ui_year, "Total"))
     dat
@@ -386,6 +386,7 @@ isValidSelection <- reactive({
 
 output$d3_chd <- renderPlotly({
   req(input$var_chd, isValidSelection())
+  
   plotlyObj()
 })
 
