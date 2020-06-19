@@ -33,7 +33,7 @@ enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
-lang = "dk"
+lang = "en"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","

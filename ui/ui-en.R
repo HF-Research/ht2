@@ -175,7 +175,10 @@ choose_aggr_lv_chd <-  enc2utf8("Choose stratification:")
 
 ui_replace_all_chd <- "en medfødt hjertefjel"
 
-ui_warning_invalid_selection <- "We cannot show new cases (incidence) of severe congenital heart disease by age or age-sex"
+ui_warning_invalid_selection <-
+"We cannot show new cases (incidence) of severe congenital heart disease by
+'Age' or 'Age-sex' combined. </br></br> Please make another seleciton, and
+read the FAQ for more information."
 
 # ABOUT CHD PANEL ---------------------------------------------------------
 
