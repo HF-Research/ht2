@@ -84,6 +84,11 @@ ui_data <- "Tabels"
 ui_about_title <- "Methods: cardiovascular diseases"
 about_selection <- "Choose definition"
 
+col_names_faq <- c(
+  "Questions",
+  "Anwsers"
+)
+
 
 about_choices <- list(
   "General" = "general",
@@ -146,16 +151,14 @@ ui_gen_2 <-
   enc2utf8(
     "The database is developed by The Danish Heart Foundation, and is updated once
     yearly. The data is available as graphs, tables or interactive maps (when
-    applicable).
-    
-    <p>HjerteTal if free to use for all interested, for example,
+    applicable).HjerteTal if free to use for all interested, for example,
     doctors, researchers, policy makers, health care administrators, or the media.
-    It is accesible on, iPad, iPhone, and Android, no app download is required</p>
+    It is accesible on, iPad, iPhone, and Android, no app download is required
     
-    <p>If you have questions, recommendations, or feedback, please write to:
+    <br><br>If you have questions, recommendations, or feedback, please write to:
     </br> <b>Maja Bülow Lykke</b>, Research consultant, The Danish Heart Foundtion
     </br>Telephone: 3366 9953,
-    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b></p>
+    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
     
     </br><h3>FAQ:</h3>"
   )
@@ -188,12 +191,13 @@ read the FAQ for more information."
 ui_about_title_chd <- "Methods: congenital heart defects"
 about_selection_chd <- "Choose definition"
 ui_about_text_chd <-
-  fread(file = "data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
+  readRDS(file = "language/ui_about_text_chd_en.rds")
 
 
 about_choices_chd <- list(
   "General/FAQ" = "general",
-  "Illness" = "def_diag"
+  "Illness" = "def_diag",
+  "Operations" = "def_opr"
 )
 
 col_names_diag_about_chd <-
@@ -205,9 +209,9 @@ col_names_diag_about_chd <-
     "Patient type")
 
 
-ui_gen_1_chd <- enc2utf8("In HjerteTal, it's possible to find information on:")
+ui_gen_1_chd <- enc2utf8("In HjerteTal, it's possible to find information on:<br><br>")
 
-bullets <- list("The incidence and prevalence of congenital heart diseases in the Danish population ",
+bullets <- list("The incidence and prevalence of congenital heart defects (CHD) in the Danish population ",
                 "The distribution of congenital heart disease across age, sex, and both age and sex together",
                 "The trends in congenital heart disease over time since 2004"
                 
@@ -218,16 +222,14 @@ ui_gen_2_chd <-
   enc2utf8(
     "The database is developed by The Danish Heart Foundation, and is updated once
     yearly. The data is available as graphs, tables or interactive maps (when
-    applicable).
-    
-    <p>HjerteTal if free to use for all interested, for example,
+    applicable).HjerteTal if free to use for all interested, for example,
     doctors, researchers, policy makers, health care administrators, or the media.
-    It is accesible on, iPad, iPhone, and Android, no app download is required</p>
+    It is accesible on, iPad, iPhone, and Android, no app download is required.
     
-    <p>If you have questions, recommendations, or feedback, please write to:
+    <br><br>If you have questions, recommendations, or feedback, please write to:
     </br> <b>Maja Bülow Lykke</b>, Research consultant, The Danish Heart Foundtion
     </br>Telephone: 3366 9953,
-    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b></p>
+    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
     
     </br><h3>FAQ:</h3>"
   )

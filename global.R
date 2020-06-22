@@ -16,7 +16,8 @@ library(manipulateWidget)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 library(mapview) # For map downloads
-# library(ggplot2)
+
+# remotes::install_github("ropensci/plotly")
 library(plotly)
 library(fst)
 library(magrittr)
@@ -157,7 +158,7 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom, 
       initComplete = header_JS
     )
   ) %>%
-    formatStyle(1:n_col, border = "white") %>% 
+    formatStyle(1:n_col, borderColor = "white") %>% 
     formatStyle('Total',  fontWeight = 'bold') %>%
     formatStyle(group_var,  backgroundColor = DT_background_color, color = "white") %>%
     formatStyle(
@@ -199,7 +200,7 @@ makeCountKomDT <-
         initComplete = header_JS
       )
     ) %>%
-      formatStyle(1:n_col, border = "white") %>% 
+      formatStyle(1:n_col, borderColor = "white") %>% 
       formatStyle('Total',  fontWeight = 'bold') %>%
       formatStyle(group_var,  backgroundColor = DT_background_color, color = "white") %>%
       formatStyle(
@@ -243,7 +244,7 @@ makeRateDT <-
         initComplete = header_JS
       )
     )  %>%
-      formatStyle(1:n_col, border = "white") %>% 
+      formatStyle(1:n_col, borderColor = "white") %>% 
       formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
   }
 
@@ -275,7 +276,7 @@ makeRateKomDT <-
         initComplete = header_JS
       )
     ) %>%
-      formatStyle(1:n_col, border = "white") %>% 
+      formatStyle(1:n_col, borderColor = "white") %>% 
       formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
   }
 
@@ -371,11 +372,9 @@ makeAboutTables <-
         pageLength = 20,
         dom = dom,
         buttons = list('pdf'),
-        initComplete = JS(
-          "function(settings, json) {",
-          "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-          "}"
-        )
+        initComplete = header_JS,
+        autoWidth = TRUE
+        # columnDefs = list(list(targets = c(0), visible = TRUE, width= '35%'))
       )
     )
   }
@@ -423,7 +422,7 @@ makeRateDT_chd <-
         initComplete = header_JS
       )
     )  %>%
-      formatStyle(1:n_col, border = "white") %>% 
+      formatStyle(1:n_col, borderColor = "white") %>% 
       formatStyle(group_var,  backgroundColor = DT_background_color, color = "white") %>% 
       formatCurrency(columns = 2:n_col, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = digits)
   }

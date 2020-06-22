@@ -148,6 +148,7 @@ rate_desc <- function() {
          replaceAggrLevelString(),
          desc_text,
          fixed = TRUE)
+
   
   # Fix Danish letters
   desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
@@ -156,6 +157,14 @@ rate_desc <- function() {
     gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
   desc_text <-
     gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
+ 
+  # Fix danish only issues 
+  if(isNational() && lang == "dk"){
+    desc_text <- gsub("for hver", "for hvert", desc_text, fixed = TRUE)
+    desc_text <- gsub("i en given", "i et givet", desc_text, fixed = TRUE)
+    desc_text <- gsub("rr", "r", desc_text, fixed = TRUE)
+  }
+  
   tagList(title_text, desc_text)
 }
 
@@ -185,7 +194,9 @@ count_desc <- function() {
     gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
   desc_text <-
     gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
-  
+
+ 
+    
   tagList(title_text, desc_text)
 }
 

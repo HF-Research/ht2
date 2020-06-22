@@ -484,8 +484,24 @@ var_col_names <- c(
 
 )
 setnames(var_desc_chd_dk, var_col_names)
+
+
+about_chd <- fread("data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
+col_names <- colnames(about_chd)
+cols_delete <- grep("_en", col_names, value = TRUE)
+about_chd_dk <- about_chd[, -..cols_delete]
+about_chd_new_names <- c(
+  "code",
+  "title_text",
+  "desc_text",
+  "desc_text_2"
+)
+setnames(about_chd_dk, about_chd_new_names)
+
 saveRDS(outcome_descriptions_dk, file = "language/outcome_descriptions_chd_dk.rds")
 saveRDS(var_desc_chd_dk, file = "language/variable_descriptions_chd_dk.rds")
+saveRDS(about_chd_dk, file = "language/ui_about_text_chd_dk.rds")
+
 
 # English
 lang <- "en"
@@ -499,16 +515,20 @@ cols_delete <- grep("_dk", col_names, value = TRUE)
 var_desc_chd_en <- var_desc_chd[, -..cols_delete]
 setnames(var_desc_chd_en, var_col_names)
 
+col_names <- colnames(about_chd)
+cols_delete <- grep("_dk", col_names, value = TRUE)
+about_chd_en <- about_chd[, -..cols_delete]
+about_chd_new_names <- c(
+  "code",
+  "title_text",
+  "desc_text",
+  "desc_text_2"
+)
+setnames(about_chd_en, about_chd_new_names)
 
 saveRDS(outcome_descriptions_en, file = "language/outcome_descriptions_chd_en.rds")
 saveRDS(var_desc_chd_en, file = "language/variable_descriptions_chd_en.rds")
-
-
-
-
-
-
-
+saveRDS(about_chd_en, file = "language/ui_about_text_chd_en.rds")
 
 # GEO DATA ------------------------------------------------------------------
 l2 <- readRDS("data/DNK_adm2.rds")
@@ -600,3 +620,4 @@ dk_sp_data <- list(l1 = l1_tmp,
 
 saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
 
+O

@@ -4,7 +4,7 @@ output$about_title <- renderText("Title")
 
 aboutFAQDT <- reactive({
   colnames(about_dat_faq) <- col_names_faq
-  
+  n_col <- NCOL(about_dat_faq)
   DT::datatable(
     data = about_dat_faq,
     
@@ -15,15 +15,11 @@ aboutFAQDT <- reactive({
       lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
       pageLength = 15,
       dom = "f",
-      
-      initComplete = JS(
-        # Table hearder background color
-        "function(settings, json) {",
-        "$(this.api().table().header()).css({'background-color': '#e7e7e7'});",
-        "}"
-      )
+      initComplete = header_JS
     )
-  )
+  ) %>%  
+    formatStyle(1:n_col, borderColor = "white") %>% 
+    formatStyle(columns = c(1), width='30%')
   
   
 })

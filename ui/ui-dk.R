@@ -196,12 +196,13 @@ ui_warning_invalid_selection <-
 ui_about_title_chd <- "Vejledning: medfødt hjertefejl"
 about_selection_chd <- "Vælg definition"
 ui_about_text_chd <-
-  fread(file = "data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
+  readRDS(file = "language/ui_about_text_chd_dk.rds")
 
 
 about_choices_chd <- list(
   "Generelt/FAQ" = "general",
-  "Sygdomme" = "def_diag"
+  "Sygdomme" = "def_diag",
+  "Operationer" = "def_opr"
   )
 
 col_names_diag_about_chd <-
@@ -209,8 +210,8 @@ col_names_diag_about_chd <-
     "Beskrivelse",
     "ICD-8 kode",
     "ICD-10 kode",
-    "Diagnosetype",
-    "Patienttype")
+    "Diagnose-type",
+    "Patient-type")
 
 # UI general tabs - intro to HjerteTal
 ui_gen_1_chd <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")

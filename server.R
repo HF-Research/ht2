@@ -115,7 +115,26 @@ setBookmarkExclude(
       "table_diag_chd_rows_all",
       "table_faq_chd_rows_selected",
       "table_faq_chd_rows_all",
-      "table_faq_chd_search")
+      "table_faq_chd_search",
+      "table_diag_row_last_clicked",
+      "table_counts_chd_row_last_clicked",
+      "table_faq_chd_row_last_clicked",
+      "table_faq_chd_row_last_clicked",
+      "table_rates_row_last_clicked",
+      "table_counts_row_last_clicked",
+      "table_diag_chd_row_last_clicked",
+      'table_faq_row_last_clicked',
+      "table_med_row_last_clicked",
+      "table_edu_row_last_clicked",
+      "table_ethnicity_row_last_clicked",
+      "table_pop_row_last_clicked",
+      'map_male_shape_mouseover',
+      "map_male_shape_mouseout",
+      "map_female_shape_mouseout",
+      "map_female_shape_mouseover",
+      "table_opr_row_last_clicked",
+      
+      "plotly_relayout-A")
   )
   
   

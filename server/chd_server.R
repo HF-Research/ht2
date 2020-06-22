@@ -1,4 +1,3 @@
-
 # TEXT --------------------------------------------------------------------
 
 output$outcome_description_chd <- renderUI({
@@ -87,7 +86,10 @@ output$variable_desc_chd <- renderUI({
   })
 })
 
-
+dataTitle <-
+  reactive({
+    paste0(input$outcome_chd, ": ", tolower(prettyVarChd()[1]))
+  })
 
 # DATA MUNGING --------------------------------------------------------------
 subsetOutcomeChd <- reactive({
@@ -171,7 +173,7 @@ plotVarId <- reactive({
 plotlyObj <- reactive({
   
   x <- toFactor()
-  plot_title <- paste0(input$outcome_chd, " ", prettyVarChd()[1])
+  plot_title <- dataTitle() 
   
   axis_font_size <- 20
   legend_font_size <- 17
@@ -179,14 +181,12 @@ plotlyObj <- reactive({
   linesize = 3
   pointsize = 8
   tooltip <-
-    paste0(prettyVarChdUnits(), ": <br> <b> %{y:.1f} </b>")
+    paste0("<b>%{y:,.", numDigits(), "f}")
   
   if (isTotals()) {
-    
     tooltip <-
-      paste0(prettyVarChdUnits(), ": <br> <b> %{y:.1f} </b><extra></extra>")
-    
-   out <-  plot_ly(data = x, x = ~ year) %>%
+      paste0(prettyVarChdUnits(), ": <br><b>%{y:,.", numDigits(), "f}</b><extra></extra>")
+    out <-  plot_ly(data = x, x = ~ year) %>%
       add_trace(
         y = ~ get(prettyVarChdUnits()),
         type = 'scatter',
@@ -197,27 +197,25 @@ plotlyObj <- reactive({
         hovertemplate = tooltip
       )
     
-    
-    
-  } else if (isSex()) {
+    } else if (isSex()) {
     out <- plot_ly(data = x, x = ~ year) %>%
       add_trace(
         y = ~ get(prettyVarChdUnits()),
         color = ~ id_var,
         colors = rev(graph_colors),
+  
         type = 'scatter',
         mode = 'lines+markers',
         line = list(width = linesize),
-        marker = list(size = pointsize),
-        hovertemplate = tooltip
+        marker = list(size = pointsize)
       )
   } else if (isAge()) {
-    
     out <- plot_ly(data = x, x = ~ year) %>%
       add_trace(
         y = ~ get(prettyVarChdUnits()),
         linetype = ~ age_adult,
         color = I(single_val_col),
+        
         type = 'scatter',
         mode = 'lines+markers',
         line = list(width = linesize),
@@ -269,7 +267,10 @@ plotlyObj <- reactive({
       tickfont = list(size = tick_font_size),
       rangemode = "tozero"),
     hoverlabel = list(font = list(size = 18)),
-    hovermode = "x"
+    hovermode = "x unified",
+    separators = paste0(dec_mark, thousands_sep),
+    legend = list(
+      font = list(size = legend_font_size))
     
   ) %>%
     config(
@@ -284,11 +285,10 @@ plotlyObj <- reactive({
         "autoScale2d",
         "resetScale2d"
       )
-    ) %>% 
-    layout(separators = paste0(dec_mark, thousands_sep),
-           legend = list(
-             font = list(size = legend_font_size)))
+    )
 })
+
+
 
 # DATATABLES --------------------------------------------------------------
 
@@ -331,14 +331,15 @@ dtCastChd <- reactive({
   
 })
 
-
-outputDT_chd <- reactive({
+numDigits <- reactive({
   digits = 1
-  
   if(input$rate_count_chd == 1){
-    
     digits = 0
   }
+  digits
+})
+
+outputDT_chd <- reactive({
   
   x <- copy(dtCastChd())
   n_col <- NCOL(x)
@@ -348,7 +349,7 @@ outputDT_chd <- reactive({
     dt_title = "H",
     messageBottom = "B",
     n_col = n_col,
-    digits = digits
+    digits = numDigits()
   )
   
 })
@@ -386,7 +387,6 @@ isValidSelection <- reactive({
 
 output$d3_chd <- renderPlotly({
   req(input$var_chd, isValidSelection())
-  
   plotlyObj()
 })
 
