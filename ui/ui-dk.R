@@ -225,12 +225,10 @@ ui_bullets_chd <- lapply(bullets, enc2utf8)
 ui_gen_2_chd <-
   enc2utf8(
     "Databasen er udviklet ved Hjerteforeningen og opdateres én gang årligt.
-    Opgørelserne findes som tabeller, søjlediagrammer eller som Danmarkskort,
-    hvor du let kan få et overblik over kommunale og regionale forskelle.
-
-    HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
-    læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
-    medier. Den fungerer på computeren, iPad, iPhone, og Android
+    Opgørelserne findes som tabeller eller graf. HjerteTal er frit tilgængelig
+    og kan bruges af alle interesserede, fx læger, forskere, politiske
+    beslutningstagere, sundhedsadministratorer og medier. Den fungerer på
+    computeren, iPad, iPhone, og Android.
     
     </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
     </br> <b>Maja Bülow Lykke</b>, Forskningskonsulent, Hjerteforeningen

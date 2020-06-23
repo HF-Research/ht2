@@ -34,7 +34,7 @@ enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
 
 print(Sys.getlocale())
-lang = "en"
+lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
@@ -103,13 +103,26 @@ formatNumbers <- function(dat, lang) {
 
 # From:
 # https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
+# These JS functions do not work when using formatCurrency, as formatCurrency
+# overrules this
 formatSuppressedValues <- JS(
   "
   function(data, type) {
-
+debugger;
     if (type !== 'display') return data;
     if (data !== '0') return data;
     return '<4';
+  }
+"
+)
+
+formatSuppressedValuesCHD <- JS(
+  "
+  function(data, type) {
+debugger;
+    if (type !== 'display') return data;
+    if (data !== '0') return data;
+    return '<10';
   }
 "
 )
@@ -410,7 +423,7 @@ makeRateDT_chd <-
         language = list(url = "Danish.json"),
         ordering = FALSE,
         dom = "tB",
-        columnDefs = list(list(render = formatNAValues, targets = "_all")),
+        columnDefs = list(list(render = formatSuppressedValuesCHD, targets = "_all")),
         buttons = list(
           list(extend = "pdf",
                messageTop = dt_title,

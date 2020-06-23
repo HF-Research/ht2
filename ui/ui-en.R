@@ -211,20 +211,22 @@ col_names_diag_about_chd <-
 
 ui_gen_1_chd <- enc2utf8("In HjerteTal, it's possible to find information on:<br><br>")
 
-bullets <- list("The incidence and prevalence of congenital heart defects (CHD) in the Danish population ",
-                "The distribution of congenital heart disease across age, sex, and both age and sex together",
-                "The trends in congenital heart disease over time since 2004"
-                
-)
+bullets <-
+  list(
+    "The incidence and prevalence of congenital heart defects (CHD) in the Danish population ",
+    "The distribution of congenital heart disease across age, sex, and both age and sex together",
+    "The trends in congenital heart disease over time since 2004"
+  )
+
 ui_bullets_chd <- lapply(bullets, enc2utf8)
 
 ui_gen_2_chd <-
   enc2utf8(
-    "The database is developed by The Danish Heart Foundation, and is updated once
-    yearly. The data is available as graphs, tables or interactive maps (when
-    applicable).HjerteTal if free to use for all interested, for example,
-    doctors, researchers, policy makers, health care administrators, or the media.
-    It is accesible on, iPad, iPhone, and Android, no app download is required.
+    "The database is developed by The Danish Heart Foundation, and is updated
+    once yearly. The data is available as graphs or tables. HjerteTal if free
+    to use for all interested, for example, doctors, researchers, policy
+    makers, health care administrators, or the media. It is accesible on,
+    iPad, iPhone, and Android, no app download is required.
     
     <br><br>If you have questions, recommendations, or feedback, please write to:
     </br> <b>Maja Bülow Lykke</b>, Research consultant, The Danish Heart Foundtion

@@ -284,6 +284,11 @@ plotlyObj <- reactive({
         "lasso2d",
         "autoScale2d",
         "resetScale2d"
+      ),
+      toImageButtonOptions = list(
+        filename = paste0("HjerteTal- ", replaceOutcomeStringChd()),
+        width = 1200,
+        height = 600
       )
     )
 })
