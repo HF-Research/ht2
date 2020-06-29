@@ -26,11 +26,17 @@ observeEvent(isIE(), {
 
 
 # TEXT RENDERING ----------------------------------------------------------
+
+prettyOutcome <- reactive({
+  
+  outcomes_all[hjertetal_code == input$oCVD, name]
+})
+
 output$outcome_description <- renderUI({
-  req(input$outcome)
+  req(input$oCVD)
   
   keep_vars <- c("desc", "link")
-  out_title <- tags$b(input$outcome)
+  out_title <- tags$b(prettyOutcome())
   
   out <-
     outcome_descriptions[hjertetal_code == outcomeCode(), ..keep_vars]
@@ -60,7 +66,7 @@ replaceTypeString <- reactive({
 })
 
 replaceOutcomeString <- reactive({
-  replace_outcome_string <- input$outcome
+  replace_outcome_string <- prettyOutcome()
   # Lowercase first character only (keeps abbreviations in caps)
   substr(replace_outcome_string, 1, 1) <-
     tolower(substr(replace_outcome_string, 1, 1))
@@ -77,9 +83,9 @@ replaceAggrLevelString <- reactive({
 
 
 output$variable_desc <- renderUI({
-  req(input$variable,
+  req(input$varCVD,
       input$year,
-      input$outcome,
+      input$oCVD,
       selectedDataVars())
   
   isolate({
@@ -216,7 +222,7 @@ output$count_desc <- renderUI({
 
 
 output$rate_count_desc <- renderUI({
-  req(input$rate_count, input$variable, selectedDataVars())
+  req(input$rate_count, input$varCVD, selectedDataVars())
   
   
   if (input$rate_count == 2) {
@@ -231,11 +237,11 @@ output$rate_count_desc <- renderUI({
 
 plotTitle <- reactive({
   if (isNational()) {
-    paste0(input$outcome, ": ", tolower(prettyVariable()[1]))
+    paste0(prettyOutcome(), ": ", tolower(prettyVariable()[1]))
   } else {
     if (isGeo()) {
       paste0(
-        input$outcome,
+        prettyOutcome(),
         ": ",
         tolower(prettyVariable()[1]),
         "  ",
@@ -246,7 +252,7 @@ plotTitle <- reactive({
     }
     else if (input$aggr_level == "edu") {
       paste0(
-        input$outcome,
+        prettyOutcome(),
         ": ",
         tolower(prettyVariable()[1]),
         " (",
@@ -257,7 +263,7 @@ plotTitle <- reactive({
         ui_moving_avg_desc
       )
     } else {
-      paste0(input$outcome,
+      paste0(prettyOutcome(),
              ": ",
              tolower(prettyVariable()[1]),
              "  ",
@@ -271,7 +277,7 @@ plotTitle <- reactive({
 
 # Titles
 output$outcome_title <- renderText({
-  input$outcome
+  prettyOutcome()
 })
 
 output$outcome_title_dt <- renderText({
@@ -320,8 +326,7 @@ outputOptions(output, "tabMap", suspendWhenHidden = FALSE)
 outcomeCode <- reactive({
   # Connect the input in normal language to the hjertetal_code. This is so we
   # can change the description without having to rename allll the datasets.
-  
-  outcomes_all[name == input$outcome, hjertetal_code]
+  input$oCVD
 })
 
 prettyAggr_level <- reactive({
@@ -332,7 +337,7 @@ prettyAggr_level <- reactive({
 
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
-  req(input$variable, input$aggr_level)
+  req(input$varCVD, input$aggr_level)
   
   var_lang <- paste0("var_", lang)
   data_var_name <- selectedDataVars()[1]
@@ -362,11 +367,11 @@ selectRawOrMean <- reactive({
 })
 
 selectPercentOrRate <- reactive({
-  if (input$variable %in% c(
-    "count_n_readmissions_ppl_30",
-    "count_n_dead30",
-    "count_n_dead1",
-    "count_n_dead5"
+  if (input$varCVD %in% c(
+    "v9",
+    "v13",
+    "v14",
+    "v15"
   )) {
     TRUE
   } else {
@@ -392,10 +397,18 @@ selectedRateType <- reactive({
     "standardized"
   }
 })
+
+
+varCodeCVD <- reactive({
+  input$varCVD
+  variable_ui[shiny_code == input$varCVD, code_name]
+})
+
 selectedDataVars <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
-  var_stripped <- gsub("count_|rate_", "", input$variable)
+  
+  var_stripped <- gsub("count_|rate_", "", varCodeCVD())
   grep_str <- paste0(var_stripped, "$")
   grep(grep_str, colnames(subsetOutcome()), value = TRUE)
 })
@@ -869,9 +882,9 @@ validate <- reactive({
   # stop the plots and tables trying to render when they have inproper input.
   # I.e. when switching between outcomes, the variable inupt is -
   #
-  nonZero_variable <- !is.null(input$variable)
+  nonZero_variable <- !is.null(input$varCVD)
   if (nonZero_variable) {
-    length(selectedDataVars()) > 0 && input$outcome != "" &&
+    length(selectedDataVars()) > 0 && input$oCVD != "" &&
       input$year > 0 && input$year != "" && validateKom()
   } else {
     FALSE
@@ -913,23 +926,24 @@ isNational <- reactive({
 })
 
 is5YearMortality <- reactive({
-  input$variable == "count_n_dead5"
+  
+  input$varCVD == "v15"
 })
 
 isIE <- reactive({
-  req(input$variable,
+  req(input$varCVD,
       input$year,
-      input$outcome)  
+      input$oCVD)  
   
   input$check == "TRUE"
 })
 
 isPercentage <- reactive({
   any(
-    input$variable == "count_n_dead30",
-    input$variable == "count_n_dead1",
-    input$variable == "count_n_dead5",
-    input$variable == "count_n_readmissions_ppl_30"
+    input$varCVD == "v13",
+    input$varCVD == "v14",
+    input$varCVD == "v15",
+    input$varCVD == "v9"
   )
   
 })
@@ -950,13 +964,13 @@ validateSelectedVars <- reactive({
   
   # This is just to make sure the reactive fires when the variable is changed by
   # Shiny when switched between diag/med/opr sections:
-  input$variable 
+  input$varCVD 
   
   outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
   
   
   var_names <- valid_output_combos[outcome == outcomeCode() &
-                                     aggr_level == aggr_selected, unique(var)]
+                                     aggr_level == aggr_selected, unique(shiny_code)]
   
   
   # Remove columns with data that should not be shown to user
@@ -964,14 +978,14 @@ validateSelectedVars <- reactive({
   
   # Select the plain language terms matching the variables in data
   var_lang <- paste0("var_", lang)
-  keep_vars <- c("code_name", var_lang)
+  keep_vars <- c("shiny_code", var_lang)
   variable_choices <-
-    variable_ui[code_name %in% var_names, ..keep_vars]
-  var_names <- variable_choices$code_name
+    variable_ui[shiny_code %in% var_names, ..keep_vars]
+  var_names <- variable_choices$shiny_code
   names(var_names) <- variable_choices[[var_lang]]
   
   
-  selected_var <- isolate(input$variable)
+  selected_var <- isolate(input$varCVD)
   
   # On start, var_selected is NULL, so set default value of validate_selection
   # to TRUE, so tables are shown
@@ -1021,7 +1035,7 @@ output$varChoices <- renderUI({
     var_names_2 <-
       valid_output_combos[outcome == outcomeCode() &
                             aggr_level == aggr_selected_next,
-                          unique(var)]
+                          unique(shiny_code)]
     if (!selected_var %in% var_names_2) {
       # ...selected var also not in set of vars attached to previously
       # selected aggr_level: Set var to incidence
@@ -1032,7 +1046,7 @@ output$varChoices <- renderUI({
   }
   
   selectInput(
-    inputId = "variable",
+    inputId = "varCVD",
     label = choose_var,
     choices = var_names,
     selectize = TRUE,
@@ -1044,18 +1058,18 @@ aggrButtonChoices <- reactive({
   # Dynamically chanages which aggre_level options are available depending on
   # which outcome and which variable is selected
   
-  var_selected <- input$variable
+  var_selected <- input$varCVD
   valid_output_combos <-
     valid_output_combos[outcome == outcomeCode()]
   
-  # When app first starts, input$variable will be null, but need to get range of
-  if (is.null(input$variable))
-    var_selected <- valid_output_combos[1, var]
+  # When app first starts, input$varCVD will be null, but need to get range of
+  if (is.null(input$varCVD))
+    var_selected <- valid_output_combos[1, shiny_code]
   
   
   aggr_level_choices <-
     valid_output_combos[outcome == outcomeCode() &
-                          var == var_selected, unique(aggr_level)]
+                          shiny_code == var_selected, unique(aggr_level)]
   
   # When switching between d, b, and m outcomes, this will return NULL at first calling
   if (length(aggr_level_choices) == 0)
@@ -1150,7 +1164,7 @@ choiceYears <- reactive({
 
 observe({
   
-  req(input$variable)
+  req(input$varCVD)
   if (req(input$aggr_level) != "national") {
     # User can only select years >=2009 when viewing regional data and <=2012 when
     # viewing 5-year mortality
@@ -1262,7 +1276,7 @@ output$downloadMapsFemale <- downloadHandler(
 # PLOT
 #
 output$d3_plot_bar <- renderSimpleD3Bar({
-  req(input$aggr_level, input$variable)
+  req(input$aggr_level, input$varCVD)
   if (validate() && !isNational() && !isKom()) {
     
     plot_d3_bar()

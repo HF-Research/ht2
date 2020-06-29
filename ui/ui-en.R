@@ -20,10 +20,20 @@ ui_the <- ""
 # Everything below here will need to be changed for the english verison
 
 # Outcome dropdown, broken up into sections
+diag_choices <- (enc2utf8(outcomes_all[type == "diag"]$hjertetal_code))
+names(diag_choices) <- (enc2utf8(outcomes_all[type == "diag"]$name))
+
+opr_choices <- enc2utf8(outcomes_all[type == "treatment"]$hjertetal_code)
+names(opr_choices) <- (enc2utf8(outcomes_all[type == "treatment"]$name))
+
+med_choices <- enc2utf8(outcomes_all[type == "med"]$hjertetal_code)
+names(med_choices) <- (enc2utf8(outcomes_all[type == "med"]$name))
+
+
 outcome_choices <- c(list(
-  "Illness" = enc2utf8(outcomes_all[type == "diag"]$name),
-  "Procedure" = enc2utf8(outcomes_all[type == "treatment"]$name),
-  "Medicine" = enc2utf8(outcomes_all[type == "med"]$name)
+  "Illness" = diag_choices,
+  "Procedure" = opr_choices,
+  "Medicine" = med_choices
 ))
 
 

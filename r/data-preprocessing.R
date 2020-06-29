@@ -9,6 +9,7 @@ library(dplyr)
 library(fst)
 library(Hmisc)
 # devtools::install_github('HF-Research/HTData', force = TRUE)
+library(HTData)
 source("r/helperFunctions.R")
 
 # DATA TO FST -------------------------------------------------------------
@@ -125,6 +126,20 @@ shiny_dat_en <- setNAtoZero(shiny_dat_en)
 edu[, edu_name_en := tolower(edu_name_en)]
 shiny_dat_en <- eduToFactorEnglish(shiny_dat_en)
 saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
+
+# Valid outcome combinations
+valid_output_combos <- fread("data/valid_output_combos.txt")
+valid_output_combos[, id := NULL]
+valid_output_combos[, var := paste0("count_", var)]
+valid_output_combos <-
+  merge(
+    valid_output_combos,
+    variable_ui[, shiny_code, code_name],
+    by.x = "var",
+    by.y = "code_name",
+    all.x = TRUE
+  )
+saveRDS(valid_output_combos, file = "data/valid_output_combos.rds")
 
 # DANISH LANGUAGE SUPPORT -------------------------------------------------
 

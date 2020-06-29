@@ -14,7 +14,7 @@ tabPanel(ui_chd_title,
                class = "well_input",
                fluidRow(
                  selectInput(
-                   inputId = "outcome_chd",
+                   inputId = "oCHD",
                    label = choose_outcome_chd,
                    choices = outcome_choices_chd,
                    selectize = TRUE,

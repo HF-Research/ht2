@@ -142,9 +142,10 @@ setBookmarkExclude(
   toListen <- reactive({
     # Put any events that are to be bookmarked in here. These events should NOT
     # ben in the setBookmarkExclude() list
-    list(input$navbar,
-    input$outcome,
-    input$outcome_chd)
+    list(input$bar,
+    input$oCVD,
+    input$oCHD,
+    input$varCVD)
   })
   observeEvent(toListen(), {
     

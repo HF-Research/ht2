@@ -1,5 +1,5 @@
 tabPanel(ui_main_title,
-         value = "cvd_adult",
+         value = "cvd",
          useShinyjs(),
          
          
@@ -15,7 +15,7 @@ tabPanel(ui_main_title,
              wellPanel(class = "well_input",
                        fluidRow(
                          selectInput(
-                           inputId = "outcome",
+                           inputId = "oCVD",
                            label = choose_outcome,
                            choices = outcome_choices,
                            selectize = TRUE

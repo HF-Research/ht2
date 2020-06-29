@@ -33,9 +33,9 @@ ui <- function(request) {
   
    navbarPage(
     title = "HjerteTal",
-    id = "navbar",
+    id = "bar",
     theme = "css-ht2.css",
-    selected = "cvd_adult",
+    selected = "cvd",
     collapsible = TRUE,
     source(file.path("ui", "main_ui.R"), local = TRUE)$value,
     source(file.path("ui", "chd_ui.R"), local = TRUE)$value,

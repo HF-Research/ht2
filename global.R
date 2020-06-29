@@ -17,7 +17,7 @@ library(manipulateWidget)
 library(simpled3)
 library(mapview) # For map downloads
 
-# remotes::install_github("ropensci/plotly")
+# devtools::install_github("ropensci/plotly")
 library(plotly)
 library(fst)
 library(magrittr)
@@ -55,9 +55,8 @@ source("ui/ui-common.R")
 ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
 source(ui_file_path, encoding = "UTF-8")
 
-valid_output_combos <- fread("data/valid_output_combos.txt")
-valid_output_combos[, var := paste0("count_", var)]
-variables_not_used <- c("count_n_bed_days", "count_n_ambulatory")
+valid_output_combos <- readRDS(file = "data/valid_output_combos.rds")
+variables_not_used <- variable_ui[grepl("count_n_ambulatory|count_n_bed", code_name), shiny_code]
 
 male_color <- "#10c8a6"
 female_color <- "#166abd"
@@ -103,26 +102,13 @@ formatNumbers <- function(dat, lang) {
 
 # From:
 # https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
-# These JS functions do not work when using formatCurrency, as formatCurrency
-# overrules this
 formatSuppressedValues <- JS(
   "
   function(data, type) {
-debugger;
+
     if (type !== 'display') return data;
     if (data !== '0') return data;
     return '<4';
-  }
-"
-)
-
-formatSuppressedValuesCHD <- JS(
-  "
-  function(data, type) {
-debugger;
-    if (type !== 'display') return data;
-    if (data !== '0') return data;
-    return '<10';
   }
 "
 )
@@ -423,7 +409,7 @@ makeRateDT_chd <-
         language = list(url = "Danish.json"),
         ordering = FALSE,
         dom = "tB",
-        columnDefs = list(list(render = formatSuppressedValuesCHD, targets = "_all")),
+        columnDefs = list(list(render = formatNAValues, targets = "_all")),
         buttons = list(
           list(extend = "pdf",
                messageTop = dt_title,

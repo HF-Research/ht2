@@ -1,12 +1,14 @@
 # TEXT --------------------------------------------------------------------
-
+prettyOutcomeChd <- reactive({
+  outcome_descriptions_chd[ht.code == input$oCHD, name]
+})
 output$outcome_description_chd <- renderUI({
-  req(input$outcome_chd)
+  req(input$oCHD)
   
-  out_title <- tags$b(input$outcome_chd)
+  out_title <- tags$b(prettyOutcomeChd())
   keep_vars <- c("desc", "link")
   out <-
-    outcome_descriptions_chd[ht.code == outcomeCodeChd(), ..keep_vars]
+    outcome_descriptions_chd[ht.code == input$oCHD, ..keep_vars]
   # Add link for further reading - if link exists, otherwise just desc
   url <- a(ui_read_more,
            href = (out$link),
@@ -35,12 +37,12 @@ outcomeCodeChd <- reactive({
   # Connect the input in normal language to the hjertetal_code. This is so we
   # can change the description without having to rename allll the datasets.
   
-  outcome_descriptions_chd[name == input$outcome_chd, ht.code]
+  outcome_descriptions_chd[name == input$oCHD, ht.code]
 })
 
 
 replaceOutcomeStringChd <- reactive({
-  replace_outcome_string <- input$outcome_chd
+  replace_outcome_string <- prettyOutcomeChd()
   # Lowercase first character only (keeps abbreviations in caps)
   substr(replace_outcome_string, 1, 1) <-
     tolower(substr(replace_outcome_string, 1, 1))
@@ -50,7 +52,7 @@ replaceOutcomeStringChd <- reactive({
 
 output$variable_desc_chd <- renderUI({
   
-  req(input$var_chd, input$outcome_chd,
+  req(input$var_chd, input$oCHD,
       selectedDataVarsChd())
   
   isolate({
@@ -88,13 +90,13 @@ output$variable_desc_chd <- renderUI({
 
 dataTitle <-
   reactive({
-    paste0(input$outcome_chd, ": ", tolower(prettyVarChd()[1]))
+    paste0(prettyOutcomeChd(), ": ", tolower(prettyVarChd()[1]))
   })
 
 # DATA MUNGING --------------------------------------------------------------
 subsetOutcomeChd <- reactive({
   # Cache subset based on outcome
-  subsetAggr()[[outcomeCodeChd()]]
+  subsetAggr()[[input$oCHD]]
 })
 
 subsetAggr <- reactive({
@@ -379,11 +381,11 @@ isAgeSex <- reactive({
 })
 
 isChd <- reactive({
-  input$navbar == "chd"
+  input$bar == "chd"
 })
 
 isValidSelection <- reactive({
-  !all( (isAge()|isAgeSex()), input$var_chd == "count_n_incidence", outcomeCodeChd() == 3)
+  !all( (isAge()|isAgeSex()), input$var_chd == "count_n_incidence", input$oCHD == 3)
 })
 
 

@@ -60,7 +60,11 @@ about_dat_med <-
 file.path <- paste0("language/outcome_descriptions_chd_", lang, ".rds")
 outcome_descriptions_chd <-
   readRDS(file =  file.path)
-outcome_choices_chd <- c(enc2utf8(outcome_descriptions_chd$name))
+
+outcome_choices_chd <- c((outcome_descriptions_chd$ht.code))
+names(outcome_choices_chd) <- enc2utf8(outcome_descriptions_chd$name)
+
+
 
 file.path <- paste0("language/variable_descriptions_chd_", lang, ".rds")
 var_descriptions_chd <-
