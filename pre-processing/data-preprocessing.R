@@ -63,7 +63,7 @@ preProccess <- function(export_dat) {
     # Make sure regions start with capital letter
     out$region[, grouping := capitalize(grouping)]
     out$region[grouping == "Midtjydlland", grouping := "Midtjylland"]
-    
+
     out$ethnicity[, grouping := capWord(grouping)]
 
     # Change edu to factor to ensure correct ordering
@@ -179,7 +179,7 @@ makeDanish <- function(dat) {
     outcome$ethnicity[, `:=`(grouping = group_dk)]
     setkey(outcome$ethnicity, sex, grouping, year)
     outcome$ethnicity[, grouping := capWord(grouping)]
-    
+
     outcome
   })
 }
@@ -410,17 +410,17 @@ chd$age <- dcast(
   chd$age,
   formula = age_adult + ht.code + n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
-) %>% 
+) %>%
   setorder(ht.code, age_adult, year)
-  
+
 
 chd$sex <- dcast(
   chd$sex,
   formula = sex  + ht.code + n_denom + year ~ variable,
   value.var = c("count_n_", "rate_strat")
-) %>% 
-setorder(ht.code, sex, year) 
-  
+) %>%
+setorder(ht.code, sex, year)
+
 
 chd$totals <- dcast(
   chd$totals,
@@ -634,5 +634,3 @@ dk_sp_data <- list(l1 = l1_tmp,
 
 
 saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
-
-O

@@ -1285,7 +1285,6 @@ output$d3_plot_bar <- renderSimpleD3Bar({
 
 output$d3_plot_line_html <- renderSimpleD3Line({
   if (validate() && isNational()) {
-    
     plot_d3_line()
   }
   

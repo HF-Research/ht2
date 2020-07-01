@@ -3,7 +3,8 @@
 # library(profvis)
 # library(reactlog)
 # options(shiny.reactlog = TRUE)
-# devtools::install_version("shiny", version = "1.2.0")
+# devtools::install_version("shiny", version = "1.5.0")
+suppressPackageStartupMessages({
 library(shiny)
 library(DT)
 library(shinyWidgets)
@@ -16,11 +17,11 @@ library(manipulateWidget)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
 library(mapview) # For map downloads
-
 # devtools::install_github("ropensci/plotly")
 library(plotly)
 library(fst)
 library(magrittr)
+})
 print(suppressMessages(webshot:::find_phantom()))
 if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
