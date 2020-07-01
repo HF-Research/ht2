@@ -1,0 +1,10 @@
+{
+  "output": {
+    "variable_desc": {
+      "html": "<b>30-day all-cause mortality<\/b>\nshows those who died, for any reason, within 30 days of being diagnosed with any cardiovscular diseases in a given year",
+      "deps": [
+
+      ]
+    }
+  }
+}

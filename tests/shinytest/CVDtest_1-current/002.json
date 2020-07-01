@@ -1,0 +1,10 @@
+{
+  "output": {
+    "variable_desc": {
+      "html": "<b>Incidence<\/b>\nshows people who were newly diagnosed with any cardiovscular diseases in a given year. In HjerteTal, an incidence case (i.e. a new case) means they have not been diagnosed with the illness within the past 10 years.",
+      "deps": [
+
+      ]
+    }
+  }
+}

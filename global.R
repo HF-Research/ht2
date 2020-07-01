@@ -29,12 +29,22 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
 
 # install.packages(c("V8","jqr","protolite","crul","jsonvalidate","httpcode","urltools","maptools"))
 # install.packages(c("geojson","geo2jsonino","geojsonlint","rgeos","rmapshaper"))
-
 print(suppressMessages(webshot:::find_phantom()))
+
+
+
+# LOAD R CODE -------------------------------------------------------------
+
+# This should be done automatically in shiny versions >= 1.5
+# However, on deployment to shinyapps, it seems these codes are note loaded
+files <- list.files(path = "r/", full.names = TRUE)
+sapply(files, source)
+
 enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
 
-print(Sys.getlocale())
+
+
 lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."

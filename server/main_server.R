@@ -74,13 +74,9 @@ replaceOutcomeString <- reactive({
   
 })
 
-
-
 replaceAggrLevelString <- reactive({
   aggr_choices[name_ht == input$aggr_level, tolower(label_long)]
 })
-
-
 
 output$variable_desc <- renderUI({
   req(input$varCVD,
@@ -91,144 +87,64 @@ output$variable_desc <- renderUI({
   isolate({
     # Append title to front of variable descr text
     
-    title_text <- prettyVariable()[1]
-    
-    title_text <- tags$b(title_text)
-    
-    col_selection <- paste0("desc_general_", lang)
-    desc_text <-
-      variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-    
-    # Replace sections of variable desc that are specific for
-    # outcome/year/outcome-type
-    
-    desc_text[1] <-
-      gsub(
-        "REPLACE_OUTCOME",
-        replaceOutcomeString(),
-        (desc_text[1]),
-        fixed = TRUE
-      )
-    # For some reason, some danish characters encoding is messed up after the
-    # gsub fn(). This fixes that
-    
-    desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
-    desc_text <- gsub("alle hjerte-kar-sygdomme", replace_allCVD_string, desc_text)
-    
-    
-    
-    desc_text <-
-      gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
-    
-    desc_text <-
-      gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
-    
-    tagList(title_text, (desc_text))
-    
-  })
+    text_var_desc(title_text = prettyVariable()[1],
+                  lang = lang,
+                  variable_ui = variable_ui,
+                  selected_data_vars = selectedDataVars()[1],
+                  replace_outcome_string = replaceOutcomeString(),
+                  replace_type_string = replaceTypeString(),
+                  replace_allCVD_string = replace_allCVD_string,
+                  input_year = input$year)
+    })
 })
 
+textCountDesc <- reactive({
+  text_count_desc(
+    pretty_var = prettyVariable(),
+    ui_count_rate = ui_count_rate,
+    lang = lang,
+    selected_data_vars = selectedDataVars(),
+    replace_outcome_string = replaceOutcomeString(),
+    replace_agg_level_string = replaceAggrLevelString(),
+    replace_type_string = replaceTypeString(),
+    input_year = input$year
+   )
+})
 
-rate_desc <- function() {
-  # For rates
-  title_text <- prettyVariable()[2]
-  if(lang == "dk") {
-    # title_text <- paste0("Den ", tolower(title_text))
-  } else {
-    
-  }
-  title_text <- tags$b(title_text)
-  col_selection <-
-    paste0("desc_", selectedRateType(), "_", lang)
-  desc_text <-
-    variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-  
-  desc_text <-
-    gsub("REPLACE_OUTCOME",
-         replaceOutcomeString(),
-         desc_text,
-         fixed = TRUE)
-  
-  desc_text <-
-    gsub("REPLACE_AGGR",
-         replaceAggrLevelString(),
-         desc_text,
-         fixed = TRUE)
-
-  
-  # Fix Danish letters
-  desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
-  
-  desc_text <-
-    gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
-  desc_text <-
-    gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
- 
-  # Fix danish only issues 
-  if(isNational() && lang == "dk"){
-    desc_text <- gsub("for hver", "for hvert", desc_text, fixed = TRUE)
-    desc_text <- gsub("i en given", "i et givet", desc_text, fixed = TRUE)
-    desc_text <- gsub("rr", "r", desc_text, fixed = TRUE)
-  }
-  
-  tagList(title_text, desc_text)
-}
-
-
-count_desc <- function() {
-  # For counts
-  title_text <-
-    tags$b(paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])))
-  
-  col_selection <- paste0("desc_", "count", "_", lang)
-  desc_text <-
-    variable_ui[code_name == selectedDataVars()[1], ..col_selection]
-  desc_text <-
-    gsub("REPLACE_OUTCOME",
-         replaceOutcomeString(),
-         desc_text,
-         fixed = TRUE)
-  
-  desc_text <-
-    gsub("REPLACE_AGGR",
-         replaceAggrLevelString(),
-         desc_text,
-         fixed = TRUE)
-  desc_text <- gsub("Ã¥", "å", desc_text, fixed = TRUE)
-  
-  desc_text <-
-    gsub("REPLACE_TYPE", replaceTypeString(), desc_text, useBytes = TRUE)
-  desc_text <-
-    gsub("REPLACE_YEAR", tolower(input$year), desc_text, useBytes = TRUE)
-
- 
-    
-  tagList(title_text, desc_text)
-}
-
+texRateDesc <- reactive({
+  text_rate_desc(
+    title_text = prettyVariable()[2],
+    lang = lang,
+    selected_rate_type = selectedRateType(),
+    selected_data_vars = selectedDataVars(),
+    replace_outcome_string = replaceOutcomeString(),
+    replace_agg_level_string = replaceAggrLevelString(),
+    replace_type_string = replaceTypeString(),
+    input_year = input$year,
+    is_national = isNational()
+  )
+})
 
 output$rate_desc <- renderUI({
-  rate_desc()
+  texRateDesc()
 })
 
 output$rate_desc_map <- renderUI({
-  rate_desc()
+  texRateDesc()
 })
 
 
 output$count_desc <- renderUI({
-  count_desc()
+  textCountDesc()
 })
 
 
 output$rate_count_desc <- renderUI({
   req(input$rate_count, input$varCVD, selectedDataVars())
-  
-  
   if (input$rate_count == 2) {
-    rate_desc()
+    texRateDesc()
   } else {
-    count_desc()
+    textCountDesc()
   }
   
 })
@@ -338,15 +254,12 @@ prettyAggr_level <- reactive({
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
   req(input$varCVD, input$aggr_level)
-  
-  var_lang <- paste0("var_", lang)
-  data_var_name <- selectedDataVars()[1]
-  grep_selection <-
-    paste0("var_rate_", selectedRateType(), "_", lang)
-  col_names <- colnames(variable_ui)
-  col_selection <- grep(grep_selection, col_names, value = TRUE)
-  c(variable_ui[code_name == data_var_name, get(var_lang)],
-    paste0(variable_ui[code_name == data_var_name, ..col_selection]))
+  pretty_variable(
+    lang = lang,
+    data_var_name = selectedDataVars()[1],
+    selected_rate_type = selectedRateType(),
+    var_ui = variable_ui
+  )
   
 })
 
@@ -384,10 +297,7 @@ selectPercentOrRate <- reactive({
 # SUBSETTING ------------------------------------------------------
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
-  
   shiny_dat[[outcomeCode()]][[input$aggr_level]]
-  
-  
 })
 
 selectedRateType <- reactive({
@@ -414,37 +324,17 @@ selectedDataVars <- reactive({
 })
 
 subsetVars <- reactive({
-  dat <- subsetOutcome()
-  
-  # Switch between RAW and MOVNIG AVG data
-  data_vars <- selectedDataVars()
-  
-  if (selectRawOrMean()) {
-    data_vars <- data_vars[!grepl("mean", data_vars)]
-  } else {
-    data_vars <- data_vars[grepl("mean", data_vars)]
-  }
-  
-  col_vars <- c("year", "sex", "grouping", data_vars)
-  dat <- dat[, ..col_vars]
-  
-  # Select based on aggre_level
-  if (input$aggr_level != "national") {
-    setnames(dat,
-             c(ui_year, ui_sex, prettyAggr_level(), prettyVariable()))
-  } else {
-    setnames(dat, c(ui_year, ui_sex, "age", prettyVariable()))
-  }
-  
-  if (selectPercentOrRate()) {
-    
-    var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
-    dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
-  }
-  
-  
-  dat[]
+  subset_vars(
+    dat = subsetOutcome(),
+    data_vars = selectedDataVars(),
+    ag_lv = input$aggr_level,
+    select_raw_mean = selectRawOrMean(),
+    pretty_variable = prettyVariable(),
+    select_percent_rate = selectPercentOrRate(),
+    pretty_ag_lv = prettyAggr_level()
+  )
 })
+
 subsetYear <- reactive({
   # Subset the already partially subset data based on years
   subsetVars()[get(ui_year) == input$year,][, (ui_year) := NULL]
@@ -462,57 +352,35 @@ outputCasesData <- function() {
   }
 }
 
-outputCasesD3Line <- reactive({
+dataD3Line <- reactive({
   # Replace value.var with reactive that corresponds to the variable the user selected
-  dat <- dtCast()
-  vars <-
-    c("group_var",
-      grep(
-        prettyVariableSingular(),
-        colnames(dat),
-        fixed = TRUE,
-        # because special characters exits
-        value = TRUE
-      ))
-  dat <- dat[, ..vars]
-  setnames(dat, c(ui_year, "male", "female")) # TODO: needs to be language agnostic
-  
-  # Column containing variable name to send to D3. TODO: send this data as
-  # single data point - so change d3 widget
-  dat[, variable := prettyVariableSingular()]
-  
+  data_d3_line(dat = dtCast(),
+               pretty_var_singular = prettyVariableSingular(),
+               ui_year = ui_year)
 })
 
-outputCasesD3Bar <- reactive({
-  
+dataD3Bar <- reactive({
   # Restrict data to the user selected vairable, and give pretty column names
-  count_rate <- prettyVariableSingular()
-  keep_cols <- c(ui_sex, prettyAggr_level(), count_rate)
-  dat <- subsetYear()[, ..keep_cols]
-  dat <- dat[, (count_rate) := lapply(.SD, function(i) {
-    # Any NA values need to be converted to 0s to be sent to d3
-    i[is.na(i)] <- 0
-    i
-  }),
-  .SDcols = count_rate]
-  
-  # For variables that present PERCENTAGE results - divide by 1000
-  
-  # Order so that males come first - makes sure the coloring matches
-  setorderv(dat, ui_sex, order = -1L)
-  dat[]
+  data_d3_bar(
+    pretty_var_singular = prettyVariableSingular(),
+    ui_sex = ui_sex,
+    pretty_aggr_level = prettyAggr_level(),
+    count_rate = count_rate,
+    subset_year = subsetYear()
+  )
+ 
 })
 
 
 plot_d3_bar <- reactive({
-  if (nrow(outputCasesD3Bar()) > 0  &&
+  if (nrow(dataD3Bar()) > 0  &&
       !isNational()) {
     sex_vars <- ui_sex_levels
     color = c(graph_colors[1], graph_colors[2])
     plot_title = plotTitle()
     
     # For kommune data re-order based on rate or count
-    dat <- copy(outputCasesD3Bar())
+    dat <- copy(dataD3Bar())
     if (isKom()) {
       setorderv(dat, c(ui_sex, prettyVariableSingular()), order = -1L)
     }
@@ -537,7 +405,7 @@ plot_d3_line <- reactive({
     color = c(graph_colors[1], graph_colors[2])
     plot_title = plotTitle()
     simpleD3Line(
-      data = outputCasesD3Line(),
+      data = dataD3Line(),
       colors = c(graph_colors[1], graph_colors[2]),
       plotTitle = plot_title,
       sexVars = sex_vars,
@@ -551,193 +419,50 @@ plot_d3_line <- reactive({
 
 # LEAFLET MAPS ------------------------------------------------------
 
-mapObj <- function() {
-  if (isKom()) {
-    dk_sp$l2
-  } else if (isRegion()) {
-    dk_sp$l1
-  }
-}
+mapObj <- reactive({
+  map_obj(is_kom = isKom(),
+          is_region = isRegion(),
+          dk_sp = dk_sp)
+})
 
 mapData <- reactive({
-  data_var <- prettyVariable()[2] # Only use rate data
-  keep_vars <- c("id", prettyAggr_level(), data_var)
-  tmp <-
-    copy(outputCasesData()) # Make copy so not corrput reactive data
+  dat <-
+    copy(outputCasesData()) # Make copy so not corrupt reactive data
   
-  # Set Zero values to NA - 0s mean <4 observations, so we don't know the actual
-  # value
-  tmp[get(data_var) == 0, (data_var) := NA]
+  map_data(dat = dat,
+           data_var = prettyVariable()[2],
+           pretty_aggr_level = prettyAggr_level(),
+           map_obj = mapObj(),
+           ui_sex = ui_sex
+           )
   
-  # MALES
-  out_m <- mapObj()
-  tmp_m <-
-    tmp[get(ui_sex) == "male" &
-          get(prettyAggr_level()) != "Unknown"]
-  
-  out_m@data <-
-    merge(
-      tmp_m,
-      out_m@data,
-      by.x = prettyAggr_level(),
-      by.y = "name_kom",
-      all.y = TRUE
-    )
-  
-  # Remove unneed vars and re-order data
-  out_m@data <- out_m@data[, ..keep_vars]
-  setorder(out_m@data, id)
-  
-  # Female
-  out_f <- mapObj()
-  tmp_f <-
-    tmp[get(ui_sex) == "female" &
-          get(prettyAggr_level()) != "Unknown"]
-  
-  out_f@data <-
-    merge(
-      tmp_f,
-      out_f@data,
-      by.x = prettyAggr_level(),
-      by.y = "name_kom",
-      all.y = TRUE
-    )
-  
-  # Remove unneed vars and re-order data
-  out_f@data <- out_f@data[, ..keep_vars]
-  setorder(out_f@data, id)
-  
-  # Combine for output
-  list(male = out_m,
-       female = out_f)
   
 })
 
 combinedMaps <- reactive({
   req((isRegion() || isKom()))
-  
-  var_name <- prettyVariable()[2]
-  name_lang <- paste0("name_", lang)
-  
-  fill_data <-
-    subsetVars()[get(ui_year) >= 2009, ][[var_name]]
-  
-  fill_data[fill_data == 0] <- NA
-  # Define breaks using the "pretty" algorithm
-  map_breaks <-
-    suppressWarnings(classIntervals(fill_data, style = "pretty", n = 5))
-  pal <-
-    colorBin(
-      palette = "YlOrRd",
-      bins = length(map_breaks$brks),
-      domain = map_breaks$brks
-    )
-  
-  if (selectPercentOrRate()) {
-    # If variable is percent:
-    labFormatter <- function(type, cuts) {
-      n = length(cuts)
-      cuts <- round(cuts, digits = 1)
-      paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
-    }
-  } else {
-    # If variable is rate:
-    labFormatter <- function(type, cuts) {
-      n = length(cuts)
-      cuts_formatted <- formatC(
-        round(cuts),
-        digits = 0,
-        format = "d",
-        big.mark = thousands_sep,
-        decimal.mark = dec_mark
-      )
-      paste0(cuts_formatted[-n], " &ndash; ", cuts_formatted[-1])
-    }
-  }
-  
-  
-  legend_title <- gsub("  ", "<br>", var_name)
-  popup_var_title_1 <- gsub("  .*", "", var_name)
-  
-  
-  # Male map
-  map_data <-  mapData()$male
-  fill_colors <-
-    ~ pal(map_data@data[[var_name]])
-  
-  
-  popup <-
-    makeMapPopup(geo_name = map_data@data[[prettyAggr_level()]],
-                 var_title1 = popup_var_title_1,
-                 map_data@data[[var_name]])
-  
-  map_m <- makeLeaflet(
-    map_data = map_data,
-    fill_colors = fill_colors,
-    label_popup = popup,
-    mini_map_lines = dk_sp$mini_map_lines,
-    element_id = "map_male"
-  )
-  
-  # Female map
-  map_data <-  mapData()$female
-  
-  fill_colors <-
-    ~ pal(map_data@data[[var_name]])
-  popup <-
-    makeMapPopup(geo_name = map_data@data[[prettyAggr_level()]],
-                 var_title1 = popup_var_title_1,
-                 map_data@data[[var_name]])
-  
-  
-  map_f <- makeLeaflet(
-    map_data = map_data,
-    fill_colors = fill_colors,
-    label_popup = popup,
-    mini_map_lines = dk_sp$mini_map_lines,
-    element_id = "map_female"
-  ) %>%
-    addLegend(
-      "topright",
-      pal = pal,
-      values = fill_data,
-      # colors =cols,
-      title = legend_title,
-      labels = legend_labels,
-      layerId = "legend",
-      labFormat = function(type, cuts, p = NULL) {
-        type <- type
-        cuts <- cuts
-        
-        labFormatter(type = type,
-                     cuts = cuts)
-      }
-    )
+  maps_out <- maps_combine(var_name = prettyVariable()[2],
+                           lang = lang,
+                           subset_vars = subsetVars(),
+                           ui_year = ui_year,
+                           select_percent_rates = selectPercentOrRate(),
+                           thousands_sep = thousands_sep,
+                           dec_mark = dec_mark,
+                           map_data_main = mapData(),
+                           dk_sp = dk_sp,
+                           pretty_aggr_level = prettyAggr_level())
+    
   
   # Store maps on "map" reactiveValues object - these will be accessed by the
   # downloadHandler for downloading functionality. I do not know how to
   # download both maps together.
-  map$map_f <- map_f
-  map$map_m <- map_m
+  map$map_f <- maps_out$map_f
+  map$map_m <- maps_out$map_m
   # Need to add legend to male map in case it's downloaded without female map
-  map$map_m_legend <- map_m %>%
-    addLegend(
-      "topright",
-      pal = pal,
-      values = fill_data,
-      # colors =cols,
-      title = legend_title,
-      labels = legend_labels,
-      layerId = "legend",
-      labFormat = function(type, cuts, p = NULL) {
-        type <- type
-        cuts <- cuts
-        
-        labFormatter(type = type,
-                     cuts = cuts)
-      }
-    )
+  map$map_m_legend <- maps_out$map_m_legend
+    
   map
+  
 })
 
 
@@ -746,133 +471,46 @@ combinedMaps <- reactive({
 # DATATABLES --------------------------------------------------------------
 dtCast <- reactive({
   # One dcast for both rates and counts
-  dat <- outputCasesData()
-  group_var <- prettyAggr_level()
-  value_var <- prettyVariable()
   
-  subset_cols = c(group_var, value_var)
-  out = cbind(dat["male", ..subset_cols], dat["female", ..value_var])
-  setnames(out, c("group_var", paste0(value_var, rep(
-    c("_male", "_female"), c(2, 2)
-  ))))
-  if (isNational() && is5YearMortality()) {
-    return(out[group_var <= year_max - 4, ])
-    
-  } else {
-    return(out)
-  }
-})
+  dt_cast(dat = outputCasesData(),
+         group_var = prettyAggr_level(),
+         value_var = prettyVariable(),
+         is_national = isNational(),
+         is_5year_mortality = is5YearMortality())
+ })
 
 
 outputCountDTTable <- reactive({
   # Organizes data for DataTable outputs. Needs to be characters
   
-  dat <- dtCast()
-  # Subset to either counts or rates
-  vars <-
-    c("group_var",
-      grep(prettyVariable()[1], colnames(dat), value = TRUE))
-  
-  dat <- dat[, ..vars]
-  colnames(dat) <- c("group_var", "male", "female")
-  # Calculate margins
-  dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
-  if (input$aggr_level != "national") {
-    # Only calculate bottom margins for "age" - other aggr levels don't include
-    # full data
-    totals <-
-      dat[, colSums(dat[, .(male, female, Total)], na.rm = TRUE)]
-    
-    # Convert entire table to character to we can rbind() totals
-    dat <- dat[, lapply(.SD, as.character)]
-    # Rbind totals
-    dat <- rbindlist(list(dat, as.list(c("Total", totals))), use.names = FALSE)
-    
-    # Convert back to numeric
-    col_convert <- c("male", "female", "Total")
-    dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
-    
-  }
-  
-  setnames(
-    dat,
-    old = c("group_var", "male", "female"),
-    new = c(prettyAggr_level(), rev(ui_sex_levels))
-  )
-  
-  col_convert <- c(ui_sex_levels, "Total")
-  n_col <- NCOL(dat)
-  if (isKom()) {
-    makeCountKomDT(
-      dat,
-      group_var = prettyAggr_level(),
-      thousands_sep = thousands_sep,
-      dt_title = plotTitle(),
-      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])),
-      n_col = n_col
-    )
-  } else {
-    
-    makeCountDT(
-      dat,
-      group_var = prettyAggr_level(),
-      thousands_sep = thousands_sep,
-      dt_title = plotTitle(),
-      messageBottom = paste0(ui_count_rate[1], " ", tolower(prettyVariable()[1])),
-      n_col = n_col
-    ) %>% 
-      formatCurrency(columns = col_convert, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = 0)
-  }
+  DTtables_count(
+    dat = dtCast(),
+    ag_lv = input$aggr_level,
+    pretty_ag_lv = prettyAggr_level(),
+    pretty_vars = prettyVariable(),
+    sex_levels = ui_sex_levels,
+    ui_count_rate = ui_count_rate,
+    thousands_sep = thousands_sep,
+    dec_mark = dec_mark,
+    plot_title = plotTitle(),
+    is_kom = isKom()
+  ) 
 })
 
 outputRateDTTable <- reactive({
-  dat <- dtCast()
-  # Subset to either counts or rates
-  vars <-
-    c("group_var",
-      grep(
-        prettyVariable()[2],
-        colnames(dat),
-        fixed = TRUE,
-        value = TRUE
-      ))
-  dat <- dat[, ..vars]
-  colnames(dat) <- c("group_var", "female", "male")
   
-  # If results are percentages - round with 1 sig fig. If results are rates -> 0
-  # sig figs.
-  if (!selectPercentOrRate()) {
-    digits = 0
-  } else {
-    digits = 1
-  }
+  DTtables_rate(
+    dat = dtCast(),
+    pretty_vars = prettyVariable(),
+    percent_rate = selectPercentOrRate(),
+    pretty_ag_lv = prettyAggr_level(),
+    ui_sex_levels = ui_sex_levels,
+    plot_title = plotTitle(), pretty_var_singular = prettyVariableSingular(),
+    is_kom = isKom(),
+    thousands_sep = thousands_sep,
+    dec_mark = dec_mark
+    )
   
-  col_convert <- c(ui_sex_levels)
-  n_col <- NCOL(dat)
-  setnames(
-    dat,
-    old = c("group_var", "male", "female"),
-    new = c(prettyAggr_level(), ui_sex_levels)
-  )
-  # colnames(dat) <- c(group_var, ui_sex_levels)
-  if (isKom()) {
-    makeRateKomDT(
-      dat = dat,
-      group_var = prettyAggr_level(),
-      dt_title = plotTitle(),
-      messageBottom = prettyVariableSingular(),
-      n_col = n_col
-      )
-    
-  } else {
-    makeRateDT(dat = dat,
-               group_var = prettyAggr_level(),
-               dt_title = plotTitle(),
-               messageBottom = prettyVariableSingular(),
-               n_col = n_col
-               ) %>%
-      formatCurrency(columns = col_convert, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = digits)
-  }
   
 })
 
@@ -954,53 +592,20 @@ isPercentage <- reactive({
 # This requires an valid aggr_level input
 
 validateSelectedVars <- reactive({
-  # Evalutes current variable selection to see if it is a valid selection for
-  # the current selection of outcome and aggr_level combination. Returns
-  # binary valid T/F, as well as current selection and current valid var
-  # possibilities.
+
   req(input$aggr_level)
   
-  aggr_selected <- input$aggr_level
-  
-  # This is just to make sure the reactive fires when the variable is changed by
-  # Shiny when switched between diag/med/opr sections:
-  input$varCVD 
-  
-  outcome_subset <- shiny_dat[[outcomeCode()]][[aggr_selected]]
-  
-  
-  var_names <- valid_output_combos[outcome == outcomeCode() &
-                                     aggr_level == aggr_selected, unique(shiny_code)]
-  
-  
-  # Remove columns with data that should not be shown to user
-  var_names <- var_names[!var_names %in% variables_not_used]
-  
-  # Select the plain language terms matching the variables in data
-  var_lang <- paste0("var_", lang)
-  keep_vars <- c("shiny_code", var_lang)
-  variable_choices <-
-    variable_ui[shiny_code %in% var_names, ..keep_vars]
-  var_names <- variable_choices$shiny_code
-  names(var_names) <- variable_choices[[var_lang]]
-  
-  
   selected_var <- isolate(input$varCVD)
+ 
   
-  # On start, var_selected is NULL, so set default value of validate_selection
-  # to TRUE, so tables are shown
-  validate_selection <- TRUE
-  
-  logic <- !(selected_var %in% var_names)
-  if (length(logic) > 0 && logic == TRUE) {
-    validate_selection <- FALSE
-  }
-  
-  list(
-    selected_var = selected_var,
-    var_names = var_names,
-    valid_selection = validate_selection
+  validate_selected_vars(
+    aggr_selected = input$aggr_level,
+    outcome_code = outcomeCode(),
+    variables_not_used = variables_not_used,
+    lang = lang,
+    selected_var = selected_var 
   )
+ 
 })
 
 output$varChoices <- renderUI({
@@ -1018,91 +623,54 @@ output$varChoices <- renderUI({
   # If the previous selected var is not available, test to see if it is
   # available in the previously selected aggr_level. If not to both, set
   # selected_var to be the first variable.
-  selected_var <- validateSelectedVars()$selected_var
-  var_names <- validateSelectedVars()$var_names
-  valid_selection <- validateSelectedVars()$valid_selection
-  if (is.null(selected_var)) {
-    # If no previous selection:
-    selected_var <- var_names[1]
-  } else if (!valid_selection) {
-    # If selected var not in current selection AND...
-    aggr_selected_next <-
-      isolate(aggrButtonChoices()$selected_aggr)
-    if (is.null(aggr_selected_next)) {
-      aggr_selected_next <- "national"
-    }
-    # Variable available for aggr_selected_next and outcome
-    var_names_2 <-
-      valid_output_combos[outcome == outcomeCode() &
-                            aggr_level == aggr_selected_next,
-                          unique(shiny_code)]
-    if (!selected_var %in% var_names_2) {
-      # ...selected var also not in set of vars attached to previously
-      # selected aggr_level: Set var to incidence
-      selected_var <- var_names[1]
-    } else {
-      var_names <- var_names_2
-    }
-  }
+  aggr_selected_next <- 
+    isolate(aggrButtonChoices()$selected_aggr)
+  var_choice_out <- make_var_choices(selected_var = (validateSelectedVars()$selected_var),
+                   var_names = (validateSelectedVars()$var_names),
+                   valid_selection = (validateSelectedVars()$valid_selection),
+                   aggr_selected_next = aggr_selected_next,
+                   outcome_code = outcomeCode(),
+                   valid_output_combos = valid_output_combos
+                   )
   
-  selectInput(
+selectInput(
     inputId = "varCVD",
     label = choose_var,
-    choices = var_names,
+    choices = var_choice_out$var_names,
     selectize = TRUE,
-    selected = selected_var
+    selected = var_choice_out$selected_var
   )
 })
 
 aggrButtonChoices <- reactive({
   # Dynamically chanages which aggre_level options are available depending on
   # which outcome and which variable is selected
+  input_aggr_level <- isolate(input$aggr_level)
   
-  var_selected <- input$varCVD
-  valid_output_combos <-
-    valid_output_combos[outcome == outcomeCode()]
+  ag_choice_out <- make_agg_choices(
+    var_selected = input$varCVD,
+    outcome_code = outcomeCode(),
+    valid_output_combos = valid_output_combos,
+    aggr_choices = aggr_choices,
+    input_aggr_level = input_aggr_level
+  )
   
-  # When app first starts, input$varCVD will be null, but need to get range of
-  if (is.null(input$varCVD))
-    var_selected <- valid_output_combos[1, shiny_code]
-  
-  
-  aggr_level_choices <-
-    valid_output_combos[outcome == outcomeCode() &
-                          shiny_code == var_selected, unique(aggr_level)]
-  
-  # When switching between d, b, and m outcomes, this will return NULL at first calling
-  if (length(aggr_level_choices) == 0)
+  if (is.null(ag_choice_out))
     return(NULL)
-  
-  aggr_choices <- aggr_choices[name_ht %in% aggr_level_choices]
-  row.names(aggr_choices) <- aggr_choices$label
-  button_vals <-
-    setNames(split(aggr_choices$name_ht, seq(nrow(aggr_choices))),
-             row.names(aggr_choices))
-  
-  
-  # If the previous selected aggr_level is available in the new outcome vars, make that
-  # the default, else the first variable
-  selected_aggr <- isolate(input$aggr_level)
-  if (is.null(selected_aggr) ||
-      !selected_aggr %in% aggr_choices$name_ht) {
-    selected_aggr <- aggr_choices$name_ht[1]
-  }
   
   html_output <- radioGroupButtons(
     inputId = "aggr_level",
     label = choose_aggr_lv,
-    choices = button_vals,
+    choices = ag_choice_out$button_vals,
     justified = TRUE,
     direction = "vertical",
-    selected = selected_aggr
+    selected = ag_choice_out$selected_aggr
   )
   
   return(
     list(
-      button_vals = button_vals,
-      selected_aggr = selected_aggr,
+      button_vals = ag_choice_out$button_vals,
+      selected_aggr = ag_choice_out$selected_aggr,
       html_output = html_output
     )
   )
@@ -1115,50 +683,14 @@ output$aggrButtonChoices <- renderUI({
 
 choiceYears <- reactive({
   # The following additional if-else logic is needed to stop the year count
-  # always resetting to 2015 when changing aggr_level.
-  
+  # always resetting to year_max when changing aggr_level.
   input$aggr_level
   year_val <- isolate(input$year)
-  if (year_val != "") {
-    selected_year <- year_val
-    # Set year-range to be used by udateSelectInput()
-    if (isGeo() &&
-        !is5YearMortality()) {
-      year_range <- c(2009:year_max)
-      if (year_val < 2009)
-        selected_year <- 2009
-      
-    } else if (isGeo() &&
-               is5YearMortality()) {
-      year_range <- c(2009:(year_max - 4))
-      if (year_val < 2009) {
-        selected_year <- 2009
-      } else if (year_val > (year_max - 4)) {
-        selected_year <- year_max - 4
-      }
-      
-    } else if (!isGeo() &&
-               is5YearMortality()) {
-      year_range <- c(2006:(year_max - 4))
-      if (year_val > (year_max - 4)) {
-        selected_year <- year_max - 4
-      }
-      
-    } else {
-      year_range <- c(2006:year_max)
-      
-    }
-    return(list(selected_year = selected_year,
-                year_range = year_range))
-    
-  } else {
-    return(list(
-      selected_year = year_max,
-      year_range = 2006:year_max
-    ))
-    
-  }
-  
+  make_year_choices(
+    year_val = year_val,
+    is_geo = isGeo(),
+    is_5year_mortality = is5YearMortality()
+  )
 })
 
 

@@ -1,0 +1,12 @@
+{
+  "output": {
+    "rate_count_desc": {
+      "message": "",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    }
+  }
+}
