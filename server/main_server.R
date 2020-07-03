@@ -75,7 +75,7 @@ replaceOutcomeString <- reactive({
 })
 
 replaceAggrLevelString <- reactive({
-  aggr_choices[name_ht == input$aggr_level, tolower(label_long)]
+  aggr_choices[name_ht == input$agCVD, tolower(label_long)]
 })
 
 output$variable_desc <- renderUI({
@@ -166,7 +166,7 @@ plotTitle <- reactive({
         ui_moving_avg_desc
       )
     }
-    else if (input$aggr_level == "edu") {
+    else if (input$agCVD == "edu") {
       paste0(
         prettyOutcome(),
         ": ",
@@ -247,13 +247,13 @@ outcomeCode <- reactive({
 
 prettyAggr_level <- reactive({
   # Outputs same character string that's used in the UI input field
-  aggr_choices[name_ht == input$aggr_level, label]
+  aggr_choices[name_ht == input$agCVD, label]
   
 })
 
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
-  req(input$varCVD, input$aggr_level)
+  req(input$varCVD, input$agCVD)
   pretty_variable(
     lang = lang,
     data_var_name = selectedDataVars()[1],
@@ -272,9 +272,9 @@ prettyVariableSingular <- reactive({
 selectRawOrMean <- reactive({
   # Returns TRUE if raw count data should be used. FALSE if moving avg data
   # should be used
-  if (input$aggr_level %in% c("age", "national")) {
+  if (input$agCVD %in% c("age", "national")) {
     TRUE
-  } else if (input$aggr_level %in% c("edu", "region", "kom", "ethnicity")) {
+  } else if (input$agCVD %in% c("edu", "region", "kom", "ethnicity")) {
     FALSE
   }
 })
@@ -297,11 +297,11 @@ selectPercentOrRate <- reactive({
 # SUBSETTING ------------------------------------------------------
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
-  shiny_dat[[outcomeCode()]][[input$aggr_level]]
+  shiny_dat[[outcomeCode()]][[input$agCVD]]
 })
 
 selectedRateType <- reactive({
-  if (input$aggr_level == "age") {
+  if (input$agCVD == "age") {
     "stratified"
   } else {
     "standardized"
@@ -327,7 +327,7 @@ subsetVars <- reactive({
   subset_vars(
     dat = subsetOutcome(),
     data_vars = selectedDataVars(),
-    ag_lv = input$aggr_level,
+    ag_lv = input$agCVD,
     select_raw_mean = selectRawOrMean(),
     pretty_variable = prettyVariable(),
     select_percent_rate = selectPercentOrRate(),
@@ -485,7 +485,7 @@ outputCountDTTable <- reactive({
   
   DTtables_count(
     dat = dtCast(),
-    ag_lv = input$aggr_level,
+    ag_lv = input$agCVD,
     pretty_ag_lv = prettyAggr_level(),
     pretty_vars = prettyVariable(),
     sex_levels = ui_sex_levels,
@@ -537,7 +537,7 @@ validateKom <- reactive({
   # and thus throwing an error - during this intermediate step.
   if (isKom()) {
     input$year >= 2009
-  } else if (input$aggr_level != "kom") {
+  } else if (input$agCVD != "kom") {
     TRUE
   } else {
     FALSE
@@ -546,11 +546,11 @@ validateKom <- reactive({
 
 
 isKom <- reactive({
-  input$aggr_level == "kom"
+  input$agCVD == "kom"
 })
 
 isRegion <- reactive({
-  input$aggr_level == "region"
+  input$agCVD == "region"
 })
 
 isGeo <- reactive({
@@ -560,7 +560,7 @@ isGeo <- reactive({
 
 
 isNational <- reactive({
-  input$aggr_level == "national"
+  input$agCVD == "national"
 })
 
 is5YearMortality <- reactive({
@@ -593,13 +593,13 @@ isPercentage <- reactive({
 
 validateSelectedVars <- reactive({
 
-  req(input$aggr_level)
+  req(input$agCVD)
   
   selected_var <- isolate(input$varCVD)
  
   
   validate_selected_vars(
-    aggr_selected = input$aggr_level,
+    aggr_selected = input$agCVD,
     outcome_code = outcomeCode(),
     variables_not_used = variables_not_used,
     lang = lang,
@@ -609,7 +609,7 @@ validateSelectedVars <- reactive({
 })
 
 output$varChoices <- renderUI({
-  req(input$aggr_level)
+  req(input$agCVD)
   
   # Gives a dynamic button UI. The buttons change depending on the selected
   # outcome Keep variables that have "count" in their name.
@@ -645,7 +645,7 @@ selectInput(
 aggrButtonChoices <- reactive({
   # Dynamically chanages which aggre_level options are available depending on
   # which outcome and which variable is selected
-  input_aggr_level <- isolate(input$aggr_level)
+  input_aggr_level <- isolate(input$agCVD)
   
   ag_choice_out <- make_agg_choices(
     var_selected = input$varCVD,
@@ -659,7 +659,7 @@ aggrButtonChoices <- reactive({
     return(NULL)
   
   html_output <- radioGroupButtons(
-    inputId = "aggr_level",
+    inputId = "agCVD",
     label = choose_aggr_lv,
     choices = ag_choice_out$button_vals,
     justified = TRUE,
@@ -684,7 +684,7 @@ output$aggrButtonChoices <- renderUI({
 choiceYears <- reactive({
   # The following additional if-else logic is needed to stop the year count
   # always resetting to year_max when changing aggr_level.
-  input$aggr_level
+  input$agCVD
   year_val <- isolate(input$year)
   make_year_choices(
     year_val = year_val,
@@ -697,7 +697,7 @@ choiceYears <- reactive({
 observe({
   
   req(input$varCVD)
-  if (req(input$aggr_level) != "national") {
+  if (req(input$agCVD) != "national") {
     # User can only select years >=2009 when viewing regional data and <=2012 when
     # viewing 5-year mortality
     updateSelectInput(
@@ -712,7 +712,7 @@ observe({
 observe({
   # Disable "year" when showing longitudinal data
   shinyjs::toggleState(id = "year",
-                       condition = input$aggr_level != "national")
+                       condition = input$agCVD != "national")
   
 })
 
@@ -738,7 +738,7 @@ observe({
 observe({
   # Hides Figures tab when showing kommne level
   shinyjs::toggle(
-    condition = (input$aggr_level != "kom"),
+    condition = (input$agCVD != "kom"),
     selector = paste0("#data_vis_tabs li a[data-value=", ui_d3_figures, "]")
   )
 })
@@ -746,7 +746,7 @@ observe({
 
 
 # Switch tabs when isGeo == FALSE
-observeEvent(input$aggr_level, {
+observeEvent(input$agCVD, {
   if (input$data_vis_tabs == ui_map && !isGeo())
     updateTabsetPanel(session = session,
                       inputId = "data_vis_tabs",
@@ -755,7 +755,7 @@ observeEvent(input$aggr_level, {
 
 # Switch tabs when landing on kommune Figures tab (since this tab should not be
 # shown to users)
-observeEvent(input$aggr_level, {
+observeEvent(input$agCVD, {
   if (isKom() && input$data_vis_tabs == ui_d3_figures)
     updateTabsetPanel(session = session,
                       inputId = "data_vis_tabs",
@@ -765,7 +765,7 @@ observeEvent(input$aggr_level, {
 
 # DOWNLOAD BUTTONS --------------------------------------------------------
 output$downloadButton <- renderUI({
-  req(input$aggr_level)
+  req(input$agCVD)
   if (!isNational()) {
     actionBttn(inputId = "download_bar",
                label = ui_download_graph,
@@ -808,7 +808,7 @@ output$downloadMapsFemale <- downloadHandler(
 # PLOT
 #
 output$d3_plot_bar <- renderSimpleD3Bar({
-  req(input$aggr_level, input$varCVD)
+  req(input$agCVD, input$varCVD)
   if (validate() && !isNational() && !isKom()) {
     
     plot_d3_bar()

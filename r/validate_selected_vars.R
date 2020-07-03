@@ -8,7 +8,7 @@
 ##' @param variables_not_used
 ##' @param lang
 ##' @param selected_var
-validate_selected_vars <- function(aggr_selected = input$aggr_level,
+validate_selected_vars <- function(aggr_selected = input$agCVD,
                                    outcome_code = outcomeCode(),
                                    variables_not_used = variables_not_used,
                                    lang = lang,
@@ -16,7 +16,7 @@ validate_selected_vars <- function(aggr_selected = input$aggr_level,
   
   outcome_subset <- shiny_dat[[outcome_code]][[aggr_selected]]
   var_names <- valid_output_combos[outcome == outcome_code &
-                                     aggr_level == aggr_selected, unique(shiny_code)]
+                                     agCVD == aggr_selected, unique(shiny_code)]
   
   # Remove columns with data that should not be shown to user
   var_names <- var_names[!var_names %in% variables_not_used]

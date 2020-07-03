@@ -1,0 +1,39 @@
+##' .. content for \description{} (no empty lines) ..
+##'
+##' .. content for \details{} ..
+##'
+##' @title
+##' @param dat
+##' @param group_var
+##' @param dt_title
+##' @param messageBottom
+##' @param n_col
+makeRateKomDT <- function(dat, group_var, dt_title, messageBottom =
+                          messageBottom, n_col) {
+col_format <- c(ui_sex_levels)
+  DT::datatable(
+    data = dat,
+    extensions = 'Buttons',
+    rownames = FALSE,
+    class = 'hover row-border',
+    options = list(
+      language = list(url = "Danish.json"),
+      lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
+      pageLength = 15,
+      dom = "lftBp",
+      columnDefs = list(list(render = formatNAValues, targets = "_all")),
+      buttons = list(
+        list(extend = "pdf",
+             messageTop = dt_title,
+             messageBottom = messageBottom),
+        list(extend = "excel",
+             messageTop = dt_title,
+             messageBottom = messageBottom)
+      ),
+      initComplete = header_JS
+    )
+  ) %>%
+    formatStyle(1:n_col, borderColor = "white") %>% 
+    formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
+
+}

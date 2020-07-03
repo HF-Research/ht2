@@ -32,11 +32,11 @@ make_var_choices <- function(selected_var =
     # Variable available for aggr_selected_next and outcome
     var_names_2 <-
       valid_output_combos[outcome == outcome_code &
-                            aggr_level == aggr_selected_next,
+                            agCVD == aggr_selected_next,
                           unique(shiny_code)]
     if (!selected_var %in% var_names_2) {
       # ...selected var also not in set of vars attached to previously
-      # selected aggr_level: Set var to incidence
+      # selected agCVD: Set var to incidence
       selected_var <- var_names[1]
     } else {
       var_names <- var_names_2

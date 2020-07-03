@@ -100,7 +100,7 @@ subsetOutcomeChd <- reactive({
 })
 
 subsetAggr <- reactive({
-  shiny_dat_chd[[input$aggr_level_chd]]
+  shiny_dat_chd[[input$agCHD]]
 })
 
 selectedDataVarsChd <- reactive({
@@ -364,20 +364,20 @@ outputDT_chd <- reactive({
 # VALIDATE ----------------------------------------------------------------
 
 isTotals <- reactive({
-  input$aggr_level_chd == "totals"
+  input$agCHD == "totals"
 })
 
 isSex <- reactive({
-  input$aggr_level_chd == "sex"
+  input$agCHD == "sex"
 })
 
 isAge <- reactive({
-  input$aggr_level_chd == "age"
+  input$agCHD == "age"
 })
 
 isAgeSex <- reactive({
   
-  input$aggr_level_chd == "age_sex"
+  input$agCHD == "age_sex"
 })
 
 isChd <- reactive({

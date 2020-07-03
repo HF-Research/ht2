@@ -72,11 +72,11 @@ tabPanel(ui_main_title,
                tabPanel(
                  title = ui_d3_figures,
                  br(),
-                 conditionalPanel(condition = "input.aggr_level != 'national'",
+                 conditionalPanel(condition = "input.agCVD != 'national'",
                                   (
                                     simpleD3BarOutput("d3_plot_bar", height = "600px")
                                   )),
-                 conditionalPanel(condition = "input.aggr_level == 'national'",
+                 conditionalPanel(condition = "input.agCVD == 'national'",
                                   (
                                     simpleD3LineOutput("d3_plot_line_html", height = "600px")
                                   )),

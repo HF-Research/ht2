@@ -13,13 +13,17 @@
 ##' @param dec_mark
 ##' @param plot_title
 ##' @param is_kom
-DTtables_count <- function(dat = dtCast(), ag_lv = input$aggr_level,
-                           pretty_ag_lv = prettyAggr_level(), pretty_vars =
-                           prettyVariable(), sex_levels = ui_sex_levels,
-                           ui_count_rate = ui_count_rate, thousands_sep =
-                           thousands_sep, dec_mark = dec_mark, plot_title =
-                           plotTitle(), is_kom = isKom()) {
-
+DTtables_count <- function(dat = dtCast(),
+                           ag_lv = input$agCVD,
+                           pretty_ag_lv = prettyAggr_level(),
+                           pretty_vars = prettyVariable(),
+                           sex_levels = ui_sex_levels,
+                           ui_count_rate = ui_count_rate,
+                           thousands_sep = thousands_sep,
+                           dec_mark = dec_mark,
+                           plot_title = plotTitle(),
+                           is_kom = isKom()) {
+  
   vars <-
     c("group_var",
       grep(pretty_vars[1], colnames(dat), value = TRUE))

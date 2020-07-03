@@ -9,3 +9,11 @@ capWord <- function(y) {
   })
   
 }
+
+ht_link <- function(lang){
+  if(lang == "en"){
+    "https://hjerteforeningen.shinyapps.io/HjerteTal-en/"
+  } else{
+    "https://hjerteforeningen.shinyapps.io/HjerteTal/"
+  }
+}

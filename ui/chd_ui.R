@@ -44,7 +44,7 @@ tabPanel(ui_chd_title,
                  column(
                    6,
                    radioGroupButtons(
-                     inputId = "aggr_level_chd",
+                     inputId = "agCHD",
                      label = choose_aggr_lv_chd,
                      choiceNames =  aggr_levels_chd_pretty,
                      choiceValues = aggr_levels_chd,

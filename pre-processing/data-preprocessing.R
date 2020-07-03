@@ -42,22 +42,26 @@ write_fst(edu, path = "data/edu_description.fst", compress = 1)
 write_fst(ui_about_text, path = "data/ui_about_text.fst", compress = 1)
 
 # OUTCOME DATA ------------------------------------------------------------
-export_diag <- as.data.table(HTData::export_diag)
+export_diag <- copy(as.data.table(HTData::export_diag))
 
-export_opr <- HTData::export_opr
-export_med <- HTData::export_med
+export_opr <- copy(HTData::export_opr)
+export_med <- copy(HTData::export_med)
+
+setnames(export_diag, "aggr_level", "agCVD")
+setnames(export_med, "aggr_level", "agCVD")
+setnames(export_opr, "aggr_level", "agCVD")
 
 preProccess <- function(export_dat) {
   dat <- split(export_dat, by = "outcome") %>%
-    lapply(., split, by = "aggr_level")
+    lapply(., split, by = "agCVD")
 
   lapply(dat, function(outcome) {
-    out <- lapply(outcome, function(aggr_level) {
-      aggr_level[, `:=` (outcome = NULL, aggr_level = NULL)]
+    out <- lapply(outcome, function(agCVD) {
+      agCVD[, `:=` (outcome = NULL, agCVD = NULL)]
 
       # !!!!! DO NOT CHANGE !!! unless you have checked with it does not
       # interfere with cbind operation in dtCast()
-      setkey(aggr_level, sex, grouping, year)
+      setkey(agCVD, sex, grouping, year)
     })
 
     # Make sure regions start with capital letter
@@ -98,9 +102,9 @@ cleanGeoData <- function(x) {
 
 setNAtoZero <- function(x) {
   lapply(x, function(outcome) {
-    lapply(outcome, function(aggr_level) {
-      data_vars <- grep("count|rate", colnames(aggr_level), value = TRUE)
-      aggr_level[, (data_vars) := lapply(.SD, function(i) {
+    lapply(outcome, function(agCVD) {
+      data_vars <- grep("count|rate", colnames(agCVD), value = TRUE)
+      agCVD[, (data_vars) := lapply(.SD, function(i) {
         i[is.na(i)] <- 0L
         i
       }),
@@ -139,6 +143,7 @@ valid_output_combos <-
     by.y = "code_name",
     all.x = TRUE
   )
+setnames(valid_output_combos, "aggr_level", "agCVD")
 saveRDS(valid_output_combos, file = "data/valid_output_combos.rds")
 
 # DANISH LANGUAGE SUPPORT -------------------------------------------------
@@ -250,7 +255,6 @@ setnames(
 )
 
 saveRDS(outcome_descriptions_dk, file = "language/outcome_descriptions_dk.rds")
-
 
 # EN
 lang <- "en"
@@ -444,7 +448,7 @@ chd <- lapply(chd, function(l1) {
 
 
 # NOTE this has different structure than data list for main HT.
-# This list is agrr_level -> outcome, while HT is outcome -> aggr_level
+# This list is agrr_level -> outcome, while HT is outcome -> agCVD
 shiny_dat_chd <- lapply(chd, split, by = "ht.code", keep.by = TRUE)
 
 # Set key for faster subsetting during live shiny use

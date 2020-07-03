@@ -121,6 +121,9 @@ input[type="month"] {
 
 
 /**** NAVBAR STYLING *****/
+#ht_title{
+  color: white;
+}
 
 .navbar{
   margin-bottom: 30px;
