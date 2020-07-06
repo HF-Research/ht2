@@ -26,7 +26,8 @@ make_agg_choices <-
       valid_output_combos[outcome == outcome_code &
                             shiny_code == var_selected, unique(agCVD)]
     
-    # When switching between d, b, and m outcomes, this will return NULL at first calling
+    # When switching between diag, operations, and medicine outcomes, this will
+    # return NULL at first calling.
     if (length(aggr_level_choices) == 0)
       return(NULL)
     

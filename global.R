@@ -1,8 +1,9 @@
 # LIBRARIES ----------------------------------------------------
 # devtools::install_github("rstudio/profvis")
 # library(profvis)
-# library(reactlog)
-# options(shiny.reactlog = TRUE)
+# remotes::install_github("rstudio/reactlog")
+library(reactlog)
+reactlog_enable()
 # devtools::install_version("shiny", version = "1.5.0")
 suppressPackageStartupMessages({
 library(shiny)
