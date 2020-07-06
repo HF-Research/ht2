@@ -13,8 +13,7 @@ text_var_desc <- function(title_text = prettyVariable()[1], lang = lang, variabl
                           selected_data_vars = selectedDataVars()[1],
                           replace_outcome_string = replaceOutcomeString(),
                           replace_type_string = replaceTypeString(),
-                          replace_allCVD_string = replace_allCVD_string,
-                          input_year = input$year) {
+                          replace_allCVD_string = replace_allCVD_string) {
 
   title_text <- tags$b(title_text)
   
@@ -43,8 +42,6 @@ text_var_desc <- function(title_text = prettyVariable()[1], lang = lang, variabl
   desc_text <-
     gsub("REPLACE_TYPE", replace_type_string, desc_text, useBytes = TRUE)
   
-  desc_text <-
-    gsub("REPLACE_YEAR", tolower(input_year), desc_text, useBytes = TRUE)
   
   tagList(title_text, (desc_text))
 

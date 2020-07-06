@@ -63,10 +63,7 @@ replaceAggrLevelString <- reactive({
 })
 
 output$variable_desc <- renderUI({
-  req(input$varCVD,
-      input$year,
-      input$oCVD,
-      selectedDataVars())
+  req(input$varCVD)
   
   isolate({
     # Append title to front of variable descr text
@@ -77,8 +74,8 @@ output$variable_desc <- renderUI({
                   selected_data_vars = selectedDataVars()[1],
                   replace_outcome_string = replaceOutcomeString(),
                   replace_type_string = replaceTypeString(),
-                  replace_allCVD_string = replace_allCVD_string,
-                  input_year = input$year)
+                  replace_allCVD_string = replace_allCVD_string
+                  )
     })
 })
 
@@ -182,7 +179,9 @@ output$outcome_title <- renderText({
 
 output$outcome_title_dt <- renderText({
   req(input$data_vis_tabs == ui_data)
+  if(validateIn()){
   plotTitle()
+  }
 })
 
 output$outcome_title_map <- renderText({
@@ -325,7 +324,7 @@ subsetYear <- reactive({
 })
 
 
-# FORMATTING DATA FOR D3------------------------------------------------------
+# FORMATTING :DATA FOR D3------------------------------------------------------
 outputCasesData <- function() {
   
   # National level data shows all years
@@ -499,7 +498,7 @@ outputRateDTTable <- reactive({
 })
 
 # VALIDATE BEFORE PLOTING -------------------------------------------------
-validate <- reactive(label = "validate", {
+validateIn <- reactive(label = "validate", {
   # Returns TRUE if passes and FALSE if any condition fails. This is needed to
   # stop the plots and tables trying to render when they have inproper input.
   # I.e. when switching between outcomes, the variable inupt is -
@@ -785,15 +784,16 @@ output$downloadMapsFemale <- downloadHandler(
 # PLOT
 #
 output$d3_plot_bar <- renderSimpleD3Bar({
-  req(input$agCVD, input$varCVD)
-  if (validate() && !isNational() && !isKom()) {
+  req(input$varCVD)
+  if (validateIn() && !isNational() && !isKom()) {
     
     plot_d3_bar()
   }
 })
 
 output$d3_plot_line_html <- renderSimpleD3Line({
-  if (validate() && isNational()) {
+  req(input$varCVD)
+  if (validateIn() && isNational()) {
     plot_d3_line()
   }
   
@@ -801,29 +801,23 @@ output$d3_plot_line_html <- renderSimpleD3Line({
 
 # DATATABLES
 output$table_counts <- renderDT({
-  
-  req(validateSelectedVars()$valid_selection)
-  if (validate()) {
+  req(validateIn())
     outputCountDTTable()
-  }
 })
 
 output$table_rates <- renderDT({
-  req(validateSelectedVars()$valid_selection)
-  if (validate()) {
+  req(validateIn())
     outputRateDTTable()
-  }
+  
 })
 
 # MAPS
 output$map_male <- renderLeaflet({
-  
-  req(validateSelectedVars()$valid_selection)
-  
-  combinedMaps()$map_m
+  req(validateIn())
+    combinedMaps()$map_m
 })
 
 output$map_female <- renderLeaflet({
-  req(validateSelectedVars()$valid_selection)
+  req(validateIn())
   combinedMaps()$map_f
 })
