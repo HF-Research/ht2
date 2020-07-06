@@ -135,7 +135,10 @@ shinyServer(function(input, output, session) {
   )
   
   barChange <- reactive({input$bar})
-  observeEvent(barChange(), {
+  
+  # Everything below only fires when barCahnge() is invalidates (i.e. when
+  # input$bar changes)
+  observeEvent(barChange(),label = "BkmrkExclude", {
     if (input$bar == "cvd") {
       bookmarkingWhitelist <- c("bar", "varCVD", "oCVD", "agCVD", "year")
     } else if (input$bar == "chd") {
@@ -155,9 +158,10 @@ shinyServer(function(input, output, session) {
     
   })
   
-  toListen <- reactive({
+  toListen <- reactive(label = "bkmrkListen", {
     # Put any events that are to be bookmarked in here. These events should NOT
     # be in the always_exclude() list
+    req(input$varCVD) # This stops multiple bookmark setting during initialization 
     list(input$bar,
          input$oCVD,
          input$varCVD,
@@ -167,12 +171,30 @@ shinyServer(function(input, output, session) {
          input$agCHD,
          input$var_chd)
   })
-  observeEvent(toListen(), {
+  observeEvent(toListen(), label = "doBookmark", {
     session$doBookmark()
   })
   onBookmarked(function(url) {
     updateQueryString(url)
   })
   
+  
+  # POPUP IE WARNING --------------------------------------------------------
+
+  observeEvent(label = "IEwarning",  input$check, {
+    if (input$check == "TRUE") {
+      showModal(
+        modalDialog(
+          title = "HjerteTal does not work with Internet Explorer",
+          easyClose = TRUE,
+          fade = TRUE,
+          tags$p(
+            "Please choose Chrome / Firefox / Safari / Edge"
+          )
+          
+        )
+      )
+    }
+  })
   
 })

@@ -3,23 +3,7 @@ options(DT.options = list(
   dom = "Bt",
   buttons = c('copy', 'csv', 'pdf')
 ))
-# POPUP IE WARNING --------------------------------------------------------
 
-observeEvent(isIE(), {
-  if (isIE()) {
-    showModal(
-      modalDialog(
-        title = "HjerteTal does not work with Internet Explorer",
-        easyClose = TRUE,
-        fade = TRUE,
-        tags$p(
-          "Please choose Chrome / Firefox / Safari / Edge"
-          )
-        
-      )
-    )
-  }
-})
 # callModule(profvis_server, "profiler")
 
 # URL BOOKMARKING ---------------------------------------------------------
@@ -515,7 +499,7 @@ outputRateDTTable <- reactive({
 })
 
 # VALIDATE BEFORE PLOTING -------------------------------------------------
-validate <- reactive({
+validate <- reactive(label = "validate", {
   # Returns TRUE if passes and FALSE if any condition fails. This is needed to
   # stop the plots and tables trying to render when they have inproper input.
   # I.e. when switching between outcomes, the variable inupt is -
@@ -568,13 +552,6 @@ is5YearMortality <- reactive({
   input$varCVD == "v15"
 })
 
-isIE <- reactive({
-  req(input$varCVD,
-      input$year,
-      input$oCVD)  
-  
-  input$check == "TRUE"
-})
 
 isPercentage <- reactive({
   any(
@@ -694,7 +671,7 @@ choiceYears <- reactive({
 })
 
 
-observe({
+observe(label = "updateYear", {
   
   req(input$varCVD)
   if (req(input$agCVD) != "national") {
@@ -709,7 +686,7 @@ observe({
   }
 })
 
-observe({
+observe(label = "disableYear", {
   # Disable "year" when showing longitudinal data
   shinyjs::toggleState(id = "year",
                        condition = input$agCVD != "national")
@@ -717,7 +694,7 @@ observe({
 })
 
 
-observe({
+observe(label = "diableRate", {
   # Disable "rate/count" when when not showing figure tab
   shinyjs::toggleState(id = "rate_count",
                        condition = input$data_vis_tabs == ui_d3_figures)
@@ -725,7 +702,7 @@ observe({
 })
 
 
-observe({
+observe(label = "tabsMaps", {
   # Shows map tab only when geo data is selected
   shinyjs::toggle(
     condition = (isKom() ||
@@ -735,7 +712,7 @@ observe({
 })
 
 
-observe({
+observe(label = "hideGraph", {
   # Hides Figures tab when showing kommne level
   shinyjs::toggle(
     condition = (input$agCVD != "kom"),
@@ -746,7 +723,7 @@ observe({
 
 
 # Switch tabs when isGeo == FALSE
-observeEvent(input$agCVD, {
+observeEvent(label = "forceTabSwitchMap", input$agCVD, {
   if (input$data_vis_tabs == ui_map && !isGeo())
     updateTabsetPanel(session = session,
                       inputId = "data_vis_tabs",
@@ -755,7 +732,7 @@ observeEvent(input$agCVD, {
 
 # Switch tabs when landing on kommune Figures tab (since this tab should not be
 # shown to users)
-observeEvent(input$agCVD, {
+observeEvent(label = "forceTabSwicthKom", input$agCVD, {
   if (isKom() && input$data_vis_tabs == ui_d3_figures)
     updateTabsetPanel(session = session,
                       inputId = "data_vis_tabs",
@@ -840,7 +817,9 @@ output$table_rates <- renderDT({
 
 # MAPS
 output$map_male <- renderLeaflet({
+  
   req(validateSelectedVars()$valid_selection)
+  
   combinedMaps()$map_m
 })
 
