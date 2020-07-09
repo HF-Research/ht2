@@ -37,7 +37,7 @@ print(suppressMessages(webshot:::find_phantom()))
 # LOAD R CODE -------------------------------------------------------------
 # This should be done automatically in shiny versions >= 1.5
 # However, on deployment to shinyapps, it seems these codes are note loaded
-files <- list.files(path = "r/", full.names = TRUE)
+files <- list.files(path = "R/", full.names = TRUE)
 sapply(files, source)
 
 enableBookmarking("url")

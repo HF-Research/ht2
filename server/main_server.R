@@ -5,10 +5,6 @@ options(DT.options = list(
 ))
 
 # callModule(profvis_server, "profiler")
-
-# URL BOOKMARKING ---------------------------------------------------------
-
-
 # TEXT RENDERING ----------------------------------------------------------
 
 prettyOutcome <- reactive({
@@ -23,7 +19,7 @@ output$outcome_description <- renderUI({
   out_title <- tags$b(prettyOutcome())
   
   out <-
-    outcome_descriptions[hjertetal_code == outcomeCode(), ..keep_vars]
+    outcome_descriptions[hjertetal_code == input$oCVD, ..keep_vars]
   # Add link for further reading - if link exists, otherwise just desc
   url <- a(ui_read_more,
            href = (out$link),
@@ -42,7 +38,7 @@ output$outcome_description <- renderUI({
 # This statement switches between those cases.
 replaceTypeString <- reactive({
   switch(
-    substr(outcomeCode(), 1, 1),
+    substr(input$oCVD, 1, 1),
     "b" = replace_type_string_opr,
     "d" = replace_type_string_diag,
     "m" = replace_type_string_med
@@ -222,12 +218,6 @@ outputOptions(output, "tabMap", suspendWhenHidden = FALSE)
 
 # DYNAMIC VARIABLES/COLUMN NAMES ------------------------------------------
 
-outcomeCode <- reactive({
-  # Connect the input in normal language to the hjertetal_code. This is so we
-  # can change the description without having to rename allll the datasets.
-  input$oCVD
-})
-
 prettyAggr_level <- reactive({
   # Outputs same character string that's used in the UI input field
   aggr_choices[name_ht == input$agCVD, label]
@@ -280,7 +270,7 @@ selectPercentOrRate <- reactive({
 # SUBSETTING ------------------------------------------------------
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
-  shiny_dat[[outcomeCode()]][[input$agCVD]]
+  shiny_dat[[input$oCVD]][[input$agCVD]]
 })
 
 selectedRateType <- reactive({
@@ -295,11 +285,8 @@ selectedRateType <- reactive({
 selectedDataVars <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
-  var_code_cvd <- variable_ui[shiny_code == input$varCVD, code_name]
-  var_stripped <- gsub("count_|rate_", "", var_code_cvd)
-  grep_str <- paste0(var_stripped, "$")
-  grep(grep_str, colnames(subsetOutcome()), value = TRUE)
-})
+  selected_data_vars(varCVD = input$varCVD, variable_ui = variable_ui, subset_outcome = subsetOutcome())
+  })
 
 subsetVars <- reactive({
   subset_vars(
@@ -571,7 +558,7 @@ validateSelectedVars <- reactive({
   
   validate_selected_vars(
     aggr_selected = input$agCVD,
-    outcome_code = outcomeCode(),
+    outcome_code = input$oCVD,
     variables_not_used = variables_not_used,
     lang = lang,
     selected_var = selected_var 
@@ -600,7 +587,7 @@ output$varChoices <- renderUI({
                    var_names = (validateSelectedVars()$var_names),
                    valid_selection = (validateSelectedVars()$valid_selection),
                    aggr_selected_next = aggr_selected_next,
-                   outcome_code = outcomeCode(),
+                   outcome_code = input$oCVD,
                    valid_output_combos = valid_output_combos
                    )
   
@@ -620,7 +607,7 @@ aggrButtonChoices <- reactive({
   
   ag_choice_out <- make_agg_choices(
     var_selected = input$varCVD,
-    outcome_code = outcomeCode(),
+    outcome_code = input$oCVD,
     valid_output_combos = valid_output_combos,
     aggr_choices = aggr_choices,
     input_aggr_level = input_aggr_level
@@ -789,7 +776,7 @@ output$d3_plot_bar <- renderSimpleD3Bar({
 output$d3_plot_line_html <- renderSimpleD3Line({
   req(input$varCVD)
   if (validateIn() && isNational()) {
-    browser()
+    
     plot_d3_line()
   }
   

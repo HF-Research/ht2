@@ -10,7 +10,7 @@ library(fst)
 library(Hmisc)
 # devtools::install_github('HF-Research/HTData', force = TRUE)
 library(HTData)
-source("r/helperFunctions.R")
+source("R/helperFunctions.R")
 
 # DATA TO FST -------------------------------------------------------------
 # Data that needs to be loaded for each session should be in fst format for performance reasons
@@ -399,6 +399,13 @@ f.load <-
 chd <- sapply(f.load, fread)
 
 names(chd) <- chd_agg_levels
+
+# Rename "opr" to "oprs" to make pattern matching easier
+lapply(chd, function(i){
+  
+  i[variable == "opr", variable := "oprs"]
+})
+
 chd$age_sex <- dcast(
   chd$age_sex,
   formula = sex + age_adult + ht.code + n_denom + year ~ variable,
@@ -441,6 +448,9 @@ lapply(chd, function(l1) {
 chd <- lapply(chd, function(l1) {
   l1[, rate_strat_incidence := round(rate_strat_incidence, digits = 1)]
   l1[, rate_strat_prevalence := round(rate_strat_prevalence, digits = 1)]
+  l1[, rate_strat_opr_patients := round(rate_strat_opr_patients, digits = 1)]
+  l1[, rate_strat_opr := round(rate_strat_oprs, digits = 1)]
+  
   l1
 })
 
