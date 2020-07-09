@@ -12,8 +12,8 @@
 makeCountKomDT <- function(dat, group_var, thousands_sep, dt_title,
                            messageBottom, n_col) {
 
+  num_format_cols <- (1:n_col - 1)[-1]
   
-  col_format <- c(ui_sex_levels, "Total")
   DT::datatable(
     data = dat,
     extensions = 'Buttons',
@@ -25,7 +25,7 @@ makeCountKomDT <- function(dat, group_var, thousands_sep, dt_title,
       lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
       pageLength = 15,
       dom = "lftBsp",
-      columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
+      columnDefs = list(list(render = formatSuppressedValues, targets = num_format_cols)),
       buttons = list(
         list(extend = "pdf",
              messageTop = dt_title,

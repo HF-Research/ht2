@@ -3,7 +3,7 @@
 # library(profvis)
 # remotes::install_github("rstudio/reactlog")
 library(reactlog)
-reactlog_enable()
+# reactlog_enable()
 # devtools::install_version("shiny", version = "1.5.0")
 suppressPackageStartupMessages({
 library(shiny)
@@ -42,7 +42,7 @@ sapply(files, source)
 
 enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
-lang = "en"
+lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
@@ -88,26 +88,28 @@ DT_background_color <- "#193f4d"
 # From:
 # https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
 formatSuppressedValues <- JS(
-  "
+paste0("
   function(data, type) {
+  
+  if (type !== 'display') return data
+  if (data > 0) return shinyjs.numberFormatter('", lang, "')(data)
+  return '<4'
 
-    if (type !== 'display') return data;
-    if (data !== '0') return data;
-    return '<4';
-  }
-"
+  }"
+)
 )
 
 
 formatNAValues <- JS(
-  "
+  paste0("
   function(data, type) {
-
+  
     if (type !== 'display') return data;
-    if (data !== '0,0') return data;
+    if (data > 0) return shinyjs.numberFormatter('", lang, "')(data);
     return 'NA';
   }
 "
+         )
 )
 
 header_JS <- JS(

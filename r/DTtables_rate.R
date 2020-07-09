@@ -64,8 +64,7 @@ DTtables_rate <- function(dat = dtCast(), pretty_vars = prettyVariable(),
                dt_title = plot_title,
                messageBottom = pretty_var_singular,
                n_col = n_col
-    ) %>%
-      formatCurrency(columns = col_convert, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = digits)
+    )
   }
   
 

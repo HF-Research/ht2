@@ -55,7 +55,7 @@ DTtables_count <- function(dat = dtCast(),
     new = c(pretty_ag_lv, rev(sex_levels))
   )
   
-  col_convert <- c(sex_levels, "Total")
+  
   n_col <- NCOL(dat)
   if (is_kom) {
     makeCountKomDT(
@@ -71,12 +71,12 @@ DTtables_count <- function(dat = dtCast(),
     makeCountDT(
       dat,
       group_var = pretty_ag_lv,
-      thousands_sep = thousands_sep,
       dt_title = plot_title,
       messageBottom = paste0(ui_count_rate[1], " ", tolower(pretty_vars[1])),
-      n_col = n_col
-    ) %>% 
-      formatCurrency(columns = col_convert, currency = "", interval = 3, mark = thousands_sep, dec.mark = dec_mark, digits = 0)
+      n_col = n_col,
+      thousands_sep = thousands_sep,
+      dec_mark = dec_mark
+    )
   }
   
 

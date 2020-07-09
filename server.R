@@ -9,6 +9,25 @@ shinyServer(function(input, output, session) {
   source(file.path("server", "about_server.R"), local = TRUE)$value
   source(file.path("server", "about_chd_server.R"), local = TRUE)$value
   
+
+  # POPUP IE WARNING --------------------------------------------------------
+  
+  observeEvent(label = "IEwarning",  input$check, {
+    if (input$check == "TRUE") {
+      showModal(
+        modalDialog(
+          title = "HjerteTal does not work with Internet Explorer",
+          easyClose = TRUE,
+          fade = TRUE,
+          tags$p(
+            "Please choose Chrome / Firefox / Safari / Edge"
+          )
+          
+        )
+      )
+    }
+  })
+  
   # BOOKMARKING -------------------------------------------------------------
   
   always_exclude <- c(
@@ -20,7 +39,8 @@ shinyServer(function(input, output, session) {
     "rate_count_chd",
     "about_selection",
     "about_selection_chd",
-    "data_vis_tabs_chd",
+    "data_vi
+    s_tabs_chd",
     "downloadMapsFemale_bttn",
     "downloadMapsMale_bttn",
     "data_vis_tabs",
@@ -178,23 +198,4 @@ shinyServer(function(input, output, session) {
     updateQueryString(url)
   })
   
-  
-  # POPUP IE WARNING --------------------------------------------------------
-
-  observeEvent(label = "IEwarning",  input$check, {
-    if (input$check == "TRUE") {
-      showModal(
-        modalDialog(
-          title = "HjerteTal does not work with Internet Explorer",
-          easyClose = TRUE,
-          fade = TRUE,
-          tags$p(
-            "Please choose Chrome / Firefox / Safari / Edge"
-          )
-          
-        )
-      )
-    }
   })
-  
-})

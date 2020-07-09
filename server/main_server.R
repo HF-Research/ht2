@@ -292,16 +292,11 @@ selectedRateType <- reactive({
 })
 
 
-varCodeCVD <- reactive({
-  input$varCVD
-  variable_ui[shiny_code == input$varCVD, code_name]
-})
-
 selectedDataVars <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
-  
-  var_stripped <- gsub("count_|rate_", "", varCodeCVD())
+  var_code_cvd <- variable_ui[shiny_code == input$varCVD, code_name]
+  var_stripped <- gsub("count_|rate_", "", var_code_cvd)
   grep_str <- paste0(var_stripped, "$")
   grep(grep_str, colnames(subsetOutcome()), value = TRUE)
 })
@@ -779,7 +774,7 @@ output$downloadMapsFemale <- downloadHandler(
     )
   }
 )
-# RENDER FUNCTIONS --------------------------------------------------------
+# RENDER FUNC:TIONS --------------------------------------------------------
 
 # PLOT
 #
@@ -794,6 +789,7 @@ output$d3_plot_bar <- renderSimpleD3Bar({
 output$d3_plot_line_html <- renderSimpleD3Line({
   req(input$varCVD)
   if (validateIn() && isNational()) {
+    browser()
     plot_d3_line()
   }
   

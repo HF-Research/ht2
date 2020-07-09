@@ -10,7 +10,7 @@
 ##' @param n_col
 makeRateKomDT <- function(dat, group_var, dt_title, messageBottom =
                           messageBottom, n_col) {
-col_format <- c(ui_sex_levels)
+  num_format_cols <- (1:n_col - 1)[-1]
   DT::datatable(
     data = dat,
     extensions = 'Buttons',
@@ -21,7 +21,7 @@ col_format <- c(ui_sex_levels)
       lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
       pageLength = 15,
       dom = "lftBp",
-      columnDefs = list(list(render = formatNAValues, targets = "_all")),
+      columnDefs = list(list(render = formatNAValues, targets = num_format_cols)),
       buttons = list(
         list(extend = "pdf",
              messageTop = dt_title,

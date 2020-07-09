@@ -10,9 +10,11 @@
 ##' @param messageBottom
 ##' @param n_col
 makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom,
-                        n_col) {
+                        n_col, dec_mark = dec_mark) {
 
-  col_format <- c(ui_sex_levels, "Total")
+  num_format_cols <- (1:n_col - 1)[-1]
+  
+  
   DT::datatable(
     data = dat,
     extensions = 'Buttons',
@@ -22,7 +24,7 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom,
       language = list(url = "Danish.json"),
       ordering = FALSE,
       dom = "tB",
-      columnDefs = list(list(render = formatSuppressedValues, targets = "_all")),
+      columnDefs = list(list(render = formatSuppressedValues, targets = num_format_cols)),
       buttons = list(
         list(extend = "pdf",
              messageTop = dt_title,
@@ -46,6 +48,7 @@ makeCountDT <- function(dat, group_var, thousands_sep, dt_title, messageBottom,
         values =  c("bold"),
         default = "normal"
       )
-    )
+    ) 
+    
 
 }

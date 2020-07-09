@@ -11,7 +11,7 @@
 makeRateDT <- function(dat, group_var, dt_title, messageBottom, n_col) {
 
   
-  col_format <- c(ui_sex_levels)
+  num_format_cols <- (1:n_col - 1)[-1]
   DT::datatable(
     data = dat,
     extensions = 'Buttons',
@@ -21,7 +21,7 @@ makeRateDT <- function(dat, group_var, dt_title, messageBottom, n_col) {
       language = list(url = "Danish.json"),
       ordering = FALSE,
       dom = "tB",
-      columnDefs = list(list(render = formatNAValues, targets = "_all")),
+      columnDefs = list(list(render = formatNAValues, targets = num_format_cols)),
       buttons = list(
         list(extend = "pdf",
              messageTop = dt_title,
