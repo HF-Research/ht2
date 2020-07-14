@@ -10,8 +10,10 @@ ui <- function(request) {
         js_lang <- paste0("www/navAppend-", lang, ".js")
         includeScript(js_lang)
       },
-      includeScript("www/checkBrowser.js")
-      # tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
+      
+      # JS code to add link to en/dk version of website
+      includeScript("www/checkBrowser.js") 
+      
       
     ),
     tags$a(
