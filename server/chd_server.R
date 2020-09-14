@@ -216,6 +216,7 @@ output$d3_chd <- renderPlotly({
 
 output$table_counts_chd <- renderDT({
   req(input$var_chd, isValidSelection())
+  
   outputDT_chd()
 })
 

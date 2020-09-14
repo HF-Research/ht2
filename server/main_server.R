@@ -790,6 +790,7 @@ output$table_counts <- renderDT({
 
 output$table_rates <- renderDT({
   req(validateIn())
+  
     outputRateDTTable()
   
 })

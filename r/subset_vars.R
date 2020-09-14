@@ -20,6 +20,7 @@ subset_vars <- function(dat, data_vars, ag_lv, select_raw_mean, select_percent_r
     setnames(dat, c(ui_year, ui_sex, "age", pretty_variable))
   }
   
+  # Change numbers from rates to percentages when required
   if (select_percent_rate) {
     var_to_modify <- grep(ui_percent, names(dat), value = TRUE)
     dat[, (var_to_modify) := round(get(var_to_modify) / 1000, digits = 1)]
