@@ -400,6 +400,17 @@ chd <- sapply(f.load, fread)
 
 names(chd) <- chd_agg_levels
 
+
+
+# TMP REMOVE 2018 --- 
+# Until we have the question of operations sorted out
+chd <- lapply(chd, function(i){
+  
+  i <- i[year != 2018]
+  i
+})
+
+
 # Rename "opr" to "oprs" to make pattern matching easier
 lapply(chd, function(i){
   
@@ -408,7 +419,7 @@ lapply(chd, function(i){
 
 chd$age_sex <- dcast(
   chd$age_sex,
-  formula = sex + age_adult + ht.code + n_denom + year ~ variable,
+  formula = sex + age_adult + ht.code +  year ~ variable,
   value.var = c("count_n_", "rate_strat")
 ) %>%
   . [, id_var := paste0(sex, age_adult)] %>%
@@ -417,9 +428,10 @@ chd$age_sex <- dcast(
   setorder(ht.code, sex, age_adult, year)
 
 
-chd$age <- dcast(
-  chd$age,
-  formula = age_adult + ht.code + n_denom + year ~ variable,
+
+chd$age <- chd$age %>% 
+  dcast(
+  formula = age_adult + ht.code + year ~ variable,
   value.var = c("count_n_", "rate_strat")
 ) %>%
   setorder(ht.code, age_adult, year)
@@ -427,7 +439,7 @@ chd$age <- dcast(
 
 chd$sex <- dcast(
   chd$sex,
-  formula = sex  + ht.code + n_denom + year ~ variable,
+  formula = sex  + ht.code + year ~ variable,
   value.var = c("count_n_", "rate_strat")
 ) %>%
 setorder(ht.code, sex, year)
@@ -435,7 +447,7 @@ setorder(ht.code, sex, year)
 
 chd$totals <- dcast(
   chd$totals,
-  formula = ht.code + n_denom + year ~ variable,
+  formula = ht.code + year ~ variable,
   value.var = c("count_n_", "rate_strat")
 ) %>% setorder(ht.code, year)
 
@@ -449,7 +461,7 @@ chd <- lapply(chd, function(l1) {
   l1[, rate_strat_incidence := round(rate_strat_incidence, digits = 1)]
   l1[, rate_strat_prevalence := round(rate_strat_prevalence, digits = 1)]
   l1[, rate_strat_opr_patients := round(rate_strat_opr_patients, digits = 1)]
-  l1[, rate_strat_opr := round(rate_strat_oprs, digits = 1)]
+  l1[, rate_strat_oprs := round(rate_strat_oprs, digits = 1)]
   
   l1
 })
