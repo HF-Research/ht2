@@ -76,7 +76,7 @@ ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andel")
-ui_edu_age_range <- "35 - 84 årige"
+ui_edu_age_range <- "35 - 79 årige"
 ui_moving_avg_desc <- "3-år glidende gennemsnit"
 
 # Strings to place inside variable descriptions
