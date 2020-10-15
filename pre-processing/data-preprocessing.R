@@ -42,34 +42,81 @@ write_fst(edu, path = "data/edu_description.fst", compress = 1)
 write_fst(ui_about_text, path = "data/ui_about_text.fst", compress = 1)
 
 # OUTCOME DATA ------------------------------------------------------------
-export_diag <- copy(as.data.table(HTData::export_diag))
 
-export_opr <- copy(HTData::export_opr)
-export_med <- copy(HTData::export_med)
 
-setnames(export_diag, "aggr_level", "agCVD")
-setnames(export_med, "aggr_level", "agCVD")
-setnames(export_opr, "aggr_level", "agCVD")
+format_data <- function(x) {
+  setnames(
+    x,
+    old = c(
+      "ht.code",
+      "aggr_level",
+      "aggr_level_val",
+      "rate",
+      "n.events"
+      
+    ),
+    new = c("outcome",
+            "agCVD",
+            "grouping",
+            "rate_",
+            "count_")
+  )
+  x[mov.avg == 1, `:=` ("mean3y_count_" = count_, "mean3y_rate_" = rate_)]
+  x[mov.avg == 1, `:=` (count_ = NA, rate_ = NA)]
+  
+  x[, event := gsub("\\.", "_", event)] %>% unique()
+  
+  # In DST the outcome grouping name is appended to the event name. We need to
+  # remove this for the shiny object.
+  x[, event := gsub("(?<=[10s])\\_opr", "", x$event, perl = TRUE)]
+  x[, event := gsub("(?<=[10s])\\_med", "", x$event, perl = TRUE)]
+  x1 <-
+    dcast(
+      x,
+      formula = sex + year + agCVD + grouping + outcome ~ event,
+      value.var = c("count_", "rate_", "mean3y_count_", "mean3y_rate_"),
+      sep = ""
+    )
+  
+}
+export_diag <-
+  HTData::export_diag %>% copy() %>%
+  format_data()
+export_opr <- HTData::export_opr %>% copy() %>%
+  format_data()
+export_med <- HTData::export_med %>% copy() %>%
+  format_data()
+
+# export_diag <- copy(as.data.table(HTData::export_diag))
+#
+# export_opr <- copy(HTData::export_opr)
+# export_med <- copy(HTData::export_med)
+
+# setnames(export_diag, "aggr_level", "agCVD")
+# setnames(export_med, "aggr_level", "agCVD")
+# setnames(export_opr, "aggr_level", "agCVD")
 
 preProccess <- function(export_dat) {
   dat <- split(export_dat, by = "outcome") %>%
     lapply(., split, by = "agCVD")
-
+  
   lapply(dat, function(outcome) {
     out <- lapply(outcome, function(agCVD) {
       agCVD[, `:=` (outcome = NULL, agCVD = NULL)]
-
+      
       # !!!!! DO NOT CHANGE !!! unless you have checked with it does not
       # interfere with cbind operation in dtCast()
       setkey(agCVD, sex, grouping, year)
     })
-
+    
     # Make sure regions start with capital letter
-    out$region[, grouping := capitalize(grouping)]
-    out$region[grouping == "Midtjydlland", grouping := "Midtjylland"]
-
-    out$ethnicity[, grouping := capWord(grouping)]
-
+    if (!is.null(out$region)) {
+      out$region[, grouping := capitalize(grouping)]
+      out$region[grouping == "Midtjydlland", grouping := "Midtjylland"]
+    }
+    if (!is.null(out$ethnicity)) {
+      out$ethnicity[, grouping := capWord(grouping)]
+    }
     # Change edu to factor to ensure correct ordering
     out$edu[, grouping := factor(tolower(grouping),
                                  levels = tolower(
@@ -94,10 +141,12 @@ cleanGeoData <- function(x) {
   # Remove unknowns from Region. and remove Christiansoe
   lapply(x, function(outcome) {
     outcome$region <- outcome$region[grouping != "Unknown",]
-    outcome$kom <- outcome$kom[grouping != "Christiansø",]
+    if (!is.null(outcome$kom)) {
+      outcome$kom <- outcome$kom[grouping != "Christiansø",]
+    }
     outcome
   })
-
+  
 }
 
 setNAtoZero <- function(x) {
@@ -109,7 +158,7 @@ setNAtoZero <- function(x) {
         i
       }),
       .SDcols = data_vars]
-
+      
     })
   })
 }
@@ -150,9 +199,11 @@ saveRDS(valid_output_combos, file = "data/valid_output_combos.rds")
 
 
 ethnicity <- fread(file = "data/ethnicity.csv", encoding = "UTF-8")
-ethnicity[, `:=` (group_dk = capWord(group_dk), group_en = capWord(group_en))]
+ethnicity[, `:=` (group_dk = capWord(group_dk),
+                  group_en = capWord(group_en))]
 ethnicity <- ethnicity[, lapply(.SD, enc2native)]
-ethnicity_short <- unique(ethnicity, by = "group_en")[, .(group_dk, group_en)]
+ethnicity_short <-
+  unique(ethnicity, by = "group_en")[, .(group_dk, group_en)]
 
 makeDanish <- function(dat) {
   # Change english education + ethnicity labels to Danish labels
@@ -167,24 +218,25 @@ makeDanish <- function(dat) {
       )
     outcome$edu[, `:=` (grouping = edu_name_dk)]
     outcome$edu[, `:=` (edu_name_dk = NULL)]
-
+    
     # Turn DK edu into factor
     outcome$edu[, `:=` (grouping = factor(grouping,
                                           levels = c(edu[, edu_name_dk])))]
     setkey(outcome$edu, sex, grouping, year)
-
-    outcome$ethnicity <-
-      merge(
-        outcome$ethnicity,
-        ethnicity_short,
-        by.x = "grouping",
-        by.y = "group_en",
-        all.x = TRUE
+    
+    if (!is.null(outcome$ethnicity)) {
+      outcome$ethnicity <-
+        merge(
+          outcome$ethnicity,
+          ethnicity_short,
+          by.x = "grouping",
+          by.y = "group_en",
+          all.x = TRUE
         )
-    outcome$ethnicity[, `:=`(grouping = group_dk)]
-    setkey(outcome$ethnicity, sex, grouping, year)
-    outcome$ethnicity[, grouping := capWord(grouping)]
-
+      outcome$ethnicity[, `:=`(grouping = group_dk)]
+      setkey(outcome$ethnicity, sex, grouping, year)
+      outcome$ethnicity[, grouping := capWord(grouping)]
+    }
     outcome
   })
 }
@@ -322,7 +374,8 @@ stopifnot(length(colnames(outcome_descriptions_dk)) == length(colnames(outcome_d
 
 
 # UI ABOUT LANG PREP ------------------------------------------------------
-about_ui <- fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
+about_ui <-
+  fread(file = "data/ui_about_text.csv", encoding = "UTF-8")
 about_ui <- about_ui[, lapply(.SD, enc2native)]
 countries <- fread(file = "data/ethnicity.csv", encoding = "UTF-8")
 
@@ -331,23 +384,19 @@ lang <- "dk"
 col_names <- colnames(about_ui)
 cols_delete <- grep("_en", col_names, value = TRUE)
 about_ui_tmp <- about_ui[, -..cols_delete]
-new_col_names <- c(
-  "code",
-  "title_text",
-  "desc_text",
-  "desc_text_2"
-  )
+new_col_names <- c("code",
+                   "title_text",
+                   "desc_text",
+                   "desc_text_2")
 setnames(about_ui_tmp, new_col_names)
 saveRDS(about_ui_tmp, file = "language/about_ui_dk.rds")
 
 col_names <- colnames(countries)
 cols_delete <- grep("_en", col_names, value = TRUE)
 tmp <- countries[, -..cols_delete]
-new_col_names <- c(
-  "code",
-  "country",
-  "group"
-)
+new_col_names <- c("code",
+                   "country",
+                   "group")
 setnames(tmp, new_col_names)
 setkey(tmp, country)
 tmp[, group := capWord(group)]
@@ -362,23 +411,19 @@ lang <- "en"
 col_names <- colnames(about_ui)
 cols_delete <- grep("_dk", col_names, value = TRUE)
 about_ui_tmp <- about_ui[, -..cols_delete]
-new_col_names <- c(
-  "code",
-  "title_text",
-  "desc_text",
-  "desc_text_2"
-)
+new_col_names <- c("code",
+                   "title_text",
+                   "desc_text",
+                   "desc_text_2")
 setnames(about_ui_tmp, new_col_names)
 saveRDS(about_ui_tmp, file = "language/about_ui_en.rds")
 
 col_names <- colnames(countries)
 cols_delete <- grep("_dk", col_names, value = TRUE)
 tmp <- countries[, -..cols_delete]
-new_col_names <- c(
-  "code",
-  "country",
-  "group"
-)
+new_col_names <- c("code",
+                   "country",
+                   "group")
 setnames(tmp, new_col_names)
 setkey(tmp, country)
 tmp[, group := capWord(group)]
@@ -387,33 +432,29 @@ saveRDS(tmp, file = "language/country_grps_en.rds")
 
 
 
+
 # CHD ---------------------------------------------------------------------
 
 # This has to be in the same order the files are loaded in (f.load object)
 chd_agg_levels <- c("age", "age_sex", "sex", "totals")
-
-f.load <-
-  list.files(path = "data/chd/",
-             pattern = "export_chd_*",
-             full.names = TRUE)
-chd <- sapply(f.load, fread)
-
+chd = list(HTData::export_chd_age,
+           export_chd_age_sex,
+           export_chd_sex,
+           export_chd_totals)
 names(chd) <- chd_agg_levels
 
 
 
-# TMP REMOVE 2018 --- 
+# TMP REMOVE 2018 ---
 # Until we have the question of operations sorted out
-chd <- lapply(chd, function(i){
-  
-  i <- i[year != 2018]
-  i
-})
+# chd <- lapply(chd, function(i) {
+#   i <- i[year != 2018]
+#   i
+# })
 
 
 # Rename "opr" to "oprs" to make pattern matching easier
-lapply(chd, function(i){
-  
+lapply(chd, function(i) {
   i[variable == "opr", variable := "oprs"]
 })
 
@@ -429,11 +470,11 @@ chd$age_sex <- dcast(
 
 
 
-chd$age <- chd$age %>% 
+chd$age <- chd$age %>%
   dcast(
-  formula = age_adult + ht.code + year ~ variable,
-  value.var = c("count_n_", "rate_strat")
-) %>%
+    formula = age_adult + ht.code + year ~ variable,
+    value.var = c("count_n_", "rate_strat")
+  ) %>%
   setorder(ht.code, age_adult, year)
 
 
@@ -442,7 +483,7 @@ chd$sex <- dcast(
   formula = sex  + ht.code + year ~ variable,
   value.var = c("count_n_", "rate_strat")
 ) %>%
-setorder(ht.code, sex, year)
+  setorder(ht.code, sex, year)
 
 
 chd$totals <- dcast(
@@ -474,7 +515,8 @@ chd <- lapply(chd, function(l1) {
 shiny_dat_chd <- lapply(chd, split, by = "ht.code", keep.by = TRUE)
 
 # Set key for faster subsetting during live shiny use
-shiny_dat_chd$age_sex <- lapply(shiny_dat_chd$age_sex, setkey, "id_var")
+shiny_dat_chd$age_sex <-
+  lapply(shiny_dat_chd$age_sex, setkey, "id_var")
 
 
 saveRDS(shiny_dat_chd, file = "data/chd/shiny_dat_chd.rds")
@@ -484,8 +526,10 @@ saveRDS(chd_agg_levels, file  = "data/chd/aggr_levels_chd.rds")
 
 # CHD LANG PREP -----------------------------------------------------------
 
-outcome_desc_chd <- fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
-var_desc_chd <- fread(file = "data/chd/variable_ui_chd.csv", encoding = "UTF-8")
+outcome_desc_chd <-
+  fread(file = "data/chd/outcome_descriptions_chd.csv", encoding = "UTF-8")
+var_desc_chd <-
+  fread(file = "data/chd/variable_ui_chd.csv", encoding = "UTF-8")
 var_desc_chd <- var_desc_chd[, lapply(.SD, enc2native)]
 
 
@@ -495,17 +539,15 @@ lang <- "dk"
 col_names <- colnames(outcome_desc_chd)
 cols_delete <- grep("_en", col_names, value = TRUE)
 outcome_descriptions_dk <- outcome_desc_chd[, -..cols_delete]
-new_col_names <- c(
-  "ht.code",
-  "name",
-  "icd8",
-  "icd10",
-  "diag_type",
-  "pat_type",
-  "grade",
-  "desc",
-  "link"
- )
+new_col_names <- c("ht.code",
+                   "name",
+                   "icd8",
+                   "icd10",
+                   "diag_type",
+                   "pat_type",
+                   "grade",
+                   "desc",
+                   "link")
 setnames(outcome_descriptions_dk, new_col_names)
 
 
@@ -522,21 +564,20 @@ var_col_names <- c(
   "desc_count",
   "desc_stratified",
   "desc_standardized"
-
+  
 )
 setnames(var_desc_chd_dk, var_col_names)
 
 
-about_chd <- fread("data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
+about_chd <-
+  fread("data/chd/ui_about_text_chd.csv", encoding = "UTF-8")
 col_names <- colnames(about_chd)
 cols_delete <- grep("_en", col_names, value = TRUE)
 about_chd_dk <- about_chd[, -..cols_delete]
-about_chd_new_names <- c(
-  "code",
-  "title_text",
-  "desc_text",
-  "desc_text_2"
-)
+about_chd_new_names <- c("code",
+                         "title_text",
+                         "desc_text",
+                         "desc_text_2")
 setnames(about_chd_dk, about_chd_new_names)
 
 saveRDS(outcome_descriptions_dk, file = "language/outcome_descriptions_chd_dk.rds")
@@ -559,12 +600,10 @@ setnames(var_desc_chd_en, var_col_names)
 col_names <- colnames(about_chd)
 cols_delete <- grep("_dk", col_names, value = TRUE)
 about_chd_en <- about_chd[, -..cols_delete]
-about_chd_new_names <- c(
-  "code",
-  "title_text",
-  "desc_text",
-  "desc_text_2"
-)
+about_chd_new_names <- c("code",
+                         "title_text",
+                         "desc_text",
+                         "desc_text_2")
 setnames(about_chd_en, about_chd_new_names)
 
 saveRDS(outcome_descriptions_en, file = "language/outcome_descriptions_chd_en.rds")
@@ -613,7 +652,7 @@ for (reg in regions) {
   attr_tmp[[reg]] <-
     l2 %>% filter(region == reg) %>% .[1, c("id", "region")] %>% st_drop_geometry()
   out_sf[[reg]] <- st_as_sf(merge(geo_tmp[[reg]], attr_tmp[[reg]]))
-
+  
 }
 
 l1 <- do.call("rbind", out_sf)
