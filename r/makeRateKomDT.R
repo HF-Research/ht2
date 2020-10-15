@@ -8,9 +8,15 @@
 ##' @param dt_title
 ##' @param messageBottom
 ##' @param n_col
-makeRateKomDT <- function(dat, group_var, dt_title, messageBottom =
-                          messageBottom, n_col) {
-  num_format_cols <- (1:n_col - 1)[-1]
+makeRateKomDT <- function(dat,
+                          group_var,
+                          dt_title,
+                          messageBottom = messageBottom,
+                          n_col,
+                          thousands_sep = thousands_sep,
+                          dec_mark = dec_mark,
+                          digits = digits) {
+  num_format_cols <- (1:n_col)[-1]
   DT::datatable(
     data = dat,
     extensions = 'Buttons',
@@ -21,19 +27,31 @@ makeRateKomDT <- function(dat, group_var, dt_title, messageBottom =
       lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
       pageLength = 15,
       dom = "lftBp",
-      columnDefs = list(list(render = formatNAValues, targets = num_format_cols)),
+      
       buttons = list(
-        list(extend = "pdf",
-             messageTop = dt_title,
-             messageBottom = messageBottom),
-        list(extend = "excel",
-             messageTop = dt_title,
-             messageBottom = messageBottom)
+        list(
+          extend = "pdf",
+          messageTop = dt_title,
+          messageBottom = messageBottom
+        ),
+        list(
+          extend = "excel",
+          messageTop = dt_title,
+          messageBottom = messageBottom
+        )
       ),
       initComplete = header_JS
     )
   ) %>%
-    formatStyle(1:n_col, borderColor = "white") %>% 
+    formatCurrency(
+      columns = num_format_cols,
+      currency = "",
+      interval = 3,
+      mark = thousands_sep,
+      dec.mark = dec_mark,
+      digits = digits
+    ) %>%
+    formatStyle(1:n_col, borderColor = "white") %>%
     formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
-
+  
 }

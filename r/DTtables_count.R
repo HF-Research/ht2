@@ -32,6 +32,7 @@ DTtables_count <- function(dat = dtCast(),
   colnames(dat) <- c("group_var", "male", "female")
   # Calculate margins
   dat[, Total := rowSums(dat[, .(female, male)], na.rm = TRUE)]
+  col_convert <- c("male", "female", "Total")
   if (ag_lv != "national") {
     # Only calculate bottom margins for "age" - other aggr levels don't include
     # full data
@@ -44,17 +45,22 @@ DTtables_count <- function(dat = dtCast(),
     dat <- rbindlist(list(dat, as.list(c("Total", totals))), use.names = FALSE)
     
     # Convert back to numeric
-    col_convert <- c("male", "female", "Total")
+    
     dat[, (col_convert) := lapply(.SD, as.numeric), .SDcols = col_convert]
     
   }
+  
+  dat[, (col_convert) := lapply(.SD, function(i){
+    i[i==0] <- NA
+    i
+  }), .SDcols = col_convert]
+  
   
   setnames(
     dat,
     old = c("group_var", "male", "female"),
     new = c(pretty_ag_lv, rev(sex_levels))
   )
-  
   
   n_col <- NCOL(dat)
   if (is_kom) {
@@ -64,7 +70,9 @@ DTtables_count <- function(dat = dtCast(),
       thousands_sep = thousands_sep,
       dt_title = plot_title,
       messageBottom = paste0(ui_count_rate[1], " ", tolower(pretty_vars[1])),
-      n_col = n_col
+      n_col = n_col,
+      dec_mark = dec_mark,
+      digits = 0
     )
   } else {
     

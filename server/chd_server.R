@@ -172,6 +172,8 @@ outputDT_chd <- reactive({
     dt_title = "H",
     messageBottom = "B",
     n_col = n_col,
+    thousands_sep = thousands_sep,
+    dec_mark = dec_mark,
     digits = numDigits()
   )
   

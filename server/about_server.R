@@ -25,7 +25,10 @@ aboutFAQDT <- reactive({
 })
 
 
-
+aboutUpdatesDT <- reactive({
+  
+  
+})
 aboutDiagDT <- reactive({
   
   col_subset <-

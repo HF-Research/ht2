@@ -285,7 +285,11 @@ selectedRateType <- reactive({
 selectedDataVars <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
-  selected_data_vars(varCVD = input$varCVD, variable_ui = variable_ui, subset_outcome = subsetOutcome())
+  selected_data_vars(
+    varCVD = input$varCVD,
+    variable_ui = variable_ui,
+    subset_outcome = subsetOutcome()
+  )
   })
 
 subsetVars <- reactive({

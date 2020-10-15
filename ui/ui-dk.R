@@ -99,6 +99,7 @@ about_selection <- "Vælg definition"
 
 about_choices <- list(
   "Generelt/FAQ" = "general",
+  "Opdatering" = "updates",
   "Sygdomme" = "def_diag",
   "Procedurer" = "def_opr",
   "Medicin" = "def_med",
