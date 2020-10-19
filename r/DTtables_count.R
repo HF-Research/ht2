@@ -50,10 +50,10 @@ DTtables_count <- function(dat = dtCast(),
     
   }
   
-  dat[, (col_convert) := lapply(.SD, function(i){
-    i[i==0] <- NA
-    i
-  }), .SDcols = col_convert]
+  # dat[, (col_convert) := lapply(.SD, function(i){
+  #   i[i==0] <- NA
+  #   i
+  # }), .SDcols = col_convert]
   
   
   setnames(

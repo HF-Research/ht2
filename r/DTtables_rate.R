@@ -52,6 +52,11 @@ DTtables_rate <-
       new = c(pretty_ag_lv, ui_sex_levels)
     )
     
+    # dat[, (col_convert) := lapply(.SD, function(i){
+    #   i[i==0] <- NA
+    #   i
+    # }), .SDcols = col_convert]
+    
     if (is_kom) {
       makeRateKomDT(
         dat = dat,
