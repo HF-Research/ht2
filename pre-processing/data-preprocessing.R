@@ -77,24 +77,61 @@ format_data <- function(x) {
       value.var = c("count_", "rate_", "mean3y_count_", "mean3y_rate_"),
       sep = ""
     )
+}
+
+format_geo_data <- function(x, geo_data, geo_type) {
+  # Replaces kommune and region numeric codes with their names (as characters of
+  # course)
+  cols_start <- names(x)
+  
+  geo_cols <- c(paste0(geo_type, "_name"), geo_type)
+  out <-
+    merge(x[agCVD == geo_type], geo_data[, ..geo_cols],
+          by.x = "grouping", by.y = geo_type,
+          all.x = TRUE)
+  out[is.na(get(geo_cols[1])), (geo_cols[1]) := "unknown"]
+  
+  # Ensure row order is same in both x and out (and verify this is true)
+  setkey(out, sex, year, agCVD, grouping, outcome)
+  x[agCVD == geo_type, idx := paste0(sex, year, outcome, grouping)]
+  out[, idx := paste0(sex, year, outcome, grouping)]
+  stopifnot(all(x[agCVD == "geo_type"]$idx == out$idx))
+  
+  # Replace number ID with region name
+  x[agCVD == geo_type, grouping := out[[geo_cols[1]]]]
+  x[, idx := NULL]
+  cols_end <- names(x)
+  stopifnot(all(cols_start == cols_end))
+  
+  # Ensure all matching occured
+  stopifnot(NROW(x[agCVD == geo_type & is.na(grouping)]) == 0)
+  
+  return(x)
   
 }
+geo_codes <-
+  fread("data/kommune_codes.csv", encoding = "UTF-8") %>%
+  setnames(c("kom", "kom_name", "region_name", "region")) %>% 
+  .[, kom := as.character(kom)] %>% 
+  .[, region := as.character(region)]
+region_codes <-
+  geo_codes[, .(region_name, region)] %>% 
+  unique(by = "region")
 export_diag <-
   HTData::export_diag %>% copy() %>%
-  format_data()
+  format_data() %>%
+  format_geo_data(geo_data = region_codes, geo_type = "region") %>%
+  format_geo_data(geo_data = geo_codes, geo_type = "kom")
+
 export_opr <- HTData::export_opr %>% copy() %>%
-  format_data()
+  format_data() %>% 
+  format_geo_data(geo_data = region_codes, geo_type = "region") %>%
+  format_geo_data(geo_data = geo_codes, geo_type = "kom")
 export_med <- HTData::export_med %>% copy() %>%
-  format_data()
+  format_data() %>% 
+  format_geo_data(geo_data = region_codes, geo_type = "region") %>%
+  format_geo_data(geo_data = geo_codes, geo_type = "kom")
 
-# export_diag <- copy(as.data.table(HTData::export_diag))
-#
-# export_opr <- copy(HTData::export_opr)
-# export_med <- copy(HTData::export_med)
-
-# setnames(export_diag, "aggr_level", "agCVD")
-# setnames(export_med, "aggr_level", "agCVD")
-# setnames(export_opr, "aggr_level", "agCVD")
 
 preProccess <- function(export_dat) {
   dat <- split(export_dat, by = "outcome") %>%
@@ -140,9 +177,9 @@ shiny_dat_en <- c(dat_opr, dat_med, dat_diag)
 cleanGeoData <- function(x) {
   # Remove unknowns from Region. and remove Christiansoe
   lapply(x, function(outcome) {
-    outcome$region <- outcome$region[grouping != "Unknown",]
+    outcome$region <- outcome$region[grouping != "Unknown", ]
     if (!is.null(outcome$kom)) {
-      outcome$kom <- outcome$kom[grouping != "Christiansø",]
+      outcome$kom <- outcome$kom[grouping != "Christiansø", ]
     }
     outcome
   })
@@ -624,13 +661,13 @@ l2 <-
 
 l2$name_kom <- enc2native(l2$name_kom)
 l2$region <- enc2native(l2$region)
-l2[l2$name_kom == "Århus",]$name_kom <- "Aarhus"
-l2[l2$name_kom == "Vesthimmerland",]$name_kom <- "Vesthimmerlands"
+l2[l2$name_kom == "Århus", ]$name_kom <- "Aarhus"
+l2[l2$name_kom == "Vesthimmerland", ]$name_kom <- "Vesthimmerlands"
 
 
 l2$name_kom
 # Delete Christiansoe polygon
-l2 <- l2[l2$name_kom != "Christiansø",]
+l2 <- l2[l2$name_kom != "Christiansø", ]
 l2$name_kom
 
 # Move Bornholm
@@ -640,7 +677,7 @@ b.geo <- b.geo + c(-2.6, 1.35) # Move object
 st_geometry(bornholm) <- b.geo # Re-assign geometry to object
 
 # Replace bornholm in main sf object
-l2[l2$name_kom == "Bornholm",] <- bornholm
+l2[l2$name_kom == "Bornholm", ] <- bornholm
 
 # Union kommune to regions
 regions <- unique(l2$region)
