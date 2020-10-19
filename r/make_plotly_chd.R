@@ -23,7 +23,7 @@ make_plotly_chd <- function(x = toFactor(), plot_title = dataTitle(),
 
   axis_font_size <- 20
   legend_font_size <- 17
-  tick_font_size <- 14
+  tick_font_size <- 15
   linesize = 3
   pointsize = 8
   tooltip <-
@@ -69,11 +69,7 @@ make_plotly_chd <- function(x = toFactor(), plot_title = dataTitle(),
         hovertemplate = tooltip
       )
   } else {
-    # tmp1 <- rep(ui_sex_levels[1], 2)
-    # tmp2 <- rep(ui_sex_levels[2], 2)
-    # legend.labs <- paste0(c(tmp1, tmp2), c(" <15", " 15+"))
-    # legend.cols <- rep(graph_colors, each = 2)
-    #
+    
     setorder(x, year)
     out <- plot_ly(data = x) %>%
       add_trace(
@@ -92,50 +88,17 @@ make_plotly_chd <- function(x = toFactor(), plot_title = dataTitle(),
     
   }
   
-  out %>% layout(
-    margin = list(t = 60),
-    title = list(
-      text = plot_title,
-      x = 0,
-      yanchor = "bottom",
-      
-      font = list(family = c("Roboto"),
-                  size = 25)
-    ),
-    xaxis = list(title = list(
-      text = ui_year,
-      font = list(size = axis_font_size)
-    ),
-    tickfont = list(size = tick_font_size)),
-    yaxis = list(
-      title = list(text = pretty_var_chd_units,
-                   font = list(size = axis_font_size)),
-      tickfont = list(size = tick_font_size),
-      rangemode = "tozero"),
-    hoverlabel = list(font = list(size = 18)),
-    hovermode = "x unified",
-    separators = paste0(dec_mark, thousands_sep),
-    legend = list(
-      font = list(size = legend_font_size))
-    
-  ) %>%
-    config(
-      locale = "da",
-      modeBarButtonsToRemove = c(
-        "zoomIn2d",
-        "zoomOut2d",
-        "zoom2d",
-        "pan2d",
-        "select2d",
-        "lasso2d",
-        "autoScale2d",
-        "resetScale2d"
-      ),
-      toImageButtonOptions = list(
-        filename = paste0("HjerteTal- ", replace_outcome_string_chd),
-        width = 1200,
-        height = 600
-      )
-    )
+  plotly_config_line(x = out, plot_title = plot_title,
+             axis_font_size = axis_font_size,
+             tick_font_size = tick_font_size,
+             legend_font_size = legend_font_size,
+             axis_title_x = ui_year,
+             axis_title_y = pretty_var_chd_units,
+             dec_mark = dec_mark,
+             thousands_sep = thousands_sep,
+             file_suffix = replace_outcome_string_chd
+             )
+  
+  
 
 }
