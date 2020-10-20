@@ -35,7 +35,6 @@ replaceOutcomeStringChd <- reactive({
 
 
 output$variable_desc_chd <- renderUI({
-  
   req(input$var_chd, input$oCHD,
       selectedDataVarsChd())
   
@@ -47,7 +46,7 @@ output$variable_desc_chd <- renderUI({
       var_chd = input$var_chd,
       replace_outcome_string_chd = replaceOutcomeStringChd(),
       ui_replace_all_chd = ui_replace_all_chd
-      )
+    )
   })
 })
 
@@ -66,7 +65,7 @@ subsetOutcomeChd <- reactive({
 selectedDataVarsChd <- reactive({
   # Returns the column names to be used to subset the data - taking into account
   # raw or mean data
-
+  
   selected_data_vars_chd(
     var_chd = input$var_chd,
     subset_outcome_chd = subsetOutcomeChd(),
@@ -112,7 +111,6 @@ toFactor <- reactive({
 
 # PLOTLY -----------------------------------------------------------
 plotVarId <- reactive({
-  
   if (isTotals()) {
     c("1")
   } else if (isSex()) {
@@ -127,16 +125,24 @@ plotVarId <- reactive({
 plotlyObj <- reactive({
   make_plotly_chd(
     x = toFactor(),
-    plot_title = dataTitle(),
     num_digits = numDigits(),
-    thousands_sep = thousands_sep,
-    dec_mark = dec_mark,
     is_totals = isTotals(),
     is_sex = isSex(),
     is_age = isAge(),
-    pretty_var_chd_units = prettyVarChdUnits(),
-    replace_outcome_string_chd = replaceOutcomeStringChd()
-  )
+    pretty_var_chd_units = prettyVarChdUnits()) %>%
+      plotly_config_line(
+        plot_title = dataTitle(),
+        axis_font_size = axis_font_size,
+        tick_font_size = tick_font_size,
+        legend_font_size = legend_font_size,
+        axis_title_x = ui_year,
+        axis_title_y = prettyVarChdUnits(),
+        dec_mark = dec_mark,
+        thousands_sep = thousands_sep,
+        file_suffix = replaceOutcomeStringChd()
+      )
+    
+  
 })
 
 
@@ -150,20 +156,21 @@ dtCastChd <- reactive({
     pretty_var_chd_units = prettyVarChdUnits(),
     is_totals = isTotals(),
     is_sex = isSex(),
-    is_age = isAge(), ui_year = ui_year, ui_sex_levels = ui_sex_levels
+    is_age = isAge(),
+    ui_year = ui_year,
+    ui_sex_levels = ui_sex_levels
   )
 })
 
 numDigits <- reactive({
   digits = 1
-  if(input$rate_count_chd == 1){
+  if (input$rate_count_chd == 1) {
     digits = 0
   }
   digits
 })
 
 outputDT_chd <- reactive({
-  
   x <- copy(dtCastChd())
   n_col <- NCOL(x)
   makeRateDT_chd(
@@ -194,7 +201,6 @@ isAge <- reactive({
 })
 
 isAgeSex <- reactive({
-  
   input$agCHD == "age_sex"
 })
 
@@ -203,7 +209,10 @@ isChd <- reactive({
 })
 
 isValidSelection <- reactive({
-  !all( (isAge()|isAgeSex()), input$var_chd == "count_n_incidence", input$oCHD == 3)
+  !all((isAge() |
+          isAgeSex()),
+       input$var_chd == "count_n_incidence",
+       input$oCHD == 3)
 })
 
 
@@ -224,10 +233,10 @@ output$table_counts_chd <- renderDT({
 
 
 output$invalid_selection_text <- renderText({
-  if(isValidSelection()){
+  if (isValidSelection()) {
     ""
   }  else {
-  HTML(paste0("<h3>", ui_warning_invalid_selection, "</h3>"))
+    HTML(paste0("<h3>", ui_warning_invalid_selection, "</h3>"))
   }
 })
 

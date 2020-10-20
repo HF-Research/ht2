@@ -266,6 +266,15 @@ selectPercentOrRate <- reactive({
   
 })
 
+numDigitsCVD <- reactive({
+  # Only have decimal when showing percentages, otherwise round to whole units
+  digits = 0
+  if (input$rate_count == 2 & selectPercentOrRate()) {
+    digits = 1
+  }
+  digits
+})
+
 
 # SUBSETTING ------------------------------------------------------
 subsetOutcome <- reactive({
@@ -310,7 +319,7 @@ subsetYear <- reactive({
 })
 
 
-# FORMATTING :DATA FOR D3------------------------------------------------------
+# FORMATTING DATA FOR D3------------------------------------------------------
 outputCasesData <- function() {
   
   # National level data shows all years
@@ -367,6 +376,21 @@ plot_d3_bar <- reactive({
 })
 
 
+plotly_line_cvd <- reactive({
+  make_plotly_cvd(x = subsetVars(), num_digits = numDigitsCVD(),
+                  pretty_variable = prettyVariableSingular()) %>% 
+    plotly_config_line(
+      plot_title = plotTitle(),
+      axis_font_size = axis_font_size,
+      tick_font_size = tick_font_size,
+      legend_font_size = legend_font_size,
+      axis_title_x = ui_year,
+      axis_title_y = prettyVariableSingular(),
+      dec_mark = dec_mark,
+      thousands_sep = thousands_sep,
+      file_suffix = plotTitle()
+    )
+})
 plot_d3_line <- reactive({
   if (isNational()) {
     
@@ -765,7 +789,7 @@ output$downloadMapsFemale <- downloadHandler(
     )
   }
 )
-# RENDER FUNC:TIONS --------------------------------------------------------
+# RENDER FUNCTIONS --------------------------------------------------------
 
 # PLOT
 #
@@ -776,6 +800,16 @@ output$d3_plot_bar <- renderSimpleD3Bar({
     plot_d3_bar()
   }
 })
+
+output$plotly_line_cvd <- renderPlotly({
+  req(input$varCVD)
+  if (validateIn() && isNational()) {
+    
+    plotly_line_cvd()
+  }
+  
+})
+
 
 output$d3_plot_line_html <- renderSimpleD3Line({
   req(input$varCVD)

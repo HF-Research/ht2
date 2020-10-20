@@ -78,7 +78,7 @@ tabPanel(ui_main_title,
                                   )),
                  conditionalPanel(condition = "input.agCVD == 'national'",
                                   (
-                                    simpleD3LineOutput("d3_plot_line_html", height = "600px")
+                                    plotlyOutput("plotly_line_cvd", height = "600px")
                                   )),
                  fluidRow(
                    div(

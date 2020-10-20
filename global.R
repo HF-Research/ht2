@@ -28,8 +28,6 @@ if (is.null(suppressMessages(webshot:::find_phantom()))) {
   webshot::install_phantomjs()
 }
 
-# install.packages(c("V8","jqr","protolite","crul","jsonvalidate","httpcode","urltools","maptools"))
-# install.packages(c("geojson","geo2jsonino","geojsonlint","rgeos","rmapshaper"))
 print(suppressMessages(webshot:::find_phantom()))
 
 
@@ -83,6 +81,13 @@ single_val_col <- hfBlue
 DT_background_color <- "#002A3A"
 DT_background_color <- "#193f4d"
 
+
+
+# PLOTLY ------------------------------------------------------------------
+
+axis_font_size <- 20
+legend_font_size <- 17
+tick_font_size <- 15
 
 # DATATABLE JS FUNCTIONS----------------------------------------------------
 # From:

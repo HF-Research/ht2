@@ -1,7 +1,7 @@
 ui <- function(request) {
   div(
     useShinyjs(),
-    extendShinyjs(script = "www/numberFormatter.js"),
+    extendShinyjs(script = "www/numberFormatter.js", functions = "numberFormatter"),
     tags$head(
       includeHTML("www/google-analytics.html"),
       {
