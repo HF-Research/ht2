@@ -330,12 +330,6 @@ outputCasesData <- function() {
   }
 }
 
-dataD3Line <- reactive({
-  # Replace value.var with reactive that corresponds to the variable the user selected
-  data_d3_line(dat = dtCast(),
-               pretty_var_singular = prettyVariableSingular(),
-               ui_year = ui_year)
-})
 
 dataD3Bar <- reactive({
   # Restrict data to the user selected vairable, and give pretty column names
@@ -391,23 +385,6 @@ plotly_line_cvd <- reactive({
       file_suffix = plotTitle()
     )
 })
-plot_d3_line <- reactive({
-  if (isNational()) {
-    
-    sex_vars <- ui_sex_levels
-    color = c(graph_colors[1], graph_colors[2])
-    plot_title = plotTitle()
-    simpleD3Line(
-      data = dataD3Line(),
-      colors = c(graph_colors[1], graph_colors[2]),
-      plotTitle = plot_title,
-      sexVars = sex_vars,
-      dataVar = prettyVariableSingular(),
-      lang = lang
-    )
-  }
-})
-
 
 
 # LEAFLET MAPS ------------------------------------------------------
@@ -810,16 +787,6 @@ output$plotly_line_cvd <- renderPlotly({
   
 })
 
-
-output$d3_plot_line_html <- renderSimpleD3Line({
-  req(input$varCVD)
-  if (validateIn() && isNational()) {
-    
-    plot_d3_line()
-  }
-  
-})
-
 # DATATABLES
 output$table_counts <- renderDT({
   req(validateIn())
@@ -836,6 +803,7 @@ output$table_rates <- renderDT({
 # MAPS
 output$map_male <- renderLeaflet({
   req(validateIn())
+  browser()
     combinedMaps()$map_m
 })
 
