@@ -751,12 +751,15 @@ map <- reactiveValues(dat = 0)
 output$downloadMapsMale <- downloadHandler(
   filename = "map_male.png",
   content = function(file) {
+    
     make_static_map(
       dat = combinedMaps()$fill_data_male,
       map_obj = mapData()$male,
       mini_map_lines = dk_sp$mini_map_lines,
       pretty_variable = prettyVariable()[2],
-      plot_title = plotTitle(), sex = ui_sex_levels[2]
+      plot_title = plotTitle(), sex = ui_sex_levels[2],
+      thousands_sep = thousands_sep,
+      dec_mark = dec_mark
     ) %>% ggsave(
       filename = file,
       plot = .,
