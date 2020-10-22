@@ -60,7 +60,7 @@ map_data <- function(dat = dat,
   out <- lapply(out, st_as_sf)
   st_crs(out$male) <- 4326
   st_crs(out$female) <- 4326
-  print(st_crs(out$male))
+  
   out
   
 }

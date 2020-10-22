@@ -760,6 +760,9 @@ output$downloadMapsMale <- downloadHandler(
     ) %>% ggsave(
       filename = file,
       plot = .,
+      width = 12,
+      height = 20,
+      units = "cm",
       scale = 1.5
     )
             
@@ -786,6 +789,9 @@ output$downloadMapsFemale <- downloadHandler(
     ) %>% ggsave(
       filename = file,
       plot = .,
+      width = 12,
+      height = 20,
+      units = "cm",
       scale = 1.5
     )
   }
@@ -821,14 +827,6 @@ output$table_rates <- renderDT({
   outputRateDTTable()
   
 })
-
-# MAPS
-# output$map_male <- renderPlotly({
-#   req(validateIn())
-#   print("start")
-#   plotly_map()
-# })
-
 
 output$map_male <- renderLeaflet({
   req(validateIn())

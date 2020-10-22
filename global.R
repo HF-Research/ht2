@@ -22,13 +22,6 @@ library(plotly)
 library(fst)
 library(magrittr)
 })
-# print(suppressMessages(webshot:::find_phantom()))
-# if (is.null(suppressMessages(webshot:::find_phantom()))) {
-#   webshot::install_phantomjs()
-# }
-# 
-# print(suppressMessages(webshot:::find_phantom()))
-
 
 
 # LOAD R CODE -------------------------------------------------------------

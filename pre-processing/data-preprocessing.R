@@ -85,11 +85,17 @@ format_geo_data <- function(x, geo_data, geo_type) {
   cols_start <- names(x)
 
   geo_cols <- c(paste0(geo_type, "_name"), geo_type)
+  
+  # Grouping == 9 are "unknowns", we want to remove those
+  x <- x[!(agCVD == geo_type & grouping == 9)]
+  x <- x[!(agCVD == geo_type & grouping == "unknown")]
   out <-
     merge(x[agCVD == geo_type], geo_data[, ..geo_cols],
           by.x = "grouping", by.y = geo_type,
           all.x = TRUE)
-  out[is.na(get(geo_cols[1])), (geo_cols[1]) := "unknown"]
+  
+  # Check that everything matches
+  stopifnot(NROW(out[is.na(get(geo_cols[1]))]) == 0)
 
   # Ensure row order is same in both x and out (and verify this is true)
   setkey(out, sex, year, agCVD, grouping, outcome)
@@ -105,7 +111,7 @@ format_geo_data <- function(x, geo_data, geo_type) {
 
   # Ensure all matching occured
   stopifnot(NROW(x[agCVD == geo_type & is.na(grouping)]) == 0)
-
+  
   return(x)
 
 }
@@ -719,21 +725,11 @@ mini_map_lines$name <- row.names(mini_map_lines)
 # Convert to sp obj for performance with leaflet
 l1_sf <- rmapshaper::ms_simplify(l1)
 l2_sf <- rmapshaper::ms_simplify(l2)
-l1_tmp <- as(l1_sf, "Spatial")
-l2_tmp <- as(l2_sf, "Spatial")
-l1_tmp$name_kom <- l1$name_kom
-l2_tmp$name_kom <- l2$name_kom
 
-
-
-dk_sp_data <- list(l1 = l1_tmp,
-                   l2 = l2_tmp,
-                   mini_map_lines = mini_map_lines
-)
 
 dk_sf_data <- list(l1 = l1_sf %>% as.data.table(),
                    l2 = l2_sf %>% as.data.table(),
                    mini_map_lines = mini_map_lines)
 
-saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
+
 saveRDS(dk_sf_data, file = "data/dk_sf_data.rds")

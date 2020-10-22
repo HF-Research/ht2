@@ -59,8 +59,8 @@ make_static_map <- function(dat,
       )
     ) +
     annotate("text",
-             x = mini_map_lines$X1[3] + 0.4,
-             y = mini_map_lines$X2[3] + 0.16,
+             x = mini_map_lines$X1[3] + 0.5,
+             y = mini_map_lines$X2[3] + 0.934,
              label = "Credit: HjerteTal.dk",
              size = 3.5,
              fontface = "italic",
@@ -73,12 +73,12 @@ make_static_map <- function(dat,
     ) +
     
     theme(
-      legend.position = c(0.96, 0.84),
-      legend.text = element_text(size = 14),
-      legend.title = element_text(size = 14),
-      plot.title = element_text(size = 18)
-    )
-  
-  
+      legend.position = c(0.82, 0.84),
+      legend.text = element_text(size = 15),
+      legend.title = element_text(size = 15),
+      plot.title = element_text(size = 19)
+    ) +  guides(fill = guide_colourbar(
+      barwidth = 1,
+      barheight = 10))  
   
 }
