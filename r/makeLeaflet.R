@@ -30,7 +30,7 @@ makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines,
       weight = 1,
       opacity = 1,
       color = "grey",
-      fillOpacity = 0.7,
+      fillOpacity = 0.9,
       label = label_popup,
       labelOptions = labelOptions(
         style = list("font-weight" = "normal", # CSS styles

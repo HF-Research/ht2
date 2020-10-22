@@ -4,8 +4,6 @@ library(sp)
 library(rgeos)
 library(maptools)
 library(sf)
-library(geojsonio)
-library(rjson)
 library(leaflet)
 library(dplyr)
 library(fst)
@@ -652,7 +650,9 @@ saveRDS(about_chd_en, file = "language/ui_about_text_chd_en.rds")
 # GEO DATA ------------------------------------------------------------------
 l2 <- readRDS("data/DNK_adm2.rds")
 
-l2 <- st_as_sf(l2, coords = c("x", "y"))
+l2 <- st_as_sf(l2, coords = c("x", "y")) %>%
+  st_transform(crs = st_crs(4326))
+st_crs(l2) <- 4326
 l2 <-
   l2 %>%
   dplyr::select(OBJECTID, NAME_1, NAME_2) %>%
@@ -695,17 +695,12 @@ for (reg in regions) {
 }
 
 l1 <- do.call("rbind", out_sf)
-# plot(l1)
-# plot(l2)
-
-# Formatting columns
 colnames(l1) <- c("id", "name_kom", "geometry")
 l2$region <- NULL
 
 
 
 # mini-map lines
-#
 x_min <- 12.03
 x_max <- 12.63
 y_min <- 56.31
@@ -719,51 +714,26 @@ top_right <- c(x_max, y_max)
 mini_map_lines <-
   data.frame(rbind(bottom_right, bottom_left, top_left, top_right, bottom_right))
 mini_map_lines$name <- row.names(mini_map_lines)
-# leaflet() %>% addPolygons(data = l1) %>% addPolylines(data = mini_map_lines, lng = ~ X1, lat = ~ X2)
+
 
 # Convert to sp obj for performance with leaflet
-l1_tmp <- as(l1, "Spatial")
-l2_tmp <- as(l2, "Spatial")
+l1_sf <- rmapshaper::ms_simplify(l1)
+l2_sf <- rmapshaper::ms_simplify(l2)
+l1_tmp <- as(l1_sf, "Spatial")
+l2_tmp <- as(l2_sf, "Spatial")
 l1_tmp$name_kom <- l1$name_kom
 l2_tmp$name_kom <- l2$name_kom
 
-l1_json <- geojson_json(input = l1_tmp) %>% 
-  rmapshaper::ms_simplify()
-l1_json <- fromJSON(l1_json)
-l2_json <- geojson_json(input = l2_tmp) %>% 
-  rmapshaper::ms_simplify()
-l2_json <- fromJSON(l2_json)
 
 
-
-library(plotly)
-fig <- plot_ly()
-fig <- fig %>% add_trace(
-  type="choropleth",
-  geojson=l2_json,
-  locations=shiny_dat_dk$d1$kom[sex == "male" & year == 2009]$grouping,
-  z=shiny_dat_dk$d1$kom[sex == "male" & year == 2009]$mean3y_count_n_incidence,
-  colorscale="Viridis",
-  featureidkey = "properties.name_kom",
-
-  marker=list(line=list(
-    width=0)
-  )
+dk_sp_data <- list(l1 = l1_tmp,
+                   l2 = l2_tmp,
+                   mini_map_lines = mini_map_lines
 )
-g <- list(
-  fitbounds = "locations",
-  visible = FALSE,
-  projection = list(type = 'azimuthal equal area')
-)
-fig <- fig %>% layout(
-  geo = g,
-  legend = list (x = 0.1, y = 0.5)
-)
-fig
-dk_sp_data <- list(l1 = l1_json,
-                   l2 = l2_json,
+
+dk_sf_data <- list(l1 = l1_sf %>% as.data.table(),
+                   l2 = l2_sf %>% as.data.table(),
                    mini_map_lines = mini_map_lines)
 
-
-
 saveRDS(dk_sp_data, file = "data/dk_sp_data.rds")
+saveRDS(dk_sf_data, file = "data/dk_sf_data.rds")

@@ -11,9 +11,7 @@ map_obj <-
            is_region = isRegion(),
            dk_sp = dk_sp) {
     if (is_kom) {
-      dk_sp$l2
-    } else if (is_region) {
-      dk_sp$l1
+      return(dk_sp$l2)
     }
-    
+    return(dk_sp$l1)
   }

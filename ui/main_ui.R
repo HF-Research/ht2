@@ -113,6 +113,9 @@ tabPanel(ui_main_title,
                      class = "col_leaflet",
                      6,
                      align = "left",
+                     # (plotlyOutput(
+                     #   "map_male", width = 420, height = 550
+                     # )),
                      (leafletOutput(
                        "map_male", width = 420, height = 550
                      )),

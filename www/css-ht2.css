@@ -419,6 +419,10 @@ td {
   padding-right: 0px;
 }
 
+.leaflet-right .leaflet-control {
+    margin-right: 0px;
+}
+
 #map_title_male{
 font-size: 1.6rem;
 font-weight: 550;

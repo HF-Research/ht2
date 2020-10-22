@@ -22,60 +22,35 @@ maps_combine <-
            map_data_main = mapData(),
            dk_sp = dk_sp,
            pretty_aggr_level = prettyAggr_level()) {
-    
+    legend_opacity = 0.9
     name_lang <- paste0("name_", lang)
     
     fill_data <-
-      subset_vars[get(ui_year) >= 2009,][[var_name]]
+      subset_vars[get(ui_year) >= 2009] %>% 
+    .[get(var_name) == 0, (var_name) := NA]
     
-    fill_data[fill_data == 0] <- NA
-    # Define breaks using the "pretty" algorithm
-    map_breaks <-
-      suppressWarnings(classIntervals(fill_data, style = "pretty", n = 5))
-    pal <-
-      colorBin(
-        palette = "YlOrRd",
-        bins = length(map_breaks$brks),
-        domain = map_breaks$brks
-      )
-    
-    if (select_percent_rates) {
-      # If variable is percent:
-      labFormatter <- function(type, cuts) {
-        n = length(cuts)
-        cuts <- round(cuts, digits = 1)
-        paste0(cuts[-n], "% &ndash; ", cuts[-1], "%")
-      }
-    } else {
-      # If variable is rate:
-      labFormatter <- function(type, cuts) {
-        n = length(cuts)
-        cuts_formatted <- formatC(
-          round(cuts),
-          digits = 0,
-          format = "d",
-          big.mark = thousands_sep,
-          decimal.mark = dec_mark
-        )
-        paste0(cuts_formatted[-n], " &ndash; ", cuts_formatted[-1])
-      }
-    }
+    fill_data_male <- fill_data[get(ui_sex) == "male"][[var_name]]
+    fill_data_female <- fill_data[get(ui_sex) == "female"][[var_name]]
     
     
-    legend_title <- gsub("  ", "<br>", var_name)
+    legend_title <- stringr::str_wrap(var_name, 25) %>% 
+      gsub("\\n", "<br>", .)
     popup_var_title_1 <- gsub("  .*", "", var_name)
-    
     
     # Male map
     map_data <-  map_data_main$male
+    pal <- 
+      colorNumeric(palette = "YlOrRd", domain = fill_data_male,)
+    
+    # This is created so NA doesn't appear on the legend
+    pal_NA <- colorNumeric("YlOrRd", fill_data_male, na.color=rgb(0,0,0,0))
+    
     fill_colors <-
-      ~ pal(map_data@data[[var_name]])
-    
-    
+      ~ pal(map_data[[var_name]])
     popup <-
-      makeMapPopup(geo_name = map_data@data[[pretty_aggr_level]],
+      makeMapPopup(geo_name = map_data[[pretty_aggr_level]],
                    var_title1 = popup_var_title_1,
-                   map_data@data[[var_name]])
+                   map_data[[var_name]])
     
     map_m <- makeLeaflet(
       map_data = map_data,
@@ -83,19 +58,31 @@ maps_combine <-
       label_popup = popup,
       mini_map_lines = dk_sp$mini_map_lines,
       element_id = "map_male"
-    )
+    ) %>% 
+      addLegend(
+        "topright",
+        pal = pal_NA,
+        values = fill_data_male,
+        title = legend_title,
+        bins = 4,
+        na.label = "",
+        layerId = "legend",
+        opacity = legend_opacity
+      )
+    
     
     # Female map
     map_data <-  map_data_main$female
+    pal <- 
+      colorNumeric(palette = "YlOrRd", domain = fill_data_female)
     
+    pal_NA <- colorNumeric("YlOrRd", fill_data_female, na.color=rgb(0,0,0,0))
     fill_colors <-
-      ~ pal(map_data@data[[var_name]])
+      ~ pal(map_data[[var_name]])
     popup <-
-      makeMapPopup(geo_name = map_data@data[[pretty_aggr_level]],
+      makeMapPopup(geo_name = map_data[[pretty_aggr_level]],
                    var_title1 = popup_var_title_1,
-                   map_data@data[[var_name]])
-    
-    
+                   map_data[[var_name]])
     map_f <- makeLeaflet(
       map_data = map_data,
       fill_colors = fill_colors,
@@ -105,35 +92,22 @@ maps_combine <-
     ) %>%
       addLegend(
         "topright",
-        pal = pal,
-        values = fill_data,
+        pal = pal_NA,
+        values = fill_data_female,
         title = legend_title,
-        labels = legend_labels,
+        bins = 4,
+        na.label = "",
         layerId = "legend",
-        labFormat = function(type, cuts, p = NULL) {
-          type <- type
-          cuts <- cuts
-          labFormatter(type = type,
-                       cuts = cuts)
-        }
-      )
+        opacity = legend_opacity
+     )
     
-    map_m_legend <- map_m %>% 
-      addLegend(
-        "topright",
-        pal = pal,
-        values = fill_data,
-        title = legend_title,
-        labels = legend_labels,
-        layerId = "legend",
-        labFormat = function(type, cuts, p = NULL) {
-          type <- type
-          cuts <- cuts
-          labFormatter(type = type,
-                       cuts = cuts)
-        }
-      )
+    # css_fix <- "div.info.legend.leaflet-control br {clear: both;}"  # CSS to correct spacing
+    # html_fix <- htmltools::tags$style(type = "text/css", css_fix)   # Convert CSS to HTML
+    # map_f %<>% htmlwidgets::prependContent(html_fix)                # Insert into leaflet HTML code
+    # map_m %<>% htmlwidgets::prependContent(html_fix)                # Insert into leaflet HTML code
     return(list(map_m = map_m,
                 map_f = map_f,
-                map_m_legend = map_m_legend))
+                fill_data_male = fill_data_male,
+                fill_data_female = fill_data_female
+                ))
   }

@@ -11,24 +11,23 @@ library(DT)
 library(shinyWidgets)
 library(data.table)
 library(shinyjs) # Hides un-used tabs
-library(classInt) # For choropleth map breaks
 library(leaflet)
 library(manipulateWidget)
 # library(shinycssloaders)
 # devtools::install_github('matthew-phelps/simpled3', force = TRUE)
 library(simpled3)
-library(mapview) # For map downloads
+library(sf)
 # devtools::install_github("ropensci/plotly")
 library(plotly)
 library(fst)
 library(magrittr)
 })
-print(suppressMessages(webshot:::find_phantom()))
-if (is.null(suppressMessages(webshot:::find_phantom()))) {
-  webshot::install_phantomjs()
-}
-
-print(suppressMessages(webshot:::find_phantom()))
+# print(suppressMessages(webshot:::find_phantom()))
+# if (is.null(suppressMessages(webshot:::find_phantom()))) {
+#   webshot::install_phantomjs()
+# }
+# 
+# print(suppressMessages(webshot:::find_phantom()))
 
 
 
@@ -54,7 +53,7 @@ year_max <- 2017
 
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)
-dk_sp <- readRDS(file = "data/dk_sp_data.rds")
+dk_sf <- readRDS(file = "data/dk_sf_data.rds")
 pop <- fread("data/pop_summary_age.txt")
 
 source("ui/ui-common.R")
