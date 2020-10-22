@@ -74,20 +74,13 @@ tabPanel(ui_main_title,
                  br(),
                  conditionalPanel(condition = "input.agCVD != 'national'",
                                   (
-                                    simpleD3BarOutput("d3_plot_bar", height = "600px")
+                                    plotlyOutput("d3_plot_bar", height = "600px")
                                   )),
                  conditionalPanel(condition = "input.agCVD == 'national'",
                                   (
                                     plotlyOutput("plotly_line_cvd", height = "600px")
                                   )),
-                 fluidRow(
-                   div(
-                     class = "col-xs-6 col-sm-6 col-md-6 col-lg-9",
-                     id = "download_button_row",
-                     align = "left",
-                     uiOutput("downloadButton")
-                   )
-                 ),
+                 
                  fluidRow(column(
                    12, align = "left",
                    uiOutput("rate_count_desc"),

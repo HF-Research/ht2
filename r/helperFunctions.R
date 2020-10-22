@@ -17,3 +17,7 @@ ht_link <- function(lang){
     "https://hjerteforeningen.shinyapps.io/HjerteTal/"
   }
 }
+
+html_wrap <- function(x, width){
+  paste0(strwrap(x, width = width), collapse =  "<br>")
+}

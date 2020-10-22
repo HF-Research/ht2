@@ -366,8 +366,33 @@ plot_d3_bar <- reactive({
   
 })
 
+plotly_bar_cvd <- reactive({
+  make_plotly_bar_cvd(
+    x = dataD3Bar(),
+    num_digits = numDigitsCVD(),
+    pretty_aggr_level = prettyAggr_level(),
+    pretty_variable = prettyVariableSingular(),
+    sex = ui_sex
+      
+  ) %>% 
+    plotly_config_line(
+      plot_title = plotTitle(),
+      axis_font_size = axis_font_size,
+      tick_font_size = tick_font_size,
+      legend_font_size = legend_font_size,
+      axis_title_x = prettyAggr_level(),
+      axis_title_y = html_wrap(prettyVariableSingular(), width = 27),
+      dec_mark = dec_mark,
+      thousands_sep = thousands_sep,
+      legend_order = "normal",
+      num_digits = numDigitsCVD(),
+      file_suffix = plotTitle()
+    )
+})
+
 
 plotly_line_cvd <- reactive({
+  
   make_plotly_cvd(
     x = subsetVars(),
     num_digits = numDigitsCVD(),
@@ -379,9 +404,11 @@ plotly_line_cvd <- reactive({
       tick_font_size = tick_font_size,
       legend_font_size = legend_font_size,
       axis_title_x = ui_year,
-      axis_title_y = prettyVariableSingular(),
+      axis_title_y = html_wrap(prettyVariableSingular(), width = 27),
       dec_mark = dec_mark,
       thousands_sep = thousands_sep,
+      legend_order = "reversed",
+      num_digits = numDigitsCVD(),
       file_suffix = plotTitle()
     )
 })
@@ -755,7 +782,7 @@ output$downloadMapsMale <- downloadHandler(
     make_static_map(
       dat = combinedMaps()$fill_data_male,
       map_obj = mapData()$male,
-      mini_map_lines = dk_sp$mini_map_lines,
+      mini_map_lines = dk_sf$mini_map_lines,
       pretty_variable = prettyVariable()[2],
       plot_title = plotTitle(), sex = ui_sex_levels[2],
       thousands_sep = thousands_sep,
@@ -786,7 +813,7 @@ output$downloadMapsFemale <- downloadHandler(
     make_static_map(
       dat = combinedMaps()$fill_data_female,
       map_obj = mapData()$female,
-      mini_map_lines = dk_sp$mini_map_lines,
+      mini_map_lines = dk_sf$mini_map_lines,
       pretty_variable = prettyVariable()[2],
       plot_title = plotTitle(), sex = ui_sex_levels[1]
     ) %>% ggsave(
@@ -803,10 +830,11 @@ output$downloadMapsFemale <- downloadHandler(
 
 # PLOT
 #
-output$d3_plot_bar <- renderSimpleD3Bar({
+output$d3_plot_bar <- renderPlotly({
   req(input$varCVD)
   if (validateIn() && !isNational() && !isKom()) {
-    plot_d3_bar()
+    
+    plotly_bar_cvd()
   }
 })
 

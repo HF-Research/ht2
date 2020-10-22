@@ -19,7 +19,7 @@ plotly_config_line <- function(x,plot_title = plot_title, axis_font_size,
                                tick_font_size, legend_font_size =
                                legend_font_size, axis_title_x, axis_title_y,
                                dec_mark = dec_mark, thousands_sep =
-                               thousands_sep, file_suffix) {
+                               thousands_sep, file_suffix, legend_order, num_digits) {
 
   x %>% layout(
     margin = list(t = 60),
@@ -40,11 +40,14 @@ plotly_config_line <- function(x,plot_title = plot_title, axis_font_size,
       title = list(text = axis_title_y,
                    font = list(size = axis_font_size)),
       tickfont = list(size = tick_font_size),
-      rangemode = "tozero"),
+      rangemode = "tozero",
+      tickformat = paste0(",.", num_digits)),
     hoverlabel = list(font = list(size = 18)),
     hovermode = "x unified",
     separators = paste0(dec_mark, thousands_sep),
     legend = list(
+      traceorder = legend_order,
+      orientation = "h",
       font = list(size = legend_font_size))
     
   ) %>%

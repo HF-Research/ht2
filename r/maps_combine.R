@@ -67,7 +67,8 @@ maps_combine <-
         bins = 4,
         na.label = "",
         layerId = "legend",
-        opacity = legend_opacity
+        opacity = legend_opacity,
+        labFormat = labelFormat(big.mark = thousands_sep, digits = 0)
       )
     
     
@@ -98,7 +99,8 @@ maps_combine <-
         bins = 4,
         na.label = "",
         layerId = "legend",
-        opacity = legend_opacity
+        opacity = legend_opacity,
+        labFormat = labelFormat(big.mark = thousands_sep, digits = 0)
      )
     
     # css_fix <- "div.info.legend.leaflet-control br {clear: both;}"  # CSS to correct spacing
