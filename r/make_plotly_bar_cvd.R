@@ -10,14 +10,19 @@
 ##' @author Matthew Phelps
 ##' @export
 make_plotly_bar_cvd <-
-  function(x = subsetVars(),
+  function(x,
            num_digits = numDigitsCVD(),
            pretty_variable = prettyVariableSingular(),
            pretty_aggr_level = prettyAggr_level(),
-           sex = ui_sex) {
+           sex = ui_sex,
+           sex_levels) {
     tooltip <-
       paste0("%{text}: <br><b>%{y:,.", num_digits, "f}<extra></extra>")
-    x[, (sex) := factor(get(sex), levels = c("male", "female"))]
+    
+    x[, (sex) := factor(get(sex),
+                        levels = c("male", "female"),
+                        labels = sex_levels)]
+    x[, (pretty_aggr_level) := html_wrap_v(get(pretty_aggr_level), 20)]
     x %>%
       plot_ly() %>%
       add_trace(
@@ -25,7 +30,7 @@ make_plotly_bar_cvd <-
         y = ~ get(pretty_variable),
         text = ~ get(sex),
         color = ~ get(sex),
-        colors = rev(graph_colors),
+        colors = (graph_colors),
         type = "bar",
         hovertemplate = tooltip
       )

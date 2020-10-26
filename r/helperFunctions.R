@@ -21,3 +21,7 @@ ht_link <- function(lang){
 html_wrap <- function(x, width){
   paste0(strwrap(x, width = width), collapse =  "<br>")
 }
+
+html_wrap_v <- function(x, width){
+ stringr::str_wrap(x, width) %>% gsub("\n", "<br>", x= .)
+}

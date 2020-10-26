@@ -11,7 +11,7 @@
 ##' @param pretty_var_chd_units
 
 make_plotly_chd <- function(x = toFactor(), 
-                            num_digits = numDigits(),
+                            num_digits,
                             is_totals = isTotals(),
                             is_sex = isSex(), is_age = isAge(),
                             pretty_var_chd_units = prettyVarChdUnits()
