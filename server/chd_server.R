@@ -123,6 +123,7 @@ plotVarId <- reactive({
 })
 
 plotlyObj <- reactive({
+  
   make_plotly_chd(
     x = toFactor(),
     num_digits = numDigits(),
@@ -130,7 +131,7 @@ plotlyObj <- reactive({
     is_sex = isSex(),
     is_age = isAge(),
     pretty_var_chd_units = prettyVarChdUnits()) %>%
-      plotly_config_line(
+      plotly_config(
         plot_title = dataTitle(),
         axis_font_size = axis_font_size,
         tick_font_size = tick_font_size,
@@ -139,6 +140,8 @@ plotlyObj <- reactive({
         axis_title_y = prettyVarChdUnits(),
         dec_mark = dec_mark,
         thousands_sep = thousands_sep,
+        legend_order = "normal",
+        num_digits = numDigits(),
         file_suffix = replaceOutcomeStringChd()
       )
     

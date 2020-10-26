@@ -317,7 +317,7 @@ subsetYear <- reactive({
 })
 
 
-# FORMATTING DATA FOR D3------------------------------------------------------
+# PLOTLY------------------------------------------------------
 outputCasesData <- function() {
   # National level data shows all years
   if (!isNational()) {
@@ -328,55 +328,26 @@ outputCasesData <- function() {
 }
 
 
-dataD3Bar <- reactive({
-  # Restrict data to the user selected vairable, and give pretty column names
-  data_d3_bar(
+plotly_bar_cvd <- reactive({
+x <- prep_bar_data(
     pretty_var_singular = prettyVariableSingular(),
     ui_sex = ui_sex,
     pretty_aggr_level = prettyAggr_level(),
     count_rate = count_rate,
     subset_year = subsetYear()
   )
-  
-})
 
-
-plot_d3_bar <- reactive({
-  if (nrow(dataD3Bar()) > 0  &&
-      !isNational()) {
-    sex_vars <- ui_sex_levels
-    color = c(graph_colors[1], graph_colors[2])
-    plot_title = plotTitle()
-    
-    # For kommune data re-order based on rate or count
-    dat <- copy(dataD3Bar())
-    if (isKom()) {
-      setorderv(dat, c(ui_sex, prettyVariableSingular()), order = -1L)
-    }
-    
-    simpleD3Bar(
-      data = dat,
-      colors = c(graph_colors[1], graph_colors[2]),
-      plotTitle = plot_title,
-      sexVars = sex_vars,
-      dataVar = prettyVariableSingular(),
-      lang = lang
-    )
-  }
-  
-})
-
-plotly_bar_cvd <- reactive({
   make_plotly_bar_cvd(
-    x = dataD3Bar(),
+    x = x,
     num_digits = numDigitsCVD(),
     pretty_aggr_level = prettyAggr_level(),
     pretty_variable = prettyVariableSingular(),
-    sex = ui_sex
+    sex = ui_sex,
+    sex_levels = rev(ui_sex_levels)
       
   ) %>% 
-    plotly_config_line(
-      plot_title = plotTitle(),
+    plotly_config(
+      plot_title = html_wrap(plotTitle(), width = 60),
       axis_font_size = axis_font_size,
       tick_font_size = tick_font_size,
       legend_font_size = legend_font_size,
@@ -394,12 +365,16 @@ plotly_bar_cvd <- reactive({
 plotly_line_cvd <- reactive({
   
   make_plotly_cvd(
-    x = subsetVars(),
+    x = copy(subsetVars()),
     num_digits = numDigitsCVD(),
-    pretty_variable = prettyVariableSingular()
+    pretty_variable = prettyVariableSingular(),
+    sex = ui_sex,
+    sex_levels = rev(ui_sex_levels),
+    count_rate = input$rate_count
+    
   ) %>%
-    plotly_config_line(
-      plot_title = plotTitle(),
+    plotly_config(
+      plot_title = html_wrap(plotTitle(), width = 60),
       axis_font_size = axis_font_size,
       tick_font_size = tick_font_size,
       legend_font_size = legend_font_size,
@@ -407,7 +382,7 @@ plotly_line_cvd <- reactive({
       axis_title_y = html_wrap(prettyVariableSingular(), width = 27),
       dec_mark = dec_mark,
       thousands_sep = thousands_sep,
-      legend_order = "reversed",
+      legend_order = "normal",
       num_digits = numDigitsCVD(),
       file_suffix = plotTitle()
     )
@@ -455,17 +430,7 @@ combinedMaps <- reactive({
   )
   
   return(maps_out)
-  # Store maps on "map" reactiveValues object - these will be accessed by the
-  # downloadHandler for downloading functionality. I do not know how to
-  # download both maps together.
-  map$map_f <- maps_out$map_f
-  map$map_m <- maps_out$map_m
-  # Need to add legend to male map in case it's downloaded without female map
-  map$map_m_legend <- maps_out$map_m_legend
-  
-  map
-  
-})
+  })
 
 
 
@@ -760,25 +725,9 @@ observeEvent(label = "forceTabSwicthKom", input$agCVD, {
 
 
 # DOWNLOAD BUTTONS --------------------------------------------------------
-output$downloadButton <- renderUI({
-  req(input$agCVD)
-  if (!isNational()) {
-    actionBttn(inputId = "download_bar",
-               label = ui_download_graph,
-               size = "sm")
-  } else if (isNational()) {
-    actionBttn(inputId = "download_line",
-               label = ui_download_graph,
-               size = "sm")
-  }
-  
-})
-
-map <- reactiveValues(dat = 0)
 output$downloadMapsMale <- downloadHandler(
   filename = "map_male.png",
   content = function(file) {
-    
     make_static_map(
       dat = combinedMaps()$fill_data_male,
       map_obj = mapData()$male,
@@ -795,17 +744,7 @@ output$downloadMapsMale <- downloadHandler(
       units = "cm",
       scale = 1.5
     )
-            
-    
-    
-    # mapshot(
-    #   map$map_m_legend,
-    #   file = file,
-    #   selector = "#map_male",
-    #   vwidth = 483,
-    #   vheight = 590
-    # )
-  }
+    }
 )
 output$downloadMapsFemale <- downloadHandler(
   filename = "map_female.png",
@@ -815,7 +754,9 @@ output$downloadMapsFemale <- downloadHandler(
       map_obj = mapData()$female,
       mini_map_lines = dk_sf$mini_map_lines,
       pretty_variable = prettyVariable()[2],
-      plot_title = plotTitle(), sex = ui_sex_levels[1]
+      plot_title = plotTitle(), sex = ui_sex_levels[1],
+      thousands_sep = thousands_sep,
+      dec_mark = dec_mark
     ) %>% ggsave(
       filename = file,
       plot = .,

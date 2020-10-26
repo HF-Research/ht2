@@ -4,8 +4,8 @@ tabPanel(ui_main_title,
          
          
          # tags$head(
-           
-           # tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
+         
+         # tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
          # ),
          fluidRow(
            div(
@@ -22,26 +22,27 @@ tabPanel(ui_main_title,
                          )
                        ),
                        fluidRow(
-                         column(6,
-                                # This UI has to change based on "outcome" choice
-                                fluidRow(uiOutput("varChoices")),
-                                fluidRow(
-                                  selectInput(
-                                    inputId = "year",
-                                    label = choose_year,
-                                    choices = year_max,
-                                    selected = year_max
-                                  )
-                                ),
-                                fluidRow(
-                                  radioGroupButtons(
-                                    inputId = "rate_count",
-                                    label =  choose_rate_count,
-                                    choices = count_rate_choices,
-                                    justified = TRUE
-                                  )
-                                )
-                                ),
+                         column(
+                           6,
+                           # This UI has to change based on "outcome" choice
+                           fluidRow(uiOutput("varChoices")),
+                           fluidRow(
+                             selectInput(
+                               inputId = "year",
+                               label = choose_year,
+                               choices = year_max,
+                               selected = year_max
+                             )
+                           ),
+                           fluidRow(
+                             radioGroupButtons(
+                               inputId = "rate_count",
+                               label =  choose_rate_count,
+                               choices = count_rate_choices,
+                               justified = TRUE
+                             )
+                           )
+                         ),
                          column(6,
                                 # This UI has to change based on "outcome" & "var" choice
                                 uiOutput("aggrButtonChoices"))
@@ -112,7 +113,14 @@ tabPanel(ui_main_title,
                      (leafletOutput(
                        "map_male", width = 420, height = 550
                      )),
-                     fluidRow(align = "center", textOutput("map_title_male"))
+                     fluidRow(align = "center", textOutput("map_title_male")),
+                     fluidRow(
+                       downloadButton(
+                         outputId = "downloadMapsMale",
+                         label = paste0(ui_download, " ", ui_sex_levels[2]),
+                         class = "btn radiobtn btn-default",
+                       )
+                     )
                    ),
                    column(
                      class = "col_leaflet",
@@ -121,30 +129,23 @@ tabPanel(ui_main_title,
                      (leafletOutput(
                        "map_female", width = 420, height = 550
                      )),
-                     fluidRow(align = "center", (textOutput("map_title_female")))
+                     fluidRow(align = "center", (textOutput("map_title_female"))),
+                     fluidRow(
+                       downloadButton(
+                         outputId = "downloadMapsFemale",
+                         class = "btn radiobtn btn-default",
+                         label = paste0(ui_download, " ", ui_sex_levels[1])
+                         
+                       )
+                     )
                    ),
                    br()
                  ),
-                 fluidRow(
-                   column(
-                       9,
-                     align = "right",
-                     downloadBttn(
-                       "downloadMapsMale",
-                       label = paste0(ui_download, " ", ui_sex_levels[2]),
-                       size = "sm"
-                     ),
-                     downloadBttn(
-                       "downloadMapsFemale",
-                       label = paste0(ui_download, " ", ui_sex_levels[1]),
-                       size = "sm"
-                     )
-                   )
-                 ),
+                 
                  fluidRow(align = "left",
                           uiOutput("rate_desc_map"),
                           br())
-               
+                 
                ),
                
                # Data panel
@@ -191,6 +192,6 @@ tabPanel(ui_main_title,
              
              br()
              
-          
+             
            )
          ))
