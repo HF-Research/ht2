@@ -33,7 +33,7 @@ ui_about_text <-
 # outcome_descriptions <-
 #   outcome_descriptions[, lapply(.SD, enc2native), .SDcols = cols_to_convert]
 variable_ui <- variable_ui[, lapply(.SD, enc2native)]
-edu <- edu[, lapply(.SD, enc2native)]
+edu <- edu[, lapply(.SD, enc2utf8)]
 
 
 write_fst(outcome_descriptions, path = "data/outcome_descriptions.fst", compress = 1)
