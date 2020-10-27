@@ -103,10 +103,7 @@ maps_combine <-
         labFormat = labelFormat(big.mark = thousands_sep, digits = 0)
      )
     
-    # css_fix <- "div.info.legend.leaflet-control br {clear: both;}"  # CSS to correct spacing
-    # html_fix <- htmltools::tags$style(type = "text/css", css_fix)   # Convert CSS to HTML
-    # map_f %<>% htmlwidgets::prependContent(html_fix)                # Insert into leaflet HTML code
-    # map_m %<>% htmlwidgets::prependContent(html_fix)                # Insert into leaflet HTML code
+ 
     return(list(map_m = map_m,
                 map_f = map_f,
                 fill_data_male = fill_data_male,

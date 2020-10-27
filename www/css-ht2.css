@@ -423,6 +423,11 @@ td {
     margin-right: 0px;
 }
 
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
 #map_title_male{
 font-size: 1.6rem;
 font-weight: 550;
