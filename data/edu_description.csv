@@ -1,6 +1,6 @@
 ﻿edu_name_dk,edu_name_en,long_desc_dk,long_desc_en,code_simple,grep_str
 Grundskole,Basic,Grundskole op til 10. klasse eller forberedende uddannelser,Primary or lower secondary education,0 - 20,[012]0
-Gymnasial/ erhvervsfaglig,Secondary,Gymnasiale og erhvervsfaglige uddannelser,High school or other secondary education,30,30
-Mellemlang videregående,Tertiary,Korte eller mellemlange videregående uddannelser,Bachelor's or other tertiary education (including vocational schools),50 - 60,[56]0
-Lang videregående,Postgraduate,Lange videregående uddannelser og PhD,"Master's, Ph.D or other posgraduate education",70 - 80,[78]0
+Gymnasial / erhvervsfaglig udd.,Secondary,"Almen- og erhvervsgymnasiale uddannelser er studiekompetencegivende. Fx studentereksamen, hf-eksamen, højere handels-/teknisk eksamen, håndværkere, kontorassistenter og sygehjælpere.",Completed high school or vocational-focused secondary education,30,30
+Kort / Mellemlang videregående udd.,Tertiary,"Korte eller mellemlange videregående uddannelser varer 1-4 år. Fx akademi- eller erhvervsakademiuddannelser, sygeplejersker og folkeskolelærere.","Bachelor's (3-year) or other tertiary education, including vocational schools. Examples: Nursing, secondary school teaching",50 - 60,[56]0
+Lang videregående udd.,Postgraduate,Lange videregående uddannelser varer samlet minimum 5 år og er typisk delt op i en 3-årig bachelorgrad og en 2-årig kandidatgrad. Fx læger og civilingeniører; inkl. forskeruddannelser.,"Master's, Ph.D or other posgraduate education",70 - 80,[78]0
 Uoplyst,Unknown,Uoplyst mv.,Unknown,90,90
