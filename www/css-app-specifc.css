@@ -1,50 +1,50 @@
 /*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
-
-/*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
-:root {
-  --blue: #008cba;
-  --indigo: #6610f2;
-  --purple: #6f42c1;
-  --pink: #e83e8c;
-  --red: #F04124;
-  --orange: #fd7e14;
-  --yellow: #E99002;
-  --green: #43ac6a;
-  --teal: #20c997;
-  --cyan: #5bc0de;
-  --white: #fff;
-  --gray: #888;
-  --gray-dark: #333;
-  --primary: #008cba;
-  --secondary: #eee;
-  --success: #43ac6a;
-  --info: #5bc0de;
-  --warning: #E99002;
-  --danger: #F04124;
-  --light: #eee;
-  --dark: #222;
-  --bleeding: #B73338;
   
-  --hfRed: #c8102E;
-  --hfRedBright: #dc1232;
-  --hfText: #454747;
-  --hfVeryLight: #f4f5f7;
-  
-  --hfBlue: #002A3A;
-  --hfBlueLight: #e5e9eb;
-  --hfBlueMedium: #b2bfc3;
-  
-  --btnBorderActive: #c8102f;
-  --btnBorder1: #e2e2e2;
-  --breakpoint-xs: 0;
-  --breakpoint-sm: 576px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 992px;
-  --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --font-size: 16px;
-}
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #008cba;
+      --indigo: #6610f2;
+      --purple: #6f42c1;
+      --pink: #e83e8c;
+      --red: #F04124;
+      --orange: #fd7e14;
+      --yellow: #E99002;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #5bc0de;
+      --white: #fff;
+      --gray: #888;
+      --gray-dark: #333;
+      --primary: #008cba;
+      --secondary: #eee;
+      --success: #43ac6a;
+      --info: #5bc0de;
+      --warning: #E99002;
+      --danger: #F04124;
+      --light: #eee;
+      --dark: #222;
+      --bleeding: #B73338;
+      
+      --hfRed: #c8102E;
+      --hfRedBright: #dc1232;
+      --hfText: #454747;
+      --hfVeryLight: #f4f5f7;
+      
+      --hfBlue: #002A3A;
+      --hfBlueLight: #e5e9eb;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #c8102f;
+      --btnBorder1: #e2e2e2;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-size: 16px;
+  }
 
 body {
   margin: 0;
@@ -53,7 +53,7 @@ body {
   font-weight: 400;
   line-height: 1.5;
   color: #222;
-  text-align: left;
+    text-align: left;
   background-color: #fff;
 }
 
@@ -106,7 +106,7 @@ button::-moz-focus-inner,
 input[type="radio"],
 input[type="checkbox"] {
   -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   padding: 0;
 }
 
@@ -118,12 +118,9 @@ input[type="month"] {
 }
 
 /***************END COPY FROM BOOTSTRAP ************************/
-
-
-/**** NAVBAR STYLING *****/
-#ht_title{
-  color: white;
-}
+  
+  
+  /**** NAVBAR STYLING *****/
 
 .navbar{
   margin-bottom: 30px;
@@ -167,12 +164,12 @@ input[type="month"] {
 }
 
 /*****   Styling the dropdowns for Help sections ********/
-.dropdown-menu>li>a {
-  font-weight: 600;
-  font-size: 1.5375rem;
-  padding-bottom: 10px;
-  color: var(--hfRed);
-}
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
 
 .dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
   font-weight: 600;
@@ -195,19 +192,13 @@ input[type="month"] {
 
 
 
-
-
-
-
-
-
 /******   TABS STYLING   *******/
-
-.tabbable > .nav > li[class=active] >a{
-  background-color: var(--hfBlue);
-  color: white;
-  font-weight: 600;
-}
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
 
 .tabbable > .nav > li > a{
   background-color: var(--white);
@@ -227,16 +218,16 @@ label{
 
 
 /**** BUTTON STYLES *****/
-
-.btn.radiobtn.btn-default.active {
-  background-color:var(--hfBlue);
-  border-color:var(--hfBlue);
-  font-weight:bold;
-  color:white;
-  font-size: 1.5rem;
-  padding-right:5px;
-  padding-left:5px;
-}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    font-size: 1.5rem;
+    padding-right:5px;
+    padding-left:5px;
+  }
 
 .btn.radiobtn.btn{
   height: 35px;
@@ -273,10 +264,10 @@ label{
 
 
 /**** DROPDOWN *****/
-
-.selectize-dropdown-content{
-  max-height: 400px;
-}
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
 
 .selectize-dropdown-content{
   line-height: 25px;
@@ -298,45 +289,27 @@ label{
 
 
 /******   DT BOTTOM STYLING   *******/
-.dt-button.buttons-excel.buttons-html5{
-  margin-top:7px;
-  background-color: #efefef;
-  border-color: #e2e2e2;
-}
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #efefef;
+      border-color: #e2e2e2;
+  }
 
 .dt-button.buttons-pdf.buttons-html5{
   margin-top:7px;
   background-color: #efefef;
-  border-color: #e2e2e2;
+    border-color: #e2e2e2;
 }
 
 .dt-button.buttons-collection:hover{
   margin-top:7px;
- background-color: #bad5f1;
-  border-color: #bad5f1;
-  
-}
-
-
-
-/**** D3 TOOLTIP STYLING *****/
-
-#tooltipBar {	
-    position: absolute;			
-    text-align: center;			
+  background-color: #bad5f1;
+    border-color: #bad5f1;
     
-    font: 16px sans-serif;		
-    
-    border-radius: 8px;
-    pointer-events: none;	
 }
 
-#tooltipLine {	
-    position: absolute;			
-    text-align: left;			;				
-    font: 16px sans-serif;	
-    pointer-events: none;
-}
+
+
 
 .table{
   width: 150px;
@@ -349,70 +322,17 @@ label{
 }
 
 td {
- text-align:left
+  text-align:left
 }
 
 
-
-/**** D3 MOUSEOVER STYLES  *****/
-.mouseSvg {
-  opacity: 0.0;
-  fill: white;
-}
-
-.mouseSvgBarChart {
-  opacity: 0.0;
-  fill: white;
-}
-
-.guide {
-  stroke-width: 1;
-  stroke: black;
-}
-
-
-#container {
-  position: relative;
-}
-
-.popover {
-			pointer-events: none;
-			background: lightsteelblue;
-}
-
-
-
-/**** D3 PLOT FONTS *****/
-.plot_text{
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-.output_titles {  
- font-size: 150%;
- font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-.axis{
-  font-size: 90%;
-}
-
-.axisTitle{
-  font-size: 110%;
-}
-
-.legend{
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-
-/* OUTOUTS */
 
 
 /******   MAPS   *******/
-
-.leaflet-container { 
-  background:white !important;
-}
+  
+  .leaflet-container { 
+    background:white !important;
+  }
 
 .col_leaflet {
   min-width:430px;
@@ -420,7 +340,7 @@ td {
 }
 
 .leaflet-right .leaflet-control {
-    margin-right: 0px;
+  margin-right: 0px;
 }
 
 .bttn-material-flat.bttn-primary{
@@ -428,20 +348,11 @@ td {
 }
 
 
-#map_title_male{
-font-size: 1.6rem;
-font-weight: 550;
-}
-
-#map_title_female{
-font-size: 1.6rem;
-font-weight: 550;
-}
 
 /******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
-.container-fluid {
-  margin:auto;
-}
+  .container-fluid {
+    margin:auto;
+  }
 
 .well_input{
   background-color:white;
@@ -464,7 +375,7 @@ font-weight: 550;
 .output_desc {
   line-height: 1.2;
   font-size: 2.1rem;
-
+  
 }
 
 .explanitory_text{
@@ -484,62 +395,17 @@ font-weight: 550;
 }
 
 .col_DT {
- min-width: 376px;
+  min-width: 376px;
 }
 
 
 
-#col_input {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-
-#col_output {
-  margin-left: auto;
-  margin-right: auto;
-  padding-right: 0px;
-}
-
-#col_description {
-  min-height: 380px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#outcome_title {
- font-size: 2.4rem; 
-}
-
-#outcome_title_dt{
- margin-top:10px;
-}
-
-#variable_title {  
- font-size: 1.9rem; 
-}
-
-#download_button_row{
-  margin-bottom:20px;
-}
-
-#data_vis_tabs{
- margin-bottom:10px;
-}
-
-#count_desc{
-  margin-top: 10px;
-}
-
-#rate_desc{
-  margin-top:10px;
-}
 
 
 /******   ABOUT TABPAGE   *******/
-.col_about_dt {
-max-width:1260px;
-}
+  .col_about_dt {
+    max-width:1260px;
+  }
 
 .about_well {
   max-width: 200px;
@@ -551,6 +417,70 @@ max-width:1260px;
 
 
 /******   CODE TABPAGE   *******/
-summary{
-  padding-bottom: 15px;
+  summary{
+    padding-bottom: 15px;
+  }
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+#map_title_male{
+font-size: 1.6rem;
+font-weight: 550;
+}
+
+#map_title_female{
+font-size: 1.6rem;
+font-weight: 550;
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
 }

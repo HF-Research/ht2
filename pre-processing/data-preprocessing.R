@@ -53,7 +53,7 @@ format_data <- function(x) {
       "aggr_level_val",
       "rate",
       "n.events"
-
+      
     ),
     new = c("outcome",
             "agCVD",
@@ -63,9 +63,9 @@ format_data <- function(x) {
   )
   x[mov.avg == 1, `:=` ("mean3y_count_" = count_, "mean3y_rate_" = rate_)]
   x[mov.avg == 1, `:=` (count_ = NA, rate_ = NA)]
-
+  
   x[, event := gsub("\\.", "_", event)] %>% unique()
-
+  
   # In DST the outcome grouping name is appended to the event name. We need to
   # remove this for the shiny object.
   x[, event := gsub("(?<=[10s])\\_opr", "", x$event, perl = TRUE)]
@@ -83,37 +83,39 @@ format_geo_data <- function(x, geo_data, geo_type) {
   # Replaces kommune and region numeric codes with their names (as characters of
   # course)
   cols_start <- names(x)
-
+  
   geo_cols <- c(paste0(geo_type, "_name"), geo_type)
   
   # Grouping == 9 are "unknowns", we want to remove those
   x <- x[!(agCVD == geo_type & grouping == 9)]
   x <- x[!(agCVD == geo_type & grouping == "unknown")]
   out <-
-    merge(x[agCVD == geo_type], geo_data[, ..geo_cols],
-          by.x = "grouping", by.y = geo_type,
+    merge(x[agCVD == geo_type],
+          geo_data[, ..geo_cols],
+          by.x = "grouping",
+          by.y = geo_type,
           all.x = TRUE)
   
   # Check that everything matches
   stopifnot(NROW(out[is.na(get(geo_cols[1]))]) == 0)
-
+  
   # Ensure row order is same in both x and out (and verify this is true)
   setkey(out, sex, year, agCVD, grouping, outcome)
   x[agCVD == geo_type, idx := paste0(sex, year, outcome, grouping)]
   out[, idx := paste0(sex, year, outcome, grouping)]
   stopifnot(all(x[agCVD == "geo_type"]$idx == out$idx))
-
+  
   # Replace number ID with region name
   x[agCVD == geo_type, grouping := out[[geo_cols[1]]]]
   x[, idx := NULL]
   cols_end <- names(x)
   stopifnot(all(cols_start == cols_end))
-
+  
   # Ensure all matching occured
   stopifnot(NROW(x[agCVD == geo_type & is.na(grouping)]) == 0)
   
   return(x)
-
+  
 }
 geo_codes <-
   fread("data/kommune_codes.csv", encoding = "UTF-8") %>%
@@ -142,16 +144,16 @@ export_med <- HTData::export_med %>% copy() %>%
 preProccess <- function(export_dat) {
   dat <- split(export_dat, by = "outcome") %>%
     lapply(., split, by = "agCVD")
-
+  
   lapply(dat, function(outcome) {
     out <- lapply(outcome, function(agCVD) {
       agCVD[, `:=` (outcome = NULL, agCVD = NULL)]
-
+      
       # !!!!! DO NOT CHANGE !!! unless you have checked with it does not
       # interfere with cbind operation in dtCast()
       setkey(agCVD, sex, grouping, year)
     })
-
+    
     # Make sure regions start with capital letter
     if (!is.null(out$region)) {
       out$region[, grouping := capitalize(grouping)]
@@ -183,13 +185,13 @@ shiny_dat_en <- c(dat_opr, dat_med, dat_diag)
 cleanGeoData <- function(x) {
   # Remove unknowns from Region. and remove Christiansoe
   lapply(x, function(outcome) {
-    outcome$region <- outcome$region[grouping != "Unknown", ]
+    outcome$region <- outcome$region[grouping != "Unknown",]
     if (!is.null(outcome$kom)) {
-      outcome$kom <- outcome$kom[grouping != "Christiansø", ]
+      outcome$kom <- outcome$kom[grouping != "Christiansø",]
     }
     outcome
   })
-
+  
 }
 
 setNAtoZero <- function(x) {
@@ -201,7 +203,7 @@ setNAtoZero <- function(x) {
         i
       }),
       .SDcols = data_vars]
-
+      
     })
   })
 }
@@ -261,12 +263,12 @@ makeDanish <- function(dat) {
       )
     outcome$edu[, `:=` (grouping = edu_name_dk)]
     outcome$edu[, `:=` (edu_name_dk = NULL)]
-
+    
     # Turn DK edu into factor
     outcome$edu[, `:=` (grouping = factor(grouping,
                                           levels = c(edu[, edu_name_dk])))]
     setkey(outcome$edu, sex, grouping, year)
-
+    
     if (!is.null(outcome$ethnicity)) {
       outcome$ethnicity <-
         merge(
@@ -546,7 +548,7 @@ chd <- lapply(chd, function(l1) {
   l1[, rate_strat_prevalence := round(rate_strat_prevalence, digits = 1)]
   l1[, rate_strat_opr_patients := round(rate_strat_opr_patients, digits = 1)]
   l1[, rate_strat_oprs := round(rate_strat_oprs, digits = 1)]
-
+  
   l1
 })
 
@@ -607,7 +609,7 @@ var_col_names <- c(
   "desc_count",
   "desc_stratified",
   "desc_standardized"
-
+  
 )
 setnames(var_desc_chd_dk, var_col_names)
 
@@ -669,13 +671,13 @@ l2 <-
 
 l2$name_kom <- enc2native(l2$name_kom)
 l2$region <- enc2native(l2$region)
-l2[l2$name_kom == "Århus", ]$name_kom <- "Aarhus"
-l2[l2$name_kom == "Vesthimmerland", ]$name_kom <- "Vesthimmerlands"
+l2[l2$name_kom == "Århus",]$name_kom <- "Aarhus"
+l2[l2$name_kom == "Vesthimmerland",]$name_kom <- "Vesthimmerlands"
 
 
 l2$name_kom
 # Delete Christiansoe polygon
-l2 <- l2[l2$name_kom != "Christiansø", ]
+l2 <- l2[l2$name_kom != "Christiansø",]
 l2$name_kom
 
 # Move Bornholm
@@ -685,7 +687,7 @@ b.geo <- b.geo + c(-2.6, 1.35) # Move object
 st_geometry(bornholm) <- b.geo # Re-assign geometry to object
 
 # Replace bornholm in main sf object
-l2[l2$name_kom == "Bornholm", ] <- bornholm
+l2[l2$name_kom == "Bornholm",] <- bornholm
 
 # Union kommune to regions
 regions <- unique(l2$region)
@@ -697,7 +699,7 @@ for (reg in regions) {
   attr_tmp[[reg]] <-
     l2 %>% filter(region == reg) %>% .[1, c("id", "region")] %>% st_drop_geometry()
   out_sf[[reg]] <- st_as_sf(merge(geo_tmp[[reg]], attr_tmp[[reg]]))
-
+  
 }
 
 l1 <- do.call("rbind", out_sf)
@@ -727,9 +729,23 @@ l1_sf <- rmapshaper::ms_simplify(l1)
 l2_sf <- rmapshaper::ms_simplify(l2)
 
 
-dk_sf_data <- list(l1 = l1_sf %>% as.data.table(),
-                   l2 = l2_sf %>% as.data.table(),
-                   mini_map_lines = mini_map_lines)
+dk_sf_data <- list(
+  l1 = l1_sf %>% as.data.table(),
+  l2 = l2_sf %>% as.data.table(),
+  mini_map_lines = mini_map_lines
+)
 
 
 saveRDS(dk_sf_data, file = "data/dk_sf_data.rds")
+
+
+# CSS PREPERATION --------------------------------------------------------- In
+# order to have a common CSS template for all HFs shiny apps, we create use a
+# common css template that has all classes and such defined. Any references to
+# element IDs goes in the second, app specific css file
+css_common <-
+  readLines(con = "https://raw.githubusercontent.com/matthew-phelps/hf-css/main/css-main.css")
+css_app_specific <-
+  readLines(con = "https://raw.githubusercontent.com/matthew-phelps/hf-css/main/ht-css.css")
+
+writeLines(text = c(css_common, css_ht), con = "www/css-app-specifc.css")
