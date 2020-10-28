@@ -40,7 +40,7 @@ ui <- function(request) {
         lang
       ))), '>', 'HjerteTal', '</a>'),
       id = "bar",
-      theme = "www/css-app-specifc.css",
+      theme = "css-app-specifc.css",
       selected = "cvd",
       collapsible = TRUE,
       source(file.path("ui", "main_ui.R"), local = TRUE)$value,
