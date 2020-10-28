@@ -34,7 +34,7 @@ country_grps <-
   readRDS(file =  file.path)
 
 
-about_dat_faq <- fread(file = "data/faq.csv", encoding = "UTF-8")
+about_dat_faq <- fread(file = "input_ui_text/faq.csv", encoding = "UTF-8")
 keep_vars <- grep(lang, colnames(about_dat_faq), value = TRUE)
 about_dat_faq <- about_dat_faq[, ..keep_vars]
 
@@ -87,7 +87,7 @@ rm(tmp)
 # CHD ABOUT SECTION -------------------------------------------------------
 
 
-about_dat_faq_chd <- fread(file = "data/chd/faq_chd.csv", encoding = "UTF-8")
+about_dat_faq_chd <- fread(file = "input_ui_text/faq_chd.csv", encoding = "UTF-8")
 keep_vars <- grep(lang, colnames(about_dat_faq_chd), value = TRUE)
 about_dat_faq_chd <- about_dat_faq_chd[, ..keep_vars]
 
