@@ -38,7 +38,7 @@ make_plotly_cvd <-
         hovertemplate = tooltip
       )
     
-    if(count_rate == 2){
+    if(count_rate == "rate"){
       return(plot)
     }
     tots <- x[, sum(get(pretty_variable)), by = .(get(ui_year))] %>% 

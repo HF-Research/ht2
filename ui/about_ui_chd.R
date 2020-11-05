@@ -2,7 +2,7 @@ tabPanel(
   ui_about_title_chd,
   value = "helpCHD",
   tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "css-ht2.css")
+    tags$link(rel = "stylesheet", type = "text/css", href = "css-app-specifc.css")
   ),
   fluidRow(
     column(

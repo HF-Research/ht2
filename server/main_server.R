@@ -8,6 +8,7 @@ options(DT.options = list(
 # TEXT RENDERING ----------------------------------------------------------
 
 prettyOutcome <- reactive({
+  
   outcomes_all[hjertetal_code == input$oCVD, name]
 })
 
@@ -67,7 +68,7 @@ output$variable_desc <- renderUI({
       title_text = prettyVariable()[1],
       lang = lang,
       variable_ui = variable_ui,
-      selected_data_vars = selectedDataVars()[1],
+      var_shiny_code = input$varCVD,
       replace_outcome_string = replaceOutcomeString(),
       replace_type_string = replaceTypeString(),
       replace_allCVD_string = replace_allCVD_string
@@ -80,7 +81,7 @@ textCountDesc <- reactive({
     pretty_var = prettyVariable(),
     ui_count_rate = ui_count_rate,
     lang = lang,
-    selected_data_vars = selectedDataVars(),
+    var_shiny_code = input$varCVD,
     replace_outcome_string = replaceOutcomeString(),
     replace_agg_level_string = replaceAggrLevelString(),
     replace_type_string = replaceTypeString(),
@@ -93,7 +94,7 @@ texRateDesc <- reactive({
     title_text = prettyVariable()[2],
     lang = lang,
     selected_rate_type = selectedRateType(),
-    selected_data_vars = selectedDataVars(),
+    var_shiny_code = input$varCVD,
     replace_outcome_string = replaceOutcomeString(),
     replace_agg_level_string = replaceAggrLevelString(),
     replace_type_string = replaceTypeString(),
@@ -117,8 +118,8 @@ output$count_desc <- renderUI({
 
 
 output$rate_count_desc <- renderUI({
-  req(input$rate_count, input$varCVD, selectedDataVars())
-  if (input$rate_count == 2) {
+  req(input$rate_count, input$varCVD, validateIn())
+  if (input$rate_count == "rate") {
     texRateDesc()
   } else {
     textCountDesc()
@@ -227,9 +228,10 @@ prettyAggr_level <- reactive({
 prettyVariable <- reactive({
   # Outputs character string formatted for user.
   req(input$varCVD, input$agCVD)
+  
   pretty_variable(
     lang = lang,
-    data_var_name = selectedDataVars()[1],
+    var_shiny_code = input$varCVD,
     selected_rate_type = selectedRateType(),
     var_ui = variable_ui
   )
@@ -237,7 +239,11 @@ prettyVariable <- reactive({
 })
 
 prettyVariableSingular <- reactive({
-  prettyVariable()[as.integer(input$rate_count)]
+  input$rate_count
+  x <- 1
+  if (input$rate_count == "rate")
+    x <- 2
+  prettyVariable()[x]
 })
 
 
@@ -252,11 +258,25 @@ selectRawOrMean <- reactive({
   }
 })
 
-selectPercentOrRate <- reactive({
+# isPercentage <- reactive({
+#   any(
+#     input$varCVD == "v13",
+#     input$varCVD == "v14",
+#     input$varCVD == "v15",
+#     input$varCVD == "v9"
+#   )
+#   
+# })
+
+
+isPercentage <- reactive({
   if (input$varCVD %in% c("v9",
+                          "v11",
+                          "v12",
                           "v13",
-                          "v14",
-                          "v15")) {
+                          "v16",
+                          "v17",
+                          "v18")) {
     TRUE
   } else {
     FALSE
@@ -267,7 +287,7 @@ selectPercentOrRate <- reactive({
 numDigitsCVD <- reactive({
   # Only have decimal when showing percentages, otherwise round to whole units
   digits = 0
-  if (input$rate_count == 2 & selectPercentOrRate()) {
+  if (input$rate_count == 2 & isPercentage()) {
     digits = 1
   }
   digits
@@ -277,7 +297,43 @@ numDigitsCVD <- reactive({
 # SUBSETTING ------------------------------------------------------
 subsetOutcome <- reactive({
   # Cache subset based on outcome, aggr level, and theme
-  shiny_dat[[input$oCVD]][[input$agCVD]]
+
+  shiny_dat[[input$oCVD]]
+  })
+
+subsetAgg <- reactive({
+  subsetOutcome()[[input$agCVD]]
+})
+
+subsetVar <- reactive({
+  subsetAgg()[[input$varCVD]]
+})
+
+subsetData <- reactive({
+  x <-
+    subsetVar()[, .(year, sex, grouping, count, rate)]
+  
+  if(isPercentage()) {
+    x[, rate := rate / 1e3]
+  }
+  
+  setnames(
+    x,
+    old = c("year", "sex", "grouping", "count", "rate"),
+    new = c(
+      ui_year,
+      ui_sex,
+      prettyAggr_level(),
+      prettyVariable()
+      
+    )
+  )
+  
+  x
+})
+
+subsetDataYear <- reactive({
+  subsetData()[get(ui_year) == input$year]
 })
 
 selectedRateType <- reactive({
@@ -288,33 +344,6 @@ selectedRateType <- reactive({
   }
 })
 
-
-selectedDataVars <- reactive({
-  # Returns the column names to be used to subset the data - taking into account
-  # raw or mean data
-  selected_data_vars(
-    varCVD = input$varCVD,
-    variable_ui = variable_ui,
-    subset_outcome = subsetOutcome()
-  )
-})
-
-subsetVars <- reactive({
-  subset_vars(
-    dat = subsetOutcome(),
-    data_vars = selectedDataVars(),
-    ag_lv = input$agCVD,
-    select_raw_mean = selectRawOrMean(),
-    pretty_variable = prettyVariable(),
-    select_percent_rate = selectPercentOrRate(),
-    pretty_ag_lv = prettyAggr_level()
-  )
-})
-
-subsetYear <- reactive({
-  # Subset the already partially subset data based on years
-  subsetVars()[get(ui_year) == input$year, ][, (ui_year) := NULL]
-})
 
 
 # PLOTLY------------------------------------------------------
@@ -329,23 +358,15 @@ outputCasesData <- function() {
 
 
 plotly_bar_cvd <- reactive({
-x <- prep_bar_data(
-    pretty_var_singular = prettyVariableSingular(),
-    ui_sex = ui_sex,
-    pretty_aggr_level = prettyAggr_level(),
-    count_rate = count_rate,
-    subset_year = subsetYear()
-  )
-
   make_plotly_bar_cvd(
-    x = x,
+    x = copy(subsetDataYear()),
     num_digits = numDigitsCVD(),
     pretty_aggr_level = prettyAggr_level(),
     pretty_variable = prettyVariableSingular(),
     sex = ui_sex,
     sex_levels = rev(ui_sex_levels)
-      
-  ) %>% 
+    
+  ) %>%
     plotly_config(
       plot_title = html_wrap(plotTitle(), width = 60),
       axis_font_size = axis_font_size,
@@ -365,13 +386,12 @@ x <- prep_bar_data(
 plotly_line_cvd <- reactive({
   
   make_plotly_cvd(
-    x = copy(subsetVars()),
+    x = copy(subsetData()),
     num_digits = numDigitsCVD(),
     pretty_variable = prettyVariableSingular(),
     sex = ui_sex,
     sex_levels = rev(ui_sex_levels),
     count_rate = input$rate_count
-    
   ) %>%
     plotly_config(
       plot_title = html_wrap(plotTitle(), width = 60),
@@ -399,8 +419,9 @@ mapObj <- reactive({
 
 
 mapData <- reactive({
+  
   dat <-
-    copy(outputCasesData()) # Make copy so not corrupt reactive data
+    copy(subsetDataYear()) # Make copy so not corrupt reactive data
   
   map_data(
     dat = dat,
@@ -415,13 +436,13 @@ mapData <- reactive({
 
 combinedMaps <- reactive({
   req((isRegion() || isKom()))
-
+  
   maps_out <- maps_combine(
     var_name = prettyVariable()[2],
     lang = lang,
-    subset_vars = subsetVars(),
+    subset_vars = subsetData(),
     ui_year = ui_year,
-    select_percent_rates = selectPercentOrRate(),
+    select_percent_rates = isPercentage(),
     thousands_sep = thousands_sep,
     dec_mark = dec_mark,
     map_data_main = mapData(),
@@ -430,7 +451,7 @@ combinedMaps <- reactive({
   )
   
   return(maps_out)
-  })
+})
 
 
 
@@ -438,9 +459,11 @@ combinedMaps <- reactive({
 # DATATABLES --------------------------------------------------------------
 dtCast <- reactive({
   # One dcast for both rates and counts
-  
+  x <- subsetDataYear()
+  if(isNational())
+    x <- subsetData()
   dt_cast(
-    dat = outputCasesData(),
+    dat = x,
     group_var = prettyAggr_level(),
     value_var = prettyVariable(),
     is_national = isNational(),
@@ -470,7 +493,7 @@ outputRateDTTable <- reactive({
   DTtables_rate(
     dat = dtCast(),
     pretty_vars = prettyVariable(),
-    percent_rate = selectPercentOrRate(),
+    percent_rate = isPercentage(),
     pretty_ag_lv = prettyAggr_level(),
     ui_sex_levels = ui_sex_levels,
     plot_title = plotTitle(),
@@ -488,10 +511,9 @@ validateIn <- reactive(label = "validate", {
   # Returns TRUE if passes and FALSE if any condition fails. This is needed to
   # stop the plots and tables trying to render when they have inproper input.
   # I.e. when switching between outcomes, the variable inupt is -
-  #
-  nonZero_variable <- !is.null(input$varCVD)
+  nonZero_variable <- !is.null(input$varCVD) && !is.null(subsetVar())
   if (nonZero_variable) {
-    length(selectedDataVars()) > 0 && input$oCVD != "" &&
+    input$oCVD != "" &&
       input$year > 0 && input$year != "" && validateKom()
   } else {
     FALSE
@@ -533,19 +555,11 @@ isNational <- reactive({
 })
 
 is5YearMortality <- reactive({
-  input$varCVD == "v15"
+  any(input$varCVD == "v13",
+      input$varCVD == "v18")
 })
 
 
-isPercentage <- reactive({
-  any(
-    input$varCVD == "v13",
-    input$varCVD == "v14",
-    input$varCVD == "v15",
-    input$varCVD == "v9"
-  )
-  
-})
 
 # CHANGE UI BASED ON INPUTS -----------------------------------------------
 
@@ -556,7 +570,6 @@ validateSelectedVars <- reactive({
   req(input$agCVD)
   
   selected_var <- isolate(input$varCVD)
-  
   
   validate_selected_vars(
     aggr_selected = input$agCVD,
@@ -648,6 +661,7 @@ choiceYears <- reactive({
   # always resetting to year_max when changing aggr_level.
   input$agCVD
   year_val <- isolate(input$year)
+  
   make_year_choices(
     year_val = year_val,
     is_geo = isGeo(),
@@ -733,7 +747,8 @@ output$downloadMapsMale <- downloadHandler(
       map_obj = mapData()$male,
       mini_map_lines = dk_sf$mini_map_lines,
       pretty_variable = prettyVariable()[2],
-      plot_title = plotTitle(), sex = ui_sex_levels[2],
+      plot_title = plotTitle(),
+      sex = ui_sex_levels[2],
       thousands_sep = thousands_sep,
       dec_mark = dec_mark
     ) %>% ggsave(
@@ -744,7 +759,7 @@ output$downloadMapsMale <- downloadHandler(
       units = "cm",
       scale = 1.5
     )
-    }
+  }
 )
 output$downloadMapsFemale <- downloadHandler(
   filename = "map_female.png",
@@ -754,7 +769,8 @@ output$downloadMapsFemale <- downloadHandler(
       map_obj = mapData()$female,
       mini_map_lines = dk_sf$mini_map_lines,
       pretty_variable = prettyVariable()[2],
-      plot_title = plotTitle(), sex = ui_sex_levels[1],
+      plot_title = plotTitle(),
+      sex = ui_sex_levels[1],
       thousands_sep = thousands_sep,
       dec_mark = dec_mark
     ) %>% ggsave(
@@ -774,7 +790,6 @@ output$downloadMapsFemale <- downloadHandler(
 output$d3_plot_bar <- renderPlotly({
   req(input$varCVD)
   if (validateIn() && !isNational() && !isKom()) {
-    
     plotly_bar_cvd()
   }
 })
@@ -782,6 +797,7 @@ output$d3_plot_bar <- renderPlotly({
 output$plotly_line_cvd <- renderPlotly({
   req(input$varCVD)
   if (validateIn() && isNational()) {
+    
     plotly_line_cvd()
   }
   
@@ -795,18 +811,16 @@ output$table_counts <- renderDT({
 
 output$table_rates <- renderDT({
   req(validateIn())
-  
   outputRateDTTable()
   
 })
 
 output$map_male <- renderLeaflet({
   req(validateIn())
-  
   combinedMaps()$map_m
 })
 
 output$map_female <- renderLeaflet({
-  req(validateIn())
+  req(validateIn(), subsetData())
   combinedMaps()$map_f
 })

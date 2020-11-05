@@ -63,8 +63,8 @@ aggr_choices <-
   )
 row.names(aggr_choices) <- aggr_choices$label
 
-count_rate_choices <- list("Rates" = as.integer(2),
-                           "Counts" = as.integer(1))
+count_rate_choices <- list("Rates" = "rate",
+                           "Counts" = "count")
 
 ui_main_title <- enc2utf8("Cardiovascular diseases")
 ui_age <- enc2utf8("Age")

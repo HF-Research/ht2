@@ -13,24 +13,19 @@
 ##' @param input_year
 text_count_desc <-
   function(pretty_var = prettyVariable(),
-           ui_count_rate =
-             ui_count_rate,
+           ui_count_rate = ui_count_rate,
            lang = lang,
-           selected_data_vars =
-             selectedDataVars(),
-           replace_outcome_string =
-             replaceOutcomeString(),
-           replace_agg_level_string =
-             replaceAggrLevelString(),
-           replace_type_string =
-             replaceTypeString(),
+           var_shiny_code = input$varCVD,
+           replace_outcome_string = replaceOutcomeString(),
+           replace_agg_level_string = replaceAggrLevelString(),
+           replace_type_string = replaceTypeString(),
            input_year = input$year) {
     title_text <-
       tags$b(paste0(ui_count_rate[1], " ", tolower(pretty_var[1])))
     
     col_selection <- paste0("desc_", "count", "_", lang)
     desc_text <-
-      variable_ui[code_name == selected_data_vars[1], ..col_selection]
+      variable_ui[shiny_code == var_shiny_code, ..col_selection]
     desc_text <-
       gsub("REPLACE_OUTCOME",
            replace_outcome_string,

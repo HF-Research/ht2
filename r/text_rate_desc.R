@@ -17,7 +17,7 @@ text_rate_desc <-
   function(title_text = prettyVariable()[2],
            lang = lang,
            selected_rate_type = selectedRateType(),
-           selected_data_vars = selectedDataVars(),
+           var_shiny_code = input$varCVD,
            replace_outcome_string = replaceOutcomeString(),
            replace_agg_level_string = replaceAggrLevelString(),
            replace_type_string = replaceTypeString(),
@@ -28,7 +28,7 @@ text_rate_desc <-
     col_selection <-
       paste0("desc_", selected_rate_type, "_", lang)
     desc_text <-
-      variable_ui[code_name == selected_data_vars[1], ..col_selection]
+      variable_ui[shiny_code == var_shiny_code, ..col_selection]
     
     desc_text <-
       gsub("REPLACE_OUTCOME",

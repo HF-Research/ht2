@@ -82,7 +82,8 @@ tick_font_size <- 15
 # From:
 # https://stackoverflow.com/questions/46694351/r-shiny-datatables-replace-numeric-with-string-and-sort-as-being-less-than-numer
 formatSuppressedValues <- JS(
-paste0("
+paste0("c
+aa
   function(data, type) {
   
   if (type !== 'display') return data

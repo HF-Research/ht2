@@ -14,6 +14,11 @@ col_names_faq <- c(
   "Svar"
 )
 
+col_names_updates <- c(
+  
+)
+
+
 
 # MAIN PANEL -----------------------------------------------
 # Everything below here will need to be changed for the english verison
@@ -64,8 +69,8 @@ aggr_choices <-
   )
 row.names(aggr_choices) <- aggr_choices$label
 
-count_rate_choices <- list("Rate" = as.integer(2),
-                           "Antal" = as.integer(1))
+count_rate_choices <- list("Rate" = "rate",
+                           "Antal" = "count")
 
 ui_main_title <- enc2utf8("Hjerte-kar-sygdomme")
 ui_age <- enc2utf8("Aldre")

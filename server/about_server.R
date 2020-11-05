@@ -26,7 +26,23 @@ aboutFAQDT <- reactive({
 
 
 aboutUpdatesDT <- reactive({
-  
+  colnames(about_dat_faq) <- col_names_faq
+  n_col <- NCOL(about_dat_faq)
+  DT::datatable(
+    data = about_dat_faq,
+    
+    rownames = FALSE,
+    class = ' hover row-border',
+    selection = c("multiple"),
+    options = list(
+      lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
+      pageLength = 15,
+      dom = "f",
+      initComplete = header_JS
+    )
+  ) %>%  
+    formatStyle(1:n_col, borderColor = "white") %>% 
+    formatStyle(columns = c(1), width='30%')
   
 })
 aboutDiagDT <- reactive({

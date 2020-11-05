@@ -2,9 +2,7 @@ tabPanel(ui_chd_title,
          value = "chd",
          
          
-         # tags$head(
-         #   tags$link(rel = "stylesheet", type = "text/css", href = "www/css-ht2.css")
-         # ),
+         
          fluidRow(
            # profvis_ui("profiler"),
            div(# This changes the column width (i.e. proportion) based on width of screen)

@@ -1,3 +1,4 @@
 date,desc_en,desc_dk
 20201101,"Corrected description of education. Previously we indicated these were restricrted to those between ages of 35 - 84, but they are actually restricted to ages 35 - 79",
 20201101,"Changed the way we ""age standardize"" rates. Previouly we used a standard population between the ages of 0 - 100, whereas now we use a standard population restricted to the ages between 35 - 100. This means that the absolute values for the age-standardized rates will increase, even though the number of cases or patients has not changed. This does not affect the relative differences between different groups (i.e. between Regions or ethnicities). Because the aboslute value of the age-standardized rates depends entirely on the standard population used, we suggest that these rates are only used to make comparisons between groups, not to make assessments on the absolute magnitude of the outcome.",
+20201101,Added data for year 2018,
