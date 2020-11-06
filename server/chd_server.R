@@ -15,7 +15,8 @@ output$outcome_description_chd <- renderUI({
 
 prettyVarChdUnits <- reactive({
   x <- prettyVarChd()
-  x[c("name_count", "name_rate")][as.integer(input$rate_count_chd)]
+  col <- grep(pattern = input$rate_count_chd, x = names(x), value = TRUE)
+  x[c("name_count", "name_rate")][col]
 })
 
 prettyVarChd <- reactive({
@@ -224,7 +225,6 @@ isValidSelection <- reactive({
 
 output$d3_chd <- renderPlotly({
   req(input$var_chd, isValidSelection())
-  
   plotlyObj()
 })
 

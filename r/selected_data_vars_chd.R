@@ -15,6 +15,7 @@ selected_data_vars_chd <-
     var_stripped <- paste0(var_stripped, "$") # make sure no matching with multiple input vars
     tmp <-
       grep(var_stripped, colnames(subset_outcome_chd), value = TRUE)
-    tmp[as.integer(rate_count)]
+    pat = paste0('^', rate_count)
+    tmp[grep(pattern = pat, x = tmp)]
     
   }

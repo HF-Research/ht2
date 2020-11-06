@@ -39,12 +39,14 @@ if (lang == "dk") {
 }
 
 # OBJECTS ------------------------------------------------------------
-year_max <- 2017
 
 data_path <- file.path(paste0("data/shiny_dat_", lang, ".rds"))
 shiny_dat <- readRDS(file = data_path)
 dk_sf <- readRDS(file = "data/dk_sf_data.rds")
 pop <- fread("data/pop_summary_age.txt")
+
+
+year_max <- shiny_dat$d1$national$v1[, max(year)] 
 
 source("ui/ui-common.R")
 ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
