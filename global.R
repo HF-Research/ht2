@@ -29,7 +29,7 @@ sapply(files, source)
 
 enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
-lang = "dk"
+lang = "en"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","
@@ -37,6 +37,7 @@ if (lang == "dk") {
   thousands_sep <- ","
   dec_mark <- "."
 }
+
 
 # OBJECTS ------------------------------------------------------------
 
@@ -50,7 +51,7 @@ year_max <- shiny_dat$d1$national$v1[, max(year)]
 
 source("ui/ui-common.R")
 ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
-source(ui_file_path, encoding = "UTF-8")
+source(ui_file_path, encoding = 'UTF-8')
 
 valid_output_combos <- readRDS(file = "data/valid_output_combos.rds")
 variables_not_used <- variable_ui[grepl("count_n_ambulatory|count_n_bed", code_name), shiny_code]

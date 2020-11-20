@@ -38,6 +38,7 @@ about_dat_faq <- fread(file = "input_ui_text/faq.csv", encoding = "UTF-8")
 keep_vars <- grep(lang, colnames(about_dat_faq), value = TRUE)
 about_dat_faq <- about_dat_faq[, ..keep_vars]
 
+
 about_dat_diag <-
   merge(data.table(hjertetal_code = grep("d", names(shiny_dat), value = TRUE)),
         outcome_descriptions,

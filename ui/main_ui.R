@@ -68,6 +68,16 @@ tabPanel(ui_main_title,
                # Graph panel
                tabPanel(
                  title = ui_d3_figures,
+                 
+                 fluidRow(
+                   class = "data_warning",
+                   column(
+                     12,
+                     
+                     align = "left",
+                    textOutput("data_warning_graph")
+                   )
+                 ),
                  br(),
                  conditionalPanel(condition = "input.agCVD != 'national'",
                                   (
@@ -89,6 +99,15 @@ tabPanel(ui_main_title,
                # Map Panel
                tabPanel(
                  title = ui_map,
+                 fluidRow(
+                   class = "data_warning_map",
+                   column(
+                     12,
+                     
+                     align = "left",
+                     textOutput("data_warning")
+                   )
+                 ),
                  fluidRow(
                    class = "row_outcome_title",
                    column(

@@ -308,9 +308,6 @@ label{
     
 }
 
-
-
-
 .table{
   width: 150px;
   background-color:white;
@@ -327,32 +324,7 @@ td {
 
 
 
-
-/******   MAPS   *******/
-  
-  .leaflet-container { 
-    background:white !important;
-  }
-
-.col_leaflet {
-  min-width:430px;
-  padding-right: 0px;
-}
-
-.leaflet-right .leaflet-control {
-  margin-right: 0px;
-}
-
-.bttn-material-flat.bttn-primary{
-  background:var(--hfBlue);;
-}
-
-
-
 /******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
-  .container-fluid {
-    margin:auto;
-  }
 
 .well_input{
   background-color:white;
@@ -401,7 +373,6 @@ td {
 
 
 
-
 /******   ABOUT TABPAGE   *******/
   .col_about_dt {
     max-width:1260px;
@@ -420,22 +391,45 @@ td {
   summary{
     padding-bottom: 15px;
   }
+  .container-fluid {
+    margin:auto;
+  }
+
+
 /**** NAVBAR STYLING *****/
   #ht_title{
   color: white;
 }
 
 /******   MAPS   *******/
-#map_title_male{
-font-size: 1.6rem;
-font-weight: 550;
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
 }
 
-#map_title_female{
-font-size: 1.6rem;
-font-weight: 550;
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
 }
 
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+  font-size: 2.6rem;
+font-weight: 400;
+}
 
 
 /******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
@@ -483,4 +477,11 @@ margin-top: 10px;
 
 #rate_desc{
 margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: red;
 }

@@ -17,19 +17,19 @@ aboutFAQDT <- reactive({
       dom = "f",
       initComplete = header_JS
     )
-  ) %>%  
-    formatStyle(1:n_col, borderColor = "white") %>% 
-    formatStyle(columns = c(1), width='30%')
+  ) %>%
+    formatStyle(1:n_col, borderColor = "white") %>%
+    formatStyle(columns = c(1), width = '30%')
   
   
 })
 
 
 aboutUpdatesDT <- reactive({
-  colnames(about_dat_faq) <- col_names_faq
-  n_col <- NCOL(about_dat_faq)
+  colnames(about_dat_updates) <- col_names_updates
+  n_col <- NCOL(about_dat_updates)
   DT::datatable(
-    data = about_dat_faq,
+    data = about_dat_updates,
     
     rownames = FALSE,
     class = ' hover row-border',
@@ -40,21 +40,18 @@ aboutUpdatesDT <- reactive({
       dom = "f",
       initComplete = header_JS
     )
-  ) %>%  
-    formatStyle(1:n_col, borderColor = "white") %>% 
-    formatStyle(columns = c(1), width='30%')
+  ) %>%
+    formatStyle(1:n_col, borderColor = "white") %>%
+    formatStyle(columns = c(1), width = '30%')
   
 })
 aboutDiagDT <- reactive({
-  
   col_subset <-
-    c(
-      "name",
+    c("name",
       "desc",
       "code_simple",
       "diag_type",
-      "pat_type"
-    )
+      "pat_type")
   diag <- about_dat_diag[, ..col_subset]
   colnames(diag) <- col_names_diag
   makeAboutTables(diag, col_names_diag)
@@ -64,7 +61,7 @@ aboutDiagDT <- reactive({
 aboutOprDT <- reactive({
   col_subset <-
     c("name",
-    "desc",
+      "desc",
       "code_simple")
   opr <- about_dat_opr[, ..col_subset]
   colnames(opr) <- col_names_opr
@@ -92,22 +89,23 @@ aboutEduDT <- reactive({
   
   edu[[1]] <- gsub("/ ", " / ", edu[[1]])
   
-  edu[, (col_names_edu) := lapply(.SD, function(i){
+  edu[, (col_names_edu) := lapply(.SD, function(i) {
     gsub("<e5>", "å", i, fixed = TRUE)
-    })
-    ]
+  })]
   
-   makeAboutTables(edu, col_names_edu)
+  makeAboutTables(edu, col_names_edu)
 })
 
 
 aboutEthnicityDT <- reactive({
-  makeAboutTables(country_grps,
-                  col_names_ethnicity,
-                  order = TRUE,
-                  paging = TRUE,
-                  search = TRUE,
-                  dom = "Bfpt")
+  makeAboutTables(
+    country_grps,
+    col_names_ethnicity,
+    order = TRUE,
+    paging = TRUE,
+    search = TRUE,
+    dom = "Bfpt"
+  )
 })
 
 
@@ -137,22 +135,23 @@ aboutPopDT <- reactive({
 
 # TEXT --------------------------------------------------------------------
 uiAboutText <- reactive({
-  
-  ui_about_text[code == input$about_selection,]
+  ui_about_text[code == input$about_selection, ]
 })
 
 output$ui_about_title <- renderText({
-  
   uiAboutText()[, title_text]
 })
 
 output$ui_about_desc <- renderUI({
-  if(input$about_selection == "general"){
-    str2 <- paste0("<ui><li>", paste0(ui_bullets, collapse = "</li><li>"), "</ui></li>")
-  HTML(paste(ui_gen_1, str2, "</br>", ui_gen_2))
-      
+  if (input$about_selection == "general") {
+    str2 <-
+      paste0("<ui><li>",
+             paste0(ui_bullets, collapse = "</li><li>"),
+             "</ui></li>")
+    HTML(paste(ui_gen_1, str2, "</br>", ui_gen_2))
+    
   } else {
-  HTML(uiAboutText()[, desc_text])
+    HTML(uiAboutText()[, desc_text])
   }
 })
 
@@ -165,6 +164,10 @@ output$ui_about_desc_2 <- renderText({
 
 output$table_faq <- renderDT({
   aboutFAQDT()
+}, server = FALSE)
+
+output$table_updates <- renderDT({
+  aboutUpdatesDT()
 }, server = FALSE)
 
 output$table_diag <- renderDT({

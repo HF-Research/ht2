@@ -34,6 +34,17 @@ tabPanel(
                            DTOutput("table_faq")
                          )
                        )),
+      
+      conditionalPanel(condition = "input.about_selection == 'updates'",
+                       fluidRow(
+                         column(
+                           class = "col_about_dt",
+                           12,
+                           align = "center",
+                           DTOutput("table_updates")
+                         )
+                       )),
+      
       conditionalPanel(condition = "input.about_selection == 'def_diag'",
                        fluidRow(
                          column(

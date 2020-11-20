@@ -15,7 +15,8 @@ col_names_faq <- c(
 )
 
 col_names_updates <- c(
-  
+  'Dato',
+  'Beskrivelse'
 )
 
 
@@ -95,10 +96,14 @@ ui_map <- "Kort"
 ui_d3_figures <- "Grafer"
 ui_data <- "Tabeller"
 
+
+# Data_warning
+ui_data_warning <- "*Data fra 2018 kan være ufuldstændig for nogle sygdomme"
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
 ui_about_title <- "Vejledning: hjerte-kar-sygdomme"
 about_selection <- "Vælg definition"
+about_dat_updates <- readRDS(file = 'language/updates_dk.rds')
 
 
 

@@ -13,6 +13,7 @@ makeCountKomDT <- function(dat,
                            group_var,
                            thousands_sep,
                            dt_title,
+                           messageTop,
                            messageBottom,
                            n_col,
                            dec_mark = dec_mark,
@@ -33,12 +34,14 @@ makeCountKomDT <- function(dat,
       buttons = list(
         list(
           extend = "pdf",
-          messageTop = dt_title,
+          title = dt_title,
+          messageTop = messageTop,
           messageBottom = messageBottom
         ),
         list(
-          extend = "excel",
-          messageTop = dt_title,
+          extend = "copy",
+          title = dt_title,
+          messageTop = messageTop,
           messageBottom = messageBottom
         )
       ),

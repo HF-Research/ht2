@@ -9,7 +9,7 @@
 ##' @param messageBottom
 ##' @param n_col
 ##' @param digits
-makeRateDT_chd <- function(dat, group_var, dt_title, messageBottom, n_col,
+makeRateDT_chd <- function(dat, group_var, dt_title, messageTop, messageBottom, n_col,
                            thousands_sep = thousands_sep,
                            dec_mark = dec_mark,
                            digits) {
@@ -26,11 +26,13 @@ makeRateDT_chd <- function(dat, group_var, dt_title, messageBottom, n_col,
       dom = "tB",
       buttons = list(
         list(extend = "pdf",
-             messageTop = dt_title,
-             messageBottom = messageBottom),
-        list(extend = "excel",
-             messageTop = dt_title,
-             messageBottom = messageBottom)
+             title = dt_title,
+             messageTop = messageTop
+             ),
+        list(extend = "copy",
+             title = dt_title,
+             messageTop = messageTop
+             )
       ),
       initComplete = header_JS
     )

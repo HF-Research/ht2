@@ -11,6 +11,7 @@
 makeRateKomDT <- function(dat,
                           group_var,
                           dt_title,
+                          messageTop,
                           messageBottom = messageBottom,
                           n_col,
                           thousands_sep = thousands_sep,
@@ -31,12 +32,14 @@ makeRateKomDT <- function(dat,
       buttons = list(
         list(
           extend = "pdf",
-          messageTop = dt_title,
+          title = dt_title,
+          messageTop = messageTop,
           messageBottom = messageBottom
         ),
         list(
-          extend = "excel",
-          messageTop = dt_title,
+          extend = "copy",
+          title = dt_title,
+          messageTop = messageTop,
           messageBottom = messageBottom
         )
       ),

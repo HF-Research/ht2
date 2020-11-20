@@ -168,7 +168,7 @@ dtCastChd <- reactive({
 
 numDigits <- reactive({
   digits = 1
-  if (input$rate_count_chd == 1) {
+  if (input$rate_count_chd == "count") {
     digits = 0
   }
   digits
@@ -177,10 +177,12 @@ numDigits <- reactive({
 outputDT_chd <- reactive({
   x <- copy(dtCastChd())
   n_col <- NCOL(x)
+  
   makeRateDT_chd(
     x,
     group_var = ui_year,
-    dt_title = "H",
+    dt_title = dataTitle(),
+    messageTop = "HjerteTal",
     messageBottom = "B",
     n_col = n_col,
     thousands_sep = thousands_sep,

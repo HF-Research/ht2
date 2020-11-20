@@ -5,6 +5,6 @@ account: cars-online
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1811905
-bundleId: 3823948
+bundleId: 3880163
 url: https://hjerteforeningen.shinyapps.io/ht-dev/
-when: 1604585029.41045
+when: 1605786626.18291

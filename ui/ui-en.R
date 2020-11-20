@@ -89,19 +89,29 @@ ui_map <- "Map"
 ui_d3_figures <- "Graph"
 ui_data <- "Tabels"
 
+
+# Data_warning
+ui_data_warning <- "*Data for 2018 may be incomplete for some illnesses"
+
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
 ui_about_title <- "Methods: cardiovascular diseases"
 about_selection <- "Choose definition"
-
+about_dat_updates <- readRDS(file = 'language/updates_en.rds')
 col_names_faq <- c(
   "Questions",
   "Anwsers"
 )
 
+col_names_updates <- c(
+  'Date',
+  'Description'
+)
+
 
 about_choices <- list(
   "General" = "general",
+  "Updates" = "updates",
   "Illness" = "def_diag",
   "Procedures" = "def_opr",
   "Medicines" = "def_med",

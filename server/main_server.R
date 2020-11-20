@@ -212,9 +212,25 @@ output$tabFigure <- reactive({
 output$tabMap <- reactive({
   input$data_vis_tabs == ui_map && isGeo()
 })
+
+# Data warnings
+output$data_warning_graph <- reactive({
+  ui_data_warning
+})
+
+output$data_warning_dt <- reactive({
+  ui_data_warning
+})
+
+output$data_warning_map <- reactive({
+  ui_data_warning
+})
+
 outputOptions(output, "tabs", suspendWhenHidden = FALSE)
 outputOptions(output, "tabFigure", suspendWhenHidden = FALSE)
 outputOptions(output, "tabMap", suspendWhenHidden = FALSE)
+
+
 
 
 # DYNAMIC VARIABLES/COLUMN NAMES ------------------------------------------
@@ -520,6 +536,14 @@ validateIn <- reactive(label = "validate", {
   }
 })
 
+validYear <- reactive({
+  
+  if (NROW(subsetDataYear()) > 0) {
+    return(TRUE)
+  }
+  return(FALSE)
+})
+
 validateKom <- reactive({
   # If geographic aggregation level is selected, the selected year must be >=
   # 2009. This invalid combination cannot be directly selected by the user, but
@@ -789,7 +813,8 @@ output$downloadMapsFemale <- downloadHandler(
 #
 output$d3_plot_bar <- renderPlotly({
   req(input$varCVD)
-  if (validateIn() && !isNational() && !isKom()) {
+  if (validateIn() && !isNational() && !isKom() && validYear()) {
+    
     plotly_bar_cvd()
   }
 })
@@ -816,11 +841,11 @@ output$table_rates <- renderDT({
 })
 
 output$map_male <- renderLeaflet({
-  req(validateIn())
+  req(validateIn(), validYear())
   combinedMaps()$map_m
 })
 
 output$map_female <- renderLeaflet({
-  req(validateIn(), subsetData())
+  req(validateIn(), subsetData(), validYear())
   combinedMaps()$map_f
 })

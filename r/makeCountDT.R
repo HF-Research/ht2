@@ -13,6 +13,7 @@ makeCountDT <-
   function(dat,
            group_var,
            dt_title,
+           messageTop,
            messageBottom,
            n_col,
            thousands_sep,
@@ -32,12 +33,14 @@ makeCountDT <-
         buttons = list(
           list(
             extend = "pdf",
-            messageTop = dt_title,
+            title = dt_title,
+            messageTop = messageTop,
             messageBottom = messageBottom
           ),
           list(
             extend = "copy",
-            messageTop = dt_title,
+            title = dt_title,
+            messageTop = messageTop,
             messageBottom = messageBottom
           )
         ),
