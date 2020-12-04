@@ -9,6 +9,27 @@ aboutFAQDTChd <- reactive({
 })
 
 
+aboutUpdatesDTChd <- reactive({
+  colnames(about_dat_updates_chd) <- col_names_updates
+  n_col <- NCOL(about_dat_updates)
+  DT::datatable(
+    data = about_dat_updates,
+    
+    rownames = FALSE,
+    class = ' hover row-border',
+    selection = c("multiple"),
+    options = list(
+      lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
+      pageLength = 15,
+      dom = "f",
+      initComplete = header_JS
+    )
+  ) %>%
+    formatStyle(1:n_col, borderColor = "white") %>%
+    formatStyle(columns = c(1), width = '30%')
+  
+})
+
 
 aboutDiagDTChd <- reactive({
   col_subset <-
@@ -60,6 +81,11 @@ output$ui_about_desc_2_chd <- renderText({
 output$table_faq_chd <- renderDT({
   
   aboutFAQDTChd()}, server = FALSE)
+
+output$table_updates_chd <- renderDT({
+  aboutUpdatesDT()
+}, server = FALSE)
+
 
 output$table_diag_chd <- renderDT({
   
