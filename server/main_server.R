@@ -131,13 +131,15 @@ output$rate_count_desc <- renderUI({
 
 plotTitle <- reactive({
   if (isNational()) {
-    paste0(prettyOutcome(), ": ", tolower(prettyVariable()[1]))
+    paste0(prettyOutcome(), ": ", tolower(prettyVariable()[1]), " ", ui_age_35plus)
   } else {
     if (isGeo()) {
       paste0(
         prettyOutcome(),
         ": ",
         tolower(prettyVariable()[1]),
+        " ",
+        ui_age_35plus,
         "  ",
         input$year,
         ", ",
@@ -160,8 +162,11 @@ plotTitle <- reactive({
       paste0(prettyOutcome(),
              ": ",
              tolower(prettyVariable()[1]),
+             " ",
+             ui_age_35plus,
              "  ",
-             input$year)
+             input$year
+             )
     }
     
   }

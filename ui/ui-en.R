@@ -75,6 +75,7 @@ ui_count_rate <-
   enc2utf8(c("Counts", "Age-specific rate", "Age-standardized rate"))
 ui_read_more <- enc2utf8("Read more")
 ui_percent <- enc2utf8("proportion")
+ui_age_35plus <- "(ages 35+)"
 ui_edu_age_range <- "35 - 79 years"
 ui_moving_avg_desc <- "3-year moving average"
 

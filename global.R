@@ -11,11 +11,11 @@ library(DT)
 library(shinyWidgets)
 library(data.table)
 library(shinyjs) # Hides un-used tabs
-library(leaflet)
 library(manipulateWidget)
 library(sf)
 # devtools::install_github("ropensci/plotly")
 library(plotly)
+library(leaflet)
 library(fst)
 library(magrittr)
 })
@@ -54,7 +54,7 @@ ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
 source(ui_file_path, encoding = 'UTF-8')
 
 valid_output_combos <- readRDS(file = "data/valid_output_combos.rds")
-variables_not_used <- variable_ui[grepl("count_n_ambulatory|count_n_bed", code_name), shiny_code]
+variables_not_used <- variable_ui[grepl("n_ambulatory|n_bed", code_name), shiny_code]
 
 male_color <- "#10c8a6"
 female_color <- "#166abd"

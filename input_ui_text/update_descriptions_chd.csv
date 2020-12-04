@@ -1,0 +1,3 @@
+﻿display_order,date,desc_en,desc_dk
+3,20201119,"Changed the way the rates for operations are calculated. Previously rates were calculated as the number of operations per 100,000 people in the genaral population (i.e., the denominator included both people with and without diagnosed congenital heart defects). Now rates are based on the number of operations per 100,000 congenital heart disease patients (i.e. the denominator now only includes people diagnosed with the selected disease). ",
+1,20201119,Added new data for 2018.,
