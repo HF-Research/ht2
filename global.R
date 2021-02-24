@@ -29,7 +29,7 @@ sapply(files, source)
 
 enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
-lang = "en"
+lang = "dk"
 if (lang == "dk") {
   thousands_sep <- "."
   dec_mark <- ","

@@ -41,67 +41,22 @@
     --breakpoint-md: 768px;
     --breakpoint-lg: 992px;
     --breakpoint-xl: 1200px;
-    --font-family-sans-serif: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-sans-serif: Roboto, "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --font-size: 16px;
   }
 
 body {
   margin: 0;
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family:  Roboto, "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1.5375rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #222;
+  color: var(--hfBlue);
     text-align: left;
   background-color: #fff;
 }
 
-
-button {
-  border-radius: 0;
-}
-
-button:focus {
-  outline: 1px dotted;
-  outline: 5px auto -webkit-focus-ring-color;
-}
-
-input,
-button,
-select,
-optgroup,
-textarea {
-  margin: 0;
-  font-family: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-button,
-input {
-  overflow: visible;
-}
-
-button,
-select {
-  text-transform: none;
-}
-
-button,
-html [type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button;
-}
-
-button::-moz-focus-inner,
-[type="button"]::-moz-focus-inner,
-[type="reset"]::-moz-focus-inner,
-[type="submit"]::-moz-focus-inner {
-  padding: 0;
-  border-style: none;
-}
 
 input[type="radio"],
 input[type="checkbox"] {
@@ -210,7 +165,7 @@ input[type="month"] {
 }
 
 label{
-  font-size:1.5rem;
+  
   font-weight: 600;
   margin-bottom:7px;
   margin-top:5px;
@@ -218,13 +173,14 @@ label{
 
 
 /**** BUTTON STYLES *****/
-  
+  .btn{
+    font-size: 1.7rem;
+  }
   .btn.radiobtn.btn-default.active {
     background-color:var(--hfBlue);
     border-color:var(--hfBlue);
     font-weight:bold;
     color:white;
-    font-size: 1.5rem;
     padding-right:5px;
     padding-left:5px;
   }
@@ -235,30 +191,36 @@ label{
 
 .btn.radiobtn.btn-default {
   background-color: var(--white);
-  border-color: var(--hfBlueLight);
+  border-color: var(--hfBlueMedium);
   color:var(--hfBlue);
-  font-size:1.5rem;
   font-weight:600;
   ;
 }
 
-.btn.radiobtn.btn-default:hover {
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
   background-color: var(--hfBlueMedium);
   border-color: var(--hfBlueMedium);
   color:white;
-  font-size: 1.5rem;
   font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
   padding-right:5px;
   padding-left:5px;
 }
+
 
 .btn.radiobtn.btn-default.active:hover {
   background-color:var(--hfBlue);
   border-color:var(--hfBlue);
   font-weight:bold;
   color:white;
-  font-size: 1.5rem;
-  
 }
 
 
@@ -351,11 +313,13 @@ td {
 }
 
 .explanitory_text{
-  font-size:1.6rem;
+  font-size:1.7rem;
 }
 
-.ref{
-  font-size: 1.2rem;}
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
 
 .tab-pane.active{
   margin-top: -15px;
@@ -391,6 +355,21 @@ td {
   summary{
     padding-bottom: 15px;
   }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
   .container-fluid {
     margin:auto;
   }

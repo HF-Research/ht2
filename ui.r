@@ -18,7 +18,7 @@ ui <- function(request) {
     ),
     tags$a(
       img(
-      src = "hf-logo.png",
+      src = "hf_logo.svg",
       align = "left",
       style = "padding-top: 20px; padding-bottom: 40px; padding-left: 2.5rem;",
       height = "110px"
