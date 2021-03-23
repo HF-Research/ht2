@@ -93,3 +93,11 @@ starting_vals_var <- validate_selected_vars(
   lang = lang,
   selected_var = "v1"
 )
+starting_vals_agg <- make_agg_choices(
+  var_selected = "v1",
+  outcome_code = "d1",
+  valid_output_combos = valid_output_combos,
+  aggr_choices = aggr_choices,
+  input_aggr_level = "national"
+)
+
