@@ -103,7 +103,7 @@ ui_data_warning <- "*Data fra 2018 kan være ufuldstændig for nogle sygdomme"
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
 ui_about_title <- "Vejledning: hjerte-kar-sygdomme"
-about_selection <- "Vælg definition"
+about_selection <- "Vælg emne:"
 about_dat_updates <- readRDS(file = 'language/updates_dk.rds')
 
 

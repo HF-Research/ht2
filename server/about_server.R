@@ -15,7 +15,7 @@ aboutFAQDT <- reactive({
       lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
       pageLength = 15,
       dom = "f",
-      initComplete = header_JS
+      initComplete = header_JS(DT_background_color, text_color = DT_text_color)
     )
   ) %>%
     formatStyle(1:n_col, borderColor = "white") %>%
@@ -38,7 +38,7 @@ aboutUpdatesDT <- reactive({
       lengthMenu = list(c(15, 50, -1), c('15', '50', 'Alle')),
       pageLength = 15,
       dom = "f",
-      initComplete = header_JS
+      initComplete = header_JS(DT_background_color, text_color = DT_text_color)
     )
   ) %>%
     formatStyle(1:n_col, borderColor = "white") %>%

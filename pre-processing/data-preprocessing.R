@@ -1,16 +1,26 @@
 library(data.table)
 library(magrittr)
 library(sp)
-library(rgeos)
-library(maptools)
+
 library(sf)
-library(leaflet)
 library(dplyr)
 library(fst)
-library(Hmisc)
 # devtools::install_github('HF-Research/HTData', force = TRUE)
 library(HTData)
 source("R/helperFunctions.R")
+files <- list.files(path = "R/", full.names = TRUE)
+sapply(files, source)
+
+
+# INTRO -------------------------------------------------------------------
+
+# There is a large amount of processing that can be done before the app is
+# deployed. This includes data munging on the health data and geographic data,
+# but also getting the UI ready for both Danish and English. Some of the
+# pre-processing is done to improve performance of app launch or of app usage
+# (i.e. using nested lists instead of a large data.table to improve performance
+# of data subsettin when drilling down).
+
 
 # DATA TO FST -------------------------------------------------------------
 # Data that needs to be loaded for each session should be in fst format for performance reasons
@@ -43,6 +53,10 @@ write_fst(edu, path = "data/edu_description.fst", compress = 1)
 write_fst(ui_about_text, path = "data/ui_about_text.fst", compress = 1)
 
 # OUTCOME DATA ------------------------------------------------------------
+# The data that we ingest needs to be transformed to allow better performance
+# in a Shiny app. Some additional housekeeping changes (re-naming variables,
+# etc) are done here, because the Shiny app and the code that produces the
+# data have diverged during development.
 format_data <- function(x, variable_translation) {
   setnames(
     x,
@@ -52,7 +66,7 @@ format_data <- function(x, variable_translation) {
       "aggr_level_val",
       "rate",
       "n.events"
-
+      
     ),
     new = c("outcome",
             "agCVD",
@@ -61,10 +75,10 @@ format_data <- function(x, variable_translation) {
             "count")
   )
   x[, event := gsub("\\.", "_", event)] %>% unique()
-
+  
   # Capitalize first word in aggr_grouping names
-  x[, grouping := capitalize(grouping)]
-
+  x[, grouping := Hmisc::capitalize(grouping)]
+  
   out <-
     merge(
       x,
@@ -75,28 +89,28 @@ format_data <- function(x, variable_translation) {
     )
   stopifnot(NROW(out[is.na(shiny_code)]) == 0)
   setnames(out, old = "shiny_code", new = "variable_code")
-
+  
   # Set NAs to 0s
   out[is.na(count), count := 0]
   out[is.na(rate), rate := 0]
-
+  
   setkey(out, year, outcome)
   out
-
+  
 }
 
 
 format_geo_data <- function(x, geo_data, geo_type) {
   # Replaces kommune and region numeric codes with their names (as characters of
   # course)
-
+  
   cols_start <- names(x)
-
+  
   geo_cols <- c(paste0(geo_type, "_name"), geo_type)
-
+  
   # Make sure geo name starts with capital letter
-
-
+  
+  
   # Grouping == 9 are "unknowns", we want to remove those
   x <- x[!(agCVD == geo_type & grouping == 9)]
   x <- x[!(agCVD == geo_type & grouping == "Unknown")]
@@ -106,43 +120,43 @@ format_geo_data <- function(x, geo_data, geo_type) {
           by.x = "grouping",
           by.y = geo_type,
           all.x = TRUE)
-
+  
   # Check that everything matches
   stopifnot(NROW(out[is.na(get(geo_cols[1]))]) == 0)
-
+  
   # Ensure row order is same in both x and out (and verify this is true)
   setkey(out, sex, year, agCVD, grouping, outcome)
   setkey(x, sex, year, agCVD, grouping, outcome)
   x[agCVD == geo_type, idx := paste0(sex, year, outcome, grouping)]
   out[, idx := paste0(sex, year, outcome, grouping)]
   stopifnot(all(x[agCVD == geo_type]$idx == out$idx))
-
+  
   # Replace number ID with region name
   x[agCVD == geo_type, grouping := out[[geo_cols[1]]]]
   x[, idx := NULL]
   cols_end <- names(x)
-
+  
   # Remove Christiansoe
   if (geo_type == "kom") {
     x <- x[grouping != "Christiansø"]
   }
-
-
+  
+  
   stopifnot(all(cols_start == cols_end))
-
+  
   # Ensure all matching occured
   stopifnot(NROW(x[agCVD == geo_type & is.na(grouping)]) == 0)
-
+  
   return(x)
-
+  
 }
 geo_codes <-
   fread("data/kommune_codes.csv", encoding = "UTF-8") %>%
   setnames(c("kom", "kom_name", "region_name", "region")) %>%
   .[, kom := as.character(kom)] %>%
   .[, region := as.character(region)] %>%
-  .[, region_name := capitalize(region_name)] %>%
-  .[, kom_name := capitalize(kom_name)]
+  .[, region_name := Hmisc::capitalize(region_name)] %>%
+  .[, kom_name := Hmisc::capitalize(kom_name)]
 region_codes <-
   geo_codes[, .(region_name, region)] %>%
   unique(by = "region")
@@ -175,8 +189,8 @@ toList <- function(x) {
             lapply(., setkeyv, cols = c("sex", "grouping", "year"))
         })
     })
-
-  # Change edu to factor to ensure correct ordering
+  
+  # Change edu to factor to ensure correct ordering in output graphs
   l1 <- lapply(l1, function(l2) {
     l2$edu <- lapply(l2$edu, function(dat) {
       dat[, grouping := factor(tolower(grouping),
@@ -203,6 +217,8 @@ saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
 
 # VALID OUTPUT COMBINDATIONS ----------------------------------------------
 
+# Some combinations of inputs are not allowed because there are too few data for
+# those combinations.
 valid_output_combos <- fread("data/valid_output_combos.txt")
 valid_output_combos[, id := NULL]
 valid_output_combos[, var := gsub("\\.", "_", var)]
@@ -238,7 +254,7 @@ makeDKEdu <- function(dat) {
                all.x = TRUE)
     x[, `:=` (grouping = edu_name_dk)]
     x[, `:=` (edu_name_dk = NULL)]
-
+    
     # Turn DK edu into factor
     x[, `:=` (grouping = factor(grouping,
                                 levels = c(edu[, edu_name_dk])))]
@@ -568,7 +584,7 @@ chd <- lapply(chd, function(l1) {
   l1[, rate_strat_prevalence := round(rate_strat_prevalence, digits = 1)]
   l1[, rate_strat_opr_patients := round(rate_strat_opr_patients, digits = 1)]
   l1[, rate_strat_oprs := round(rate_strat_oprs, digits = 1)]
-
+  
   l1
 })
 
@@ -629,7 +645,7 @@ var_col_names <- c(
   "desc_count",
   "desc_stratified",
   "desc_standardized"
-
+  
 )
 setnames(var_desc_chd_dk, var_col_names)
 
@@ -676,6 +692,13 @@ saveRDS(var_desc_chd_en, file = "language/variable_descriptions_chd_en.rds")
 saveRDS(about_chd_en, file = "language/ui_about_text_chd_en.rds")
 
 # GEO DATA ------------------------------------------------------------------
+
+# Here we perpare the base map and ensure that names are aligned to allow
+# merging with the health data in the Shiny app.
+
+# Additionally The island of Bornholm makes a map of Denmark awkward. To get
+# around this we mimic on inset map by moving the coordinates of Bornholm, then
+# putting inset lines around it
 l2 <- readRDS("data/DNK_adm2.rds")
 
 l2 <- st_as_sf(l2, coords = c("x", "y")) %>%
@@ -691,14 +714,13 @@ l2 <-
 
 l2$name_kom <- enc2native(l2$name_kom)
 l2$region <- enc2native(l2$region)
-l2[l2$name_kom == "Århus",]$name_kom <- "Aarhus"
-l2[l2$name_kom == "Vesthimmerland",]$name_kom <- "Vesthimmerlands"
+l2[l2$name_kom == "Århus", ]$name_kom <- "Aarhus"
+l2[l2$name_kom == "Vesthimmerland", ]$name_kom <- "Vesthimmerlands"
 
 
-l2$name_kom
+
 # Delete Christiansoe polygon
-l2 <- l2[l2$name_kom != "Christiansø",]
-l2$name_kom
+l2 <- l2[l2$name_kom != "Christiansø", ]
 
 # Move Bornholm
 bornholm <- l2 %>% filter(name_kom == "Bornholm")
@@ -707,7 +729,7 @@ b.geo <- b.geo + c(-2.6, 1.35) # Move object
 st_geometry(bornholm) <- b.geo # Re-assign geometry to object
 
 # Replace bornholm in main sf object
-l2[l2$name_kom == "Bornholm",] <- bornholm
+l2[l2$name_kom == "Bornholm", ] <- bornholm
 
 # Union kommune to regions
 regions <- unique(l2$region)
@@ -719,7 +741,7 @@ for (reg in regions) {
   attr_tmp[[reg]] <-
     l2 %>% filter(region == reg) %>% .[1, c("id", "region")] %>% st_drop_geometry()
   out_sf[[reg]] <- st_as_sf(merge(geo_tmp[[reg]], attr_tmp[[reg]]))
-
+  
 }
 
 l1 <- do.call("rbind", out_sf)
@@ -728,12 +750,11 @@ l2$region <- NULL
 
 
 
-# mini-map lines
+# Make map inset
 x_min <- 12.03
 x_max <- 12.63
 y_min <- 56.31
 y_max <- 56.68
-
 
 bottom_right <- c(x_max, y_min)
 bottom_left <- c(x_min, y_min)
@@ -759,11 +780,32 @@ dk_sf_data <- list(
 saveRDS(dk_sf_data, file = "data/dk_sf_data.rds")
 
 
+
+# STARTING CONDITIONS -----------------------------------------------------
+# valid_output_combos <-
+#   readRDS(file = "data/valid_output_combos.rds")
+# variables_not_used <-
+#   variable_ui[grepl("n_ambulatory|n_bed", code_name), shiny_code]
+# 
+# starting_vals_dk <- validate_selected_vars(
+#   aggr_selected = "national",
+#   outcome_code = "d1",
+#   variables_not_used = variables_not_used,lang = "dk",selected_var = "v1"
+# )
+# 
+# starting_vals_en <- validate_selected_vars(
+#   aggr_selected = "national",
+#   outcome_code = "d1",
+#   variables_not_used = variables_not_used,lang = "en",selected_var = "v1"
+# )
+# 
+# saveRDS(starting_vals_dk, file = "data/starting_vals_dk")
+# saveRDS(starting_vals_en, file = "data/starting_vals_en")
 # CSS PREPERATION ---------------------------------------------------------
 
-# In order to have a common CSS template for all HFs shiny apps, we create use a
-# common css template that has all classes and such defined. Any references to
-# element IDs goes in the second, app specific css file.
+# In order to have a common CSS template for all  Shiny apps in the Danish Heart
+# Foundation, we create use a common css template with base styling. Any styling
+# specific to an app goes in the app_specific css file.
 css_common <-
   readLines(con = "https://raw.githubusercontent.com/matthew-phelps/hf-css/main/css-main.css")
 css_app_specific <-

@@ -68,7 +68,8 @@ DTtables_rate <-
         thousands_sep = thousands_sep,
         dec_mark = dec_mark,
         digits = digits
-      )
+      ) 
+        
       
     } else {
       makeRateDT(

@@ -34,7 +34,7 @@ makeRateDT_chd <- function(dat, group_var, dt_title, messageTop, messageBottom, 
              messageTop = messageTop
              )
       ),
-      initComplete = header_JS
+      initComplete = header_JS(DT_background_color, text_color = DT_text_color)
     )
   )  %>%
     formatCurrency(
@@ -46,6 +46,7 @@ makeRateDT_chd <- function(dat, group_var, dt_title, messageTop, messageBottom, 
       digits = digits
     ) %>%
     formatStyle(1:n_col, borderColor = "white") %>% 
-    formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
+    formatStyle(group_var,  fontWeight = "bold") %>%
+    formatStyle(columns = names(dat),backgroundColor = DT_background_color, color = DT_text_color)
     
 }

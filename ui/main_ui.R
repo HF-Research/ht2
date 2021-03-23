@@ -21,7 +21,15 @@ tabPanel(ui_main_title,
                          column(
                            6,
                            # This UI has to change based on "outcome" choice
-                           fluidRow(uiOutput("varChoices")),
+                           # fluidRow(uiOutput("varChoices")),
+                           fluidRow(
+                             selectInput(
+                               inputId = "varCVD",
+                               label = choose_var,
+                               choices = starting_vals_var$var_names,
+                               selected = starting_vals_var$selected_var
+                             )
+                           ),
                            fluidRow(
                              selectInput(
                                inputId = "year",

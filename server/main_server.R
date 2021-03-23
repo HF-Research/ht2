@@ -610,11 +610,35 @@ validateSelectedVars <- reactive({
   
 })
 
+observeEvent(validateSelectedVars(),{
+  freezeReactiveValue(input, "varCVD")
+  aggr_selected_next <-
+    isolate(aggrButtonChoices()$selected_aggr)
+  var_choice_out <-
+    make_var_choices(
+      selected_var = (validateSelectedVars()$selected_var),
+      var_names = (validateSelectedVars()$var_names),
+      valid_selection = (validateSelectedVars()$valid_selection),
+      aggr_selected_next = aggr_selected_next,
+      outcome_code = input$oCVD,
+      valid_output_combos = valid_output_combos
+    )
+  
+  updateSelectizeInput(
+    session,
+    inputId = "varCVD",
+    label = choose_var,
+    choices = var_choice_out$var_names,
+    selected = var_choice_out$selected_var
+  )
+  
+})
+
+
 output$varChoices <- renderUI({
   req(input$agCVD)
   
-  # Gives a dynamic button UI. The buttons change depending on the selected
-  # outcome Keep variables that have "count" in their name.
+  # Gives a dynamic button UI.
   #
   # This next code allows the variable chosen by the user to remain, when
   # switching to a new outcome, while on a aggr_level not supported with the new

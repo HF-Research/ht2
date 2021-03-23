@@ -26,7 +26,7 @@ makeAboutTables <- function(dat, col_names, order = FALSE, paging = FALSE, dom
       pageLength = 20,
       dom = dom,
       buttons = list('pdf'),
-      initComplete = header_JS,
+      initComplete = header_JS(DT_background_color, text_color = DT_text_color),
       autoWidth = TRUE
       # columnDefs = list(list(targets = c(0), visible = TRUE, width= '35%'))
     )

@@ -45,7 +45,7 @@ makeCountKomDT <- function(dat,
           messageBottom = messageBottom
         )
       ),
-      initComplete = header_JS
+      initComplete = header_JS(DT_background_color, text_color = DT_text_color)
     )
   ) %>%
     formatCurrency(
@@ -58,7 +58,7 @@ makeCountKomDT <- function(dat,
     ) %>%
     formatStyle(1:n_col, borderColor = "white") %>%
     formatStyle('Total',  fontWeight = 'bold') %>%
-    formatStyle(group_var,  backgroundColor = DT_background_color, color = "white") %>%
+    formatStyle(group_var,  fontWeight = 'bold') %>%
     formatStyle(
       # Bolds the "Totals" row which has character == "Total" in column 1
       1,

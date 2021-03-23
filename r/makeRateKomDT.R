@@ -43,7 +43,7 @@ makeRateKomDT <- function(dat,
           messageBottom = messageBottom
         )
       ),
-      initComplete = header_JS
+      initComplete = header_JS(DT_background_color, text_color = DT_text_color)
     )
   ) %>%
     formatCurrency(
@@ -54,7 +54,8 @@ makeRateKomDT <- function(dat,
       dec.mark = dec_mark,
       digits = digits
     ) %>%
-    formatStyle(1:n_col, borderColor = "white") %>%
-    formatStyle(group_var,  backgroundColor = DT_background_color, color = "white")
+    formatStyle(1:n_col, borderColor = "white") %>% 
+    formatStyle(group_var,  fontWeight = "bold") %>% 
+    formatStyle(columns = names(dat),backgroundColor = DT_background_color, color = DT_text_color)
   
 }

@@ -13,7 +13,7 @@ validate_selected_vars <- function(aggr_selected = input$agCVD,
                                    variables_not_used = variables_not_used,
                                    lang = lang,
                                    selected_var = selected_var) {
-  
+
   outcome_subset <- shiny_dat[[outcome_code]][[aggr_selected]]
   var_names <- valid_output_combos[outcome == outcome_code &
                                      agCVD == aggr_selected, unique(shiny_code)]
@@ -25,7 +25,8 @@ validate_selected_vars <- function(aggr_selected = input$agCVD,
   var_lang <- paste0("var_", lang)
   keep_vars <- c("shiny_code", var_lang)
   variable_choices <-
-    variable_ui[shiny_code %in% var_names, ..keep_vars]
+    variable_ui[shiny_code %chin% var_names, ..keep_vars]
+  
   var_names <- variable_choices$shiny_code
   names(var_names) <- variable_choices[[var_lang]]
   

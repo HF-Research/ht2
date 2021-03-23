@@ -74,7 +74,8 @@ DTtables_count <- function(dat = dtCast(),
       n_col = n_col,
       dec_mark = dec_mark,
       digits = 0
-    )
+    ) %>% 
+      formatStyle(columns = names(dat), color = DT_text_color)
   } else {
     
     makeCountDT(
@@ -86,7 +87,8 @@ DTtables_count <- function(dat = dtCast(),
       n_col = n_col,
       thousands_sep = thousands_sep,
       dec_mark = dec_mark
-    )
+    ) %>% 
+      formatStyle(columns = names(dat), color = DT_text_color)
   }
   
 
