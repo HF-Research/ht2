@@ -49,7 +49,15 @@ tabPanel(ui_main_title,
                          ),
                          column(6,
                                 # This UI has to change based on "outcome" & "var" choice
-                                uiOutput("aggrButtonChoices"))
+                                radioGroupButtons(
+                                  inputId = "agCVD",
+                                  label = choose_aggr_lv,
+                                  choices = starting_vals_agg$button_vals,
+                                  selected = starting_vals_agg$selected_aggr,
+                                  direction = "vertical",
+                                  justified = TRUE
+                                ))
+                                # uiOutput("aggrButtonChoices"))
                        )),
              # DESCRITPIONS
              fluidRow(
