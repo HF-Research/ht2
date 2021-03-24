@@ -532,6 +532,9 @@ validateIn <- reactive(label = "validate", {
   # Returns TRUE if passes and FALSE if any condition fails. This is needed to
   # stop the plots and tables trying to render when they have inproper input.
   # I.e. when switching between outcomes, the variable inupt is -
+  
+  req(input$agCVD)
+  
   nonZero_variable <- !is.null(input$varCVD) && !is.null(subsetVar())
   if (nonZero_variable) {
     input$oCVD != "" &&
