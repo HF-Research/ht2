@@ -2,7 +2,7 @@
 # devtools::install_github("rstudio/profvis")
 # library(profvis)
 # remotes::install_github("rstudio/reactlog")
-library(reactlog)
+# library(reactlog)
 
 options("shiny.reactlog" = TRUE)
 # devtools::install_version("shiny", version = "1.5.0")

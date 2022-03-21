@@ -210,9 +210,9 @@ tabPanel(ui_main_title,
                      6,
                      align = "center",
                      fluidRow(tags$b(textOutput("table2_title"))),
-                     fluidRow(((
+                     fluidRow(
                        DTOutput("table_rates")
-                     ))),
+                     ),
                      fluidRow(align = "left",
                               uiOutput("rate_desc"),
                               br())

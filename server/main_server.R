@@ -631,13 +631,13 @@ observeEvent(validateSelectedVars(), {
       valid_output_combos = valid_output_combos
     )
   
-    updateSelectizeInput(
-      session,
-      inputId = "varCVD",
-      label = choose_var,
-      choices = var_choice_out$var_names,
-      selected = var_choice_out$selected_var
-    )
+  updateSelectizeInput(
+    session,
+    inputId = "varCVD",
+    label = choose_var,
+    choices = var_choice_out$var_names,
+    selected = var_choice_out$selected_var
+  )
 })
 
 
