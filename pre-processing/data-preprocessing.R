@@ -354,7 +354,7 @@ setnames(
     "display_order"
   )
 )
-
+outcome_descriptions_dk[grepl("^d", hjertetal_code), desc := paste0(desc, " ICD koder: ", code_simple, ".")]
 saveRDS(outcome_descriptions_dk, file = "language/outcome_descriptions_dk.rds")
 
 # EN
@@ -417,6 +417,7 @@ setnames(
     "display_order"
   )
 )
+outcome_descriptions_en[grepl("^d", hjertetal_code), desc := paste0(desc, " ICD codes: ", code_simple, ".")]
 saveRDS(outcome_descriptions_en, file = "language/outcome_descriptions_en.rds")
 
 stopifnot(length(colnames(outcome_descriptions_dk)) == length(colnames(outcome_descriptions_en)))
