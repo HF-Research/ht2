@@ -6,6 +6,7 @@ shinyServer(function(input, output, session) {
          encoding = "UTF-8",
          local = TRUE)$value
   source(file.path("server", "chd_server.R"), local = TRUE)$value
+  # source(file.path("server", "risk_predict_server.R"), local = TRUE)$value
   source(file.path("server", "about_server.R"), local = TRUE)$value
   source(file.path("server", "about_chd_server.R"), local = TRUE)$value
   
@@ -37,7 +38,6 @@ shinyServer(function(input, output, session) {
     # "year",
     "rate_count",
     "rate_count_chd",
-    "about_selection",
     "about_selection_chd",
     "data_vi
     s_tabs_chd",
@@ -157,7 +157,30 @@ shinyServer(function(input, output, session) {
     "map_female_shape_mouseout",
     "map_female_shape_mouseover",
     "table_opr_row_last_clicked",
-    "plotly_relayout-A"
+    "plotly_relayout-A",
+    "table_faq_columns_selected",
+    "table_faq_cells_selected",
+    "table_updates_rows_selected",
+    "table_updates_search",
+    "table_updates_state",
+    "table_updates_rows_all",
+    "table_updates_columns_selected",
+    "table_updates_rows_current",
+    "table_updates_cell_clicked",
+    "table_updates_cells_selected",
+    "table_diag_cells_selected",
+    "table_diag_cells_selected",
+    "table_diag_columns_selected",
+    "table_opr_columns_selected",
+    "table_opr_cells_selected",
+    "table_med_columns_selected",
+    "table_med_cells_selected",
+    "table_edu_cells_selected",
+    "table_edu_columns_selected",
+    "table_ethnicity_cells_selected",
+    "table_ethnicity_columns_selected",
+    "table_pop_columns_selected",
+    "table_pop_cells_selected"
   )
   
   barChange <- reactive({input$bar})
@@ -170,7 +193,7 @@ shinyServer(function(input, output, session) {
     } else if (input$bar == "chd") {
       bookmarkingWhitelist <- c("bar", "oCHD", "var_chd", "agCHD")
     } else if (input$bar == "helpCVD") {
-      bookmarkingWhitelist <- c("bar")
+      bookmarkingWhitelist <- c("bar", "about_selection")
     } else if (input$bar == "helpCHD") {
       bookmarkingWhitelist <- c("bar")
     }
@@ -195,7 +218,8 @@ shinyServer(function(input, output, session) {
          input$year,
          input$oCHD,
          input$agCHD,
-         input$var_chd)
+         input$var_chd,
+         input$about_selection)
   })
   observeEvent(toListen(), label = "doBookmark", {
     session$doBookmark()
