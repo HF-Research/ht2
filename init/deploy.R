@@ -1,2 +1,9 @@
 # DO NOT RUN THIS SCRIPT DIRECTLY, SOURCE THE CALL_DEPLOY_LOCAL SCRIPT
-rsconnect::deployApp(appName = 'HjerteTal', forceUpdate = TRUE)
+
+# Run this when deploying a development verison to test. Comment out when
+# deploying to production
+rsconnect::deployApp(appName = 'ht-dev', forceUpdate = TRUE)
+
+# Only run this when you are sure everything works, and have deployed a test
+# version first
+# rsconnect::deployApp(appName = 'HjerteTal', forceUpdate = TRUE)

@@ -1,6 +1,6 @@
 # LIBRARIES ----------------------------------------------------
 # devtools::install_github("rstudio/profvis")
-# library(profvis)
+# library(profvis) # used to check performance, almost certainly not needed unless a major change is done to the shiny code
 # remotes::install_github("rstudio/reactlog")
 # library(reactlog)
 
@@ -22,9 +22,10 @@ suppressPackageStartupMessages({
 })
 
 
-# LOAD R CODE -------------------------------------------------------------
-# This should be done automatically in shiny versions >= 1.5
-# However, on deployment to shinyapps, it seems these codes are note loaded
+# LOAD R CODE ------------------------------------------------------------- This
+# should be done automatically in shiny versions >= 1.5 However, on deployment
+# to shinyapps, it seems these codes are note loaded automatically, so I do it
+# explicitly here
 files <- list.files(path = "R/", full.names = TRUE)
 sapply(files, source)
 
