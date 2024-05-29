@@ -11,6 +11,7 @@ suppressPackageStartupMessages({
   library(DT)
   library(shinyWidgets)
   library(data.table)
+  library(tidyverse)
   library(shinyjs) # Hides un-used tabs
   library(manipulateWidget)
   library(sf)

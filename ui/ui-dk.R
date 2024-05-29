@@ -1,4 +1,4 @@
-# INTRO -------------------------------------------------------------------
+# INTRO´- OPDATERET MARIANNA 10-05-2024 -------------------------------------------------------------------
 # Requires shiny_dat_* to be loaded - but will load this in global.R file before running this ui file
 # ALL PANELS --------------------------------------------------------------
 ui_sex <- enc2utf8("Køn")
@@ -99,7 +99,7 @@ ui_data <- "Tabeller"
 
 
 # Data_warning
-ui_data_warning <- "*Data fra 2018 kan være ufuldstændig for nogle sygdomme"
+#ui_data_warning <- "*Data fra 2018 kan være ufuldstændig for nogle sygdomme"
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
 ui_about_title <- "Vejledning: hjerte-kar-sygdomme"
@@ -164,7 +164,7 @@ ui_gen_1 <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
 bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne befolkning i Danmark.",
                 "Fordelingen kan vurderes på baggrund af køn, alder, uddannelse, etnisk herkomst og geografisk placering (bopæl).",
-                "Udviklingen af hjerte-kar-sygdomme fra 2006 og frem.",
+                "Udviklingen af hjerte-kar-sygdomme fra 2004 og frem.",
                 "Overlevelsen efter hjerte-kar-sygdom og efter invasive behandlinger.",
                 "Omfanget af forbruget af hjerte-kar-medicin."
 )
@@ -178,12 +178,17 @@ ui_gen_2 <-
     hvor du let kan få et overblik over kommunale og regionale forskelle.
     HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
     læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
-    medier. Den fungerer på computeren, iPad, iPhone, og Android
+    medier. Den fungerer på computeren, iPad, iPhone, og Android.
+    OBS: Vi har opdateret HjerteTal, hvor antallet af hjertekarpatienter i Danmark nu er ca. 670.000,
+    hvor det nuværende antal er 524.000 (2018). 
+    Det er vigtigt at bemærke, at disse tal ikke kan/skal sammenlignes direkte med de tidligere tal på 1:1 basis på grund af flere ændringer. 
+    Disse ændringer er betydelige faktorer for stigningen af hjertekarpatienter i Danmark.
+    Tal for medfødt hjertefejl er IKKE opdateret.
     
     </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
-</br> <b>Maja Bülow Lykke</b>, Forskningskonsulent, Hjerteforeningen
-</br>Telefon: 3366 9953,
-</br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
+</br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
+</br>Telefon: 30722587,
+</br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
     <hr>
     <h3> FAQ (Ofte stillede spørgsmål):</h3>"
     )
@@ -247,15 +252,17 @@ ui_bullets_chd <- lapply(bullets, enc2utf8)
 ui_gen_2_chd <-
   enc2utf8(
     "Databasen er udviklet ved Hjerteforeningen og opdateres én gang årligt.
-    Opgørelserne findes som tabeller eller graf. HjerteTal er frit tilgængelig
-    og kan bruges af alle interesserede, fx læger, forskere, politiske
-    beslutningstagere, sundhedsadministratorer og medier. Den fungerer på
-    computeren, iPad, iPhone, og Android.
+    Opgørelserne findes som tabeller, søjlediagrammer eller som Danmarkskort,
+    hvor du let kan få et overblik over kommunale og regionale forskelle.
+    HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
+    læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
+    medier. Den fungerer på computeren, iPad, iPhone, og Android.
+    Tal for medfødt hjertefejl er IKKE opdateret.
     
     </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
-    </br> <b>Maja Bülow Lykke</b>, Forskningskonsulent, Hjerteforeningen
-    </br>Telefon: 3366 9953,
-    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
+</br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
+</br>Telefon: 30722587,
+</br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
     <hr>
     <h3> FAQ (Ofte stillede spørgsmål):</h3>"
   )
