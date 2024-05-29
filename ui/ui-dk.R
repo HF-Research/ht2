@@ -82,8 +82,8 @@ ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
 ui_read_more <- enc2utf8("Læse mere")
 ui_percent <- enc2utf8("andel")
-ui_age_35plus <- "(35+ årige)"
-ui_edu_age_range <- "35 - 79 årige"
+ui_age_35plus <- "(18+ årige)"
+ui_edu_age_range <- "18 - 79 årige"
 ui_moving_avg_desc <- "3-år glidende gennemsnit"
 
 # Strings to place inside variable descriptions
@@ -99,7 +99,7 @@ ui_data <- "Tabeller"
 
 
 # Data_warning
-#ui_data_warning <- "*Data fra 2018 kan være ufuldstændig for nogle sygdomme"
+ui_data_warning <- ""
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
 ui_about_title <- "Vejledning: hjerte-kar-sygdomme"
@@ -179,11 +179,13 @@ ui_gen_2 <-
     HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
     læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
     medier. Den fungerer på computeren, iPad, iPhone, og Android.
-    OBS: Vi har opdateret HjerteTal, hvor antallet af hjertekarpatienter i Danmark nu er ca. 670.000,
-    hvor det nuværende antal er 524.000 (2018). 
-    Det er vigtigt at bemærke, at disse tal ikke kan/skal sammenlignes direkte med de tidligere tal på 1:1 basis på grund af flere ændringer. 
-    Disse ændringer er betydelige faktorer for stigningen af hjertekarpatienter i Danmark.
-    Tal for medfødt hjertefejl er IKKE opdateret.
+    Omkring 670.000 danskere lever med en hjerte-kar-sygdom*
+
+</br></br>*Antallet af patienter med hjerte-kar-sygdom kan ikke direkte sammenlignes med tidligere opgørelser.
+Det skyldes b.la. at der i 2019 kom en ny version af Landspatientregistret, hvor sygdomsforløb defineres anderledes end tidligere. 
+Derudover er populationen i denne opdatering udvidet til at inkludere alle danskere over 18 år og inkluderer nye sygdomsgrupper som f.eks. stroke.
+Ændringerne i den nye beregningsmetode er foretaget for at harmonisere med Sundhedsdatastyrelsen.
+Tal for medfødt hjertefejl er IKKE opdateret.
     
     </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
 </br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
@@ -257,7 +259,6 @@ ui_gen_2_chd <-
     HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
     læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
     medier. Den fungerer på computeren, iPad, iPhone, og Android.
-    Tal for medfødt hjertefejl er IKKE opdateret.
     
     </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
 </br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
