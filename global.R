@@ -19,6 +19,7 @@ suppressPackageStartupMessages({
   library(plotly)
   library(leaflet)
   library(fst)
+  
   library(magrittr)
 })
 
@@ -64,9 +65,9 @@ variables_not_used <-
 
 # COLORS ------------------------------------------------------------------
 
-hfBlue <- "#EFE6DD"
+hfBlue <- "#400000"
 
-male_color <- "#400000"
+male_color <- "#002A3A"
 female_color <- "#EAAE93"
 graph_colors <- c(male_color, female_color)
 rm(male_color, female_color)
