@@ -64,10 +64,10 @@ variables_not_used <-
 
 # COLORS ------------------------------------------------------------------
 
-hfBlue <- "#002A3A"
+hfBlue <- "#EFE6DD"
 
-male_color <- "#19b9b1"
-female_color <- "#ea8438"
+male_color <- "#400000"
+female_color <- "#EAAE93"
 graph_colors <- c(male_color, female_color)
 rm(male_color, female_color)
 
