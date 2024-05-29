@@ -813,7 +813,11 @@ output$d3_plot_bar <- renderPlotly({
   req(input$varCVD)
   if (validateIn() && !isNational() && !isKom() && validYear()) {
     
-    plotly_bar_cvd()
+    plotly_bar_cvd() %>% layout(yaxis =list
+                                (tickformat =
+                                    ".0f"
+                                  # Ensures the y-axis uses standard notation
+                                ))
   }
 })
 
@@ -821,7 +825,11 @@ output$plotly_line_cvd <- renderPlotly({
   req(input$varCVD)
   if (validateIn() && isNational()) {
     
-    plotly_line_cvd()
+    plotly_line_cvd() %>% layout(yaxis =list
+                                         (tickformat =
+                                             ".0f"
+                                           # Ensures the y-axis uses standard notation
+                                         ))
   }
   
 })
