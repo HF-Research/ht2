@@ -1,3 +1,3 @@
 ﻿display_order,date,desc_en,desc_dk
-"3,20240516,""Corrected age-groups. Previously we only inclued persons between ages of 35 - 84, but now we have expanded the population so we have persons from 18+"",""Vi har rettet  aldersgrupperne. Vi har tidligere kun inkluderet personer i alderen 35-84 år, men nu har vi udvidet populationen således vi har alle personer over 18 år, som har haft en hjerte-kar-sygdom."""
-"2,20240516,""Added new data from 2004 to 2022."",""Tilføjet ny data fra 2004 til 2022"""
+3,20240516,"Corrected age-groups. Previously we only inclued persons between ages of 35 - 84, but now we have expanded the population so we have persons from 18+","Vi har rettet  aldersgrupperne. Vi har tidligere kun inkluderet personer i alderen 35-84 år, men nu har vi udvidet populationen således vi har alle personer over 18 år, som har haft en hjerte-kar-sygdom."
+2,20240516,"Added new data from 2004 to 2022.","Tilføjet ny data fra 2004 til 2022"

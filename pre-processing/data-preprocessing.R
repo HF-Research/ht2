@@ -7,9 +7,9 @@ library(dplyr)
 library(fst)
 #devtools::install_github('HF-Research/HTData', force = TRUE)
 library(HTData)
-source("R/helperFunctions.R")
-files <- list.files(path = "R/", full.names = TRUE)
-sapply(files, source)
+source("r/helperFunctions.R")
+files <- list.files(path = "r/", full.names = TRUE)
+nix <- sapply(files, source)
 
 
 # INTRO -------------------------------------------------------------------
@@ -24,15 +24,13 @@ sapply(files, source)
 
 # DATA TO FST -------------------------------------------------------------
 # Data that needs to be loaded for each session should be in fst format for performance reasons
-outcome_descriptions <-
-  fread(file = "input_ui_text/outcome_descriptions.csv",
-        encoding = "UTF-8",
-        header = TRUE)
+outcome_descriptions <- fread(file = "input_ui_text/outcome_descriptions.csv",
+                              encoding = "UTF-8",
+                              header = TRUE)
 # load(file = "data/variable_ui.Rdata")
-variable_ui <-
-  fread(file = "input_ui_text/variable_ui.csv",
-        encoding = "UTF-8",
-        header = TRUE)
+variable_ui <- fread(file = "input_ui_text/variable_ui.csv",
+                     encoding = "UTF-8",
+                     header = TRUE)
 edu <-
   fread(file = "input_ui_text/edu_description.csv", encoding = "UTF-8")
 ui_about_text <-
@@ -507,8 +505,7 @@ col_names <- colnames(tmp)
 cols_delete <-
   c(grep("_dk", col_names, value = TRUE), 'display_order')
 tmp <- tmp[, -..cols_delete]
-new_col_names <- c("date",
-                   "desc")
+new_col_names <- c("date","desc")
 setnames(tmp, new_col_names)
 saveRDS(tmp, file = "language/updates_en.rds")
 
