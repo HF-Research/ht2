@@ -227,13 +227,21 @@ isValidSelection <- reactive({
 
 output$d3_chd <- renderPlotly({
   req(input$var_chd, isValidSelection())
-  plotlyObj()
+  plotlyObj() %>% layout(yaxis =list
+                         (tickformat =
+                             ".0f"
+                           # Ensures the y-axis uses standard notation
+                         ))
 })
 
 output$table_counts_chd <- renderDT({
   req(input$var_chd, isValidSelection())
   
-  outputDT_chd()
+  outputDT_chd() %>% layout(yaxis =list
+                            (tickformat =
+                                ".0f"
+                              # Ensures the y-axis uses standard notation
+                            ))
 })
 
 
