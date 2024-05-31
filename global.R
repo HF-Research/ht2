@@ -28,8 +28,8 @@ suppressPackageStartupMessages({
 # should be done automatically in shiny versions >= 1.5 However, on deployment
 # to shinyapps, it seems these codes are note loaded automatically, so I do it
 # explicitly here
-files <- list.files(path = "R/", full.names = TRUE)
-sapply(files, source)
+files <- list.files(path = "r/", full.names = TRUE)
+nix <- sapply(files, source)
 
 enableBookmarking("url")
 # LANGUAGE UI ---------------------------------------------------------
