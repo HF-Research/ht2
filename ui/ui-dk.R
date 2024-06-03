@@ -164,7 +164,7 @@ ui_gen_1 <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
 bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne befolkning i Danmark.",
                 "Fordelingen kan vurderes på baggrund af køn, alder, uddannelse, etnisk herkomst og geografisk placering (bopæl).",
-                "Udviklingen af hjerte-kar-sygdomme fra 2004 og frem.",
+                "Udviklingen af hjerte-kar-sygdomme fra 2006 og frem.",
                 "Overlevelsen efter hjerte-kar-sygdom og efter invasive behandlinger.",
                 "Omfanget af forbruget af hjerte-kar-medicin."
 )
@@ -248,7 +248,7 @@ ui_gen_1_chd <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
 bullets <- list("Forekomsten og fordelingen af medfødt hjertefejl i den dansk befolkning.",
                 "Fordelingen kan vurderes på baggrund af køn, alder, og både køn og alder smatidig",
-                "Udviklingen af medfødt hjertefejl fra 2004 og frem."
+                "Udviklingen af medfødt hjertefejl fra 2006 og frem."
                 
 )
 ui_bullets_chd <- lapply(bullets, enc2utf8)

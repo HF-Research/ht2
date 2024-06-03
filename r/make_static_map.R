@@ -31,10 +31,6 @@ make_static_map <- function(dat,
   mid_point <- dat_range[2] - ((dat_range[2] - dat_range[1]) / 2)
   
   ggplot() +
-    geom_tile() +
-    scale_fill_gradientn(
-      labels = comma # This removes scientific notation
-    )+
     geom_sf(data = z, aes(fill = !!fill_var), color = "grey35") +
     scale_fill_gradientn(
       # low = "#FFFFCC",
