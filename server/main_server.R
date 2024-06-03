@@ -3,7 +3,7 @@ options(DT.options = list(
   dom = "Bt",
   buttons = c('copy', 'csv', 'pdf')
 ))
-options(scipen = 999)
+
 # callModule(profvis_server, "profiler")
 # TEXT RENDERING ----------------------------------------------------------
 

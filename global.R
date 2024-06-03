@@ -65,17 +65,17 @@ variables_not_used <-
 
 # COLORS ------------------------------------------------------------------
 
-hfBlue <- "#400000"
+hfBlue <- "black"
 
-male_color <- "#002A3A"
-female_color <- "#EAAE93"
+male_color <- "#4058f4"
+female_color <- "#CFAAF6"
 graph_colors <- c(male_color, female_color)
 rm(male_color, female_color)
 
 single_val_col <- hfBlue
 
-DT_background_color <- "#002A3A"
-DT_background_color <- "#193f4d"
+DT_background_color <- "#400000"
+DT_background_color <- "#400000"
 DT_background_color <- "white"
 DT_text_color <- hfBlue
 

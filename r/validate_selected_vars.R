@@ -38,7 +38,7 @@ validate_selected_vars <- function(aggr_selected = input$agCVD,
   if (length(logic) > 0 && logic == TRUE) {
     validate_selection <- FALSE
   }
-  
+
   list(
     selected_var = selected_var,
     var_names = var_names,

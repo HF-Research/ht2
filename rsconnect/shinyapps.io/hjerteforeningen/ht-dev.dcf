@@ -5,6 +5,5 @@ account: hjerteforeningen
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1811905
-bundleId: 3204794
+bundleId: 8688230
 url: https://hjerteforeningen.shinyapps.io/ht-dev/
-when: 1590761485.8428

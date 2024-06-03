@@ -43,14 +43,13 @@ make_static_map <- function(dat,
       # high = "#800026",
       colors = RColorBrewer::brewer.pal(9, name = "YlOrRd"),
       limits = dat_range,
-      labels = scales::number_format(accuracy = 1) # Adjust accuracy as needed
-      # labels = function(x)
-      #   format(
-      #     x,
-      #     big.mark = thousands_sep,
-      #     decimal.mark = dec_mark,
-      #     scientific = FALSE
-      #   )
+      labels = function(x)
+        format(
+          x,
+          big.mark = thousands_sep,
+          decimal.mark = dec_mark,
+          scientific = FALSE
+        )
     ) +
     geom_segment(
       data = mini_map_lines,

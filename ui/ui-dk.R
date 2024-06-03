@@ -179,6 +179,7 @@ ui_gen_2 <-
     HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
     læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
     medier. Den fungerer på computeren, iPad, iPhone, og Android.
+    
      </br></br>Omkring 670.000 danskere lever med en hjerte-kar-sygdom*
 
 </br></br>*Antallet af patienter med hjerte-kar-sygdom kan ikke direkte sammenlignes med tidligere opgørelser.
