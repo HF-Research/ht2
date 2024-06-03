@@ -11,6 +11,10 @@
 ##' @param map_data_main
 ##' @param dk_sp
 ##' @param pretty_aggr_level
+
+options(scipen = 999)
+
+
 maps_combine <-
   function(var_name = prettyVariable()[2],
            lang = lang,
