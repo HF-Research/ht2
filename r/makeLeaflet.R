@@ -10,7 +10,14 @@
 ##' @param element_id
 makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines,
                         element_id) {
-
+  # Ensure label_popup is formatted to avoid scientific notation
+  label_popup <- sapply(label_popup, function(x) {
+    if (is.numeric(x)) {
+      format(x, scientific = FALSE)
+    } else {
+      x
+    }
+  })
   
   leaflet(elementId = element_id,
           options = leafletOptions(minZoom = 7,
