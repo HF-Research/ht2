@@ -10,8 +10,7 @@
 ##' @return
 ##' @author Matthew Phelps
 ##' @export
-
-options(scipen = 999)
+options(scipen=10000)
 make_static_map <- function(dat,
                             map_obj,
                             mini_map_lines = dk_sp$mini_map_lines,
