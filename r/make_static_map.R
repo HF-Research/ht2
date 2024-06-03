@@ -39,18 +39,20 @@ make_static_map <- function(dat,
       # high = "#800026",
       colors = RColorBrewer::brewer.pal(9, name = "YlOrRd"),
       limits = dat_range,
-      labels = function(x)
-        format(
-          x,
-          big.mark = thousands_sep,
-          decimal.mark = dec_mark,
-          scientific = FALSE
-        )
+      labels = comma
+      # labels = function(x)
+      #   format(
+      #     x,
+      #     big.mark = thousands_sep,
+      #     decimal.mark = dec_mark,
+      #     scientific = FALSE
+      #   )
     ) +
     geom_segment(
       data = mini_map_lines,
       color = "grey",
       size = 1.2,
+  
       aes(
         x = mini_map_lines[name == "bottom_left"]$X1,
         xend = mini_map_lines[name == "bottom_right"]$X1,
