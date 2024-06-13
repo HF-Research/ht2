@@ -185,7 +185,7 @@ ui_gen_2 <-
 
 </br></br>*Antallet af patienter med hjerte-kar-sygdom kan ikke direkte sammenlignes med tidligere opgørelser.
 Det skyldes b.la. at der i 2019 kom en ny version af Landspatientregistret, hvor sygdomsforløb defineres anderledes end tidligere. 
-Derudover er populationen i denne opdatering udvidet til at inkludere alle danskere over 18 år og inkluderer nye sygdomsgrupper som f.eks. stroke.
+Derudover er populationen i denne opdatering udvidet til at inkludere alle danskere over 18 år og inkluderer nye sygdomsgrupper.
 Ændringerne i den nye beregningsmetode er foretaget for at harmonisere med Sundhedsdatastyrelsen.
 Tal for medfødt hjertefejl er IKKE opdateret.
     
