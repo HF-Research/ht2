@@ -174,22 +174,22 @@ ui_bullets <- lapply(bullets, enc2utf8)
 
 ui_gen_2 <-
   enc2utf8(
-    "Databasen er udviklet ved Hjerteforeningen og opdateres én gang årligt.
-    Opgørelserne findes som tabeller, søjlediagrammer eller som Danmarkskort,
-    hvor du let kan få et overblik over kommunale og regionale forskelle.
-    HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
-    læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
-    medier. Den fungerer på computeren, iPad, iPhone, og Android.
+"Databasen er udviklet af Hjerteforeningen og opdateres én gang årligt.
+</br></br>Opgørelserne præsenteres som tabeller, søjlediagrammer eller Danmarkskort, der gør det nemt at få et overblik over forskelle på kommunalt og regionalt niveau.
+HjerteTal er frit tilgængelig og kan bruges af alle interesserede, herunder læger, forskere, politiske beslutningstagere, sundhedsadministratorer og medier. 
+Den er kompatibel med computer, iPad, iPhone og Android-enheder.
     
-     </br></br>Omkring 670.000 danskere lever med en hjerte-kar-sygdom*
+</br></br>Omkring 670.000 danskere lever med en hjerte-kar-sygdom*
 
-</br></br>*Antallet af patienter med hjerte-kar-sygdom kan ikke direkte sammenlignes med tidligere opgørelser.
-Det skyldes b.la. at der i 2019 kom en ny version af Landspatientregistret, hvor sygdomsforløb defineres anderledes end tidligere. 
-Derudover er populationen i denne opdatering udvidet til at inkludere alle danskere over 18 år og inkluderer nye sygdomsgrupper.
-Ændringerne i den nye beregningsmetode er foretaget for at harmonisere med Sundhedsdatastyrelsen.
-Tal for medfødt hjertefejl er IKKE opdateret.
+</br></br>*Antallet af patienter med hjerte-kar-sygdom kan ikke direkte sammenlignes med tidligere opgørelser. Dette skyldes blandt andet, at der i 2019 blev indført en ny version af Landspatientregistret (LPR3), hvor sygdomsforløb defineres anderledes end tidligere.  
+
+</br></br>Derudover er populationen i denne opdatering blevet udvidet til at omfatte alle danskere over 18 år samt nye sygdomsgrupper. Ændringerne i beregningsmetoden er foretaget for at harmonisere med Sundhedsdatastyrelsens praksis.  
+
+</br></br>Vi anbefaler derfor, at man først sammenligner tal fra HjerteTal, når vi har data fra to på hinanden følgende år baseret på det nye LPR3. Dette bliver muligt med de kommende tal for 2023.
+
+
     
-    </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
+</br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
 </br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
 </br>Telefon: 30722587,
 </br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
@@ -248,21 +248,19 @@ col_names_diag_about_chd <-
 ui_gen_1_chd <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
 bullets <- list("Forekomsten og fordelingen af medfødt hjertefejl i den dansk befolkning.",
-                "Fordelingen kan vurderes på baggrund af køn, alder, og både køn og alder smatidig.",
+                "Fordelingen kan vurderes på baggrund af køn og alder",
                 "Udviklingen af medfødt hjertefejl fra 2006 og frem."
                 
 )
 ui_bullets_chd <- lapply(bullets, enc2utf8)
 ui_gen_2_chd <-
   enc2utf8(
-    "Databasen er udviklet ved Hjerteforeningen og opdateres én gang årligt.
-    Opgørelserne findes som tabeller, søjlediagrammer eller som Danmarkskort,
-    hvor du let kan få et overblik over kommunale og regionale forskelle.
-    HjerteTal er frit tilgængelig og kan bruges af alle interesserede, fx
-    læger, forskere, politiske beslutningstagere, sundhedsadministratorer og
-    medier. Den fungerer på computeren, iPad, iPhone, og Android.
+    "Databasen er udviklet af Hjerteforeningen og opdateres én gang årligt.
+</br></br>Opgørelserne præsenteres som tabeller, søjlediagrammer eller Danmarkskort, der gør det nemt at få et overblik over forskelle på kommunalt og regionalt niveau.
+HjerteTal er frit tilgængelig og kan bruges af alle interesserede, herunder læger, forskere, politiske beslutningstagere, sundhedsadministratorer og medier. 
+Den er kompatibel med computer, iPad, iPhone og Android-enheder.
     
-    </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
+</br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
 </br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
 </br>Telefon: 30722587,
 </br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
