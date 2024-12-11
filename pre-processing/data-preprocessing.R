@@ -1,11 +1,10 @@
 library(data.table)
 library(magrittr)
 library(sp)
-
 library(sf)
 library(dplyr)
 library(fst)
-#devtools::install_github('HF-Research/HTData', force = TRUE)
+# devtools::install_github('HF-Research/HTData', force = TRUE)
 library(HTData)
 source("r/helperFunctions.R")
 files <- list.files(path = "r/", full.names = TRUE)
