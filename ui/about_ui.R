@@ -2,6 +2,7 @@ tabPanel(
   ui_about_title,
   value = "helpCVD",
   tags$head(
+    tags$link(rel = "stylesheet", href = "https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"),
     tags$link(rel = "stylesheet", type = "text/css", href = "css-app-specifc.css")
   ),
   fluidRow(
