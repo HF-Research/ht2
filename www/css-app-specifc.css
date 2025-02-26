@@ -2,39 +2,40 @@
   
   /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
   :root {
-    --blue: #008cba;
-      --indigo: #6610f2;
-      --purple: #6f42c1;
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
       --pink: #e83e8c;
       --red: #F04124;
       --orange: #fd7e14;
       --yellow: #E99002;
       --green: #43ac6a;
       --teal: #20c997;
-      --cyan: #5bc0de;
+      --cyan: #4058f4;
       --white: #fff;
       --gray: #888;
       --gray-dark: #333;
-      --primary: #008cba;
+      --primary: #4058f4;
       --secondary: #eee;
       --success: #43ac6a;
-      --info: #5bc0de;
+      --info: #4058f4;
       --warning: #E99002;
       --danger: #F04124;
       --light: #eee;
       --dark: #222;
-      --bleeding: #B73338;
+      --bleeding: ##400000
+;
       
-      --hfRed: #c8102E;
-      --hfRedBright: #dc1232;
+      --hfRed: #F04124;
+      --hfRedBright: ##F04124;
       --hfText: #454747;
       --hfVeryLight: #f4f5f7;
       
-      --hfBlue: #002A3A;
+      --hfBlue: #400000;
       --hfBlueLight: #e5e9eb;
       --hfBlueMedium: #b2bfc3;
       
-      --btnBorderActive: #c8102f;
+      --btnBorderActive: #F74030;
       --btnBorder1: #e2e2e2;
       --breakpoint-xs: 0;
     --breakpoint-sm: 576px;
@@ -516,5 +517,5 @@ margin-top:10px;
 /**** DATA WARNING *****/
 .data_warning{
   padding-top:10px;
-  color: red;
+  color:#F74030;
 }
