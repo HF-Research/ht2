@@ -162,12 +162,12 @@ def_stratas_title <- "Definitioner af stratifikationer"
 # UI general tabs - intro to HjerteTal
 ui_gen_1 <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
-bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne befolkning i Danmark.",
-                "Fordelingen kan vurderes på baggrund af køn, alder, uddannelse, etnisk herkomst og geografisk placering (bopæl).",
-                "Udviklingen af hjerte-kar-sygdomme fra 2006 og frem.",
-                "Dødelighed af hjerte-kar-sygdomme fra 2006 til 2021.",
-                "Overlevelsen efter hjerte-kar-sygdom og efter invasive behandlinger.",
-                "Omfanget af forbruget af hjerte-kar-medicin."
+bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne befolkning i Danmark.
+Fordelingen kan vurderes på baggrund af køn, alder, uddannelse, etnisk herkomst og geografisk placering (bopæl).
+Udviklingen af hjerte-kar-sygdomme fra 2006 og frem.
+Dødelighed af hjerte-kar-sygdomme fra 2006 og frem (Bemærk: Dødelighedsdata er tilgængelige frem til 2022, da nyere tal endnu ikke er opgjort i registrene Hjerteforeningen har adgang til).
+Overlevelse efter hjerte-kar-sygdom og efter invasive behandlinger.
+Omfanget af forbruget af hjerte-kar-medicin"
 )
 ui_bullets <- lapply(bullets, enc2utf8)
 
@@ -179,15 +179,6 @@ ui_gen_2 <-
 HjerteTal er frit tilgængelig og kan bruges af alle interesserede, herunder læger, forskere, politiske beslutningstagere, sundhedsadministratorer og medier. 
 Den er kompatibel med computer, iPad, iPhone og Android-enheder.
     
-</br></br>Omkring 670.000 danskere lever med en hjerte-kar-sygdom*
-
-</br></br>*Antallet af patienter med hjerte-kar-sygdom kan ikke direkte sammenlignes med tidligere opgørelser. Dette skyldes blandt andet, at der i 2019 blev indført en ny version af Landspatientregistret (LPR3), hvor sygdomsforløb defineres anderledes end tidligere.  
-
-</br></br>Derudover er populationen i denne opdatering blevet udvidet til at omfatte alle danskere over 18 år samt nye sygdomsgrupper. Ændringerne i beregningsmetoden er foretaget for at harmonisere med Sundhedsdatastyrelsens praksis.  
-
-</br></br>Vi anbefaler derfor, at man først sammenligner tal fra HjerteTal, når vi har data fra to på hinanden følgende år baseret på det nye LPR3. Dette bliver muligt med de kommende tal for 2023.
-
-
     
 </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
 </br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
