@@ -247,9 +247,9 @@ col_names_diag_about_chd <-
 # UI general tabs - intro to HjerteTal
 ui_gen_1_chd <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
-bullets <- list("Forekomsten og fordelingen af medfødt hjertefejl i den dansk befolkning.",
+bullets <- list("Forekomsten og fordelingen af medfødt hjertefejl i den danske befolkning.",
                 "Fordelingen kan vurderes på baggrund af køn og alder",
-                "Udviklingen af medfødt hjertefejl fra 2006 og frem."
+                "Udviklingen af medfødt hjertefejl fra 2004 til 2023."
                 
 )
 ui_bullets_chd <- lapply(bullets, enc2utf8)

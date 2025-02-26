@@ -4,11 +4,11 @@
   :root {
     --blue: #008cba;
       --indigo: #6610f2;
-      --purple: #CFAAF6;
+      --purple: #6f42c1;
       --pink: #e83e8c;
       --red: #F04124;
       --orange: #fd7e14;
-      --yellow: #F9F097;
+      --yellow: #E99002;
       --green: #43ac6a;
       --teal: #20c997;
       --cyan: #5bc0de;
@@ -21,20 +21,20 @@
       --info: #5bc0de;
       --warning: #E99002;
       --danger: #F04124;
-      --light: #F4f1f0;
+      --light: #eee;
       --dark: #222;
-      --bleeding: #F04124#;
+      --bleeding: #B73338;
       
-      --hfRed: #F04124;
-      --hfRedBright: #F04124;
+      --hfRed: #c8102E;
+      --hfRedBright: #dc1232;
       --hfText: #454747;
-      --hfVeryLight: #F4f1f0;
+      --hfVeryLight: #f4f5f7;
       
-      --hfBlue: #400000;
-      --hfBlueLight: #F4f1f0;
+      --hfBlue: #002A3A;
+      --hfBlueLight: #e5e9eb;
       --hfBlueMedium: #b2bfc3;
       
-      --btnBorderActive: #F04124;
+      --btnBorderActive: #c8102f;
       --btnBorder1: #e2e2e2;
       --breakpoint-xs: 0;
     --breakpoint-sm: 576px;

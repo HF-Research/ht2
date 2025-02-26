@@ -4,7 +4,8 @@ library(sp)
 library(sf)
 library(dplyr)
 library(fst)
-# devtools::install_github('HF-Research/HTData', force = TRUE)
+library(rsconnect)
+#devtools::install_github('HF-Research/HTData', force = TRUE)
 library(HTData)
 source("r/helperFunctions.R")
 files <- list.files(path = "r/", full.names = TRUE)
@@ -810,3 +811,4 @@ css_app_specific <-
 
 writeLines(text = c(css_common, css_app_specific),
            con = "www/css-app-specifc.css")
+
