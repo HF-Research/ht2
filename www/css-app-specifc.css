@@ -2,40 +2,40 @@
   
   /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
   :root {
-    --blue: #4058f4;
+    --blue: #008cba;
       --indigo: #6610f2;
-      --purple: #CFAAF6;
+      --purple: #6f42c1;
       --pink: #e83e8c;
       --red: #F04124;
       --orange: #fd7e14;
-      --yellow: ##F9F97A;
+      --yellow: #E99002;
       --green: #43ac6a;
       --teal: #20c997;
       --cyan: #5bc0de;
-      --white: #EFE6DD;
+      --white: #fff;
       --gray: #888;
       --gray-dark: #333;
       --primary: #008cba;
-      --secondary:#EFE6DD;
+      --secondary: #eee;
       --success: #43ac6a;
       --info: #5bc0de;
-      --warning: #F9F97A;
+      --warning: #E99002;
       --danger: #F04124;
       --light: #eee;
       --dark: #222;
       --bleeding: #B73338;
       
-      --hfRed: #F74030;
-      --hfRedBright: #F74030;
+      --hfRed: #c8102E;
+      --hfRedBright: #dc1232;
       --hfText: #454747;
-      --hfVeryLight: #F4F1F0;
+      --hfVeryLight: #f4f5f7;
       
-      --hfBlue: #400000;
-      --hfBlueLight: #EFE6DD;
+      --hfBlue: #002A3A;
+      --hfBlueLight: #e5e9eb;
       --hfBlueMedium: #b2bfc3;
       
-      --btnBorderActive: #F74030;
-      --btnBorder1: #EFE6DD;
+      --btnBorderActive: #c8102f;
+      --btnBorder1: #e2e2e2;
       --breakpoint-xs: 0;
     --breakpoint-sm: 576px;
     --breakpoint-md: 768px;
@@ -48,13 +48,13 @@
 
 body {
   margin: 0;
-  font-family:  Roboto, "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: "Poppins", sans-serif; -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1.5375rem;
   font-weight: 400;
   line-height: 1.5;
   color: var(--hfBlue);
     text-align: left;
-  background-color: #F4F1F0;
+  background-color: #fff;
 }
 
 
