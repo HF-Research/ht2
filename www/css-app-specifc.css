@@ -95,7 +95,7 @@ input[type="month"] {
 
 
 .navbar-default .navbar-nav>li>a:hover{
-  background-color: #F4F1F0;
+  background-color: white;
   color: var(--hfRedBright);
 }
 
@@ -139,7 +139,7 @@ input[type="month"] {
   font-size: 1.5375rem;
   padding-bottom: 10px;
   color: var(--hfRed);
-  background-color: white;
+  background-color: #F4F1F0;
   text-decoration: underline;
   text-decoration-color: var(--hfRed);
 }
