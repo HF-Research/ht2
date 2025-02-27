@@ -6,60 +6,57 @@
       --indigo: #CFAAF6;
       --purple: #CFAAF6;
       --pink: #e83e8c;
-      --red: #F04124;
-      --orange: #fd7e14;
-      --yellow: #E99002;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
       --green: #43ac6a;
       --teal: #20c997;
       --cyan: #4058f4;
-      --white: #fff;
-      --gray: #888;
-      --gray-dark: #333;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
       --primary: #4058f4;
-      --secondary: #eee;
+      --secondary: #F4F1F0;
       --success: #43ac6a;
       --info: #4058f4;
-      --warning: #E99002;
-      --danger: #F04124;
-      --light: #eee;
-      --dark: #222;
-      --bleeding: ##400000
-;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
       
-      --hfRed: #F04124;
-      --hfRedBright: ##F04124;
-      --hfText: #454747;
-      --hfVeryLight: #f4f5f7;
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
       
       --hfBlue: #400000;
-      --hfBlueLight: #e5e9eb;
+      --hfBlueLight: #F4F1F0;
       --hfBlueMedium: #b2bfc3;
       
       --btnBorderActive: #F74030;
-      --btnBorder1: #e2e2e2;
+      --btnBorder1: #F4F1F0;
       --breakpoint-xs: 0;
     --breakpoint-sm: 576px;
     --breakpoint-md: 768px;
     --breakpoint-lg: 992px;
     --breakpoint-xl: 1200px;
-    --font-family-sans-serif: "Poppins", sans-serif;
-    --font-family-monospace: S"Poppins", sans-serif;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
     --font-size: 16px;
   }
 
 body {
   margin: 0;
-  font-family: "Poppins", sans-serif; 
+  font-family:  font-family: 'Poppins', sans-serif;
   font-size: 1.5375rem;
   font-weight: 400;
   line-height: 1.5;
   color: var(--hfBlue);
     text-align: left;
-  background-color: #fff;
+  background-color: #F4F1F0;
 }
-* {
-  font-family: 'Poppins', sans-serif !important; /* Ensure all elements use Poppins */
-}
+
 
 input[type="radio"],
 input[type="checkbox"] {
@@ -261,8 +258,8 @@ label{
 .selectize-input{
   line-height:22px;
   border: 0px;
-  border-right:1px solid #cccccc;
-  border-bottom:1px solid #cccccc;;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
 }
 
 
@@ -270,20 +267,20 @@ label{
 /******   DT BOTTOM STYLING   *******/
   .dt-button.buttons-excel.buttons-html5{
     margin-top:7px;
-    background-color: #efefef;
-      border-color: #e2e2e2;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
   }
 
 .dt-button.buttons-pdf.buttons-html5{
   margin-top:7px;
-  background-color: #efefef;
-    border-color: #e2e2e2;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
 }
 
 .dt-button.buttons-collection:hover{
   margin-top:7px;
-  background-color: #bad5f1;
-    border-color: #bad5f1;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
     
 }
 
@@ -294,7 +291,7 @@ label{
 
 .table th{
   width: 150px;
-  background-color:#ccc;
+  background-color:#F4F1F0;
 }
 
 td {
@@ -517,5 +514,5 @@ margin-top:10px;
 /**** DATA WARNING *****/
 .data_warning{
   padding-top:10px;
-  color:#F74030;
+  color: #F74030;
 }
