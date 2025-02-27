@@ -95,7 +95,7 @@ input[type="month"] {
 
 
 .navbar-default .navbar-nav>li>a:hover{
-  background-color: white;
+  background-color: #F4F1F0;
   color: var(--hfRedBright);
 }
 
