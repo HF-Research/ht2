@@ -814,9 +814,9 @@ saveRDS(dk_sf_data, file = "data/dk_sf_data.rds")
 # Foundation, we create use a common css template with base styling. Any styling
 # specific to an app goes in the app_specific css file.
 css_common <-
-  readLines(con = "https://raw.githubusercontent.com/matthew-phelps/hf-css/main/css-main.css")
+  readLines(con = "https://raw.githubusercontent.com/HF-Research/ht2/refs/heads/master/www/css-app-specifc.css")
 css_app_specific <-
-  readLines(con = "https://raw.githubusercontent.com/matthew-phelps/hf-css/main/ht-css.css")
+  readLines(con = "https://raw.githubusercontent.com/HF-Research/ht2/refs/heads/master/www/css-app-specifc.css")
 
 writeLines(text = c(css_common, css_app_specific),
            con = "www/css-app-specifc.css")
