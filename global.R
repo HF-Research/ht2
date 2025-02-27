@@ -65,7 +65,7 @@ variables_not_used <-
 
 # COLORS ------------------------------------------------------------------
 
-hfBlue <- "black"
+hfBlue <- "#400000"
 
 male_color <- "#4058f4"
 female_color <- "#CFAAF6"
