@@ -92,7 +92,7 @@ ui_data <- "Tabels"
 
 
 # Data_warning
-ui_data_warning <- "*Data for 2018 may be incomplete for some illnesses"
+#ui_data_warning <- "*Data for 2018 may be incomplete for some illnesses"
 
 # ABOUT MAIN PANEL -------------------------------------------------------------
 
