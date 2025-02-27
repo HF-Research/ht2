@@ -159,7 +159,7 @@ input[type="month"] {
   
   .tabbable > .nav > li[class=active] >a{
     background-color: var(--hfBlue);
-    color: white;
+    color: #F4F1F0;
     font-weight: 600;
   }
 
