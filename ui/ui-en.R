@@ -75,8 +75,8 @@ ui_count_rate <-
   enc2utf8(c("Counts", "Age-specific rate", "Age-standardized rate"))
 ui_read_more <- enc2utf8("Read more")
 ui_percent <- enc2utf8("proportion")
-ui_age_35plus <- "(ages 35+)"
-ui_edu_age_range <- "35 - 79 years"
+ui_age_35plus <- "(ages 18+)"
+ui_edu_age_range <- "18 - 79 years"
 ui_moving_avg_desc <- "3-year moving average"
 
 # Strings to place inside variable descriptions
@@ -177,9 +177,9 @@ ui_gen_2 <-
     It is accesible on, iPad, iPhone, and Android, no app download is required
     
     <br><br>If you have questions, recommendations, or feedback, please write to:
-    </br> <b>Maja Bülow Lykke</b>, Research consultant, The Danish Heart Foundtion
-    </br>Telephone: 3366 9953,
-    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
+    </br> <b>Marianna Meaidi</b>, Data Scientist, The Danish Heart Foundtion
+    </br>Telephone: 30722587,
+    </br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
     
     </br><h3>FAQ:</h3>"
   )
@@ -249,10 +249,10 @@ ui_gen_2_chd <-
     makers, health care administrators, or the media. It is accesible on,
     iPad, iPhone, and Android, no app download is required.
     
-    <br><br>If you have questions, recommendations, or feedback, please write to:
-    </br> <b>Maja Bülow Lykke</b>, Research consultant, The Danish Heart Foundtion
-    </br>Telephone: 3366 9953,
-    </br>e-mail: <b>mblykke@hjerteforeningen.dk</b>
+ <br><br>If you have questions, recommendations, or feedback, please write to:
+    </br> <b>Marianna Meaidi</b>, Data Scientist, The Danish Heart Foundtion
+    </br>Telephone: 30722587,
+    </br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
     
     </br><h3>FAQ:</h3>"
   )
