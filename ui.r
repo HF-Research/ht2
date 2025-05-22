@@ -20,7 +20,7 @@ ui <- function(request) {
       img(
       src = "HF_RGB_svg.svg",
       align = "left",
-      style = "padding-top: 50px; padding-bottom: 70px; padding-left: 2.5rem;",
+      style = "padding-top: 5px; padding-bottom: 10px; padding-left: 2.5rem;",
       height = "170px"
     ), href = "https://hjerteforeningen.dk/", target ="_blank"),
     fluidPage(
