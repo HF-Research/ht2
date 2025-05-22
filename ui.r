@@ -18,7 +18,7 @@ ui <- function(request) {
     ),
     tags$a(
       img(
-      src = "Hjerteforeningen_RGB_svg.svg",
+      src = "HF_RGB_svg.svg",
       align = "left",
       style = "padding-top: 20px; padding-bottom: 40px; padding-left: 2.5rem;",
       height = "110px"
@@ -28,7 +28,7 @@ ui <- function(request) {
           titlePanel(
             title = "",
             windowTitle = tags$head(
-              tags$link(rel = "icon", type = "image/png", href = "logo.png"),
+              tags$link(rel = "icon", type = "image/png", href = "hf_logo.png"),
               tags$title("HjerteTal")
             )
           ))
