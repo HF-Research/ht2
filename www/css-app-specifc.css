@@ -8302,3 +8302,8307 @@ margin-top:10px;
   padding-top:10px;
   color: #F74030;
 }
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: white;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: white;
+  * {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: #F4F1F0;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: #F4F1F0;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:--hfBlue;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:white;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:#F4F1F0;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:#F4F1F0;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
+/*Copied from bootstrop page -- I commented below where the end of the copied section lies. I have also added my own color names */
+  
+  /*@import url("https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400 300,700");*/
+  :root {
+    --blue: #4058f4;
+      --indigo: #CFAAF6;
+      --purple: #CFAAF6;
+      --pink: #e83e8c;
+      --red: #F74030;
+      --orange: #F9F97A;
+      --yellow: #F9F97A;
+      --green: #43ac6a;
+      --teal: #20c997;
+      --cyan: #4058f4;
+      --white: #F4F1F0;
+      --gray: #400000;
+      --gray-dark: #400000;
+      --primary: #4058f4;
+      --secondary: #F4F1F0;
+      --success: #43ac6a;
+      --info: #4058f4;
+      --warning: #F9F97A;
+      --danger: #F74030;
+      --light: #F4F1F0;
+      --dark: #400000;
+      --bleeding: #F74030;
+      
+      --hfRed: #F74030;
+      --hfRedBright: #F74030;
+      --hfText: #400000;
+      --hfVeryLight: #F4F1F0;
+      
+      --hfBlue: #400000;
+      --hfBlueLight: #F4F1F0;
+      --hfBlueMedium: #b2bfc3;
+      
+      --btnBorderActive: #F74030;
+      --btnBorder1: #F4F1F0;
+      --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: font-family: 'Poppins', sans-serif;
+    --font-family-monospace: font-family: 'Poppins', sans-serif;
+    --font-size: 16px;
+  }
+
+body {
+  margin: 0;
+  font-family:  font-family: 'Poppins', sans-serif;
+  font-size: 1.5375rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--hfBlue);
+    text-align: left;
+  background-color: #F4F1F0;
+}
+
+
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"] {
+  -webkit-appearance: listbox;
+}
+
+/***************END COPY FROM BOOTSTRAP ************************/
+
+  
+  /**** list style *****/
+  ul{
+  list-style-type:disc  
+  }
+  
+  
+  /**** NAVBAR STYLING *****/
+
+.navbar{
+  margin-bottom: 30px;
+}
+.navbar-default{
+  background-color: var(--hfRed);
+}
+
+
+
+.navbar-default .navbar-nav>li>a:hover{
+  background-color: white;
+  color: var(--hfRedBright);
+}
+
+.navbar-default .navbar-nav>li>a{
+  font-weight: 600;
+  color: white;
+}
+
+.navbar-default .navbar-brand, .navbar-default .navbar-brand:hover{
+  font-weight: 600;
+  font-size: 1.5em;
+  color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+  border:0px;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  color: var(--hfRed);
+  background-color: white;
+}
+
+.navbar-default .navbar-nav>.dropdown.open>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover{
+  font-weight: 600;
+  background-color: white;
+  
+}
+
+/*****   Styling the dropdowns for Help sections ********/
+  .dropdown-menu>li>a {
+    font-weight: 600;
+    font-size: 1.5375rem;
+    padding-bottom: 10px;
+    color: var(--hfRed);
+  }
+
+.dropdown-menu>li>a:hover, .dropdown-menu>.active>a:hover {
+  font-weight: 600;
+  font-size: 1.5375rem;
+  padding-bottom: 10px;
+  color: var(--hfRed);
+  background-color: white;
+  text-decoration: underline;
+  text-decoration-color: var(--hfRed);
+}
+
+.navbar-nav>li>.dropdown-menu{
+  border: 0px;
+}
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus{
+  background-color: var(--white);
+  color: var(--hfRed);
+}
+
+
+
+
+/******   TABS STYLING   *******/
+  
+  .tabbable > .nav > li[class=active] >a{
+    background-color: var(--hfBlue);
+    color: white;
+    font-weight: 600;
+  }
+
+.tabbable > .nav > li > a{
+  background-color: var(--white);
+  color: var(--hfBlue);
+  border: 1px;
+  border-style: solid;
+  border-color: var(--hfBlueLight);
+  font-weight:600;
+}
+
+label{
+  
+  font-weight: 600;
+  margin-bottom:7px;
+  margin-top:5px;
+}
+
+
+/**** BUTTON STYLES *****/
+  .btn{
+    font-size: 1.7rem;
+  }
+  
+  
+  .btn.btn-default-no-hover {
+  background-color: var(--hfBlue);
+  border-color: var(--hfBlueMedium);
+  color:var(--white);
+
+}
+  
+  .btn.radiobtn.btn-default.active {
+    background-color:var(--hfBlue);
+    border-color:var(--hfBlue);
+    font-weight:bold;
+    color:white;
+    padding-right:5px;
+    padding-left:5px;
+  }
+
+.btn.radiobtn.btn{
+  height: 35px;
+}
+
+.btn.radiobtn.btn-default {
+  background-color: var(--white);
+  border-color: var(--hfBlueMedium);
+  color:var(--hfBlue);
+  font-weight:600;
+  ;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.btn-default:hover {
+  background-color: var(--hfBlueMedium);
+  border-color: var(--hfBlueMedium);
+  color:white;
+  font-weight: 600;
+}
+
+.btn.radiobtn.btn-default {
+  border-color: var(--hfBlueLight);
+}
+.btn.radiobtn.btn-default:hover{
+  padding-right:5px;
+  padding-left:5px;
+}
+
+
+.btn.radiobtn.btn-default.active:hover {
+  background-color:var(--hfBlue);
+  border-color:var(--hfBlue);
+  font-weight:bold;
+  color:white;
+}
+
+
+/**** DROPDOWN *****/
+  
+  .selectize-dropdown-content{
+    max-height: 400px;
+  }
+
+.selectize-dropdown-content{
+  line-height: 25px;
+}
+
+.selectize-dropdown .optgroup-header{
+  color:black;
+  font-weight:bold;
+  font-size:1.4rem;
+}
+
+.selectize-input{
+  line-height:22px;
+  border: 0px;
+  border-right:1px solid #F4F1F0;
+  border-bottom:1px solid #F4F1F0;;
+}
+
+
+
+/******   DT BOTTOM STYLING   *******/
+  .dt-button.buttons-excel.buttons-html5{
+    margin-top:7px;
+    background-color: #F4F1F0;
+      border-color: #F4F1F0;
+  }
+
+.dt-button.buttons-pdf.buttons-html5{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+}
+
+.dt-button.buttons-collection:hover{
+  margin-top:7px;
+  background-color: #F4F1F0;
+    border-color: #F4F1F0;
+    
+}
+
+.table{
+  width: 150px;
+  background-color:white;
+}
+
+.table th{
+  width: 150px;
+  background-color:#F4F1F0;
+}
+
+td {
+  text-align:left
+}
+
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+.results_container{
+  min-height: 315px;
+}
+.well_input{
+  background-color:white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  min-height: 350px;
+}
+
+.row{
+  margin-left:-10px;
+  margin-right:-10px
+}
+
+
+.gauge_row{
+  max-width: 400px;
+}
+.well_description {
+  background-color:white;
+  margin-left: auto;
+  margin-right: auto;
+  border: 0px;
+  padding: 15px;
+}
+.output_desc {
+  line-height: 1.2;
+  font-size: 2.1rem;
+  
+}
+
+.explanitory_text{
+  font-size:1.7rem;
+}
+
+.ref_text{
+  font-style: italic;
+  font-size:1.7rem;
+}
+
+.tab-pane.active{
+  margin-top: -15px;
+}
+
+.row_outcome_title{
+  margin-top: 17px;
+  margin-bottom: 10px;
+}
+
+.col_DT {
+  min-width: 376px;
+}
+
+
+
+/******   ABOUT TABPAGE   *******/
+  .col_about_dt {
+    max-width:1260px;
+  }
+
+.about_well {
+  max-width: 200px;
+}
+
+.about_well_lmhs {
+  max-width: 230px;
+}
+
+.col_about_text{
+  max-width:1060px;
+}
+
+
+.col_about_text_lmhs{
+  max-width:740px;
+}
+
+
+/******   CODE TABPAGE   *******/
+  summary{
+    padding-bottom: 15px;
+  }
+
+
+.modal-body{
+  font-size: 1.7rem;
+}
+
+
+/******   FONT STYLING   *******/
+
+.helper_text{
+  font-style:italic;
+  font-size:1.7rem;
+}
+.small_header{
+  font-size:2rem;
+  font-weight: bold;
+}
+/**** OVERRIDES FROM MAIN STLYLE SHEET ****/
+  .btn{
+    font-size: 1.5rem;
+  }
+
+label{
+  font-size:1.5rem;
+}
+
+
+  .container-fluid {
+    margin:auto;
+  }
+
+
+/**** NAVBAR STYLING *****/
+  #ht_title{
+  color: white;
+}
+
+/******   MAPS   *******/
+  
+  .leaflet-container { 
+    background:white !important;
+  }
+
+.col_leaflet {
+  min-width:430px;
+  padding-right: 0px;
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 0px;
+}
+
+.bttn-material-flat.bttn-primary{
+  background:var(--hfBlue);;
+}
+
+
+#outcome_title_map{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_dt{
+font-size: 2.6rem;
+font-weight: 400;
+}
+
+#outcome_title_sub_dt{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+#outcome_title_sub_map{
+margin-top: -10px;
+font-size: 1.8rem;
+font-style: italic;
+}
+
+
+/******   SIZES OF CONATINERS/DIVS/ROWS ETC   *******/
+#col_input {
+margin-left: auto;
+margin-right: auto;
+}
+
+
+#col_output {
+margin-left: auto;
+margin-right: auto;
+padding-right: 0px;
+}
+
+#col_description {
+min-height: 380px;
+margin-left: auto;
+margin-right: auto;
+}
+
+#outcome_title {
+font-size: 2.4rem; 
+}
+
+#outcome_title_dt{
+margin-top:10px;
+}
+
+#variable_title {  
+font-size: 1.9rem; 
+}
+
+#download_button_row{
+margin-bottom:20px;
+}
+
+#data_vis_tabs{
+margin-bottom:10px;
+}
+
+#count_desc{
+margin-top: 10px;
+}
+
+#rate_desc{
+margin-top:10px;
+}
+
+
+/**** DATA WARNING *****/
+.data_warning{
+  padding-top:10px;
+  color: #F74030;
+}
