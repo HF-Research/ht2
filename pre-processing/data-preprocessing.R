@@ -226,7 +226,7 @@ saveRDS(shiny_dat_en, file = "data/shiny_dat_en.rds")
 
 # Some combinations of inputs are not allowed because there are too few data for
 # those combinations.
-valid_output_combos <- fread("data/valid_output_combos.txt")
+valid_output_combos <- fread("data/valid_output_combos_new.txt")
 valid_output_combos[, id := NULL]
 valid_output_combos[, var := gsub("\\.", "_", var)]
 valid_output_combos <-
@@ -238,7 +238,7 @@ valid_output_combos <-
     all.x = TRUE
   )
 setnames(valid_output_combos, "aggr_level", "agCVD")
-saveRDS(valid_output_combos, file = "data/valid_output_combos.rds")
+saveRDS(valid_output_combos, file = "data/valid_output_combos_new.rds")
 
 
 

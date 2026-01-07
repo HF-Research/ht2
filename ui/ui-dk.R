@@ -162,12 +162,12 @@ def_stratas_title <- "Definitioner af stratifikationer"
 # UI general tabs - intro to HjerteTal
 ui_gen_1 <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
-bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne befolkning i Danmark.
-Fordelingen kan vurderes på baggrund af køn, alder, uddannelse, etnisk herkomst og geografisk placering (bopæl).
-Udviklingen af hjerte-kar-sygdomme fra 2006 og frem.
-Dødelighed af hjerte-kar-sygdomme fra 2006 og frem (Bemærk: Dødelighedsdata er tilgængelige frem til 2022, da nyere tal endnu ikke er opgjort i registrene Hjerteforeningen har adgang til).
-Overlevelse efter hjerte-kar-sygdom og efter invasive behandlinger.
-Omfanget af forbruget af hjerte-kar-medicin"
+bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne befolkning i Danmark.",
+"Fordelingen kan vurderes på baggrund af køn, alder, uddannelse, etnisk herkomst og geografisk placering (bopæl).",
+"Udviklingen af hjerte-kar-sygdomme fra 2004 og frem.",
+"Dødelighed af hjerte-kar-sygdomme fra 2004 og frem.",
+"Overlevelse efter hjerte-kar-sygdom og efter invasive behandlinger.",
+"Omfanget af forbruget af medicin mod hjertekarsygdomme"
 )
 ui_bullets <- lapply(bullets, enc2utf8)
 

@@ -58,7 +58,7 @@ ui_file_path <- file.path(paste0("ui/ui-", lang, ".R"))
 source(ui_file_path, encoding = 'UTF-8')
 
 valid_output_combos <-
-  readRDS(file = "data/valid_output_combos.rds")
+  readRDS(file = "data/valid_output_combos_new.rds")
 variables_not_used <-
   variable_ui[grepl("n_ambulatory|n_bed", code_name), shiny_code]
 
