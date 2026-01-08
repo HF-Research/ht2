@@ -80,7 +80,7 @@ ui_region <- enc2utf8("Region")
 ui_national <- enc2utf8("National")
 ui_count_rate <-
   enc2utf8(c("Antal", "Aldersspecifikke rate", "Aldersstandardiserede rate"))
-ui_read_more <- enc2utf8("Læse mere")
+ui_read_more <- enc2utf8("Læs mere")
 ui_percent <- enc2utf8("andel")
 ui_age_35plus <- "(18+ årige)"
 ui_edu_age_range <- "18 - 79 årige"
@@ -167,7 +167,7 @@ bullets <- list("Forekomsten og fordelingen af hjerte-kar-sygdomme i den voksne 
 "Udviklingen af hjerte-kar-sygdomme fra 2004 og frem.",
 "Dødelighed af hjerte-kar-sygdomme fra 2004 og frem.",
 "Overlevelse efter hjerte-kar-sygdom og efter invasive behandlinger.",
-"Omfanget af forbruget af medicin mod hjertekarsygdomme"
+"Omfanget af forbruget af medicin mod hjertekarsygdomme."
 )
 ui_bullets <- lapply(bullets, enc2utf8)
 
@@ -194,7 +194,7 @@ file.path <- paste0("language/outcome_descriptions_chd_", lang, ".rds")
 outcome_descriptions_chd <-
   readRDS(file =  file.path)
 
-ui_chd_title <- enc2utf8("Medfødt hjertefejl")
+ui_chd_title <- enc2utf8("Medfødte hjertefejl")
 choose_outcome_chd <- enc2utf8("Vælg medfødt hjertefejl:")
 
 
@@ -239,8 +239,8 @@ col_names_diag_about_chd <-
 ui_gen_1_chd <- enc2utf8("I HjerteTal er det muligt at finde oplysninger om:")
 
 bullets <- list("Forekomsten og fordelingen af medfødt hjertefejl i den danske befolkning.",
-                "Fordelingen kan vurderes på baggrund af køn og alder",
-                "Udviklingen af medfødt hjertefejl fra 2004 til 2023."
+                "Fordelingen kan vurderes på baggrund af køn og alder.",
+                "Udviklingen af medfødt hjertefejl fra 2004 og frem."
                 
 )
 ui_bullets_chd <- lapply(bullets, enc2utf8)
