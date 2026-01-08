@@ -181,9 +181,8 @@ Den er kompatibel med computer, iPad, iPhone og Android-enheder.
     
     
 </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
-</br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
-</br>Telefon: 30722587,
-</br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
+</br> <b>Lisbeth Vestergaard Andersen</b>, Senior Udviklingskonsulent, Hjerteforeningen
+</br>e-mail: <b>analyse@hjerteforeningen.dk</b>
     <hr>
     <h3> FAQ (Ofte stillede spørgsmål):</h3>"
     )
@@ -252,9 +251,8 @@ HjerteTal er frit tilgængelig og kan bruges af alle interesserede, herunder læ
 Den er kompatibel med computer, iPad, iPhone og Android-enheder.
     
 </br></br>Hvis du har feedback eller anbefalinger, skriv venligst til:
-</br> <b>Marianna Meaidi</b>, Data Scientist, Hjerteforeningen
-</br>Telefon: 30722587,
-</br>e-mail: <b>mmeaidi@hjerteforeningen.dk</b>
+</br> <b>Lisbeth Vestergaard Andersen</b>, Senior Udviklingskonsulent, Hjerteforeningen
+</br>e-mail: <b>analyse@hjerteforeningen.dk</b>
     <hr>
     <h3> FAQ (Ofte stillede spørgsmål):</h3>"
   )
