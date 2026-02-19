@@ -236,12 +236,12 @@ output$d3_chd <- renderPlotly({
 
 output$table_counts_chd <- renderDT({
   req(input$var_chd, isValidSelection())
-  
-  outputDT_chd() %>% layout(yaxis =list
-                            (tickformat =
-                                ".0f"
-                              # Ensures the y-axis uses standard notation
-                            ))
+  outputDT_chd()
+  # outputDT_chd() %>% layout(yaxis =list
+  #                           (tickformat =
+  #                               ".0f"
+  #                             # Ensures the y-axis uses standard notation
+  #                           ))
 })
 
 
