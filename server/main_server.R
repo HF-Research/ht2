@@ -1,5 +1,5 @@
 options(DT.options = list(
-  pageLength = 20,
+  pageLength = 21, # 
   dom = "Bt",
   buttons = c('copy', 'csv', 'pdf')
 ))
@@ -333,7 +333,6 @@ subsetVar <- reactive({
 subsetData <- reactive({
   x <-
     subsetVar()[, .(year, sex, grouping, count, rate)]
-  
   if(isPercentage()) {
     x[, rate := rate / 1e3]
   }
@@ -491,7 +490,6 @@ dtCast <- reactive({
     is_5year_mortality = is5YearMortality()
   )
 })
-
 
 outputCountDTTable <- reactive({
   # Organizes data for DataTable outputs. Needs to be characters
