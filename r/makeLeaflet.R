@@ -8,12 +8,10 @@
 ##' @param label_popup
 ##' @param mini_map_lines
 ##' @param element_id
-makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines,
-                        element_id) {
+makeLeaflet <- function(map_data, fill_colors, label_popup, mini_map_lines) {
 
   
-  leaflet(elementId = element_id,
-          options = leafletOptions(minZoom = 7,
+  leaflet(options = leafletOptions(minZoom = 7,
                                    preferCanvas = TRUE)) %>%
     setView(lng = 10.408,
             lat = 56.199752,

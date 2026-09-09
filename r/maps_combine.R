@@ -60,8 +60,7 @@ maps_combine <-
       map_data = map_data,
       fill_colors = fill_colors,
       label_popup = popup,
-      mini_map_lines = dk_sp$mini_map_lines,
-      element_id = "map_male"
+      mini_map_lines = dk_sp$mini_map_lines
     ) %>% 
       addLegend(
         "topright",
@@ -72,7 +71,15 @@ maps_combine <-
         na.label = "",
         layerId = "legend",
         opacity = legend_opacity,
-        labFormat = labelFormat(big.mark = thousands_sep, digits = 0)
+        labFormat = function(type, cuts, p) {
+          format(
+            round(cuts, 0),
+            big.mark = thousands_sep,
+            decimal.mark = dec_mark,
+            scientific = FALSE,
+            trim = TRUE
+          )
+        }
       )
     
     
@@ -92,8 +99,7 @@ maps_combine <-
       map_data = map_data,
       fill_colors = fill_colors,
       label_popup = popup,
-      mini_map_lines = dk_sp$mini_map_lines,
-      element_id = "map_female"
+      mini_map_lines = dk_sp$mini_map_lines
     ) %>%
       addLegend(
         "topright",
@@ -104,7 +110,15 @@ maps_combine <-
         na.label = "",
         layerId = "legend",
         opacity = legend_opacity,
-        labFormat = labelFormat(big.mark = thousands_sep, digits = 0)
+        labFormat = function(type, cuts, p) {
+          format(
+            round(cuts, 0),
+            big.mark = thousands_sep,
+            decimal.mark = dec_mark,
+            scientific = FALSE,
+            trim = TRUE
+          )
+        }
      )
     
  
